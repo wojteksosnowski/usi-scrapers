@@ -11,6 +11,7 @@ from .manager import TechnicalDataManager
 from .scraper_rp import discover_rp_investments, scrape_rynek_pierwotny, download_raw_rp_json, download_raw_rp_dev_json
 from .scraper_otodom import discover_otodom_investments, discover_otodom_listing, scrape_otodom, download_raw_otodom_json, download_raw_otodom_dev_json, fetch_otodom_agency_name
 from .scraper_to import discover_to_investments, discover_to_listing, scrape_tabelaofert, download_raw_to_json, download_raw_to_dev_json, fetch_to_agency_name
+from .utils.io import save_raw_json, save_dev_raw_json
 
 def list_investments(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: Optional[str] = None) -> List[Dict[str, Any]]:
     """Pobiera listę inwestycji dewelopera ze wskazanego portalu (Discovery)."""
@@ -61,6 +62,14 @@ def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, ident
     elif p in ("to", "tabelaofert"):
         return download_raw_to_dev_json(identifier, dev_slug, fetcher, config)
     return None
+
+def save_raw(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, inv_slug: str, portal_prefix: str) -> Path:
+    """Zapisuje gotowy słownik jako surowy JSON inwestycji."""
+    return save_raw_json(data, config.public_dir, dev_slug, inv_slug, portal_prefix)
+
+def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, portal_prefix: str) -> Path:
+    """Zapisuje gotowy słownik jako surowy JSON dewelopera."""
+    return save_dev_raw_json(data, config.public_dir, dev_slug, portal_prefix)
 
 def identify_developer(fetcher: Fetcher, portal: str, url: str) -> Optional[str]:
     """Próbuje zidentyfikować nazwę dewelopera na podstawie URL oferty."""
