@@ -90,6 +90,10 @@ def resolve_rp_vendor_id(slug: str, fetcher: Fetcher) -> str | None:
         return None
     
     # Look for "vendor": ID in the page source or API calls mentioned in scripts
+    match = re.search(r'["\']vendor["\']:\s*(\d+)', html)
+    if match:
+        return match.group(1)
+        
     match = re.search(r'"vendor_id":\s*(\d+)', html)
     if match:
         return match.group(1)
@@ -97,6 +101,11 @@ def resolve_rp_vendor_id(slug: str, fetcher: Fetcher) -> str | None:
     match = re.search(r'vendor=(\d+)', html)
     if match:
         return match.group(1)
+
+    # Fallback: Check if slug ends with numeric ID (e.g. dom-development-sa-955)
+    slug_parts = slug.strip("/").split("-")
+    if slug_parts and slug_parts[-1].isdigit():
+        return slug_parts[-1]
         
     return None
 
@@ -106,7 +115,7 @@ def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_o
     """
     if vendor_id_or_slug:
         vendor_id = vendor_id_or_slug
-        if not vendor_id_or_slug.isdigit():
+        if not str(vendor_id_or_slug).isdigit():
             vendor_id = resolve_rp_vendor_id(vendor_id_or_slug, fetcher)
             if not vendor_id:
                 logger.error(f"Could not resolve vendor ID for slug: {vendor_id_or_slug}")
@@ -119,7 +128,10 @@ def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_o
         # Global discovery - scan all configured URLs
         all_results = []
         seen_ids = set()
-        for url in config.rp_discovery_urls:
+        urls = config.rp_discovery_urls or [
+            "https://rynekpierwotny.pl/api/v2/offers/offer/?s=offer-list&display_type=1&distance=5&for_sale=true&limited_presentation=false&page=1&page_size=100&show_on_listing=true&type=1"
+        ]
+        for url in urls:
             logger.info(f"Discovering RP investments via global JSONMAIN query: {url}")
             data = fetcher.fetch_json(url, use_scraperapi=False) or {}
             batch = _parse_rp_results(data.get("results", []))
@@ -143,6 +155,10 @@ def _parse_rp_results(results: list) -> list[dict]:
         parent_name = item.get("name")
         parent_id = str(item.get("id"))
         
+        v_data_parent = get_val(item, "vendor") or {}
+        v_name_parent = v_data_parent.get("name")
+        v_slug_parent = v_data_parent.get("slug")
+
         parent_img = None
         main_img_data = item.get("main_image")
         if main_img_data:
@@ -172,7 +188,8 @@ def _parse_rp_results(results: list) -> list[dict]:
                     s_name = s_offer_val.get("name")
                     s_slug = s_offer_val.get("slug")
                     s_vendor_val = get_val(s_offer_val, "vendor") or {}
-                    s_vendor_slug = s_vendor_val.get("slug")
+                    s_vendor_slug = s_vendor_val.get("slug") or v_slug_parent
+                    s_vendor_name = s_vendor_val.get("name") or v_name_parent
                     
                     s_img = None
                     s_main_photo = get_val(s_offer_val, "main_photo") or get_val(s_offer_val, "main_image")
@@ -188,7 +205,7 @@ def _parse_rp_results(results: list) -> list[dict]:
                         "id": s_id,
                         "name": s_name,
                         "slug": s_slug,
-                        "developer": s_vendor_val.get("name"),
+                        "developer": s_vendor_name,
                         "vendor_slug": s_vendor_slug,
                         "url": f"https://rynekpierwotny.pl/oferty/{s_vendor_slug}/{s_slug}-{s_id}/?show_sold_stage=true&stage={s_id_internal}",
                         "image": s_img,
@@ -197,8 +214,8 @@ def _parse_rp_results(results: list) -> list[dict]:
                     })
         else:
             v_data = get_val(item, "vendor") or {}
-            v_slug = v_data.get("slug")
-            v_name = v_data.get("name")
+            v_slug = v_data.get("slug") or v_slug_parent
+            v_name = v_data.get("name") or v_name_parent
             o_id = str(item.get("id"))
             o_slug = item.get("slug")
             
