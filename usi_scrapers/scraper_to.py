@@ -73,17 +73,9 @@ def extract_to_data(html: str, url: str) -> dict:
         "longitude": lng
     }
 
-    # 3. Gallery (Strictly from JSON-LD / RSC script data)
+    # 3. Gallery
     gallery_urls = extract_gallery_urls(html)
-    
-    # Also add the main image from JSON-LD if present
-    main_image = data.get("image")
-    if isinstance(main_image, list):
-        gallery_urls.extend(main_image)
-    elif isinstance(main_image, str):
-        gallery_urls.append(main_image)
-        
-    data["_raw_gallery_urls"] = list(dict.fromkeys(gallery_urls))
+    data["_raw_gallery_urls"] = gallery_urls
     
     return data
 
@@ -151,14 +143,32 @@ def extract_additional_prop(product: dict, name: str) -> str | None:
 def extract_gallery_urls(html: str) -> list[str]:
     found_urls = []
     
-    # 1. From script tags (Strictly use the structured gallery data)
-    scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.DOTALL)
+    # Target only the main content area, excluding "Other investments" and "Similar offers"
+    main_window = html
+    for stop_word in ["Inne inwestycje", "Podobne oferty", "Polecane inwestycje"]:
+        # Find position of stop word
+        idx = html.find(stop_word)
+        if idx != -1:
+            main_window = html[:idx]
+            break
+
+    # 1. From script tags (often contains the main gallery)
+    scripts = re.findall(r"<script[^>]*>(.*?)</script>", main_window, re.DOTALL)
     for s in scripts:
         if '"galeria"' in s and '"zdjecia"' in s:
-            # Extract URLs from the 'galeria' JS object in RSC/Next data
             urls = re.findall(r'\\"url\\":\\"(https?://content\.tabelaofert\.pl/[^\\]+)', s)
             if urls:
                 found_urls.extend([u.rstrip('"') for u in urls])
+                
+    # 2. Targeted regex on main window
+    regex = r'(?:https?:)?//content\.tabelaofert\.pl/[^\s\"\\<>]+\.(?:webp|jpg|jpeg|png)'
+    found = re.findall(regex, main_window, re.IGNORECASE)
+    for u in found:
+        u_clean = u if u.startswith("http") else ("https:" + u)
+        # Skip thumbnails
+        if any(p in u_clean for p in ["thumb_200x200", "scale_300", "scale_245", "thumb_600x400"]):
+            continue
+        found_urls.append(u_clean)
             
     return list(dict.fromkeys(found_urls))
 
