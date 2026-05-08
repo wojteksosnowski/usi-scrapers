@@ -18,10 +18,28 @@ def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: 
         logger.error(f"Failed to fetch TO HTML for {url}")
         return None
 
-    data = extract_to_data(html, url)
+    data = extract_to_data(html, url, fetcher=fetcher)
     return save_dev_raw_json(data, config.public_dir, dev_slug, "to")
 
-def extract_to_data(html: str, url: str) -> dict:
+def extract_to_api_token(html: str) -> str | None:
+    """Extracts the API version token from Next.js script hashes."""
+    # Pattern for hashes like c1661a4a02 in /_next/static/chunks/main-app-c1661a4a02.js
+    m = re.search(r'/_next/static/chunks/[^"]+-([a-f0-9]{10})\.js', html)
+    if m:
+        return f"v{m.group(1)}"
+    return None
+
+def fetch_to_api_gallery(inv_id: str, token: str, fetcher: Fetcher) -> list[str]:
+    """Fetches investment gallery using the hidden JSON API."""
+    url = f"https://tabelaofert.pl/api/{token}/oferty/inwestycja/{inv_id}/galeria"
+    logger.info(f"Fetching TO Gallery API: {url}")
+    data = fetcher.fetch_json(url)
+    if not data: return []
+    
+    images = data.get("data", {}).get("images", [])
+    return [img["url"] for img in images if isinstance(img, dict) and "url" in img]
+
+def extract_to_data(html: str, url: str, fetcher: Fetcher = None) -> dict:
     """
     Centralized extraction logic for TabelaOfert.
     """
@@ -73,8 +91,17 @@ def extract_to_data(html: str, url: str) -> dict:
         "longitude": lng
     }
 
-    # 3. Gallery
-    gallery_urls = extract_gallery_urls(html)
+    # 3. Gallery (API Priority -> HTML Fallback)
+    gallery_urls = []
+    inv_id = _extract_to_id(url)
+    token = extract_to_api_token(html)
+    
+    if inv_id and token and fetcher:
+        gallery_urls = fetch_to_api_gallery(inv_id, token, fetcher)
+        
+    if not gallery_urls:
+        gallery_urls = extract_gallery_urls(html)
+        
     data["_raw_gallery_urls"] = gallery_urls
     
     return data
@@ -88,7 +115,7 @@ def download_raw_to_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetche
         logger.error(f"Failed to fetch TO HTML for {url}")
         return None
 
-    data = extract_to_data(html, url)
+    data = extract_to_data(html, url, fetcher=fetcher)
     return save_raw_json(data, config.public_dir, dev_slug, inv_slug, "to")
 
 def fetch_to_html(url: str, fetcher: Fetcher) -> str:
