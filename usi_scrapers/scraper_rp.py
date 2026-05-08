@@ -112,6 +112,8 @@ def resolve_rp_vendor_id(slug: str, fetcher: Fetcher) -> str | None:
 def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_or_slug: str = None) -> list[dict]:
     """
     Discovers investments on RynekPierwotny.pl.
+    If vendor_id_or_slug is provided, scans that developer.
+    Otherwise, uses global offer-list queries.
     """
     if vendor_id_or_slug:
         vendor_id = vendor_id_or_slug
@@ -125,14 +127,20 @@ def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_o
         data = fetcher.fetch_json(url, use_scraperapi=False) or {}
         return _parse_rp_results(data.get("results", []))
     else:
-        # Global discovery - scan all configured URLs
+        # Global discovery - scan using the recommended offer-list pattern
         all_results = []
         seen_ids = set()
-        urls = config.rp_discovery_urls or [
-            "https://rynekpierwotny.pl/api/v2/offers/offer/?s=offer-list&display_type=1&distance=5&for_sale=true&limited_presentation=false&page=1&page_size=100&show_on_listing=true&type=1"
-        ]
+        
+        # Use provided discovery URLs or the default global query
+        urls = []
+        if hasattr(config, "rp_discovery_urls") and config.rp_discovery_urls:
+            urls = config.rp_discovery_urls
+        else:
+            # Default global query (page 1)
+            urls = ["https://rynekpierwotny.pl/api/v2/offers/offer/?s=offer-list&display_type=1&distance=5&for_sale=true&limited_presentation=false&page=1&page_size=100&show_on_listing=true&type=1"]
+            
         for url in urls:
-            logger.info(f"Discovering RP investments via global JSONMAIN query: {url}")
+            logger.info(f"Discovering RP investments via query: {url}")
             data = fetcher.fetch_json(url, use_scraperapi=False) or {}
             batch = _parse_rp_results(data.get("results", []))
             for item in batch:
