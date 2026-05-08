@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "usi_unified.schema.json",
+  "title": "USI Unified Investment Data",
+  "description": "Zunifikowany format danych inwestycji (usi_{slug}.json). Wynik działania adapterów, jedyne źródło danych dla UI.",
+  "type": "object",
+  "required": ["investment_slug", "developer_slug", "name", "developer", "coords"],
+  "properties": {
+    "usi_inv_id": {
+      "type": "string",
+      "description": "Unikalny identyfikator USI inwestycji (np. INV-0001)."
+    },
+    "usi_dev_id": {
+      "type": ["string", "null"],
+      "description": "Link do nadrzędnego rekordu dewelopera USI."
+    },
+    "investment_slug": { "type": "string", "description": "Stabilny identyfikator inwestycji (folder)." },
+    "developer_slug": { "type": "string", "description": "Stabilny identyfikator dewelopera (folder)." },
+    "name": { "type": "string", "description": "Nazwa inwestycji (wyczyszczona)." },
+    "developer": { "type": "string", "description": "Nazwa dewelopera (wyświetlana)." },
+    "status": { 
+      "type": "string", 
+      "enum": ["Brak", "AI", "Wstępna", "Poszerzona", "Pełna", "Aktualizacja", "Ukończona"],
+      "default": "Brak"
+    },
+    "sources": {
+      "type": "object",
+      "description": "KRYTYCZNE: Mapowanie identyfikatorów portalowych (rpID, otoID). Nigdy nie usuwać.",
+      "properties": {
+        "rp": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "description": "rpID - stały identyfikator RynekPierwotny." },
+            "url": { "type": "string", "format": "uri" },
+            "last_sync": { "type": "string", "format": "date-time" }
+          }
+        },
+        "oto": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "description": "otoID - identyfikator Otodom (może ulec zmianie na portalu, ale musi być śledzony)." },
+            "url": { "type": "string", "format": "uri" },
+            "last_sync": { "type": "string", "format": "date-time" }
+          }
+        },
+        "to": {
+          "type": "object",
+          "properties": {
+            "url": { "type": "string", "format": "uri" },
+            "last_sync": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "coords": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "[latitude, longitude]"
+        },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "district": { "type": "string" }
+      }
+    },
+    "specifications": {
+      "type": "object",
+      "properties": {
+        "units_count": { "type": "integer", "minimum": 0 },
+        "floors_count": { "type": "integer", "minimum": 0 },
+        "delivery_date": { "type": "string", "description": "Format: 'Q kw. YYYY' lub ISO date." },
+        "delivery_quarter": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "delivery_year": { "type": "integer" }
+      }
+    },
+    "financials": {
+      "type": "object",
+      "properties": {
+        "price_avg": { "type": "number" },
+        "price_min": { "type": "number" },
+        "price_max": { "type": "number" },
+        "price_m2_min": { "type": "number" },
+        "price_m2_max": { "type": "number" }
+      }
+    },
+    "amenities": {
+      "type": "object",
+      "properties": {
+        "labels": { "type": "array", "items": { "type": "string" } },
+        "score": { "type": "integer" },
+        "matched": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": { "type": "string" },
+              "hm_udo": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "ratings": {
+      "type": "object",
+      "description": "Oceny analityka (0-4). Wartość null oznacza brak przyznanej oceny.",
+      "properties": {
+        "Balkony": { "type": ["number", "null"] },
+        "Fasady": { "type": ["number", "null"] },
+        "Wnętrza": { "type": ["number", "null"] },
+        "Teren": { "type": ["number", "null"] },
+        "Mieszkania": { "type": ["number", "null"] },
+        "Udogodnienia": { "type": ["number", "null"] },
+        "komentarz": { "type": ["string", "null"] }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "properties": {
+        "images_count": { "type": "integer" },
+        "image_paths": { "type": "array", "items": { "type": "string" } },
+        "here_map_url": { "type": "string", "format": "uri" },
+        "here_map_url_dark": { "type": "string", "format": "uri" }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "properties": {
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

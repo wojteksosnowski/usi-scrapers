@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "usi_dev.schema.json",
+  "title": "USI Unified Developer Data",
+  "description": "Stabilny format danych dewelopera (usi_dev_{slug}.json). Przechowuje mapowanie identyfikatorów portalowych.",
+  "type": "object",
+  "required": ["developer_slug", "name", "portal_mapping", "usi_dev_id"],
+  "properties": {
+    "usi_dev_id": {
+      "type": "string",
+      "description": "Unikalny identyfikator USI dewelopera (np. DEV-0001)."
+    },
+    "parent_id": {
+      "type": ["string", "null"],
+      "description": "ID nadrzędnego dewelopera (grupa kapitałowa)."
+    },
+    "developer_slug": { 
+      "type": "string", 
+      "description": "Stabilny identyfikator dewelopera (nazwa folderu)." 
+    },
+    "name": { 
+      "type": "string", 
+      "description": "Oficjalna nazwa dewelopera." 
+    },
+    "website": { 
+      "type": ["string", "null"], 
+      "format": "uri",
+      "description": "Oficjalna strona internetowa dewelopera."
+    },
+    "portal_mapping": {
+      "type": "object",
+      "description": "KRYTYCZNE: Mapowanie identyfikatorów portalowych do celów discovery i aktualizacji.",
+      "properties": {
+        "rp": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "description": "vendor_id (numeryczny string)." },
+            "slug": { "type": "string", "description": "vendor_slug używany w URL." }
+          }
+        },
+        "oto": {
+          "type": "object",
+          "properties": {
+            "agency_ids": { 
+              "type": "array", 
+              "items": { "type": "integer" },
+              "description": "Lista agency_id przypisanych do tego dewelopera na Otodom."
+            },
+            "url": { 
+              "type": "string", 
+              "format": "uri", 
+              "description": "Stały URL profilu dewelopera na Otodom." 
+            }
+          }
+        },
+        "to": {
+          "type": "object",
+          "properties": {
+            "slug": { "type": "string", "description": "dev_slug używany na tabelaofert.pl/deweloper/{slug}" }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Dodatkowe informacje (NIP, adres biura, itp.).",
+      "additionalProperties": true
+    },
+    "suggestions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "usi_dev_id": { "type": "string" },
+          "developer_slug": { "type": "string" },
+          "reason": { "type": "string" },
+          "score": { "type": "number" }
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "properties": {
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

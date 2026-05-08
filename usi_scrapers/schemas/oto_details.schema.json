@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "oto_details.schema.json",
+  "title": "Otodom Details",
+  "description": "Raw ad_data extracted from the __NEXT_DATA__ JSON blob on the Otodom investment page. Saved to Public/USIdata/{dev_slug}/{inv_slug}/oto_details.json. Note: the 'id' field (otoID) is unstable and may change for the same investment without warning — USIfolder is the stable identifier.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Otodom internal numeric ad ID. Unstable — may be reassigned. Do not use as a permanent key."
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL slug used in otodom.pl URLs. Contains the short public ID (e.g. 'rezydencja-swierkowa-etap-ii-ID4ADIF'). Also unstable."
+    },
+    "publicId": {
+      "type": "string",
+      "description": "Short alphanumeric public ID embedded in the URL slug (e.g. 'ID4ADIF')."
+    },
+    "externalId": {
+      "type": "string",
+      "description": "UUID assigned by the developer's CRM or integration partner (e.g. Obido)."
+    },
+    "title": {
+      "type": ["string", "null"],
+      "description": "Investment title as displayed on Otodom."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "HTML-formatted investment description."
+    },
+    "market": {
+      "type": "string",
+      "description": "Market type. Empty string for primary market."
+    },
+    "advertiserType": {
+      "type": "string",
+      "description": "Advertiser category, e.g. 'business'."
+    },
+    "advertType": {
+      "type": "string",
+      "description": "Listing type, e.g. 'DEVELOPER'."
+    },
+    "source": {
+      "type": "string",
+      "description": "Data source URN, e.g. 'urn:partner:obidointegration'."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "ISO 8601 datetime when the listing was first created."
+    },
+    "modifiedAt": {
+      "type": "string",
+      "description": "ISO 8601 datetime of last modification."
+    },
+    "price": {
+      "type": "object",
+      "description": "Price object. Often empty for developer listings where prices are per-unit.",
+      "additionalProperties": true
+    },
+    "services": {
+      "type": "array",
+      "description": "Paid promotion services active on this listing."
+    },
+    "developmentId": {"type": "integer"},
+    "developmentTitle": {"type": "string"},
+    "developmentUrl": {"type": "string"},
+    "exclusiveOffer": {"type": "boolean"},
+    "features": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Flat list of feature labels (Polish), e.g. ['Balkon', 'Taras', 'Winda']."
+    },
+    "featuresByCategory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {"type": "string"},
+          "values": {"type": "array", "items": {"type": "string"}},
+          "__typename": {"type": "string"}
+        },
+        "additionalProperties": true
+      },
+      "description": "Features grouped by category (e.g. 'Przestrzeń dodatkowa', 'Udogodnienia')."
+    },
+    "featuresWithoutCategory": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "agency": {
+      "type": ["object", "null"],
+      "description": "Developer/agency details.",
+      "properties": {
+        "id": {"type": "integer"},
+        "name": {"type": "string"},
+        "url": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "location": {
+      "type": ["object", "null"],
+      "description": "Location data. mapDetails.lat/lon are used by scraper_otodom.py.",
+      "properties": {
+        "mapDetails": {
+          "type": "object",
+          "properties": {
+            "lat": {"type": ["number", "null"]},
+            "lon": {"type": ["number", "null"]}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "investmentEstimatedDelivery": {
+      "type": ["object", "null"],
+      "description": "Estimated completion date.",
+      "properties": {
+        "quarter": {"type": ["integer", "null"], "minimum": 1, "maximum": 4},
+        "year": {"type": ["integer", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "target": {
+      "type": ["object", "null"],
+      "description": "Ad targeting metadata with investment stats (area range, city, unit count, etc.).",
+      "properties": {
+        "Area_from": {"type": "string"},
+        "Area_to": {"type": "string"},
+        "City": {"type": "string"},
+        "City_id": {"type": "string"},
+        "Number_of_properties": {"type": "string"},
+        "Floors_num": {"type": "string"},
+        "MarketType": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "images": {
+      "type": "array",
+      "items": {"type": "object"},
+      "description": "Image objects with URL and metadata."
+    },
+    "openDay": {"type": ["object", "string", "null"]},
+    "referenceId": {"type": "string"},
+    "pushedUpAt": {"type": ["string", "null"]},
+    "creationSource": {"type": "string"}
+  },
+  "additionalProperties": true
+}

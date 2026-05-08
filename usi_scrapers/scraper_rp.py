@@ -1,0 +1,308 @@
+import logging
+import json
+import re
+from pathlib import Path
+from .fetcher import Fetcher
+from .models import ScraperConfig
+from .utils.io import save_raw_json, save_dev_raw_json
+from .utils.stage_detector import extract_groups_id, extract_stages
+
+logger = logging.getLogger(__name__)
+
+def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
+    """
+    Downloads raw JSON for an RP developer profile and saves it.
+    """
+    profile = fetch_rp_developer_profile(vendor_id_or_slug, fetcher)
+    if not profile:
+        logger.error(f"Failed to fetch RP developer profile for {vendor_id_or_slug}")
+        return None
+
+    return save_dev_raw_json(profile, config.public_dir, dev_slug, "rp")
+
+def fetch_rp_developer_profile(vendor_id_or_slug: str, fetcher: Fetcher) -> dict:
+    """
+    Fetches developer profile from RynekPierwotny.pl API.
+    """
+    vendor_id = vendor_id_or_slug
+    if not str(vendor_id_or_slug).isdigit():
+        vendor_id = resolve_rp_vendor_id(vendor_id_or_slug, fetcher)
+        if not vendor_id:
+            logger.error(f"Could not resolve vendor ID for slug: {vendor_id_or_slug}")
+            return {}
+
+    url = f"https://rynekpierwotny.pl/api/v2/vendors/vendor/{vendor_id}/?s=vendor-detail"
+    logger.info(f"Fetching RynekPierwotny developer profile for ID: {vendor_id} from {url}")
+    return fetcher.fetch_json(url, use_scraperapi=False) or {}
+
+def download_raw_rp_json(offer_id: str, dev_slug: str, inv_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
+    """
+    Downloads raw JSON for an RP investment (details + gallery) and saves it to the database.
+    Does not process images or adapt data.
+    """
+    details = fetch_rp_details(offer_id, fetcher)
+    if not details:
+        logger.error(f"Failed to fetch RP details for ID {offer_id}")
+        return None
+
+    # Also fetch gallery to make the raw JSON complete
+    gallery_data = fetcher.fetch_json(f"https://rynekpierwotny.pl/api/v2/offers/offer/{offer_id}/?s=offer-detail-gallery", use_scraperapi=False)
+    if gallery_data:
+        details["_raw_gallery"] = gallery_data
+
+    return save_raw_json(details, config.public_dir, dev_slug, inv_slug, "rp")
+
+def fetch_rp_details(offer_id: str, fetcher: Fetcher) -> dict:
+    """
+    Fetches investment details from RynekPierwotny.pl API v2.
+    """
+    url = f"https://rynekpierwotny.pl/api/v2/offers/offer/{offer_id}/?s=offer-detail"
+    logger.info(f"Fetching RynekPierwotny details for ID: {offer_id} from {url}")
+    return fetcher.fetch_json(url, use_scraperapi=False) or {}
+
+def fetch_rp_gallery(offer_id: str, fetcher: Fetcher) -> list[str]:
+    """
+    Fetches image URLs from RynekPierwotny.pl gallery API.
+    """
+    url = f"https://rynekpierwotny.pl/api/v2/offers/offer/{offer_id}/?s=offer-detail-gallery"
+    logger.info(f"Fetching RynekPierwotny gallery for ID: {offer_id} from {url}")
+    
+    data = fetcher.fetch_json(url, use_scraperapi=False) or {}
+    # Extract images from gallery
+    images = []
+    gallery = data.get("gallery", [])
+    for item in gallery:
+        # Prefer 1500 resolution
+        img_url = item.get("image", {}).get("g_img_1500")
+        if img_url:
+            images.append(img_url)
+                
+    return images
+
+def resolve_rp_vendor_id(slug: str, fetcher: Fetcher) -> str | None:
+    """
+    Scrapes the developer profile page on RynekPierwotny.pl to find their vendor ID.
+    """
+    url = f"https://rynekpierwotny.pl/deweloperzy/{slug}/"
+    logger.info(f"Resolving RP vendor ID for slug: {slug} from {url}")
+    html = fetcher.fetch(url, use_scraperapi=False)
+    if not html:
+        return None
+    
+    # Look for "vendor": ID in the page source or API calls mentioned in scripts
+    match = re.search(r'"vendor_id":\s*(\d+)', html)
+    if match:
+        return match.group(1)
+    
+    match = re.search(r'vendor=(\d+)', html)
+    if match:
+        return match.group(1)
+        
+    return None
+
+def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_or_slug: str = None) -> list[dict]:
+    """
+    Discovers investments on RynekPierwotny.pl.
+    """
+    if vendor_id_or_slug:
+        vendor_id = vendor_id_or_slug
+        if not vendor_id_or_slug.isdigit():
+            vendor_id = resolve_rp_vendor_id(vendor_id_or_slug, fetcher)
+            if not vendor_id:
+                logger.error(f"Could not resolve vendor ID for slug: {vendor_id_or_slug}")
+                return []
+        url = f"https://rynekpierwotny.pl/api/v2/offers/offer/?s=vendor-detail-offer-list&country=1&country=2&display_type=1&display_type=2&page=1&page_size=100&type=1&type=2&type=3&vendor={vendor_id}"
+        logger.info(f"Discovering RP investments for vendor ID: {vendor_id}")
+        data = fetcher.fetch_json(url, use_scraperapi=False) or {}
+        return _parse_rp_results(data.get("results", []))
+    else:
+        # Global discovery - scan all configured URLs
+        all_results = []
+        seen_ids = set()
+        for url in config.rp_discovery_urls:
+            logger.info(f"Discovering RP investments via global JSONMAIN query: {url}")
+            data = fetcher.fetch_json(url, use_scraperapi=False) or {}
+            batch = _parse_rp_results(data.get("results", []))
+            for item in batch:
+                if item["id"] not in seen_ids:
+                    all_results.append(item)
+                    seen_ids.add(item["id"])
+        return all_results
+
+def _parse_rp_results(results: list) -> list[dict]:
+    """Helper to parse RP API results and flatten stages."""
+    offers = []
+    for item in results:
+        def get_val(obj, key):
+            if not obj or not isinstance(obj, dict): return None
+            v = obj.get(key)
+            if isinstance(v, dict) and "value" in v:
+                return v["value"]
+            return v
+
+        parent_name = item.get("name")
+        parent_id = str(item.get("id"))
+        
+        parent_img = None
+        main_img_data = item.get("main_image")
+        if main_img_data:
+            if isinstance(main_img_data, str): parent_img = main_img_data
+            elif isinstance(main_img_data, dict):
+                parent_img = main_img_data.get("m_img_1500") or main_img_data.get("m_img_500") or main_img_data.get("image")
+        
+        if not parent_img:
+            gallery = item.get("gallery")
+            if gallery and isinstance(gallery, list) and len(gallery) > 0:
+                first_img = gallery[0].get("image")
+                if isinstance(first_img, dict):
+                    parent_img = first_img.get("g_img_1500") or first_img.get("g_img_500") or first_img.get("image")
+                elif isinstance(first_img, str):
+                    parent_img = first_img
+
+        groups = get_val(item, "groups") or {}
+        stages = get_val(groups, "stages") or []
+        
+        if stages:
+            for stage in stages:
+                s_id_internal = stage.get("id")
+                s_offer_val = get_val(stage, "offer")
+                
+                if s_offer_val:
+                    s_id = str(s_offer_val.get("id"))
+                    s_name = s_offer_val.get("name")
+                    s_slug = s_offer_val.get("slug")
+                    s_vendor_val = get_val(s_offer_val, "vendor") or {}
+                    s_vendor_slug = s_vendor_val.get("slug")
+                    
+                    s_img = None
+                    s_main_photo = get_val(s_offer_val, "main_photo") or get_val(s_offer_val, "main_image")
+                    if s_main_photo:
+                        if isinstance(s_main_photo, str): s_img = s_main_photo
+                        elif isinstance(s_main_photo, dict):
+                            s_img = s_main_photo.get("image") or s_main_photo.get("m_img_1500")
+                    
+                    if not s_img:
+                        s_img = parent_img
+                    
+                    offers.append({
+                        "id": s_id,
+                        "name": s_name,
+                        "slug": s_slug,
+                        "developer": s_vendor_val.get("name"),
+                        "vendor_slug": s_vendor_slug,
+                        "url": f"https://rynekpierwotny.pl/oferty/{s_vendor_slug}/{s_slug}-{s_id}/?show_sold_stage=true&stage={s_id_internal}",
+                        "image": s_img,
+                        "is_stage": True,
+                        "parent_id": parent_id
+                    })
+        else:
+            v_data = get_val(item, "vendor") or {}
+            v_slug = v_data.get("slug")
+            v_name = v_data.get("name")
+            o_id = str(item.get("id"))
+            o_slug = item.get("slug")
+            
+            offers.append({
+                "id": o_id,
+                "name": parent_name,
+                "slug": o_slug,
+                "developer": v_name,
+                "vendor_slug": v_slug,
+                "url": f"https://rynekpierwotny.pl/oferty/{v_slug}/{o_slug}-{o_id}/",
+                "image": parent_img,
+                "is_stage": False
+            })
+            
+    return offers
+
+def scrape_rynek_pierwotny(offer_id: str, developer_slug: str, investment_slug: str, fetcher: Fetcher, url: str = None) -> dict:
+    """
+    Main function to scrape RynekPierwotny investment.
+    """
+    details = fetch_rp_details(offer_id, fetcher)
+    if not details:
+        return {"error": "Could not fetch details"}
+        
+    gallery_data = fetcher.fetch_json(f"https://rynekpierwotny.pl/api/v2/offers/offer/{offer_id}/?s=offer-detail-gallery", use_scraperapi=False)
+    if gallery_data:
+        details["_raw_gallery"] = gallery_data
+        
+    gallery_urls = []
+    if gallery_data:
+        gallery = gallery_data.get("gallery", [])
+        for item in gallery:
+            img_url = item.get("image", {}).get("g_img_1500")
+            if img_url:
+                gallery_urls.append(img_url)
+    
+    main_image = details.get("main_image", {}).get("m_img_500")
+    if main_image:
+        gallery_urls.insert(0, main_image)
+        
+    def get_val(data, key, default=None):
+        if not data or key not in data:
+            return default
+        val = data[key]
+        if isinstance(val, dict) and "value" in val:
+            return val["value"]
+        return val
+
+    vendor_data = get_val(details, "vendor")
+    vendor_slug = get_val(vendor_data, "slug") if vendor_data else None
+    offer_slug = details.get("slug", "")
+
+    if not url and vendor_slug and offer_slug:
+        url = f"https://rynekpierwotny.pl/oferty/{vendor_slug}/{offer_slug}-{offer_id}/"
+        
+    details["url"] = url
+    geo_point = get_val(details, "geo_point")
+    coords = get_val(geo_point, "coordinates") if geo_point else None
+    
+    construction_date = get_val(details, "construction_date_range")
+    const_upper = get_val(construction_date, "upper") if construction_date else None
+
+    stages = extract_stages(details)
+    groups_id = extract_groups_id(details)
+    groups = details.get("groups") or {}
+
+    stage_sort = None
+    stage_is_current = None
+    for s in stages:
+        if str(s["offer_id"]) == str(offer_id):
+            stage_sort = s["sort"]
+            stage_is_current = s["current"]
+            break
+
+    details["image_urls"] = gallery_urls
+    sibling_stages = stages
+    sibling_stage_folders = [
+        f"{developer_slug}/{s['slug']}"
+        for s in stages
+        if str(s["offer_id"]) != str(offer_id) and s["slug"]
+    ]
+
+    result = {
+        "source": "rynekpierwotny.pl",
+        "id": offer_id,
+        "url": url,
+        "developer_slug": developer_slug,
+        "investment_slug": investment_slug,
+        "name": details.get("name"),
+        "address": details.get("address"),
+        "geo_point": coords,
+        "latitude": coords[1] if coords and len(coords) > 1 else (coords[0] if coords else None),
+        "longitude": coords[0] if coords and len(coords) > 0 else None,
+        "construction_date_upper": const_upper,
+        "website": details.get("website"),
+        "properties_count": details.get("properties"),
+        "image_urls": gallery_urls,
+        "groups_id": groups_id,
+        "groups_name": groups.get("name"),
+        "stage_sort": stage_sort,
+        "stage_is_current": stage_is_current,
+        "sibling_stages": sibling_stages,
+        "sibling_stage_folders": sibling_stage_folders,
+        "raw_details": details,
+    }
+
+    return result

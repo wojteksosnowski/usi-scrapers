@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "rp_details.schema.json",
+  "title": "RynekPierwotny Details",
+  "description": "Raw response from the RynekPierwotny REST API (v2/offers/offer/{id}). Saved to Public/USIdata/{dev_slug}/{inv_slug}/rp_details.json. Used by Coda .ParseJSON and by stage_detector.py to read sibling stage data.",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": ["string", "null"],
+      "description": "Street address of the investment."
+    },
+    "buildings": {
+      "type": ["integer", "null"],
+      "description": "Number of buildings in the investment."
+    },
+    "commercial_rental": {
+      "type": ["boolean", "null"],
+      "description": "Whether the investment includes commercial rental units."
+    },
+    "configuration": {
+      "type": "object",
+      "description": "Display and form configuration set by the developer.",
+      "properties": {
+        "display_type": {"type": "integer"},
+        "is_boosted": {"type": "boolean"},
+        "pre_sale": {"type": "boolean"},
+        "price_visibility": {"type": "integer"},
+        "publish_date": {"type": ["string", "null"]},
+        "show_price_range": {"type": "boolean"},
+        "show_price_m2_range": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "construction_date_range": {
+      "type": ["object", "null"],
+      "description": "Planned construction completion date range.",
+      "properties": {
+        "lower": {"type": ["string", "null"], "format": "date"},
+        "upper": {"type": ["string", "null"], "format": "date"},
+        "bounds": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "create_date": {
+      "type": "string",
+      "description": "ISO 8601 datetime when the offer was first published on RP."
+    },
+    "currency": {
+      "type": "integer",
+      "description": "Currency code (1 = PLN)."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "HTML-formatted investment description."
+    },
+    "distance_from_the_airport": {"type": ["number", "null"]},
+    "distance_from_the_beach": {"type": ["number", "null"]},
+    "facilities": {
+      "type": "array",
+      "items": {"type": "integer"},
+      "description": "List of facility codes. Decoded labels available in RPfacilities field of the Coda table."
+    },
+    "floors_above_ground_range": {
+      "type": ["object", "null"],
+      "properties": {
+        "lower": {"type": "integer"},
+        "upper": {"type": "integer"},
+        "bounds": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "floors_below_ground": {"type": ["integer", "null"]},
+    "funds_protection": {
+      "type": ["integer", "null"],
+      "description": "Buyer funds protection level (Polish law escrow categories)."
+    },
+    "funds_protection_description": {"type": ["string", "null"]},
+    "geo_area": {
+      "type": ["object", "null"],
+      "description": "GeoJSON Polygon or Point representing the investment footprint.",
+      "properties": {
+        "type": {"type": "string"},
+        "coordinates": {}
+      },
+      "additionalProperties": true
+    },
+    "geo_point": {
+      "type": ["object", "null"],
+      "description": "GeoJSON Point or object with value field containing [longitude, latitude].",
+      "additionalProperties": true
+    },
+    "groups": {
+      "type": ["object", "null"],
+      "description": "Stage group metadata. Present when the investment belongs to a multi-stage development. Used by stage_detector.py.",
+      "properties": {
+        "id": {},
+        "name": {"type": "string"},
+        "offer_ids": {"type": "array", "items": {}}
+      },
+      "additionalProperties": true
+    },
+    "id": {
+      "type": ["integer", "string"],
+      "description": "RynekPierwotny offer ID."
+    },
+    "images": {
+      "type": "array",
+      "items": {"type": "object"},
+      "description": "List of image objects with URL and metadata."
+    },
+    "is_active": {"type": ["boolean", "null"]},
+    "name": {
+      "type": ["string", "null"],
+      "description": "Investment name."
+    },
+    "price_m2_range": {
+      "type": ["object", "null"],
+      "description": "Price per m² range (lower/upper/bounds).",
+      "properties": {
+        "lower": {"type": ["number", "null"]},
+        "upper": {"type": ["number", "null"]},
+        "bounds": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "price_range": {
+      "type": ["object", "null"],
+      "description": "Total unit price range (lower/upper/bounds).",
+      "properties": {
+        "lower": {"type": ["number", "null"]},
+        "upper": {"type": ["number", "null"]},
+        "bounds": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "properties": {
+      "type": ["integer", "null"],
+      "description": "Total number of units (apartments/houses) available."
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL slug used in rynekpierwotny.pl offer URLs."
+    },
+    "stages": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "offer_id": {},
+          "slug": {"type": "string"},
+          "name": {"type": "string"},
+          "sort": {"type": ["integer", "null"]},
+          "is_current": {"type": ["boolean", "null"]}
+        },
+        "additionalProperties": true
+      },
+      "description": "Sibling stages within the same development group. Used by stage_detector.py to populate sibling_stage_folders."
+    },
+    "website": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Developer's project website URL."
+    }
+  },
+  "additionalProperties": true
+}

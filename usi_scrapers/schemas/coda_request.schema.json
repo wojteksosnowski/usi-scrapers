@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "coda_request.schema.json",
+  "title": "Coda Request",
+  "description": "Message written by the Coda.io pack to trigger scraping. Placed at Public/USIdata/{dev_slug}/{inv_slug}/coda_request_{id}.json. bus.py detects creation and dispatches to the appropriate scraper.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["rynekpierwotny", "otodom", "tabelaofert", "grabber"],
+      "description": "Explicit scraper type. When absent, bus.py infers from field presence: rpID → rynekpierwotny, otoID/strona_otodom → otodom."
+    },
+    "rpID": {
+      "type": "string",
+      "description": "RynekPierwotny offer ID (numeric string). Triggers rynekpierwotny task when type is absent."
+    },
+    "otoID": {
+      "type": "string",
+      "description": "Otodom investment ID (short alphanumeric string, e.g. '4uvqs'). Unstable — may change for the same investment without warning. USIfolder is the stable key."
+    },
+    "strona_otodom": {
+      "type": "string",
+      "format": "uri",
+      "description": "Otodom investment URL. Used as fallback when otoID is absent. Triggers otodom task when type is absent."
+    },
+    "strona_rynek": {
+      "type": "string",
+      "format": "uri",
+      "description": "RynekPierwotny investment URL, e.g. https://rynekpierwotny.pl/oferty/{dev}/{inv}-{id}/"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Generic URL used for tabelaofert and grabber tasks."
+    },
+    "USIfolder": {
+      "type": "string",
+      "description": "Investment slug — the stable identifier used as the directory name under USIdata/{dev_slug}/."
+    },
+    "developer_slug": {
+      "type": "string",
+      "description": "Developer slug for directory structure. Falls back to rpSlug or otoSlug."
+    },
+    "rpSlug": {
+      "type": "string",
+      "description": "Developer slug as recorded in RynekPierwotny."
+    },
+    "otoSlug": {
+      "type": "string",
+      "description": "Developer slug as recorded in Otodom."
+    },
+    "offer_id": {
+      "type": "string",
+      "description": "Alias for rpID used in some request formats."
+    },
+    "regex": {
+      "type": "string",
+      "description": "Regular expression for link extraction. Used only for grabber task type."
+    }
+  },
+  "additionalProperties": true
+}

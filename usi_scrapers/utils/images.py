@@ -1,13 +1,14 @@
 import requests
 import shutil
 import re
+import logging
 from pathlib import Path
 from urllib.parse import unquote
-import logging
+from ..models import ScraperConfig
 
-logger = logging.getLogger("usi_scrapers.utils.images")
+logger = logging.getLogger(__name__)
 
-IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".avif", ".heic"]
+IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 
 def clean_filename(url: str) -> str:
     """
@@ -38,11 +39,8 @@ def clean_filename(url: str) -> str:
     base_url = url.split("?")[0].split("#")[0]
     filename = unquote(base_url.split("/")[-1])
     
-    # Strip cache-buster/hash suffix like _e94b5737.webp or _a789f3d8.webp before matching
-    filename = re.sub(r'_[a-f0-9]{8}\.', '.', filename)
-    
     # Extract something like file.jpg, file.png, etc.
-    match = re.search(r'([^\/]+\.(?:jpg|jpeg|png|webp|avif|heic))', filename, re.IGNORECASE)
+    match = re.search(r'([^\/]+\.(?:jpg|jpeg|png|webp))', filename, re.IGNORECASE)
     if match:
         return match.group(1)
     
@@ -51,12 +49,15 @@ def clean_filename(url: str) -> str:
         if ext in filename.lower():
             idx = filename.lower().find(ext)
             return filename[:idx + len(ext)]
+            
+    # Strip cache-buster/hash suffix like _e94b5737.webp or _a789f3d8.webp
+    filename = re.sub(r'_[a-f0-9]{8}\.', '.', filename)
 
     return filename
 
-def download_image(url: str, public_dir: Path, developer_slug: str, investment_slug: str) -> str:
+def download_image(url: str, developer_slug: str, investment_slug: str, config: ScraperConfig) -> str:
     """
-    Downloads image from URL and saves it to <public_dir>/USI/{dev_slug}/{inv_slug}/{filename}.
+    Downloads image from URL and saves it to {public_dir}/USI/{dev_slug}/{inv_slug}/{filename}.
     Returns filename if successful, empty string otherwise.
     """
     filename = clean_filename(url)
@@ -65,18 +66,28 @@ def download_image(url: str, public_dir: Path, developer_slug: str, investment_s
         logger.warning(f"Could not extract filename from URL: {url}")
         return ""
         
-    target_dir = public_dir / "USI" / developer_slug / investment_slug
-    target_dir.mkdir(parents=True, exist_ok=True)
+    # Standardize image directory path
+    usi_root = config.public_dir / "USI"
+    target_dir = usi_root / developer_slug / investment_slug
+    
+    try:
+        target_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError:
+        # macOS drive permission issues
+        logger.debug(f"Permission denied creating/accessing directory {target_dir}, proceeding anyway")
+        
     target_path = target_dir / filename
     
-    if target_path.exists():
-        # Optional: check if file is too small (incomplete download)
-        if target_path.stat().st_size > 1024:
-            return filename
+    try:
+        if target_path.exists():
+            # Skip if already exists and is not a tiny placeholder
+            if target_path.stat().st_size > 1024:
+                return filename
+    except PermissionError:
+        logger.debug(f"Permission denied checking existence of {target_path}")
         
     try:
         logger.info(f"Downloading image: {url}")
-        # Use a real User-Agent to avoid being blocked
         headers = {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
@@ -91,19 +102,18 @@ def download_image(url: str, public_dir: Path, developer_slug: str, investment_s
         logger.error(f"Error downloading image {url}: {e}")
         return ""
 
-def save_images(urls: list[str], public_dir: Path, developer_slug: str, investment_slug: str) -> list[str]:
+def save_images(urls: list[str], developer_slug: str, investment_slug: str, config: ScraperConfig) -> list[str]:
     """
     Downloads and saves a list of images.
     Returns list of successful filenames.
     """
     saved_filenames = []
-    # Use set to avoid duplicate URLs
     unique_urls = [u for u in set(urls) if u and u.strip()]
     
     for url in unique_urls:
-        fname = download_image(url, public_dir, developer_slug, investment_slug)
+        fname = download_image(url, developer_slug, investment_slug, config)
         if fname:
             saved_filenames.append(fname)
             
-    logger.info(f"Successfully saved {len(saved_filenames)} images for {investment_slug} in {public_dir}")
+    logger.info(f"Successfully saved {len(saved_filenames)} images for {investment_slug}")
     return saved_filenames

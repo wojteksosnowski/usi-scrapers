@@ -18,6 +18,9 @@ class ScraperConfig:
     # Ścieżka do pliku ze statystykami użycia ScraperAPI (np. gdzieś w USIdata/)
     usage_stats_path: Optional[Path] = None
     
+    # HERE Maps API Key dla geokodowania i wzbogacania danych POI
+    here_api_key: Optional[str] = None
+    
     # Limity odpytywania (rate limiting) per domena (w sekundach)
     fetch_delays: Dict[str, float] = field(default_factory=lambda: {
         "rynekpierwotny.pl": 0.5,
