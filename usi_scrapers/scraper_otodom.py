@@ -196,8 +196,11 @@ def fetch_otodom_agency_name(url: str, fetcher: Fetcher) -> str | None:
     ad_data = data.get("ad", {})
     if not ad_data:
         ad_data = data.get("data", {}).get("searchAds", {})
+    
+    if not ad_data:
+        return None
         
-    return ad_data.get("agency", {}).get("name")
+    return ad_data.get("agency", {}).get("name") if ad_data.get("agency") else None
 
 def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: Fetcher) -> dict:
     """
@@ -213,7 +216,11 @@ def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: 
         
     ad_data = page_props.get("ad", {})
     if not ad_data:
+        # Fallback for search-based data
         ad_data = page_props.get("data", {}).get("searchAds", {})
+        
+    if not ad_data:
+        return {"error": "Could not find investment data in page properties"}
         
     images = []
     images_raw = ad_data.get("images", [])
@@ -222,9 +229,15 @@ def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: 
         if img_url:
             images.append(img_url)
             
-    agency_url = ad_data.get("agency", {}).get("url", "")
-    agency_name = ad_data.get("agency", {}).get("name", "")
+    agency_data = ad_data.get("agency") or {}
+    agency_url = agency_data.get("url", "")
+    agency_name = agency_data.get("name", "")
     
+    # If no agency but it is private/unknown, try to use owner name
+    if not agency_name:
+        owner_data = ad_data.get("owner") or {}
+        agency_name = owner_data.get("name") or "Nieznany Deweloper"
+
     if agency_url:
         dev_match = re.search(r'(?<=/)[^/]+(?=-ID)', agency_url)
         if dev_match:
@@ -239,7 +252,7 @@ def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: 
         developer_slug = slugify(agency_name)
         logger.info(f"Resolved developer slug from Otodom agency name: {developer_slug}")
             
-    coords = ad_data.get("location", {}).get("coordinates", {})
+    coords = ad_data.get("location", {}).get("coordinates") or {}
     lat = coords.get("latitude")
     lng = coords.get("longitude")
 
@@ -271,8 +284,8 @@ def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: 
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
         "title": ad_data.get("title"),
-        "agency_name": ad_data.get("agency", {}).get("name"),
-        "agency_id": ad_data.get("agency", {}).get("id"),
+        "agency_name": agency_name,
+        "agency_id": agency_data.get("id"),
         "latitude": lat,
         "longitude": lng,
         "delivery_quarter": delivery_quarter,
