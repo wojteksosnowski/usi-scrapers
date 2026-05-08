@@ -1,0 +1,3 @@
+"""
+Utils module. Narzędzia pomocnicze.
+"""
