@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 @dataclass
 class ScraperConfig:
@@ -21,6 +21,11 @@ class ScraperConfig:
     # HERE Maps API Key dla geokodowania i wzbogacania danych POI
     here_api_key: Optional[str] = None
     
+    # Adresy URL do globalnego skanowania portali (Discovery)
+    rp_discovery_urls: List[str] = field(default_factory=list)
+    otodom_discovery_urls: List[str] = field(default_factory=list)
+    to_discovery_urls: List[str] = field(default_factory=list)
+    
     # Limity odpytywania (rate limiting) per domena (w sekundach)
     fetch_delays: Dict[str, float] = field(default_factory=lambda: {
         "rynekpierwotny.pl": 0.5,
@@ -28,4 +33,3 @@ class ScraperConfig:
         "tabelaofert.pl": 0.5,
         "default": 0.5
     })
-

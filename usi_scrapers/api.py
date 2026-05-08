@@ -23,7 +23,18 @@ def list_investments(config: ScraperConfig, fetcher: Fetcher, portal: str, ident
             return discover_otodom_investments(identifier, fetcher)
         elif identifier:
             return discover_otodom_listing(identifier, fetcher)
-        return []
+            
+        # Global discovery for Otodom
+        all_results = []
+        seen_ids = set()
+        for url in config.otodom_discovery_urls:
+             batch = discover_otodom_listing(url, fetcher)
+             for item in batch:
+                 if item["id"] not in seen_ids:
+                     all_results.append(item)
+                     seen_ids.add(item["id"])
+        return all_results
+        
     elif p in ("to", "tabelaofert"):
         return discover_to_investments(identifier, fetcher, config)
     else:
