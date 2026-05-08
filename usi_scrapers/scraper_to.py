@@ -203,23 +203,30 @@ def filter_investment_images(urls: list[str], product: dict) -> list[str]:
         
     prefix = _investment_image_prefix(str(main_image)) if main_image else None
     candidates = []
+    
+    # Common keywords for non-investment images
+    exclude_keywords = ["mapa", "logo", "icon", "avatar", "tabela-", "rzut-", "plan-", "plany/"]
+
     for url in urls:
-        fname = _cdn_filename(url)
-        if any(fname.startswith(p) for p in ["mapa-", "logo-", "icon-", "avatar-"]):
+        fname = _cdn_filename(url).lower()
+        if any(kw in fname for kw in exclude_keywords) or "/plany/" in url:
             continue
             
-        if prefix and not fname.startswith(prefix):
+        if prefix and not fname.startswith(prefix.lower()):
             prefix_parts = prefix.split("-")
-            short_prefix = "-".join(prefix_parts[:3]) if len(prefix_parts) > 2 else prefix
-            if not fname.startswith(short_prefix):
+            # Try a slightly shorter prefix if 4 parts don't match, but not too short
+            short_prefix = "-".join(prefix_parts[:3]) if len(prefix_parts) > 3 else prefix
+            if not fname.startswith(short_prefix.lower()):
                 continue
         
         candidates.append(url)
 
+    # Fallback: if prefix filtering was too aggressive and we have no images, 
+    # take anything that isn't a map/logo/plan.
     if not candidates and urls:
-        for url in candidates:
-            fname = _cdn_filename(url)
-            if not any(fname.startswith(p) for p in ["mapa-", "logo-", "icon-", "avatar-"]):
+        for url in urls:
+            fname = _cdn_filename(url).lower()
+            if not any(kw in fname for kw in exclude_keywords) and "/plany/" not in url:
                 candidates.append(url)
 
     by_filename: dict[str, tuple[int, str]] = {}
