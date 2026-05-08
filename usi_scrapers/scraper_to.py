@@ -24,7 +24,6 @@ def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: 
 def extract_to_data(html: str, url: str) -> dict:
     """
     Centralized extraction logic for TabelaOfert.
-    Combines JSON-LD, RSC fragments, and H1 analysis.
     """
     data = parse_to_product(html) or {}
     data["url"] = url
@@ -63,18 +62,6 @@ def extract_to_data(html: str, url: str) -> dict:
     street = address_obj.get("streetAddress")
     city = address_obj.get("addressLocality")
     region = address_obj.get("addressRegion")
-
-    if (not street or not city) and data.get("description"):
-        desc = data.get("description", "")
-        parts_segments = re.split(r"[✔️➤]", desc)
-        for segment in parts_segments:
-            segment = segment.strip()
-            if "ul." in segment or (city and city in segment):
-                parts = [p.strip() for p in segment.split(",")]
-                if len(parts) >= 2:
-                    city = parts[0]
-                    street = parts[-1]
-                    break
     
     address = ", ".join(filter(None, [street, city])) or None
     
@@ -86,9 +73,17 @@ def extract_to_data(html: str, url: str) -> dict:
         "longitude": lng
     }
 
-    # 3. Gallery
+    # 3. Gallery (Strictly from JSON-LD / RSC script data)
     gallery_urls = extract_gallery_urls(html)
-    data["_raw_gallery_urls"] = gallery_urls
+    
+    # Also add the main image from JSON-LD if present
+    main_image = data.get("image")
+    if isinstance(main_image, list):
+        gallery_urls.extend(main_image)
+    elif isinstance(main_image, str):
+        gallery_urls.append(main_image)
+        
+    data["_raw_gallery_urls"] = list(dict.fromkeys(gallery_urls))
     
     return data
 
@@ -155,35 +150,35 @@ def extract_additional_prop(product: dict, name: str) -> str | None:
 
 def extract_gallery_urls(html: str) -> list[str]:
     found_urls = []
+    
+    # 1. From script tags (Strictly use the structured gallery data)
     scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.DOTALL)
     for s in scripts:
         if '"galeria"' in s and '"zdjecia"' in s:
+            # Extract URLs from the 'galeria' JS object in RSC/Next data
             urls = re.findall(r'\\"url\\":\\"(https?://content\.tabelaofert\.pl/[^\\]+)', s)
             if urls:
                 found_urls.extend([u.rstrip('"') for u in urls])
-                
-    regex = r'(?:https?:)?//content\.tabelaofert\.pl/[^\s\"\\<>]+\.(?:webp|jpg|jpeg|png)'
-    found = re.findall(regex, html, re.IGNORECASE)
-    for u in found:
-        if u.startswith("//"):
-            found_urls.append("https:" + u)
-        else:
-            found_urls.append(u)
             
     return list(dict.fromkeys(found_urls))
 
 def _cdn_filename(url: str) -> str:
     fname = url.rsplit("/", 1)[-1]
     m = re.search(r"[^/]+-/(.+)$", url)
-    if m: fname = m.group(1)
+    if m: 
+        fname = m.group(1)
     else:
         parts = fname.split(",")
         if len(parts) > 1: fname = parts[-1]
+    
     fname = re.sub(r'_[a-f0-9]{8}\.', '.', fname)
     return fname
 
 def _investment_image_prefix(image_url: str) -> str | None:
     fname = _cdn_filename(image_url)
+    if "/" in fname:
+        fname = fname.rsplit("/", 1)[-1]
+        
     stem = fname.rsplit(".", 1)[0]
     stem = re.sub(r'-\d+$', '', stem)
     
@@ -196,39 +191,52 @@ def _investment_image_prefix(image_url: str) -> str | None:
         return "-".join(parts[:4])
     return "-".join(parts)
 
-def filter_investment_images(urls: list[str], product: dict) -> list[str]:
+def filter_investment_images(urls: list[str], product: dict, inv_url: str = None) -> list[str]:
     main_image = product.get("image")
     if isinstance(main_image, list) and main_image:
         main_image = main_image[0]
         
+    to_id = _extract_to_id(inv_url) if inv_url else None
     prefix = _investment_image_prefix(str(main_image)) if main_image else None
-    candidates = []
     
-    # Common keywords for non-investment images
-    exclude_keywords = ["mapa", "logo", "icon", "avatar", "tabela-", "rzut-", "plan-", "plany/"]
+    if prefix and (len(prefix) < 5 or prefix.lower() in ("mieszkanie", "logo", "mapa")):
+        if inv_url:
+            slug_match = re.search(r'/inwestycja/([^,]+)', inv_url)
+            if slug_match:
+                prefix = "-".join(slug_match.group(1).split("-")[:3])
 
+    candidates = []
     for url in urls:
-        fname = _cdn_filename(url).lower()
-        if any(kw in fname for kw in exclude_keywords) or "/plany/" in url:
+        fname = _cdn_filename(url)
+        
+        # 1. ID Check (Strong signal for TabelaOfert plans)
+        if to_id and (f"plany/{to_id}" in url or f"mapa-i{to_id}" in fname):
+             candidates.append(url)
+             continue
+
+        # 2. Skip generic stuff
+        if any(p in fname.lower() for p in ["mapa-", "logo-", "icon-", "avatar-", "spacer-"]):
             continue
             
-        if prefix and not fname.startswith(prefix.lower()):
+        # 3. Prefix Check
+        if prefix:
             prefix_parts = prefix.split("-")
-            # Try a slightly shorter prefix if 4 parts don't match, but not too short
-            short_prefix = "-".join(prefix_parts[:3]) if len(prefix_parts) > 3 else prefix
-            if not fname.startswith(short_prefix.lower()):
+            short_prefix = "-".join(prefix_parts[:2]) if len(prefix_parts) > 1 else prefix
+            
+            clean_fname = fname.rsplit("/", 1)[-1] if "/" in fname else fname
+            if not clean_fname.startswith(short_prefix):
                 continue
         
         candidates.append(url)
 
-    # Fallback: if prefix filtering was too aggressive and we have no images, 
-    # take anything that isn't a map/logo/plan.
+    # 4. Fallback if filter too aggressive
     if not candidates and urls:
         for url in urls:
-            fname = _cdn_filename(url).lower()
-            if not any(kw in fname for kw in exclude_keywords) and "/plany/" not in url:
+            fname = _cdn_filename(url)
+            if not any(p in fname.lower() for p in ["mapa-", "logo-", "icon-", "avatar-"]):
                 candidates.append(url)
 
+    # 5. Deduplicate and take highest resolution
     by_filename: dict[str, tuple[int, str]] = {}
     for url in candidates:
         fname = _cdn_filename(url)
@@ -240,6 +248,7 @@ def filter_investment_images(urls: list[str], product: dict) -> list[str]:
     return [v[1] for v in by_filename.values()]
 
 def _extract_to_id(url: str) -> str | None:
+    if not url: return None
     m = re.search(r",i(\d+)(?:[/?]|$)", url)
     return m.group(1) if m else None
 
@@ -332,7 +341,6 @@ def discover_to_listing(url: str, fetcher: Fetcher, limit: int = None) -> list[d
             if limit and len(all_offers) >= limit:
                 return all_offers
 
-        # TabelaOfert usually has "następna" or similar for pagination
         if 'class="next"' not in html and 'rel="next"' not in html:
             break
             
@@ -385,7 +393,7 @@ def scrape_tabelaofert(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher)
         price_min = price_max = None
 
     gallery_urls = product.get("_raw_gallery_urls", [])
-    filtered_urls = filter_investment_images(gallery_urls, product)
+    filtered_urls = filter_investment_images(gallery_urls, product, url)
     
     amenities = []
     props = product.get("additionalProperty", [])
