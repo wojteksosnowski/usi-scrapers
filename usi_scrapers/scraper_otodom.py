@@ -125,62 +125,103 @@ def discover_otodom_investments(agency_id: str, fetcher: Fetcher) -> list[dict]:
 
     return offers
 
-def discover_otodom_listing(url: str, fetcher: Fetcher) -> list[dict]:
+def discover_otodom_listing(url: str, fetcher: Fetcher, limit: int = None) -> list[dict]:
     """
     Discovers investments from a general Otodom listing URL (HTML with __NEXT_DATA__).
+    Supports pagination. Max page size for Otodom is 72.
     """
-    logger.info(f"Discovering Otodom investments from listing: {url}")
-    html = fetch_otodom_html(url, fetcher)
-    if not html:
-        return []
+    PAGE_SIZE = 72
+    all_offers = []
+    seen_ids = set()
+    
+    base_url = url
+    if "limit=" not in base_url:
+        connector = "&" if "?" in base_url else "?"
+        base_url += f"{connector}limit={PAGE_SIZE}"
+    else:
+        base_url = re.sub(r'limit=\d+', f'limit={PAGE_SIZE}', base_url)
 
-    data = extract_next_data(html)
-    if not data:
-        return []
+    current_page = 1
+    
+    while True:
+        page_url = base_url
+        if "page=" in page_url:
+            page_url = re.sub(r'page=\d+', f'page={current_page}', page_url)
+        else:
+            connector = "&" if "?" in page_url else "?"
+            page_url += f"{connector}page={current_page}"
 
-    offers = []
-    try:
-        search_ads = data.get("data", {}).get("searchAds", {})
-        if not search_ads:
-            search_ads = data.get("searchAds", {})
-            
-        items = search_ads.get("items", [])
-        for item in items:
-            full_slug = item.get("slug")
-            if full_slug:
-                clean_slug = full_slug
-                hash_id = None
+        logger.info(f"Discovering Otodom investments from listing (page {current_page}): {page_url}")
+        html = fetch_otodom_html(page_url, fetcher)
+        if not html:
+            break
+
+        data = extract_next_data(html)
+        if not data:
+            break
+
+        try:
+            search_ads = data.get("data", {}).get("searchAds", {})
+            if not search_ads:
+                search_ads = data.get("searchAds", {})
                 
-                if "-ID" in full_slug:
-                    parts = full_slug.split("-ID")
-                    clean_slug = parts[0]
-                    hash_id = parts[1]
-                elif "ID" in full_slug:
-                    parts = full_slug.split("ID")
-                    clean_slug = parts[0]
-                    hash_id = parts[1]
+            items = search_ads.get("items", [])
+            if not items:
+                break
 
-                img_data = item.get("images", [])
-                img_url = img_data[0].get("medium") if img_data else None
+            for item in items:
+                offer_id = item.get("id")
+                if offer_id in seen_ids:
+                    continue
+                seen_ids.add(offer_id)
 
-                agency_name = item.get("agency", {}).get("name")
-                if not agency_name:
-                    agency_name = item.get("advertiser", {}).get("name")
+                full_slug = item.get("slug")
+                if full_slug:
+                    clean_slug = full_slug
+                    hash_id = None
+                    
+                    if "-ID" in full_slug:
+                        parts = full_slug.split("-ID")
+                        clean_slug = parts[0]
+                        hash_id = parts[1]
+                    elif "ID" in full_slug:
+                        parts = full_slug.split("ID")
+                        clean_slug = parts[0]
+                        hash_id = parts[1]
 
-                offers.append({
-                    "id": item.get("id"), 
-                    "hash_id": hash_id,   
-                    "url": f"https://www.otodom.pl/pl/inwestycja/{full_slug}",
-                    "name": item.get("title"),
-                    "slug": clean_slug,   
-                    "full_slug": full_slug,
-                    "image": img_url,
-                    "developer": agency_name
-                })
-    except Exception as e:
-        logger.error(f"Error parsing Otodom listing discovery data: {e}")
+                    img_data = item.get("images", [])
+                    img_url = img_data[0].get("medium") if img_data else None
 
-    return offers
+                    agency_name = item.get("agency", {}).get("name")
+                    if not agency_name:
+                        agency_name = item.get("advertiser", {}).get("name")
+
+                    all_offers.append({
+                        "id": offer_id, 
+                        "hash_id": hash_id,   
+                        "url": f"https://www.otodom.pl/pl/inwestycja/{full_slug}",
+                        "name": item.get("title"),
+                        "slug": clean_slug,   
+                        "full_slug": full_slug,
+                        "image": img_url,
+                        "developer": agency_name
+                    })
+                    
+                    if limit and len(all_offers) >= limit:
+                        return all_offers
+
+            # Check if there are more pages
+            total_pages = search_ads.get("pagination", {}).get("totalPages", 0)
+            if current_page >= total_pages:
+                break
+            
+            current_page += 1
+            
+        except Exception as e:
+            logger.error(f"Error parsing Otodom listing discovery data: {e}")
+            break
+
+    return all_offers
 
 def fetch_otodom_agency_name(url: str, fetcher: Fetcher) -> str | None:
     """

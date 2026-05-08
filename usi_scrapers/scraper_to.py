@@ -260,49 +260,78 @@ def fetch_to_agency_name(url: str, fetcher: Fetcher) -> str | None:
 
     return "Nieznany Deweloper"
 
-def discover_to_listing(url: str, fetcher: Fetcher) -> list[dict]:
-    logger.info(f"Discovering TabelaOfert investments from URL: {url}")
-    html = fetch_to_html(url, fetcher)
-    if not html: return []
-    
-    offers = []
+def discover_to_listing(url: str, fetcher: Fetcher, limit: int = None) -> list[dict]:
+    """
+    Discovers TabelaOfert investments from a listing page with pagination.
+    """
+    all_offers = []
     seen_ids = set()
-
-    matches = list(re.finditer(r'href="(/inwestycja/([^",]+),i(\d+))"', html))
     
-    for m in matches:
-        full_path, slug_part, to_id = m.groups()
-        if to_id in seen_ids: continue
-        seen_ids.add(to_id)
-        
-        full_url = f"https://tabelaofert.pl{full_path}"
-        name = slug_part.replace("-", " ").title()
-        
-        start_search = max(0, m.start() - 2000)
-        end_search = min(len(html), m.end() + 1000)
-        window = html[start_search:end_search]
-        
-        img_matches = list(re.finditer(r'src="(https?://content\.tabelaofert\.pl/[^"]+\.(?:webp|jpg|png|jpeg))"', window))
-        image_url = img_matches[-1].group(1) if img_matches else None
+    base_url = url
+    current_page = 1
+    
+    while True:
+        page_url = base_url
+        if "page=" in page_url:
+            page_url = re.sub(r'page=\d+', f'page={current_page}', page_url)
+        else:
+            connector = "&" if "?" in page_url else "?"
+            page_url += f"{connector}page={current_page}"
 
-        dev_name = None
-        dev_match = re.search(r'data-developer="([^"]+)"', window)
-        if not dev_match:
-            dev_match = re.search(r'<span>([^<]+)</span>', window)
+        logger.info(f"Discovering TabelaOfert investments from URL (page {current_page}): {page_url}")
+        html = fetch_to_html(page_url, fetcher)
+        if not html: 
+            break
         
-        if dev_match:
-            dev_name = dev_match.group(1).strip()
+        page_offers = []
+        matches = list(re.finditer(r'href="(/inwestycja/([^",]+),i(\d+))"', html))
+        
+        if not matches:
+            break
 
-        offers.append({
-            "id": to_id,
-            "url": full_url,
-            "name": name,
-            "slug": slug_part,
-            "image": image_url,
-            "developer": dev_name
-        })
+        for m in matches:
+            full_path, slug_part, to_id = m.groups()
+            if to_id in seen_ids: 
+                continue
+            seen_ids.add(to_id)
             
-    return offers
+            full_url = f"https://tabelaofert.pl{full_path}"
+            name = slug_part.replace("-", " ").title()
+            
+            start_search = max(0, m.start() - 2000)
+            end_search = min(len(html), m.end() + 1000)
+            window = html[start_search:end_search]
+            
+            img_matches = list(re.finditer(r'src="(https?://content\.tabelaofert\.pl/[^"]+\.(?:webp|jpg|png|jpeg))"', window))
+            image_url = img_matches[-1].group(1) if img_matches else None
+
+            dev_name = None
+            dev_match = re.search(r'data-developer="([^"]+)"', window)
+            if not dev_match:
+                dev_match = re.search(r'<span>([^<]+)</span>', window)
+            
+            if dev_match:
+                dev_name = dev_match.group(1).strip()
+
+            all_offers.append({
+                "id": to_id,
+                "url": full_url,
+                "name": name,
+                "slug": slug_part,
+                "image": image_url,
+                "developer": dev_name
+            })
+            
+            if limit and len(all_offers) >= limit:
+                return all_offers
+
+        # TabelaOfert usually has "następna" or similar for pagination
+        if 'class="next"' not in html and 'rel="next"' not in html:
+            break
+            
+        current_page += 1
+            
+    return all_offers
 
 def discover_to_investments(dev_slug_or_id: str | None, fetcher: Fetcher, config: ScraperConfig) -> list[dict]:
     if not dev_slug_or_id:

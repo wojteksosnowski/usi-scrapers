@@ -109,12 +109,41 @@ def resolve_rp_vendor_id(slug: str, fetcher: Fetcher) -> str | None:
         
     return None
 
-def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_or_slug: str = None) -> list[dict]:
+def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_or_slug: str = None, limit: int = None) -> list[dict]:
     """
     Discovers investments on RynekPierwotny.pl.
     If vendor_id_or_slug is provided, scans that developer.
-    Otherwise, uses global offer-list queries.
+    Otherwise, uses global offer-list queries with pagination.
+    RP has a max page size of 30.
     """
+    PAGE_SIZE = 30
+    all_results = []
+    seen_ids = set()
+
+    def fetch_page(url_template, page):
+        url = url_template.replace("page=1", f"page={page}").replace("page_size=100", f"page_size={PAGE_SIZE}")
+        if "page=" not in url:
+            connector = "&" if "?" in url else "?"
+            url += f"{connector}page={page}&page_size={PAGE_SIZE}"
+        
+        logger.info(f"Discovering RP investments via query (page {page}): {url}")
+        data = fetcher.fetch_json(url, use_scraperapi=False) or {}
+        batch = _parse_rp_results(data.get("results", []))
+        
+        new_count = 0
+        for item in batch:
+            if item["id"] not in seen_ids:
+                all_results.append(item)
+                seen_ids.add(item["id"])
+                new_count += 1
+                if limit and len(all_results) >= limit:
+                    return False
+        
+        # If batch is smaller than page size, we reached the end
+        if len(batch) < PAGE_SIZE:
+            return False
+        return True
+
     if vendor_id_or_slug:
         vendor_id = vendor_id_or_slug
         if not str(vendor_id_or_slug).isdigit():
@@ -122,32 +151,27 @@ def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_o
             if not vendor_id:
                 logger.error(f"Could not resolve vendor ID for slug: {vendor_id_or_slug}")
                 return []
-        url = f"https://rynekpierwotny.pl/api/v2/offers/offer/?s=vendor-detail-offer-list&country=1&country=2&display_type=1&display_type=2&page=1&page_size=100&type=1&type=2&type=3&vendor={vendor_id}"
-        logger.info(f"Discovering RP investments for vendor ID: {vendor_id}")
-        data = fetcher.fetch_json(url, use_scraperapi=False) or {}
-        return _parse_rp_results(data.get("results", []))
-    else:
-        # Global discovery - scan using the recommended offer-list pattern
-        all_results = []
-        seen_ids = set()
         
-        # Use provided discovery URLs or the default global query
+        url_template = f"https://rynekpierwotny.pl/api/v2/offers/offer/?s=vendor-detail-offer-list&country=1&country=2&display_type=1&display_type=2&page=1&page_size={PAGE_SIZE}&type=1&type=2&type=3&vendor={vendor_id}"
+        page = 1
+        while fetch_page(url_template, page):
+            page += 1
+    else:
+        # Global discovery
         urls = []
         if hasattr(config, "rp_discovery_urls") and config.rp_discovery_urls:
             urls = config.rp_discovery_urls
         else:
-            # Default global query (page 1)
-            urls = ["https://rynekpierwotny.pl/api/v2/offers/offer/?s=offer-list&display_type=1&distance=5&for_sale=true&limited_presentation=false&page=1&page_size=100&show_on_listing=true&type=1"]
+            urls = ["https://rynekpierwotny.pl/api/v2/offers/offer/?s=offer-list&display_type=1&distance=5&for_sale=true&limited_presentation=false&page=1&page_size=30&show_on_listing=true&type=1"]
             
-        for url in urls:
-            logger.info(f"Discovering RP investments via query: {url}")
-            data = fetcher.fetch_json(url, use_scraperapi=False) or {}
-            batch = _parse_rp_results(data.get("results", []))
-            for item in batch:
-                if item["id"] not in seen_ids:
-                    all_results.append(item)
-                    seen_ids.add(item["id"])
-        return all_results
+        for url_template in urls:
+            page = 1
+            while fetch_page(url_template, page):
+                page += 1
+            if limit and len(all_results) >= limit:
+                break
+                
+    return all_results[:limit] if limit else all_results
 
 def _parse_rp_results(results: list) -> list[dict]:
     """Helper to parse RP API results and flatten stages."""
