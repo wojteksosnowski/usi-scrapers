@@ -8,6 +8,39 @@ from .utils.io import save_raw_json, save_dev_raw_json
 
 logger = logging.getLogger(__name__)
 
+
+def _parse_otodom_slug(full_slug: str) -> tuple[str, str | None]:
+    """Returns (clean_slug, hash_id) by stripping the Otodom -ID<hash> suffix."""
+    if "-ID" in full_slug:
+        parts = full_slug.split("-ID", 1)
+        return parts[0], parts[1]
+    if "ID" in full_slug:
+        parts = full_slug.split("ID", 1)
+        return parts[0], parts[1]
+    return full_slug, None
+
+
+def _parse_otodom_item(item: dict, offer_id=None) -> dict | None:
+    """Extracts a normalised offer dict from an Otodom search result item."""
+    full_slug = item.get("slug")
+    if not full_slug:
+        return None
+    clean_slug, hash_id = _parse_otodom_slug(full_slug)
+    img_data = item.get("images", [])
+    img_url = img_data[0].get("medium") if img_data else None
+    agency_name = item.get("agency", {}).get("name") or item.get("advertiser", {}).get("name")
+    return {
+        "id": offer_id or item.get("id"),
+        "hash_id": hash_id,
+        "url": f"https://www.otodom.pl/pl/oferta/{full_slug}",
+        "name": item.get("title"),
+        "slug": clean_slug,
+        "full_slug": full_slug,
+        "image": img_url,
+        "developer": agency_name,
+    }
+
+
 def download_raw_otodom_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
     Downloads raw JSON for an Otodom developer profile and saves it.
@@ -89,37 +122,9 @@ def discover_otodom_investments(agency_id: str, fetcher: Fetcher) -> list[dict]:
         items = search_ads.get("items", [])
 
         for item in items:
-            full_slug = item.get("slug")
-            if full_slug:
-                clean_slug = full_slug
-                hash_id = None
-                
-                if "-ID" in full_slug:
-                    parts = full_slug.split("-ID")
-                    clean_slug = parts[0]
-                    hash_id = parts[1]
-                elif "ID" in full_slug:
-                    parts = full_slug.split("ID")
-                    clean_slug = parts[0]
-                    hash_id = parts[1]
-
-                img_data = item.get("images", [])
-                img_url = img_data[0].get("medium") if img_data else None
-                
-                agency_name = item.get("agency", {}).get("name")
-                if not agency_name:
-                    agency_name = item.get("advertiser", {}).get("name")
-
-                offers.append({
-                    "id": item.get("id"), 
-                    "hash_id": hash_id,   
-                    "url": f"https://www.otodom.pl/pl/oferta/{full_slug}",
-                    "name": item.get("title"),
-                    "slug": clean_slug,   
-                    "full_slug": full_slug,
-                    "image": img_url,
-                    "developer": agency_name
-                })
+                parsed = _parse_otodom_item(item)
+                if parsed:
+                    offers.append(parsed)
     except Exception as e:
         logger.error(f"Error parsing Otodom discovery data: {e}")
 
@@ -175,37 +180,9 @@ def discover_otodom_listing(url: str, fetcher: Fetcher, limit: int = None) -> li
                     continue
                 seen_ids.add(offer_id)
 
-                full_slug = item.get("slug")
-                if full_slug:
-                    clean_slug = full_slug
-                    hash_id = None
-                    
-                    if "-ID" in full_slug:
-                        parts = full_slug.split("-ID")
-                        clean_slug = parts[0]
-                        hash_id = parts[1]
-                    elif "ID" in full_slug:
-                        parts = full_slug.split("ID")
-                        clean_slug = parts[0]
-                        hash_id = parts[1]
-
-                    img_data = item.get("images", [])
-                    img_url = img_data[0].get("medium") if img_data else None
-
-                    agency_name = item.get("agency", {}).get("name")
-                    if not agency_name:
-                        agency_name = item.get("advertiser", {}).get("name")
-
-                    all_offers.append({
-                        "id": offer_id,
-                        "hash_id": hash_id,
-                        "url": f"https://www.otodom.pl/pl/oferta/{full_slug}",
-                        "name": item.get("title"),
-                        "slug": clean_slug,   
-                        "full_slug": full_slug,
-                        "image": img_url,
-                        "developer": agency_name
-                    })
+                parsed = _parse_otodom_item(item, offer_id=offer_id)
+                if parsed:
+                    all_offers.append(parsed)
                     
                     if limit and len(all_offers) >= limit:
                         return all_offers
@@ -307,8 +284,8 @@ def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: 
                     parts = values[0].split("-")
                     delivery_year = int(parts[0])
                     delivery_quarter = (int(parts[1]) - 1) // 3 + 1
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.warning(f"Could not parse project_finish_date '{values[0]}': {e}")
             break
             
     if delivery_quarter is None:
