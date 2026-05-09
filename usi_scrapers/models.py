@@ -13,11 +13,7 @@ class ScraperConfig:
     
     # Ustawienia sieciowe i fallback do ScraperAPI
     scraperapi_key: Optional[str] = None
-    scraperapi_limit: int = 1000
-    
-    # Ścieżka do pliku ze statystykami użycia ScraperAPI (np. gdzieś w USIdata/)
-    usage_stats_path: Optional[Path] = None
-    
+
     # HERE Maps API Key dla geokodowania i wzbogacania danych POI
     here_api_key: Optional[str] = None
     
