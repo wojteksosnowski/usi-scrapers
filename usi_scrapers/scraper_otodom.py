@@ -197,9 +197,9 @@ def discover_otodom_listing(url: str, fetcher: Fetcher, limit: int = None) -> li
                         agency_name = item.get("advertiser", {}).get("name")
 
                     all_offers.append({
-                        "id": offer_id, 
-                        "hash_id": hash_id,   
-                        "url": f"https://www.otodom.pl/pl/inwestycja/{full_slug}",
+                        "id": offer_id,
+                        "hash_id": hash_id,
+                        "url": f"https://www.otodom.pl/pl/oferta/{full_slug}",
                         "name": item.get("title"),
                         "slug": clean_slug,   
                         "full_slug": full_slug,

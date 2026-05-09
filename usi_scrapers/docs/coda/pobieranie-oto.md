@@ -30,7 +30,7 @@ System USI Tracker wykonuje zapytania do dwóch typów stron Otodom:
     - URL: `https://www.otodom.pl/pl/inwestycje/oferty/{region}?investmentEstateType=FLATS&by=LATEST`
     - Cel: Wykrycie nowych slugów inwestycji.
 2.  **Strona Szczegółów (Scrape)**:
-    - URL: `https://www.otodom.pl/pl/inwestycja/{investment-slug}`
+    - URL: `https://www.otodom.pl/pl/oferta/{investment-slug}`
     - Cel: Pobranie pełnych metadanych i obrazów.
 
 ## 3. Obsługa Rekordów Wieloetapowych

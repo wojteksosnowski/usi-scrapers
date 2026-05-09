@@ -8,15 +8,15 @@ Głównym źródłem danych są endpointy API RynekPierwotny zwracające ustrukt
 
 ### A. Zapytanie Listy (Discovery / JSONMAIN)
 Służy do wykrywania nowych inwestycji lub masowej aktualizacji.
-*   **URL:** `https://rynekpierwotny.pl/api/v2/offers/offer/?s=offer-list&display_type=1&distance=5&for_sale=true&limited_presentation=false&page=1&page_size=100&show_on_listing=true&type=1`
+*   **URL:** `https://rynekpierwotny.pl/api/v2/offers/offer/?s=offer-list&display_type=1&distance=5&for_sale=true&limited_presentation=false&page=1&page_size=30&show_on_listing=true&type=1`
 *   **Parametry:**
     - `s=offer-list`: Tryb listy ofert.
-    - `page_size=100`: Maksymalna liczba rekordów na stronę.
+    - `page_size=30`: Maksymalna liczba rekordów na stronę (RP nie zwraca więcej niż 30).
     - `type=1`: Filtrowanie typów (mieszkania/domy).
 
 ### B. Zapytanie Dewelopera
 Pobiera wszystkie oferty przypisane do konkretnego dostawcy (vendor).
-*   **URL:** `https://rynekpierwotny.pl/api/v2/offers/offer/?s=vendor-detail-offer-list&vendor={vendor_id}&page_size=100`
+*   **URL:** `https://rynekpierwotny.pl/api/v2/offers/offer/?s=vendor-detail-offer-list&vendor={vendor_id}&page_size=30`
 
 ### C. Zapytanie Szczegółów (Offer Detail)
 Pobiera pełne dane o konkretnym `offer_id` (w tym opis, współrzędne, etapy).

@@ -339,7 +339,7 @@ def scrape_rynek_pierwotny(offer_id: str, developer_slug: str, investment_slug: 
         "name": details.get("name"),
         "address": details.get("address"),
         "geo_point": coords,
-        "latitude": coords[1] if coords and len(coords) > 1 else (coords[0] if coords else None),
+        "latitude": coords[1] if coords and len(coords) > 1 else None,
         "longitude": coords[0] if coords and len(coords) > 0 else None,
         "construction_date_upper": const_upper,
         "website": details.get("website"),
