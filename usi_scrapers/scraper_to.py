@@ -406,7 +406,7 @@ def scrape_tabelaofert(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher)
     if not html:
         return {"error": "Could not fetch HTML"}
 
-    product = extract_to_data(html, url)
+    product = extract_to_data(html, url, fetcher=fetcher)
     
     brand_name = product.get("brand", {}).get("name", "") if isinstance(product.get("brand"), dict) else ""
     if dev_slug in ("unknown", "tabelaofert") and brand_name:

@@ -40,18 +40,17 @@ def clean_filename(url: str) -> str:
     filename = unquote(base_url.split("/")[-1])
     
     # Extract something like file.jpg, file.png, etc.
+    # Strip cache-buster/hash suffix like photo_e94b5737.webp → photo.webp
+    filename = re.sub(r'_[a-f0-9]{8}\.', '.', filename)
+
     match = re.search(r'([^\/]+\.(?:jpg|jpeg|png|webp))', filename, re.IGNORECASE)
     if match:
         return match.group(1)
-    
-    # Fallback: check if there's any of the extensions in the filename
+
     for ext in IMAGE_EXTENSIONS:
         if ext in filename.lower():
             idx = filename.lower().find(ext)
             return filename[:idx + len(ext)]
-            
-    # Strip cache-buster/hash suffix like _e94b5737.webp or _a789f3d8.webp
-    filename = re.sub(r'_[a-f0-9]{8}\.', '.', filename)
 
     return filename
 

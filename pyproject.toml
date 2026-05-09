@@ -25,3 +25,7 @@ dev = [
     "pytest-mock>=3.14.0",
     "requests-mock>=1.12.1"
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["usi_scrapers*"]
