@@ -6,14 +6,20 @@ from typing import Any, Dict, List, Optional
 from pathlib import Path
 
 from .fetcher import Fetcher
-from .models import ScraperConfig
+from .models import ScraperConfig, ProgressCallback
 from .manager import TechnicalDataManager
 from .scraper_rp import discover_rp_investments, scrape_rynek_pierwotny, download_raw_rp_json, download_raw_rp_dev_json
 from .scraper_otodom import discover_otodom_investments, discover_otodom_listing, scrape_otodom, download_raw_otodom_json, download_raw_otodom_dev_json, fetch_otodom_agency_name
 from .scraper_to import discover_to_investments, discover_to_listing, scrape_tabelaofert, download_raw_to_json, download_raw_to_dev_json, fetch_to_agency_name
 from .utils.io import save_raw_json, save_dev_raw_json
 
-def list_investments(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: Optional[str] = None) -> List[Dict[str, Any]]:
+def list_investments(
+    config: ScraperConfig,
+    fetcher: Fetcher,
+    portal: str,
+    identifier: Optional[str] = None,
+    on_progress: Optional[ProgressCallback] = None,
+) -> List[Dict[str, Any]]:
     """Pobiera listę inwestycji dewelopera ze wskazanego portalu (Discovery)."""
     p = portal.lower()
     if p == "rp":
@@ -23,22 +29,49 @@ def list_investments(config: ScraperConfig, fetcher: Fetcher, portal: str, ident
             return discover_otodom_investments(identifier, fetcher)
         elif identifier:
             return discover_otodom_listing(identifier, fetcher)
-            
+
         # Global discovery for Otodom
         all_results = []
         seen_ids = set()
-        for url in config.otodom_discovery_urls:
-             batch = discover_otodom_listing(url, fetcher)
-             for item in batch:
-                 if item["id"] not in seen_ids:
-                     all_results.append(item)
-                     seen_ids.add(item["id"])
+        urls = config.otodom_discovery_urls
+        total = len(urls)
+        for i, url in enumerate(urls):
+            batch = discover_otodom_listing(url, fetcher)
+            for item in batch:
+                if item["id"] not in seen_ids:
+                    all_results.append(item)
+                    seen_ids.add(item["id"])
+            if on_progress:
+                on_progress(i + 1, total)
         return all_results
-        
+
     elif p in ("to", "tabelaofert"):
         return discover_to_investments(identifier, fetcher, config)
     else:
         raise ValueError(f"Unsupported portal for discovery: {portal}")
+
+
+def fetch_many(
+    config: ScraperConfig,
+    fetcher: Fetcher,
+    portal: str,
+    investments: List[Dict[str, Any]],
+    on_progress: Optional[ProgressCallback] = None,
+) -> List[Dict[str, Any]]:
+    """
+    Pobiera szczegóły listy inwestycji, wołając on_progress(current, total) po każdej.
+
+    Każdy element investments musi zawierać klucze: "identifier", "dev_slug", "inv_slug".
+    Zwraca listę wyników w tej samej kolejności co investments.
+    """
+    total = len(investments)
+    results = []
+    for i, inv in enumerate(investments):
+        result = fetch_investment(config, fetcher, portal, inv["identifier"], inv["dev_slug"], inv["inv_slug"])
+        results.append(result)
+        if on_progress:
+            on_progress(i + 1, total)
+    return results
 
 def fetch_investment(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: str, inv_slug: str) -> Dict[str, Any]:
     """Pobiera szczegóły konkretnej inwestycji ze wskazanego portalu (Scrape)."""
