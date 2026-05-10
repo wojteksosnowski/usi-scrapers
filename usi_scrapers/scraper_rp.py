@@ -152,7 +152,7 @@ def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_o
                 logger.error(f"Could not resolve vendor ID for slug: {vendor_id_or_slug}")
                 return []
         
-        url_template = f"https://rynekpierwotny.pl/api/v2/offers/offer/?s=vendor-detail-offer-list&country=1&country=2&display_type=1&display_type=2&page=1&page_size={PAGE_SIZE}&type=1&type=2&type=3&vendor={vendor_id}"
+        url_template = f"https://rynekpierwotny.pl/api/v2/offers/offer/?s=vendor-detail-offer-list&country=1&country=2&limited_presentation=false&page=1&page_size={PAGE_SIZE}&vendor={vendor_id}"
         page = 1
         while fetch_page(url_template, page):
             page += 1

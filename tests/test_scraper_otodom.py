@@ -189,8 +189,12 @@ def test_scrape_otodom_fetch_failure(fetcher):
 # discover_otodom_investments (by agency ID)
 # ---------------------------------------------------------------------------
 
-def _make_agency_html(items):
-    payload = {"props": {"pageProps": {"data": {"searchAds": {"items": items}}}}}
+def _make_agency_html(items, total_pages=1, current_page=1):
+    # searchAds is directly under pageProps (not nested under data)
+    payload = {"props": {"pageProps": {"searchAds": {
+        "items": items,
+        "pagination": {"totalPages": total_pages, "currentPage": current_page},
+    }}}}
     return f'<script id="__NEXT_DATA__" type="application/json">{json.dumps(payload)}</script>'
 
 
@@ -220,6 +224,36 @@ def test_discover_otodom_investments_empty(fetcher):
 def test_discover_otodom_investments_fetch_fail(fetcher):
     fetcher.fetch.return_value = None
     assert discover_otodom_investments("99", fetcher) == []
+
+
+def test_discover_otodom_investments_pagination(fetcher):
+    item_a = dict(_AGENCY_ITEM, id=1, slug="inv-a-ID1111")
+    item_b = dict(_AGENCY_ITEM, id=2, slug="inv-b-ID2222")
+    fetcher.fetch.side_effect = [
+        _make_agency_html([item_a], total_pages=2, current_page=1),
+        _make_agency_html([item_b], total_pages=2, current_page=2),
+    ]
+    offers = discover_otodom_investments("99", fetcher)
+    assert len(offers) == 2
+    assert fetcher.fetch.call_count == 2
+    # Strona 2 musi być odpytana przez ?currentPage=2
+    page2_url = fetcher.fetch.call_args_list[1][0][0]
+    assert "currentPage=2" in page2_url
+
+
+def test_discover_otodom_investments_deduplicates(fetcher):
+    fetcher.fetch.side_effect = [
+        _make_agency_html([_AGENCY_ITEM, _AGENCY_ITEM], total_pages=1),
+    ]
+    offers = discover_otodom_investments("99", fetcher)
+    assert len(offers) == 1
+
+
+def test_discover_otodom_investments_limit(fetcher):
+    items = [dict(_AGENCY_ITEM, id=i, slug=f"inv-{i}-ID{i}000") for i in range(3)]
+    fetcher.fetch.return_value = _make_agency_html(items, total_pages=5)
+    offers = discover_otodom_investments("99", fetcher, limit=2)
+    assert len(offers) == 2
 
 
 # ---------------------------------------------------------------------------

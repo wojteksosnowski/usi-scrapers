@@ -98,35 +98,52 @@ def extract_next_data(html: str) -> dict:
         logger.error(f"Error parsing __NEXT_DATA__ JSON: {e}")
         return {}
 
-def discover_otodom_investments(agency_id: str, fetcher: Fetcher) -> list[dict]:
+def discover_otodom_investments(agency_id: str, fetcher: Fetcher, limit: int = None) -> list[dict]:
     """
     Discovers investments for a given agency ID on Otodom.pl.
+    Paginates via ?currentPage=N (page= and p= do not trigger SSR pagination).
     """
-    url = f"https://www.otodom.pl/pl/firmy/deweloperzy/deweloper-ID{agency_id}"
+    base_url = f"https://www.otodom.pl/pl/firmy/deweloperzy/deweloper-ID{agency_id}"
     logger.info(f"Discovering Otodom investments for agency ID: {agency_id}")
 
-    html = fetch_otodom_html(url, fetcher)
-    if not html:
-        return []
-
-    data = extract_next_data(html)
-    if not data:
-        return []
-
     offers = []
-    try:
-        search_ads = data.get("data", {}).get("searchAds", {})
-        if not search_ads:
-            search_ads = data.get("searchAds", {})
-            
-        items = search_ads.get("items", [])
+    seen_ids = set()
+    current_page = 1
 
-        for item in items:
+    while True:
+        url = base_url if current_page == 1 else f"{base_url}?currentPage={current_page}"
+        html = fetch_otodom_html(url, fetcher)
+        if not html:
+            break
+
+        data = extract_next_data(html)
+        if not data:
+            break
+
+        try:
+            search_ads = data.get("searchAds") or data.get("data", {}).get("searchAds", {})
+            items = search_ads.get("items", [])
+            if not items:
+                break
+
+            for item in items:
+                offer_id = item.get("id")
+                if offer_id in seen_ids:
+                    continue
+                seen_ids.add(offer_id)
                 parsed = _parse_otodom_item(item)
                 if parsed:
                     offers.append(parsed)
-    except Exception as e:
-        logger.error(f"Error parsing Otodom discovery data: {e}")
+                    if limit and len(offers) >= limit:
+                        return offers
+
+            pagination = search_ads.get("pagination", {})
+            if current_page >= pagination.get("totalPages", 1):
+                break
+            current_page += 1
+        except Exception as e:
+            logger.error(f"Error parsing Otodom discovery data: {e}")
+            break
 
     return offers
 
