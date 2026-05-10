@@ -8,11 +8,11 @@ from typing import Any, Dict, List, Optional
 from pathlib import Path
 
 from .fetcher import Fetcher
-from .models import ScraperConfig, ProgressCallback
+from .models import ScraperConfig, ProgressCallback, DeveloperPage
 from .manager import TechnicalDataManager
-from .scraper_rp import discover_rp_investments, scrape_rynek_pierwotny, download_raw_rp_json, download_raw_rp_dev_json
-from .scraper_otodom import discover_otodom_investments, discover_otodom_listing, scrape_otodom, download_raw_otodom_json, download_raw_otodom_dev_json, fetch_otodom_agency_name
-from .scraper_to import discover_to_investments, discover_to_listing, scrape_tabelaofert, download_raw_to_json, download_raw_to_dev_json, fetch_to_agency_name
+from .scraper_rp import discover_rp_investments, scrape_rynek_pierwotny, download_raw_rp_json, download_raw_rp_dev_json, discover_rp_developers
+from .scraper_otodom import discover_otodom_investments, discover_otodom_listing, scrape_otodom, download_raw_otodom_json, download_raw_otodom_dev_json, fetch_otodom_agency_name, discover_otodom_developers
+from .scraper_to import discover_to_investments, discover_to_listing, scrape_tabelaofert, download_raw_to_json, download_raw_to_dev_json, fetch_to_agency_name, discover_to_developers
 from .utils.io import save_raw_json, save_dev_raw_json
 
 # DEVELIA agency ID on Otodom — large developer, stable probe target
@@ -216,6 +216,25 @@ def save_raw(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, inv_slu
 def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, portal_prefix: str) -> Path:
     """Zapisuje gotowy słownik jako surowy JSON dewelopera."""
     return save_dev_raw_json(data, config.public_dir, dev_slug, portal_prefix)
+
+def list_developers(
+    config: ScraperConfig,
+    fetcher: Fetcher,
+    portal: str,
+    page: int = 1,
+    base_url: Optional[str] = None,
+) -> DeveloperPage:
+    """Pobiera jedną stronę katalogu deweloperów ze wskazanego portalu."""
+    p = portal.lower()
+    if p == "rp":
+        return discover_rp_developers(fetcher, page=page, base_url=base_url)
+    elif p in ("oto", "otodom"):
+        return discover_otodom_developers(fetcher, page=page, base_url=base_url)
+    elif p in ("to", "tabelaofert"):
+        return discover_to_developers(fetcher, page=page, base_url=base_url)
+    else:
+        raise ValueError(f"Unsupported portal for developer listing: {portal}")
+
 
 def identify_developer(fetcher: Fetcher, portal: str, url: str) -> Optional[str]:
     """Próbuje zidentyfikować nazwę dewelopera na podstawie URL oferty."""

@@ -1,9 +1,11 @@
 import logging
 import json
+import math
 import re
 from pathlib import Path
+from typing import Optional
 from .fetcher import Fetcher
-from .models import ScraperConfig
+from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json
 from .utils.stage_detector import extract_groups_id, extract_stages
 
@@ -355,3 +357,70 @@ def scrape_rynek_pierwotny(offer_id: str, developer_slug: str, investment_slug: 
     }
 
     return result
+
+
+_RP_DEVELOPER_LISTING_URL = "https://rynekpierwotny.pl/deweloperzy/?page={page}"
+_RP_DEVELOPER_API_URL = "https://rynekpierwotny.pl/api/v2/vendors/vendor/?s=vendor-list&page={page}&page_size=30"
+
+
+def discover_rp_developers(
+    fetcher: Fetcher,
+    page: int = 1,
+    base_url: Optional[str] = None,
+) -> DeveloperPage:
+    """Pobiera jedną stronę listy deweloperów z RynekPierwotny."""
+    api_url = _RP_DEVELOPER_API_URL.format(page=page)
+    data = fetcher.fetch_json(api_url)
+    if data and "results" in data:
+        count = data.get("count", 0)
+        total_pages = max(1, math.ceil(count / 30))
+        developers = [
+            {
+                "url": f"https://rynekpierwotny.pl/deweloperzy/{item['slug']}/",
+                "name": item.get("name"),
+                "slug": item["slug"],
+            }
+            for item in data["results"]
+            if item.get("slug")
+        ]
+        return DeveloperPage(developers=developers, total_pages=total_pages, page=page)
+
+    # Fallback: HTML __NEXT_DATA__
+    html_url = (base_url or _RP_DEVELOPER_LISTING_URL).format(page=page)
+    if base_url and "page=" not in base_url:
+        connector = "&" if "?" in base_url else "?"
+        html_url = f"{base_url}{connector}page={page}"
+    logger.info(f"RP API unavailable, falling back to HTML: {html_url}")
+    html = fetcher.fetch(html_url)
+    if not html:
+        logger.error(f"Failed to fetch RP developer listing: {html_url}")
+        return DeveloperPage(developers=[], total_pages=1, page=page)
+
+    # Extract __NEXT_DATA__
+    m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.+?)</script>', html, re.DOTALL)
+    if not m:
+        logger.error("RP developer listing: __NEXT_DATA__ not found in HTML")
+        return DeveloperPage(developers=[], total_pages=1, page=page)
+    try:
+        next_data = json.loads(m.group(1))
+        props = next_data.get("props", {}).get("pageProps", {})
+        vendors_data = props.get("vendors") or props.get("data", {}).get("vendors", {})
+        if not vendors_data:
+            logger.warning(f"RP developer listing: no vendors key in pageProps. Keys: {list(props.keys())}")
+            return DeveloperPage(developers=[], total_pages=1, page=page)
+        items = vendors_data.get("items", vendors_data.get("results", []))
+        pagination = vendors_data.get("pagination", {})
+        total_pages = pagination.get("totalPages", 1)
+        developers = [
+            {
+                "url": f"https://rynekpierwotny.pl/deweloperzy/{item['slug']}/",
+                "name": item.get("name"),
+                "slug": item["slug"],
+            }
+            for item in items
+            if item.get("slug")
+        ]
+        return DeveloperPage(developers=developers, total_pages=total_pages, page=page)
+    except (json.JSONDecodeError, KeyError) as e:
+        logger.error(f"RP developer listing: failed to parse __NEXT_DATA__: {e}")
+        return DeveloperPage(developers=[], total_pages=1, page=page)

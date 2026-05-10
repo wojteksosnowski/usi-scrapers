@@ -38,7 +38,7 @@ Pipeline: **Fetch → Scrape → Save**
 
 5. **`manager.py` + `utils/`** — `utils/io.py` resolves all save paths; `utils/images.py` downloads images. Always use `clean_filename()` — it strips CDN parameters, cache-busters (`_e94b5737`), and normalises extensions.
 
-6. **`api.py`** — Public interface for `usi-tracker`. All external calls go through here. Includes `health_check(config, fetcher, portals=None)` which smoke-tests discovery + scrape for all three portals and returns `{"ok": bool, "portals": {...}, "checked_at": ISO}`. Optional `portals` list limits which portals are tested.
+6. **`api.py`** — Public interface for `usi-tracker`. All external calls go through here. Includes `health_check(config, fetcher, portals=None)` which smoke-tests discovery + scrape for all three portals and returns `{"ok": bool, "portals": {...}, "checked_at": ISO}`. Optional `portals` list limits which portals are tested. Includes `list_developers(config, fetcher, portal, page, base_url)` which returns one page of a portal's developer catalogue as a `DeveloperPage`.
 
 ## Config (`models.py` → `ScraperConfig`)
 
@@ -52,13 +52,20 @@ Pipeline: **Fetch → Scrape → Save**
 
 ```
 {public_dir}/USIdata/{dev_slug}/{inv_slug}/
-    raw_rp_{inv_slug}.json      # RynekPierwotny raw
-    raw_oto_{inv_slug}.json     # Otodom raw
-    raw_to_{inv_slug}.json      # TabelaOfert raw
+    raw_rp_{inv_slug}.json      # RynekPierwotny raw (investment)
+    raw_oto_{inv_slug}.json     # Otodom raw (investment)
+    raw_to_{inv_slug}.json      # TabelaOfert raw (investment)
+
+{public_dir}/USIdev/raw/
+    raw_rp_{dev_slug}.json      # RynekPierwotny raw (developer profile)
+    raw_oto_{dev_slug}.json     # Otodom raw (developer profile)
+    raw_to_{dev_slug}.json      # TabelaOfert raw (developer profile)
 
 {public_dir}/USI/{dev_slug}/{inv_slug}/
     *.webp / *.jpg              # downloaded images
 ```
+
+Existing raw files are archived with a timestamp suffix before being overwritten (`raw_rp_{slug}_20250511_120000.json`).
 
 ## api.py — how usi-tracker calls this package
 
@@ -130,7 +137,37 @@ name = identify_developer(fetcher=fetcher, portal="otodom", url="https://...")
 # Works for otodom and tabelaofert. Returns None for rp.
 ```
 
-### 5. Smoke-test all portals (health check)
+### 5. List developers from portal catalogue (one page at a time)
+
+```python
+from usi_scrapers.api import list_developers
+
+page = list_developers(
+    config=config,
+    fetcher=fetcher,
+    portal="rp",   # "rp" | "otodom" | "tabelaofert"
+    page=1,        # 1-based page number
+    base_url=None, # override default listing URL
+)
+# → DeveloperPage(developers=[{url, name, slug}, ...], total_pages=int, page=int)
+#
+# Caller iterates: for p in range(1, page.total_pages + 1): list_developers(..., page=p)
+```
+
+**Developer page URL formats (verified against live portals, 2026-05-11):**
+
+| Portal | URL format | Example |
+|--------|-----------|---------|
+| `rp` | `https://rynekpierwotny.pl/deweloperzy/{slug}/` | `…/atal-sa-1084/` |
+| `otodom` | `https://www.otodom.pl/pl/firmy/deweloperzy/{slug}-ID{id}` | `…/atal-ID10554231` |
+| `tabelaofert` | `https://tabelaofert.pl/katalog-firm/deweloperzy/{slug}` | `…/atal` |
+
+**Implementation notes (gotchas):**
+- **RP** — uses REST API `GET /api/v2/vendors/vendor/?s=vendor-list&page={n}&page_size=30`; HTML fallback not needed in practice. `total_pages = ceil(count / 30)`.
+- **Otodom** — `/firmy/deweloperzy/` is a **legacy PHP page** (no `__NEXT_DATA__`). Must parse HTML with regex. Developer links are absolute `https://www.otodom.pl/pl/firmy/deweloperzy/{slug}-ID{id}`; `total_pages` comes from `?page=N` links in paginator. Verified: 230 pages, ~20 developers per page.
+- **TabelaOfert** — developer links in listing HTML are **absolute URLs** (`https://tabelaofert.pl/katalog-firm/deweloperzy/{slug}`); city/filter links are **relative** (`/katalog-firm/deweloperzy/wroclaw`) — regex must match absolute form only to avoid including city filters. `total_pages` from `?page=N` paginator links. Verified: 117 pages, ~20 developers per page.
+
+### 6. Smoke-test all portals (health check)
 
 ```python
 from usi_scrapers.api import health_check
@@ -142,9 +179,27 @@ result = health_check(config, fetcher)
 # result["checked_at"]  → ISO timestamp
 #
 # Optional: health_check(config, fetcher, portals=["rp", "otodom"])
+# No-arg form auto-inits config with public_dir=/tmp (useful in CI/monitoring):
+result = health_check()
 ```
 
-### Typical usi-tracker flow
+### Typical usi-tracker flow — developer catalogue scan
+
+```python
+from usi_scrapers.api import list_developers
+
+# Iterate all pages of a portal's developer catalogue
+first = list_developers(config, fetcher, "rp", page=1)
+for p in range(1, first.total_pages + 1):
+    page = list_developers(config, fetcher, "rp", page=p)
+    for dev in page.developers:
+        # dev["url"]  → canonical developer page URL
+        # dev["slug"] → identifier for list_investments()
+        # dev["name"] → developer name (None for tabelaofert)
+        investments = list_investments(config, fetcher, "rp", dev["slug"])
+```
+
+### Typical usi-tracker flow — investment scrape
 
 ```python
 # 1. Discover investments
@@ -171,4 +226,13 @@ Developer profile parsing (logo, description, contact) beyond raw JSON is not im
 - Otodom investment URLs use `/pl/oferta/{slug}` (not `/pl/inwestycja/`) — confirmed against 2300+ production records.
 - RP API returns coordinates as `[lng, lat]` — index 0 is longitude, index 1 is latitude.
 - RP page_size max is 30 (despite older docs saying 100).
+- Discovery functions share the signature `discover_*(config, fetcher, identifier=None, limit=None)`; `identifier=None` triggers a global scan using `config.*_discovery_urls`.
+- `discover_*_developers(fetcher, page, base_url)` functions do **not** take `config` — they don't write files.
 - When bumping version: update both `pyproject.toml` and `usi_scrapers/__init__.py`, then create a matching git tag (`git tag vX.Y.Z && git push origin vX.Y.Z`).
+
+## Additional utilities
+
+- **`utils/url_parser.py`** — `parse_url(url)` parses RynekPierwotny, Otodom, and TabelaOfert URLs and returns a dict with `type`, `kind`, and the relevant identifiers (e.g. `developer_slug`, `agency_id`, `to_id`). Use this to extract the `identifier` value needed for API calls from a raw portal URL.
+- **`utils/string.py`** — custom `slugify()` with explicit Polish character transliteration. Prefer this over the `python-slugify` dependency when generating internal slugs; `clean_filename()` in `utils/images.py` strips CDN cache-buster suffixes.
+- **`schemas/`** — JSON Schema files (`usi_unified.schema.json`, `rp_details.schema.json`, etc.) for validating scraped payloads. Used for cross-checking, not enforced at runtime.
+- **`ProgressCallback`** — `from usi_scrapers.models import ProgressCallback`; a `Callable[[int, int], None]` that receives `(current, total)`. Supported by discovery and scrape functions as an optional `progress_cb` kwarg.

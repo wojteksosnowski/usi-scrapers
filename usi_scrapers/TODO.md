@@ -1,5 +1,5 @@
-## Bieżący kamień milowy: Inne ulepszenia
+# TODO
 
-## Następny kamień milowy: (Do ustalenia)
+## Inne ulepszenia
 
-## Przyszłe kamienie milowe
+## (Do ustalenia)

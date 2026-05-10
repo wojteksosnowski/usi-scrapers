@@ -40,9 +40,10 @@ pytest tests/test_scraper_otodom.py
 ```
 
 ### Główne Komendy i Przepływy:
-- **Inicjalizacja**: Zawsze wymagany jest `ScraperConfig` przekazany do `Fetcher` lub `TechnicalDataManager` (wyjątkiem jest `health_check`, który posiada auto-inicjalizację).
+- **Inicjalizacja**: Zawsze wymagany jest `ScraperConfig` przekazany do `Fetcher` lub `TechnicalDataManager`.
+- **Health Check**: Funkcja `health_check()` posiada mechanizm auto-inicjalizacji (używa `/tmp` w razie braku parametrów), co ułatwia monitoring systemu.
+- **Kompatybilność**: Alias `verify_consistency` jest zachowany dla wstecznej kompatybilności, ale jest oznaczony jako przestarzały (`DeprecationWarning`).
 - **Publiczne API**: Główne funkcje interakcji znajdują się w `api.py`. Pełna dokumentacja dostępna w [docs/API.md](docs/API.md).
-- **Health Check**: Funkcja `health_check()` służy do szybkiej weryfikacji poprawności działania wszystkich scraperów.
 
 ## Konwencje i Standardy
 
@@ -53,6 +54,7 @@ pytest tests/test_scraper_otodom.py
 
 ### Zasady Kodowania:
 - **Typowanie**: Obowiązkowe użycie Type Hints dla wszystkich funkcji publicznych.
+- **Discovery**: Funkcje odkrywające inwestycje muszą posiadać ujednoliconą sygnaturę `discover_*(config, fetcher, identifier=None, limit=None)`. Przy `identifier=None` funkcja powinna wykonywać skanowanie globalne na podstawie URL-i z konfiguracji.
 - **Logowanie**: Używaj dedykowanych loggerów per moduł (np. `logger = logging.getLogger(__name__)`).
 - **Bezpieczeństwo**: Nigdy nie hardkoduj kluczy API. Używaj `ScraperConfig`.
 - **Surgical Updates**: Przy modyfikacji logiki scrapowania, zawsze sprawdzaj wpływ na adaptery i wykonuj testy regresyjne.

@@ -1,9 +1,17 @@
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, Dict, Optional, List
+from typing import Any, Callable, Dict, Optional, List
 
 # Called with (current, total) after each item is processed.
 ProgressCallback = Callable[[int, int], None]
+
+
+@dataclass
+class DeveloperPage:
+    """Wynik pobrania jednej strony listy deweloperów z portalu."""
+    developers: List[Dict[str, Any]]
+    total_pages: int
+    page: int
 
 @dataclass
 class ScraperConfig:

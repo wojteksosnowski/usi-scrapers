@@ -2,8 +2,9 @@ import re
 import json
 import logging
 from pathlib import Path
+from typing import Optional
 from .fetcher import Fetcher
-from .models import ScraperConfig
+from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json
 from .utils.string import slugify
 
@@ -469,3 +470,51 @@ def scrape_tabelaofert(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher)
         "image_urls": filtered_urls,
         "raw_details": product,
     }
+
+
+_TO_DEVELOPER_LISTING_URL = "https://tabelaofert.pl/katalog-firm/deweloperzy?page={page}"
+
+
+def discover_to_developers(
+    fetcher: Fetcher,
+    page: int = 1,
+    base_url: Optional[str] = None,
+) -> DeveloperPage:
+    """Pobiera jedną stronę listy deweloperów z TabelaOfert."""
+    listing_url = base_url or _TO_DEVELOPER_LISTING_URL.format(page=page)
+    if base_url:
+        if "page=" in listing_url:
+            listing_url = re.sub(r'page=\d+', f'page={page}', listing_url)
+        else:
+            connector = "&" if "?" in listing_url else "?"
+            listing_url = f"{listing_url}{connector}page={page}"
+
+    html = fetch_to_html(listing_url, fetcher)
+    if not html:
+        logger.error(f"Failed to fetch TO developer listing: {listing_url}")
+        return DeveloperPage(developers=[], total_pages=1, page=page)
+
+    seen_slugs: set[str] = set()
+    developers = []
+    # Developer profile links are absolute URLs; city/filter links are relative — match only absolute
+    for m in re.finditer(r'href="https://tabelaofert\.pl(/katalog-firm/deweloperzy/([^"/?]+))"', html):
+        full_path, slug = m.group(1), m.group(2)
+        if slug in seen_slugs:
+            continue
+        seen_slugs.add(slug)
+        developers.append({
+            "url": f"https://tabelaofert.pl{full_path}",
+            "name": None,
+            "slug": slug,
+        })
+
+    # Determine total_pages from paginator links
+    page_nums = [int(n) for n in re.findall(r'href="[^"]*[?&]page=(\d+)"', html)]
+    if page_nums:
+        total_pages = max(page_nums)
+    elif 'class="next"' in html or 'rel="next"' in html:
+        total_pages = page + 1
+    else:
+        total_pages = page
+
+    return DeveloperPage(developers=developers, total_pages=total_pages, page=page)

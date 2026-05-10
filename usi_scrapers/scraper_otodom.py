@@ -2,8 +2,9 @@ import json
 import re
 import logging
 from pathlib import Path
+from typing import Optional
 from .fetcher import Fetcher
-from .models import ScraperConfig
+from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json
 
 logger = logging.getLogger(__name__)
@@ -348,5 +349,59 @@ def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: 
         "image_urls": images,
         "raw_details": ad_data
     }
-    
+
     return result
+
+
+_OTODOM_DEVELOPER_LISTING_URL = "https://www.otodom.pl/firmy/deweloperzy/?sq=&page={page}"
+
+
+def discover_otodom_developers(
+    fetcher: Fetcher,
+    page: int = 1,
+    base_url: Optional[str] = None,
+) -> DeveloperPage:
+    """Pobiera jedną stronę listy deweloperów z Otodom.
+
+    Strona /firmy/deweloperzy/ to legacy PHP (brak __NEXT_DATA__) — parsujemy HTML.
+    URL deweloperów: https://www.otodom.pl/pl/firmy/deweloperzy/{slug}-ID{id}
+    """
+    listing_url = base_url or _OTODOM_DEVELOPER_LISTING_URL.format(page=page)
+    if base_url:
+        if "page=" in listing_url:
+            listing_url = re.sub(r'page=\d+', f'page={page}', listing_url)
+        else:
+            connector = "&" if "?" in listing_url else "?"
+            listing_url = f"{listing_url}{connector}page={page}"
+
+    html = fetch_otodom_html(listing_url, fetcher)
+    if not html:
+        logger.error(f"Failed to fetch Otodom developer listing: {listing_url}")
+        return DeveloperPage(developers=[], total_pages=1, page=page)
+
+    # Extract developer links + names from legacy HTML
+    # Pattern: href="https://www.otodom.pl/pl/firmy/deweloperzy/{slug}-ID{id}">Name<
+    seen_urls: set[str] = set()
+    developers = []
+    for m in re.finditer(
+        r'href="(https://www\.otodom\.pl/pl/firmy/deweloperzy/([^"]+)-ID(\d+))"[^>]*>\s*([^<]+?)\s*<',
+        html,
+    ):
+        url, slug, agency_id, name = m.group(1), m.group(2), m.group(3), m.group(4).strip()
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)
+        developers.append({
+            "url": url,
+            "name": name or None,
+            "slug": slug,
+        })
+
+    # Determine total_pages from paginator ?page=N links
+    page_nums = [int(n) for n in re.findall(r'[?&]page=(\d+)', html)]
+    total_pages = max(page_nums) if page_nums else page
+
+    if not developers:
+        logger.warning(f"Otodom developer listing: no developers found on page {page} ({listing_url})")
+
+    return DeveloperPage(developers=developers, total_pages=total_pages, page=page)
