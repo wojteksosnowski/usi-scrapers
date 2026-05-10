@@ -38,7 +38,7 @@ Pipeline: **Fetch → Scrape → Save**
 
 5. **`manager.py` + `utils/`** — `utils/io.py` resolves all save paths; `utils/images.py` downloads images. Always use `clean_filename()` — it strips CDN parameters, cache-busters (`_e94b5737`), and normalises extensions.
 
-6. **`api.py`** — Public interface for `usi-tracker`. All external calls go through here.
+6. **`api.py`** — Public interface for `usi-tracker`. All external calls go through here. Includes `health_check(config, fetcher, portals=None)` which smoke-tests discovery + scrape for all three portals and returns `{"ok": bool, "portals": {...}, "checked_at": ISO}`. Optional `portals` list limits which portals are tested.
 
 ## Config (`models.py` → `ScraperConfig`)
 
