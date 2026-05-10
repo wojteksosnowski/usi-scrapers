@@ -60,6 +60,109 @@ Pipeline: **Fetch → Scrape → Save**
     *.webp / *.jpg              # downloaded images
 ```
 
+## api.py — how usi-tracker calls this package
+
+All calls go through `api.py`. Never import scraper modules directly.
+
+### Developer identifier formats per portal
+
+| Portal | `identifier` format | Example |
+|--------|--------------------|---------| 
+| `rp` | vendor slug or numeric ID | `"unidevelopment-955"` or `"955"` |
+| `otodom` | agency numeric ID | `"10556359"` |
+| `tabelaofert` | developer slug | `"unidevelopment"` |
+
+### 1. List investments for a developer (Discovery)
+
+```python
+from usi_scrapers.api import list_investments
+
+investments = list_investments(
+    config=config,
+    fetcher=fetcher,
+    portal="rp",                  # "rp" | "otodom" | "tabelaofert"
+    identifier="unidevelopment",  # developer slug/ID; None = global scan of config URLs
+)
+# → list[dict]: id, url, slug, name, image, developer
+```
+
+### 2. Save developer raw JSON to disk
+
+```python
+from usi_scrapers.api import download_raw_dev
+
+path = download_raw_dev(
+    config=config,
+    fetcher=fetcher,
+    portal="rp",
+    identifier="unidevelopment",  # developer slug/ID
+    dev_slug="unidevelopment",
+)
+# → {public_dir}/USIdata/{dev_slug}/raw_rp_{dev_slug}.json
+# → returns Path | None
+```
+
+### 3. Scrape one investment (full details)
+
+```python
+from usi_scrapers.api import fetch_investment
+
+data = fetch_investment(
+    config=config,
+    fetcher=fetcher,
+    portal="tabelaofert",
+    identifier="https://tabelaofert.pl/inwestycja/...,i8982461",  # full investment URL
+    dev_slug="unidevelopment",
+    inv_slug="idea-ogrody-3-...",
+)
+# → dict: name/title, latitude, longitude, price_min/max, image_urls, amenities, ...
+```
+
+**Note:** for `rp`, pass `inv["id"]` (numeric string) as `identifier`, not the URL.
+
+### 4. Identify developer name from an investment URL
+
+```python
+from usi_scrapers.api import identify_developer
+
+name = identify_developer(fetcher=fetcher, portal="otodom", url="https://...")
+# → "Unidevelopment S.A." | None
+# Works for otodom and tabelaofert. Returns None for rp.
+```
+
+### 5. Smoke-test all portals (health check)
+
+```python
+from usi_scrapers.api import health_check
+
+result = health_check(config, fetcher)
+# result["ok"]  → True if all portals returned valid data
+# result["portals"]["rp"]["ok"]  → per-portal status
+# result["portals"]["rp"]["error"]  → error message or None
+# result["checked_at"]  → ISO timestamp
+#
+# Optional: health_check(config, fetcher, portals=["rp", "otodom"])
+```
+
+### Typical usi-tracker flow
+
+```python
+# 1. Discover investments
+investments = list_investments(config, fetcher, "rp", "unidevelopment")
+
+# 2. Save developer profile to disk
+download_raw_dev(config, fetcher, "rp", "unidevelopment", "unidevelopment")
+
+# 3. Scrape each investment
+for inv in investments:
+    data = fetch_investment(config, fetcher, "rp", inv["id"], "unidevelopment", inv["slug"])
+    # ... persist to database
+```
+
+### What is NOT in this package
+
+Developer profile parsing (logo, description, contact) beyond raw JSON is not implemented — only `identify_developer` extracts the name. Full developer profile structuring is usi-tracker's responsibility.
+
 ## Key conventions
 
 - **Type hints** required on all public functions.
