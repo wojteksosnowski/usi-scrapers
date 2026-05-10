@@ -3,6 +3,7 @@ Public API dla usi-scrapers.
 Zbiór metod służących do interakcji z pakietem.
 """
 from datetime import datetime, timezone
+import warnings
 from typing import Any, Dict, List, Optional
 from pathlib import Path
 
@@ -37,25 +38,29 @@ def _check_fields(data: Dict[str, Any], portal: str) -> tuple[list[str], list[st
 
 
 def health_check(
-    config: ScraperConfig,
-    fetcher: Fetcher,
+    config: Optional[ScraperConfig] = None,
+    fetcher: Optional[Fetcher] = None,
     portals: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """
     Smoke-test: sprawdza discovery i scrape dla każdego portalu.
     Zwraca słownik z wynikami per portal i globalnym 'ok'.
 
+    Jeśli config lub fetcher nie zostaną podane, zostaną zainicjowane
+    automatycznie z domyślnymi ustawieniami i ścieżką /tmp.
+
     Domyślnie testuje wszystkie trzy portale. Można ograniczyć listą:
     portals=["rp"], portals=["otodom", "tabelaofert"] itp.
-
-    Każdy wpis w 'portals' zawiera:
-      ok                  – bool: discovery dał ≥1 wynik i scrape zwrócił wymagane pola
-      discovery_count     – int | None
-      scrape_url          – str | None: URL który był scrapowany
-      scrape_fields_ok    – list[str]
-      scrape_fields_missing – list[str]
-      error               – str | None: pierwszy napotkany błąd
     """
+    if config is None:
+        from .models import ScraperConfig
+        import tempfile
+        config = ScraperConfig(public_dir=Path(tempfile.gettempdir()))
+
+    if fetcher is None:
+        from .fetcher import Fetcher
+        fetcher = Fetcher(config)
+
     if portals is None:
         portals = ["rp", "otodom", "tabelaofert"]
 
@@ -74,11 +79,11 @@ def health_check(
 
         try:
             if p == "rp":
-                items = discover_rp_investments(fetcher, config, None, limit=1)
+                items = discover_rp_investments(config, fetcher, None, limit=1)
             elif p in ("oto", "otodom"):
-                items = discover_otodom_investments(_OTO_PROBE_AGENCY_ID, fetcher, limit=1)
+                items = discover_otodom_investments(config, fetcher, _OTO_PROBE_AGENCY_ID, limit=1)
             elif p in ("to", "tabelaofert"):
-                items = discover_to_listing(_TO_PROBE_URL, fetcher, limit=1)
+                items = discover_to_listing(config, fetcher, _TO_PROBE_URL, limit=1)
             else:
                 raise ValueError(f"Nieznany portal: {portal}")
 
@@ -132,30 +137,18 @@ def list_investments(
     """Pobiera listę inwestycji dewelopera ze wskazanego portalu (Discovery)."""
     p = portal.lower()
     if p == "rp":
-        return discover_rp_investments(fetcher, config, identifier)
+        return discover_rp_investments(config, fetcher, identifier)
     elif p in ("oto", "otodom"):
         if identifier and not identifier.startswith("http"):
-            return discover_otodom_investments(identifier, fetcher)
+            return discover_otodom_investments(config, fetcher, identifier)
         elif identifier:
-            return discover_otodom_listing(identifier, fetcher)
+            return discover_otodom_listing(config, fetcher, identifier)
 
-        # Global discovery for Otodom
-        all_results = []
-        seen_ids = set()
-        urls = config.otodom_discovery_urls
-        total = len(urls)
-        for i, url in enumerate(urls):
-            batch = discover_otodom_listing(url, fetcher)
-            for item in batch:
-                if item["id"] not in seen_ids:
-                    all_results.append(item)
-                    seen_ids.add(item["id"])
-            if on_progress:
-                on_progress(i + 1, total)
-        return all_results
+        # Global discovery for Otodom is now handled internally
+        return discover_otodom_investments(config, fetcher)
 
     elif p in ("to", "tabelaofert"):
-        return discover_to_investments(identifier, fetcher, config)
+        return discover_to_investments(config, fetcher, identifier)
     else:
         raise ValueError(f"Unsupported portal for discovery: {portal}")
 
@@ -232,3 +225,20 @@ def identify_developer(fetcher: Fetcher, portal: str, url: str) -> Optional[str]
     elif p in ("to", "tabelaofert"):
         return fetch_to_agency_name(url, fetcher)
     return None
+
+def verify_consistency(
+    config: Optional[ScraperConfig] = None,
+    fetcher: Optional[Fetcher] = None,
+    portals: Optional[List[str]] = None,
+) -> Dict[str, Any]:
+    """
+    Alias dla health_check. Zapewnia wsteczną kompatybilność.
+    @deprecated: Używaj health_check() zamiast tej funkcji.
+    """
+    warnings.warn(
+        "verify_consistency() jest przestarzałe i zostanie usunięte w przyszłości. "
+        "Użyj health_check() zamiast tego.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    return health_check(config, fetcher, portals)

@@ -295,43 +295,43 @@ _LISTING_HTML_PAGE2 = """
 """
 
 
-def test_discover_to_listing_single_page(fetcher):
+def test_discover_to_listing_single_page(fetcher, config):
     fetcher.fetch.return_value = _LISTING_HTML_PAGE1.replace('<a rel="next"', '<span>')
-    offers = discover_to_listing("https://tabelaofert.pl/lista", fetcher)
+    offers = discover_to_listing(config, fetcher, identifier="https://tabelaofert.pl/lista")
     assert len(offers) == 1
     assert offers[0]["id"] == "11111"
     assert offers[0]["url"] == "https://tabelaofert.pl/inwestycja/osiedle-zielone,i11111"
 
 
-def test_discover_to_listing_pagination(fetcher):
+def test_discover_to_listing_pagination(fetcher, config):
     fetcher.fetch.side_effect = [_LISTING_HTML_PAGE1, _LISTING_HTML_PAGE2]
-    offers = discover_to_listing("https://tabelaofert.pl/lista", fetcher)
+    offers = discover_to_listing(config, fetcher, identifier="https://tabelaofert.pl/lista")
     assert len(offers) == 2
     ids = {o["id"] for o in offers}
     assert ids == {"11111", "22222"}
 
 
-def test_discover_to_listing_deduplicates(fetcher):
+def test_discover_to_listing_deduplicates(fetcher, config):
     # Page 2 returns same item — should be deduplicated. Page 3 is empty to end pagination.
     fetcher.fetch.side_effect = [_LISTING_HTML_PAGE1, _LISTING_HTML_PAGE1, "<html></html>"]
-    offers = discover_to_listing("https://tabelaofert.pl/lista", fetcher)
+    offers = discover_to_listing(config, fetcher, identifier="https://tabelaofert.pl/lista")
     assert len([o for o in offers if o["id"] == "11111"]) == 1
 
 
-def test_discover_to_listing_limit(fetcher):
+def test_discover_to_listing_limit(fetcher, config):
     html = """<html>
     <a href="/inwestycja/inv-a,i1">A</a>
     <a href="/inwestycja/inv-b,i2">B</a>
     <a href="/inwestycja/inv-c,i3">C</a>
     </html>"""
     fetcher.fetch.return_value = html
-    offers = discover_to_listing("https://tabelaofert.pl/lista", fetcher, limit=2)
+    offers = discover_to_listing(config, fetcher, identifier="https://tabelaofert.pl/lista", limit=2)
     assert len(offers) == 2
 
 
-def test_discover_to_listing_no_offers(fetcher):
+def test_discover_to_listing_no_offers(fetcher, config):
     fetcher.fetch.return_value = "<html><p>Brak wyników</p></html>"
-    offers = discover_to_listing("https://tabelaofert.pl/lista", fetcher)
+    offers = discover_to_listing(config, fetcher, identifier="https://tabelaofert.pl/lista")
     assert offers == []
 
 

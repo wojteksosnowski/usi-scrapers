@@ -313,10 +313,15 @@ def fetch_to_agency_name(url: str, fetcher: Fetcher) -> str | None:
 
     return "Nieznany Deweloper"
 
-def discover_to_listing(url: str, fetcher: Fetcher, limit: int = None) -> list[dict]:
+def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:
     """
     Discovers TabelaOfert investments from a listing page with pagination.
     """
+    if not identifier:
+        logger.error("discover_to_listing requires an identifier (URL)")
+        return []
+
+    url = identifier
     all_offers = []
     seen_ids = set()
     
@@ -385,20 +390,22 @@ def discover_to_listing(url: str, fetcher: Fetcher, limit: int = None) -> list[d
             
     return all_offers
 
-def discover_to_investments(dev_slug_or_id: str | None, fetcher: Fetcher, config: ScraperConfig) -> list[dict]:
-    if not dev_slug_or_id:
+def discover_to_investments(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:
+    if not identifier:
         all_results = []
         seen_ids = set()
         for url in config.to_discovery_urls:
-            batch = discover_to_listing(url, fetcher)
+            batch = discover_to_listing(config, fetcher, identifier=url, limit=limit)
             for item in batch:
                 if item["id"] not in seen_ids:
                     all_results.append(item)
                     seen_ids.add(item["id"])
+                    if limit and len(all_results) >= limit:
+                        return all_results
         return all_results
         
-    url = f"https://tabelaofert.pl/katalog-firm/deweloperzy/{dev_slug_or_id}"
-    return discover_to_listing(url, fetcher)
+    url = f"https://tabelaofert.pl/katalog-firm/deweloperzy/{identifier}"
+    return discover_to_listing(config, fetcher, identifier=url, limit=limit)
 
 def scrape_tabelaofert(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher) -> dict:
     logger.info(f"Scraping TabelaOfert: {url}")

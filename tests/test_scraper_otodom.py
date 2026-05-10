@@ -207,33 +207,33 @@ _AGENCY_ITEM = {
 }
 
 
-def test_discover_otodom_investments_returns_offers(fetcher):
+def test_discover_otodom_investments_returns_offers(fetcher, config):
     fetcher.fetch.return_value = _make_agency_html([_AGENCY_ITEM])
-    offers = discover_otodom_investments("99", fetcher)
+    offers = discover_otodom_investments(config, fetcher, identifier="99")
     assert len(offers) == 1
     assert offers[0]["slug"] == "osiedle-testowe"
     assert offers[0]["hash_id"] == "4xF1A"
     assert "/pl/oferta/" in offers[0]["url"]
 
 
-def test_discover_otodom_investments_empty(fetcher):
+def test_discover_otodom_investments_empty(fetcher, config):
     fetcher.fetch.return_value = _make_agency_html([])
-    assert discover_otodom_investments("99", fetcher) == []
+    assert discover_otodom_investments(config, fetcher, identifier="99") == []
 
 
-def test_discover_otodom_investments_fetch_fail(fetcher):
+def test_discover_otodom_investments_fetch_fail(fetcher, config):
     fetcher.fetch.return_value = None
-    assert discover_otodom_investments("99", fetcher) == []
+    assert discover_otodom_investments(config, fetcher, identifier="99") == []
 
 
-def test_discover_otodom_investments_pagination(fetcher):
+def test_discover_otodom_investments_pagination(fetcher, config):
     item_a = dict(_AGENCY_ITEM, id=1, slug="inv-a-ID1111")
     item_b = dict(_AGENCY_ITEM, id=2, slug="inv-b-ID2222")
     fetcher.fetch.side_effect = [
         _make_agency_html([item_a], total_pages=2, current_page=1),
         _make_agency_html([item_b], total_pages=2, current_page=2),
     ]
-    offers = discover_otodom_investments("99", fetcher)
+    offers = discover_otodom_investments(config, fetcher, identifier="99")
     assert len(offers) == 2
     assert fetcher.fetch.call_count == 2
     # Strona 2 musi być odpytana przez ?currentPage=2
@@ -241,18 +241,18 @@ def test_discover_otodom_investments_pagination(fetcher):
     assert "currentPage=2" in page2_url
 
 
-def test_discover_otodom_investments_deduplicates(fetcher):
+def test_discover_otodom_investments_deduplicates(fetcher, config):
     fetcher.fetch.side_effect = [
         _make_agency_html([_AGENCY_ITEM, _AGENCY_ITEM], total_pages=1),
     ]
-    offers = discover_otodom_investments("99", fetcher)
+    offers = discover_otodom_investments(config, fetcher, identifier="99")
     assert len(offers) == 1
 
 
-def test_discover_otodom_investments_limit(fetcher):
+def test_discover_otodom_investments_limit(fetcher, config):
     items = [dict(_AGENCY_ITEM, id=i, slug=f"inv-{i}-ID{i}000") for i in range(3)]
     fetcher.fetch.return_value = _make_agency_html(items, total_pages=5)
-    offers = discover_otodom_investments("99", fetcher, limit=2)
+    offers = discover_otodom_investments(config, fetcher, identifier="99", limit=2)
     assert len(offers) == 2
 
 
@@ -276,36 +276,50 @@ def _make_listing_html(items, total_pages=1):
     return f'<script id="__NEXT_DATA__" type="application/json">{json.dumps(payload)}</script>'
 
 
-def test_discover_otodom_listing_single_page(fetcher):
+def test_discover_otodom_listing_single_page(fetcher, config):
     fetcher.fetch.return_value = _make_listing_html([_AGENCY_ITEM])
-    offers = discover_otodom_listing("https://www.otodom.pl/pl/inwestycje/oferty/warszawa", fetcher)
+    offers = discover_otodom_listing(config, fetcher, identifier="https://www.otodom.pl/pl/inwestycje/oferty/warszawa")
     assert len(offers) == 1
     assert "/pl/oferta/" in offers[0]["url"]
 
 
-def test_discover_otodom_listing_pagination(fetcher):
+def test_discover_otodom_listing_pagination(fetcher, config):
     item_a = dict(_AGENCY_ITEM, id=1, slug="inv-a-ID1111")
     item_b = dict(_AGENCY_ITEM, id=2, slug="inv-b-ID2222")
     fetcher.fetch.side_effect = [
         _make_listing_html([item_a], total_pages=2),
         _make_listing_html([item_b], total_pages=2),
     ]
-    offers = discover_otodom_listing("https://www.otodom.pl/pl/inwestycje/oferty/warszawa", fetcher)
+    offers = discover_otodom_listing(config, fetcher, identifier="https://www.otodom.pl/pl/inwestycje/oferty/warszawa")
     assert len(offers) == 2
     assert fetcher.fetch.call_count == 2
 
 
-def test_discover_otodom_listing_deduplicates(fetcher):
+def test_discover_otodom_listing_deduplicates(fetcher, config):
     fetcher.fetch.side_effect = [
         _make_listing_html([_AGENCY_ITEM, _AGENCY_ITEM], total_pages=2),
         _make_listing_html([], total_pages=2),
     ]
-    offers = discover_otodom_listing("https://www.otodom.pl/pl/inwestycje/oferty/warszawa", fetcher)
+    offers = discover_otodom_listing(config, fetcher, identifier="https://www.otodom.pl/pl/inwestycje/oferty/warszawa")
     assert len(offers) == 1
 
 
-def test_discover_otodom_listing_limit(fetcher):
+def test_discover_otodom_listing_limit(fetcher, config):
     items = [dict(_AGENCY_ITEM, id=i, slug=f"inv-{i}-ID{i}000") for i in range(10)]
     fetcher.fetch.return_value = _make_listing_html(items, total_pages=5)
-    offers = discover_otodom_listing("https://www.otodom.pl/pl/inwestycje/oferty/warszawa", fetcher, limit=3)
+    offers = discover_otodom_listing(config, fetcher, identifier="https://www.otodom.pl/pl/inwestycje/oferty/warszawa", limit=3)
     assert len(offers) == 3
+
+def test_discover_otodom_investments_global(fetcher, config):
+    config.otodom_discovery_urls = ["https://www.otodom.pl/test1", "https://www.otodom.pl/test2"]
+    item1 = dict(_AGENCY_ITEM, id=1, slug="inv-1-ID1")
+    item2 = dict(_AGENCY_ITEM, id=2, slug="inv-2-ID2")
+    # item1 repeated on second page to test deduplication
+    fetcher.fetch.side_effect = [
+        _make_listing_html([item1], total_pages=1),
+        _make_listing_html([item2, item1], total_pages=1),
+    ]
+    offers = discover_otodom_investments(config, fetcher, identifier=None)
+    assert len(offers) == 2
+    assert {o["id"] for o in offers} == {1, 2}
+    assert fetcher.fetch.call_count == 2

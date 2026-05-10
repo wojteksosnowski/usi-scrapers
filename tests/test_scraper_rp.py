@@ -250,7 +250,7 @@ def test_discover_rp_by_vendor(fetcher, config):
     page1 = _rp_page([_RP_SIMPLE_ITEM])
     fetcher.fetch_json.return_value = page1
 
-    results = discover_rp_investments(fetcher, config, vendor_id_or_slug="123")
+    results = discover_rp_investments(config, fetcher, identifier="123")
     assert len(results) == 1
     assert results[0]["id"] == "1001"
 
@@ -261,14 +261,14 @@ def test_discover_rp_pagination_stops_on_partial_page(fetcher, config):
     fetcher.fetch_json.side_effect = [full_page, partial_page]
 
     config.rp_discovery_urls = ["https://rynekpierwotny.pl/api/v2/offers/offer/?s=offer-list&page=1&page_size=30"]
-    results = discover_rp_investments(fetcher, config)
+    results = discover_rp_investments(config, fetcher)
     assert fetcher.fetch_json.call_count == 2
 
 
 def test_discover_rp_deduplicates(fetcher, config):
     page = _rp_page([_RP_SIMPLE_ITEM, _RP_SIMPLE_ITEM])
     fetcher.fetch_json.return_value = page
-    results = discover_rp_investments(fetcher, config, vendor_id_or_slug="123")
+    results = discover_rp_investments(config, fetcher, identifier="123")
     ids = [r["id"] for r in results]
     assert ids.count("1001") == 1
 

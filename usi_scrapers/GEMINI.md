@@ -19,10 +19,8 @@ System opiera się na przepływie: **Fetch -> Scrape -> Adapt -> Merge**.
 
 1.  **Fetcher (`fetcher.py`)**: Centralny punkt obsługi zapytań HTTP z obsługą rate-limitingu i rotacji strategii (impersonate vs scraperapi).
 2.  **Scrapers (`scraper_*.py`)**: Logika specyficzna dla portalu, wyciągająca surowe dane (Raw JSON) z HTML lub ukrytych API.
-3.  **Adapters (`adapters/`)**: Mapowanie surowych danych na wspólny schemat.
-    - `BaseAdapter`: Interfejs bazowy.
-    - `Merger`: Logika scalania danych z wielu źródeł z uwzględnieniem priorytetów i historii zmian (audit log).
-4.  **Manager (`manager.py`)**: Zarządzanie zapisem plików JSON i obrazów w strukturze katalogowej `Public`.
+3.  **Manager (`manager.py`)**: Klasa `TechnicalDataManager` odpowiedzialna za techniczne operacje I/O: zarządzanie ścieżkami katalogów, zapis surowych plików JSON oraz pobieranie i synchronizację obrazów w strukturze `Public`. Semantyczne scalanie danych jest delegowane do nadrzędnego trackera.
+4.  **Modele i Schematy (`models.py`, `schemas/`)**: `models.py` przechowuje główne struktury konfiguracyjne (`ScraperConfig`), natomiast katalog `schemas/` dostarcza pliki JSON Schema używane do walidacji spójności pobranych danych (np. `usi_unified.schema.json`).
 
 ## Instrukcje Deweloperskie
 
@@ -42,8 +40,9 @@ pytest tests/test_scraper_otodom.py
 ```
 
 ### Główne Komendy i Przepływy:
-- **Inicjalizacja**: Zawsze wymagany jest `ScraperConfig` przekazany do `Fetcher` lub `TechnicalDataManager`.
-- **Publiczne API**: Główne funkcje interakcji znajdują się w `api.py`.
+- **Inicjalizacja**: Zawsze wymagany jest `ScraperConfig` przekazany do `Fetcher` lub `TechnicalDataManager` (wyjątkiem jest `health_check`, który posiada auto-inicjalizację).
+- **Publiczne API**: Główne funkcje interakcji znajdują się w `api.py`. Pełna dokumentacja dostępna w [docs/API.md](docs/API.md).
+- **Health Check**: Funkcja `health_check()` służy do szybkiej weryfikacji poprawności działania wszystkich scraperów.
 
 ## Konwencje i Standardy
 

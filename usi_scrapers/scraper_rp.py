@@ -109,10 +109,10 @@ def resolve_rp_vendor_id(slug: str, fetcher: Fetcher) -> str | None:
         
     return None
 
-def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_or_slug: str = None, limit: int = None) -> list[dict]:
+def discover_rp_investments(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:
     """
     Discovers investments on RynekPierwotny.pl.
-    If vendor_id_or_slug is provided, scans that developer.
+    If identifier (vendor_id or slug) is provided, scans that developer.
     Otherwise, uses global offer-list queries with pagination.
     RP has a max page size of 30.
     """
@@ -144,12 +144,12 @@ def discover_rp_investments(fetcher: Fetcher, config: ScraperConfig, vendor_id_o
             return False
         return True
 
-    if vendor_id_or_slug:
-        vendor_id = vendor_id_or_slug
-        if not str(vendor_id_or_slug).isdigit():
-            vendor_id = resolve_rp_vendor_id(vendor_id_or_slug, fetcher)
+    if identifier:
+        vendor_id = identifier
+        if not str(identifier).isdigit():
+            vendor_id = resolve_rp_vendor_id(identifier, fetcher)
             if not vendor_id:
-                logger.error(f"Could not resolve vendor ID for slug: {vendor_id_or_slug}")
+                logger.error(f"Could not resolve vendor ID for slug: {identifier}")
                 return []
         
         url_template = f"https://rynekpierwotny.pl/api/v2/offers/offer/?s=vendor-detail-offer-list&country=1&country=2&limited_presentation=false&page=1&page_size={PAGE_SIZE}&vendor={vendor_id}"

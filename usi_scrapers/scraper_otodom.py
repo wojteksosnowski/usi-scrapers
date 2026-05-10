@@ -98,13 +98,28 @@ def extract_next_data(html: str) -> dict:
         logger.error(f"Error parsing __NEXT_DATA__ JSON: {e}")
         return {}
 
-def discover_otodom_investments(agency_id: str, fetcher: Fetcher, limit: int = None) -> list[dict]:
+def discover_otodom_investments(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:
     """
     Discovers investments for a given agency ID on Otodom.pl.
+    If identifier (agency_id) is None, performs global discovery using config.otodom_discovery_urls.
     Paginates via ?currentPage=N (page= and p= do not trigger SSR pagination).
     """
-    base_url = f"https://www.otodom.pl/pl/firmy/deweloperzy/deweloper-ID{agency_id}"
-    logger.info(f"Discovering Otodom investments for agency ID: {agency_id}")
+    if not identifier:
+        logger.info("Performing global Otodom discovery via config URLs")
+        all_results = []
+        seen_ids = set()
+        for url in config.otodom_discovery_urls:
+            batch = discover_otodom_listing(config, fetcher, identifier=url, limit=limit)
+            for item in batch:
+                if item["id"] not in seen_ids:
+                    all_results.append(item)
+                    seen_ids.add(item["id"])
+                    if limit and len(all_results) >= limit:
+                        return all_results
+        return all_results
+
+    base_url = f"https://www.otodom.pl/pl/firmy/deweloperzy/deweloper-ID{identifier}"
+    logger.info(f"Discovering Otodom investments for agency ID: {identifier}")
 
     offers = []
     seen_ids = set()
@@ -147,11 +162,16 @@ def discover_otodom_investments(agency_id: str, fetcher: Fetcher, limit: int = N
 
     return offers
 
-def discover_otodom_listing(url: str, fetcher: Fetcher, limit: int = None) -> list[dict]:
+def discover_otodom_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:
     """
     Discovers investments from a general Otodom listing URL (HTML with __NEXT_DATA__).
     Supports pagination. Max page size for Otodom is 72.
     """
+    if not identifier:
+        logger.error("discover_otodom_listing requires an identifier (URL)")
+        return []
+
+    url = identifier
     PAGE_SIZE = 72
     all_offers = []
     seen_ids = set()
