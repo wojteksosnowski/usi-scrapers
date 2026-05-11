@@ -362,7 +362,16 @@ def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
             window = html[start_search:end_search]
             
             img_matches = list(re.finditer(r'src="(https?://content\.tabelaofert\.pl/[^"]+\.(?:webp|jpg|png|jpeg))"', window))
-            image_url = img_matches[-1].group(1) if img_matches else None
+            
+            image_url = None
+            if img_matches:
+                for m_img in img_matches:
+                    u = m_img.group(1)
+                    if not any(p in u.lower() for p in ["logo-", "icon-", "avatar-", "spacer-", "mapa-"]):
+                        image_url = u
+                        break
+                if not image_url:
+                    image_url = img_matches[-1].group(1)
 
             dev_name = None
             dev_match = re.search(r'data-developer="([^"]+)"', window)
