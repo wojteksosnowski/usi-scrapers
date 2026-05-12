@@ -291,10 +291,27 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         agency_name = owner_data.get("name") or "Nieznany Deweloper"
 
     if agency_url:
+        full_agency_url = agency_url if agency_url.startswith("http") else f"https://www.otodom.pl{agency_url}"
         dev_match = re.search(r'(?<=/)[^/]+(?=-ID)', agency_url)
         if dev_match:
-            developer_slug = dev_match.group(0)
-            logger.info(f"Extracted developer slug from Otodom: {developer_slug}")
+            candidate_slug = dev_match.group(0)
+            if candidate_slug not in ("deweloper", "biuro-nieruchomosci", "agency"):
+                developer_slug = candidate_slug
+        
+        # Deep extraction if still unknown or generic
+        if developer_slug == "unknown":
+            logger.info(f"Deep extracting developer slug from: {full_agency_url}")
+            dev_html = fetch_otodom_html(full_agency_url, fetcher)
+            if dev_html:
+                # Try to find canonical or a better link in the dev page
+                canonical_match = re.search(r'link rel="canonical" href=".*?/firmy/deweloperzy/([^/"?#]+)-ID', dev_html)
+                if canonical_match:
+                    developer_slug = canonical_match.group(1)
+        
+        # Add developer to database (save raw JSON)
+        if developer_slug != "unknown":
+            download_raw_otodom_dev_json(full_agency_url, developer_slug, fetcher, fetcher.config)
+            logger.info(f"Added developer '{developer_slug}' to database from Otodom.")
             
     coords = ad_data.get("location", {}).get("coordinates") or {}
     lat = coords.get("latitude")

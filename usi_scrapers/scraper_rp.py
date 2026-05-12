@@ -286,7 +286,13 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
 
     vendor_data = get_val(details, "vendor")
     developer_slug = get_val(vendor_data, "slug") if vendor_data else "unknown"
+    vendor_id = vendor_data.get("id") if vendor_data else None
     investment_slug = details.get("slug", "unknown")
+
+    # Add developer to database (save raw JSON)
+    if vendor_id and developer_slug != "unknown":
+        download_raw_rp_dev_json(str(vendor_id), developer_slug, fetcher, fetcher.config)
+        logger.info(f"Added developer '{developer_slug}' to database from RynekPierwotny.")
 
     if not url and developer_slug != "unknown" and investment_slug != "unknown":
         url = f"https://rynekpierwotny.pl/oferty/{developer_slug}/{investment_slug}-{offer_id}/"

@@ -1,3 +1,9 @@
+## Zintegrowane Discovery Deweloperów (0.4.5) — 2026-05-12
+- Zintegrowano logikę dodawania deweloperów bezpośrednio do scraperów inwestycji.
+- Każde pobranie inwestycji automatycznie wyzwala pobranie i zapis surowych danych dewelopera (`raw_*.json`).
+- Wprowadzono mechanizm "Deep Extraction" dla Otodom: jeśli slug dewelopera jest generyczny lub nieobecny w URL, scraper pobiera profil dewelopera i ekstrahuje natywny slug z tagu canonical.
+- Zapewniono automatyczną synchronizację bazy deweloperów podczas standardowego scrapingu inwestycji.
+
 ## Rozszerzenie Progress Reporting (0.4.4) — 2026-05-12
 - Dodano obsługę callbacka `on_progress` do funkcji `fetch_investment`, umożliwiając ustandaryzowane raportowanie postępu również dla pojedynczych pobrań (total=1).
 

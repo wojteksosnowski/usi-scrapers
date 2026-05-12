@@ -432,6 +432,10 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     dev_link_match = re.search(r'href="/katalog-firm/deweloperzy/([^/"?#]+)"', html)
     if dev_link_match:
         developer_slug = dev_link_match.group(1)
+        # Add developer to database (save raw JSON)
+        full_dev_url = f"https://tabelaofert.pl/katalog-firm/deweloperzy/{developer_slug}"
+        download_raw_to_dev_json(full_dev_url, developer_slug, fetcher, fetcher.config)
+        logger.info(f"Added developer '{developer_slug}' to database from TabelaOfert.")
     
     ext_loc = product.get("_extracted_location", {})
     address = ext_loc.get("address")
