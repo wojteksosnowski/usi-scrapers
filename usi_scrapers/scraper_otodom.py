@@ -26,19 +26,9 @@ def _parse_otodom_item(item: dict, offer_id=None) -> dict | None:
     full_slug = item.get("slug")
     if not full_slug:
         return None
-    clean_slug, hash_id = _parse_otodom_slug(full_slug)
-    img_data = item.get("images", [])
-    img_url = img_data[0].get("medium") if img_data else None
-    agency_name = item.get("agency", {}).get("name") or item.get("advertiser", {}).get("name")
     return {
         "id": offer_id or item.get("id"),
-        "hash_id": hash_id,
         "url": f"https://www.otodom.pl/pl/oferta/{full_slug}",
-        "name": item.get("title"),
-        "slug": clean_slug,
-        "full_slug": full_slug,
-        "image": img_url,
-        "developer": agency_name,
     }
 
 
@@ -258,7 +248,7 @@ def fetch_otodom_agency_name(url: str, fetcher: Fetcher) -> str | None:
         
     return ad_data.get("agency", {}).get("name") if ad_data.get("agency") else None
 
-def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: Fetcher) -> dict:
+def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     """
     Main function to scrape Otodom investment and save images.
     """
@@ -269,6 +259,12 @@ def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: 
     page_props = extract_next_data(html)
     if not page_props:
         return {"error": "Could not extract __NEXT_DATA__ JSON"}
+
+    # Native slug extraction
+    from .utils.url_parser import parse_url
+    parsed = parse_url(url)
+    investment_slug = parsed.get("investment_slug", "unknown")
+    developer_slug = "unknown"
         
     ad_data = page_props.get("ad", {})
     if not ad_data:
@@ -299,14 +295,6 @@ def scrape_otodom(url: str, developer_slug: str, investment_slug: str, fetcher: 
         if dev_match:
             developer_slug = dev_match.group(0)
             logger.info(f"Extracted developer slug from Otodom: {developer_slug}")
-        elif developer_slug in ("otodom", "unknown") and agency_name:
-            from .utils.string import slugify
-            developer_slug = slugify(agency_name)
-            logger.info(f"Resolved developer slug from Otodom agency name: {developer_slug}")
-    elif developer_slug in ("otodom", "unknown") and agency_name:
-        from .utils.string import slugify
-        developer_slug = slugify(agency_name)
-        logger.info(f"Resolved developer slug from Otodom agency name: {developer_slug}")
             
     coords = ad_data.get("location", {}).get("coordinates") or {}
     lat = coords.get("latitude")

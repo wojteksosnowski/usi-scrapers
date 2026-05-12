@@ -237,36 +237,22 @@ def _parse_rp_results(results: list) -> list[dict]:
                     
                     offers.append({
                         "id": s_id,
-                        "name": s_name,
-                        "slug": s_slug,
-                        "developer": s_vendor_name,
-                        "vendor_slug": s_vendor_slug,
                         "url": f"https://rynekpierwotny.pl/oferty/{s_vendor_slug}/{s_slug}-{s_id}/?show_sold_stage=true&stage={s_id_internal}",
-                        "image": s_img,
-                        "is_stage": True,
-                        "parent_id": parent_id
                     })
         else:
             v_data = get_val(item, "vendor") or {}
             v_slug = v_data.get("slug") or v_slug_parent
-            v_name = v_data.get("name") or v_name_parent
             o_id = str(item.get("id"))
             o_slug = item.get("slug")
             
             offers.append({
                 "id": o_id,
-                "name": parent_name,
-                "slug": o_slug,
-                "developer": v_name,
-                "vendor_slug": v_slug,
                 "url": f"https://rynekpierwotny.pl/oferty/{v_slug}/{o_slug}-{o_id}/",
-                "image": parent_img,
-                "is_stage": False
             })
             
     return offers
 
-def scrape_rynek_pierwotny(offer_id: str, developer_slug: str, investment_slug: str, fetcher: Fetcher, url: str = None) -> dict:
+def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> dict:
     """
     Main function to scrape RynekPierwotny investment.
     """
@@ -299,11 +285,11 @@ def scrape_rynek_pierwotny(offer_id: str, developer_slug: str, investment_slug: 
         return val
 
     vendor_data = get_val(details, "vendor")
-    vendor_slug = get_val(vendor_data, "slug") if vendor_data else None
-    offer_slug = details.get("slug", "")
+    developer_slug = get_val(vendor_data, "slug") if vendor_data else "unknown"
+    investment_slug = details.get("slug", "unknown")
 
-    if not url and vendor_slug and offer_slug:
-        url = f"https://rynekpierwotny.pl/oferty/{vendor_slug}/{offer_slug}-{offer_id}/"
+    if not url and developer_slug != "unknown" and investment_slug != "unknown":
+        url = f"https://rynekpierwotny.pl/oferty/{developer_slug}/{investment_slug}-{offer_id}/"
         
     details["url"] = url
     geo_point = get_val(details, "geo_point")

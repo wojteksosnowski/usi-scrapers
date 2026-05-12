@@ -384,10 +384,6 @@ def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
             all_offers.append({
                 "id": to_id,
                 "url": full_url,
-                "name": name,
-                "slug": slug_part,
-                "image": image_url,
-                "developer": dev_name
             })
             
             if limit and len(all_offers) >= limit:
@@ -417,21 +413,26 @@ def discover_to_investments(config: ScraperConfig, fetcher: Fetcher, identifier:
     url = f"https://tabelaofert.pl/katalog-firm/deweloperzy/{identifier}"
     return discover_to_listing(config, fetcher, identifier=url, limit=limit)
 
-def scrape_tabelaofert(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher) -> dict:
+def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     logger.info(f"Scraping TabelaOfert: {url}")
     html = fetch_to_html(url, fetcher)
     if not html:
         return {"error": "Could not fetch HTML"}
 
     product = extract_to_data(html, url, fetcher=fetcher)
-    
     brand_name = product.get("brand", {}).get("name", "") if isinstance(product.get("brand"), dict) else ""
-    if dev_slug in ("unknown", "tabelaofert") and brand_name:
-        from .utils.string import slugify
-        resolved_dev_slug = slugify(brand_name)
-        if resolved_dev_slug:
-            dev_slug = resolved_dev_slug
-
+    
+    # Native slug extraction
+    from .utils.url_parser import parse_url
+    parsed = parse_url(url)
+    investment_slug = parsed.get("investment_slug", "unknown")
+    
+    developer_slug = "unknown"
+    # Search for developer profile link in HTML
+    dev_link_match = re.search(r'href="/katalog-firm/deweloperzy/([^/"?#]+)"', html)
+    if dev_link_match:
+        developer_slug = dev_link_match.group(1)
+    
     ext_loc = product.get("_extracted_location", {})
     address = ext_loc.get("address")
     city = ext_loc.get("city")
@@ -462,8 +463,8 @@ def scrape_tabelaofert(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher)
         "source": "tabelaofert.pl",
         "to_id": _extract_to_id(url),
         "to_url": url,
-        "developer_slug": dev_slug,
-        "investment_slug": inv_slug,
+        "developer_slug": developer_slug,
+        "investment_slug": investment_slug,
         "name": product.get("name"),
         "developer_name": brand_name or None,
         "address": address,

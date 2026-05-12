@@ -96,15 +96,14 @@ def health_check(
 
             inv = items[0]
             url = inv["url"]
-            slug = inv.get("slug", "unknown")
             entry["scrape_url"] = url
 
             if p == "rp":
-                data = scrape_rynek_pierwotny(inv["id"], "unknown", slug, fetcher)
+                data = scrape_rynek_pierwotny(inv["id"], fetcher)
             elif p in ("oto", "otodom"):
-                data = scrape_otodom(url, "unknown", slug, fetcher)
+                data = scrape_otodom(url, fetcher)
             else:
-                data = scrape_tabelaofert(url, "unknown", slug, fetcher)
+                data = scrape_tabelaofert(url, fetcher)
 
             if data.get("error"):
                 entry["error"] = f"scrape: {data['error']}"
@@ -163,27 +162,27 @@ def fetch_many(
     """
     Pobiera szczegóły listy inwestycji, wołając on_progress(current, total) po każdej.
 
-    Każdy element investments musi zawierać klucze: "identifier", "dev_slug", "inv_slug".
+    Każdy element investments musi zawierać klucz: "identifier".
     Zwraca listę wyników w tej samej kolejności co investments.
     """
     total = len(investments)
     results = []
     for i, inv in enumerate(investments):
-        result = fetch_investment(config, fetcher, portal, inv["identifier"], inv["dev_slug"], inv["inv_slug"])
+        result = fetch_investment(config, fetcher, portal, inv["identifier"])
         results.append(result)
         if on_progress:
             on_progress(i + 1, total)
     return results
 
-def fetch_investment(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: str, inv_slug: str) -> Dict[str, Any]:
+def fetch_investment(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str) -> Dict[str, Any]:
     """Pobiera szczegóły konkretnej inwestycji ze wskazanego portalu (Scrape)."""
     p = portal.lower()
     if p == "rp":
-        return scrape_rynek_pierwotny(identifier, dev_slug, inv_slug, fetcher)
+        return scrape_rynek_pierwotny(identifier, fetcher)
     elif p in ("oto", "otodom"):
-        return scrape_otodom(identifier, dev_slug, inv_slug, fetcher)
+        return scrape_otodom(identifier, fetcher)
     elif p in ("to", "tabelaofert"):
-        return scrape_tabelaofert(identifier, dev_slug, inv_slug, fetcher)
+        return scrape_tabelaofert(identifier, fetcher)
     else:
         raise ValueError(f"Unsupported portal for fetching: {portal}")
 

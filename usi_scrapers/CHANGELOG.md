@@ -1,3 +1,10 @@
+## Refaktoryzacja Discovery i Scrape API (0.4.2) — 2026-05-12
+- Zminimalizowano dane zwracane przez Discovery API do niezbędnego minimum (`id` i `url`).
+- Wprowadzono autonomiczne wykrywanie slugów (dewelopera i inwestycji) bezpośrednio ze stron portali.
+- Całkowicie usunięto zależność od sztucznego generowania slugów (`slugify`) na rzecz natywnych identyfikatorów.
+- Ujednolicono sygnatury metod `scrape_*` i `fetch_investment`, usuwając konieczność przekazywania slugów na wejściu.
+- Dodano suitę testów bezpieczeństwa weryfikującą poprawność natywnej ekstrakcji slugów.
+
 ## Zmiana kontraktu dla health_check — 2026-05-10
 - Przywrócono wsteczną kompatybilność kontraktu `health_check` poprzez dodanie aliasu `verify_consistency`.
 - Wprowadzono ostrzeżenie o deprecacji (`DeprecationWarning`) dla starszego aliasu.
