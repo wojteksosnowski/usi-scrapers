@@ -281,17 +281,57 @@ def fetch_many(
             on_progress(i + 1, total)
     return results
 
-def fetch_investment(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str) -> Dict[str, Any]:
+def fetch_investment(
+    config: ScraperConfig, 
+    fetcher: Fetcher, 
+    portal: str, 
+    identifier: str,
+    on_progress: Optional[Callable[[Dict[str, Any]], None]] = None
+) -> Dict[str, Any]:
     """Pobiera szczegóły konkretnej inwestycji ze wskazanego portalu (Scrape)."""
     p = portal.lower()
-    if p == "rp":
-        return scrape_rynek_pierwotny(identifier, fetcher)
-    elif p in ("oto", "otodom"):
-        return scrape_otodom(identifier, fetcher)
-    elif p in ("to", "tabelaofert"):
-        return scrape_tabelaofert(identifier, fetcher)
-    else:
-        raise ValueError(f"Unsupported portal for fetching: {portal}")
+    data = {}
+    error_msg = None
+    status = "failed"
+
+    try:
+        if p == "rp":
+            data = scrape_rynek_pierwotny(identifier, fetcher)
+        elif p in ("oto", "otodom"):
+            data = scrape_otodom(identifier, fetcher)
+        elif p in ("to", "tabelaofert"):
+            data = scrape_tabelaofert(identifier, fetcher)
+        else:
+            raise ValueError(f"Unsupported portal for fetching: {portal}")
+
+        if data and data.get("error"):
+            error_msg = str(data["error"])
+        else:
+            status = "success"
+    except Exception as e:
+        error_msg = str(e)
+        data = {"error": error_msg}
+
+    if on_progress:
+        msg = "Pobrano pomyślnie." if status == "success" else f"Pobranie nieudane: {error_msg}"
+        dev_slug = data.get("developer_slug", "unknown") if status == "success" else None
+        inv_slug = data.get("investment_slug", "unknown") if status == "success" else None
+
+        on_progress({
+            "total": 1,
+            "current_index": 1,
+            "progress_percent": 100,
+            "status": status,
+            "investment": {
+                "identifier": identifier,
+                "dev_slug": dev_slug,
+                "inv_slug": inv_slug
+            },
+            "message": msg,
+            "error_details": error_msg if status == "failed" else None
+        })
+
+    return data
 
 def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: str, inv_slug: str) -> Optional[Path]:
     """Pobiera i zapisuje surowy JSON inwestycji."""

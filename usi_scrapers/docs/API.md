@@ -52,10 +52,10 @@ investments = list_investments(config, fetcher, portal="rp", identifier="dom-dev
 ---
 
 ### `fetch_investment` (Scraping)
-Pobiera pełne dane o konkretnej inwestycji. Scraper automatycznie wykrywa natywne slugi dewelopera i inwestycji.
+Pobiera pełne dane o konkretnej inwestycji. Scraper automatycznie wykrywa natywne slugi dewelopera i inwestycji. Wspiera opcjonalny callback `on_progress` do raportowania statusu.
 
 ```python
-data = fetch_investment(config, fetcher, portal="rp", identifier="12345")
+data = fetch_investment(config, fetcher, portal="rp", identifier="12345", on_progress=callback)
 ```
 
 ---

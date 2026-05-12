@@ -1,3 +1,6 @@
+## Rozszerzenie Progress Reporting (0.4.4) — 2026-05-12
+- Dodano obsługę callbacka `on_progress` do funkcji `fetch_investment`, umożliwiając ustandaryzowane raportowanie postępu również dla pojedynczych pobrań (total=1).
+
 ## Batch Processing i Progress Reporting (0.4.3) — 2026-05-12
 - Dodano funkcję `process_batch` do sekwencyjnego pobierania paczek inwestycji.
 - Zaimplementowano ustandaryzowany system raportowania postępu (`on_progress`) z bogatym payloadem (indeksy, procenty, statusy, błędy).
