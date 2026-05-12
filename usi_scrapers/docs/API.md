@@ -52,20 +52,62 @@ investments = list_investments(config, fetcher, portal="rp", identifier="dom-dev
 ---
 
 ### `fetch_investment` (Scraping)
-Pobiera pełne dane o konkretnej inwestycji.
+Pobiera pełne dane o konkretnej inwestycji. Scraper automatycznie wykrywa natywne slugi dewelopera i inwestycji.
 
 ```python
-data = fetch_investment(config, fetcher, portal="rp", identifier="123", dev_slug="dev", inv_slug="inv")
+data = fetch_investment(config, fetcher, portal="rp", identifier="12345")
+```
+
+---
+
+### `process_batch`
+Sekwencyjnie pobiera listę inwestycji z obsługą throttling, retry i ustandaryzowanym raportowaniem postępu. Wykorzystuje `TechnicalDataManager` do natychmiastowego zapisu danych i zdjęć na dysk (izolacja I/O).
+
+```python
+from usi_scrapers.api import process_batch
+
+def my_callback(report):
+    print(f"Postęp: {report['progress_percent']}% | Status: {report['status']}")
+
+results = process_batch(
+    config,
+    fetcher,
+    portal="otodom",
+    identifiers=["https://...", "https://..."],
+    on_progress=my_callback,
+    delay_range=(1.0, 3.0),
+    max_retries=3
+)
+```
+
+**Argumenty:**
+- `identifiers` (*List[str]*): Lista adresów URL lub ID do pobrania.
+- `on_progress` (*Callable[[Dict], None]*): Callback otrzymujący szczegółowy raport.
+- `delay_range` (*tuple*): Zakres losowego opóźnienia między inwestycjami (sekundy).
+- `max_retries` (*int*): Liczba ponowień przy błędach 429 lub timeoutach.
+
+**Format Raportu (`on_progress`):**
+```json
+{
+  "total": 149,
+  "current_index": 5,
+  "progress_percent": 3,
+  "status": "success",          // "success" | "failed" | "retrying"
+  "investment": {
+    "dev_slug": "urban-home",
+    "inv_slug": "nowe-branice",
+    "identifier": "https://..."
+  },
+  "message": "Pobrano pomyślnie i zapisano 12 zdjęć.",
+  "error_details": null
+}
 ```
 
 ---
 
 ### `fetch_many`
-Wsadowy scraping listy inwestycji z obsługą postępu.
+Starsza wersja wsadowego scrapingu. Zaleca się używanie `process_batch` dla lepszej kontroli i raportowania.
 
-```python
-results = fetch_many(config, fetcher, portal="otodom", investments=[...], on_progress=callback)
-```
 
 ---
 
