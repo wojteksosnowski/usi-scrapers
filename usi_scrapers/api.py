@@ -2,9 +2,11 @@
 Public API dla usi-scrapers.
 Zbiór metod służących do interakcji z pakietem.
 """
+import time
+import random
 from datetime import datetime, timezone
 import warnings
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 from pathlib import Path
 
 from .fetcher import Fetcher
@@ -14,6 +16,111 @@ from .scraper_rp import discover_rp_investments, scrape_rynek_pierwotny, downloa
 from .scraper_otodom import discover_otodom_investments, discover_otodom_listing, scrape_otodom, download_raw_otodom_json, download_raw_otodom_dev_json, fetch_otodom_agency_name, discover_otodom_developers
 from .scraper_to import discover_to_investments, discover_to_listing, scrape_tabelaofert, download_raw_to_json, download_raw_to_dev_json, fetch_to_agency_name, discover_to_developers
 from .utils.io import save_raw_json, save_dev_raw_json
+
+# ... (keep DEVELIA and other constants)
+# ... (keep _check_fields and health_check)
+
+def process_batch(
+    config: ScraperConfig,
+    fetcher: Fetcher,
+    portal: str,
+    identifiers: List[str],
+    on_progress: Optional[Callable[[Dict[str, Any]], None]] = None,
+    delay_range: tuple[float, float] = (0.5, 2.0),
+    max_retries: int = 3,
+) -> List[Dict[str, Any]]:
+    """
+    Sekwencyjnie pobiera listę inwestycji z obsługą throttling, retry i raportowaniem postępu.
+    Zapisuje dane surowe i zdjęcia natychmiast po pobraniu każdej inwestycji (I/O Isolation).
+    """
+    total = len(identifiers)
+    results = []
+    manager = TechnicalDataManager(config)
+    portal_prefix = {"rp": "rp", "oto": "oto", "otodom": "oto", "to": "to", "tabelaofert": "to"}.get(portal.lower(), "raw")
+
+    for i, identifier in enumerate(identifiers):
+        current_index = i + 1
+        progress_percent = int((current_index / total) * 100)
+        
+        data = None
+        error_msg = None
+        status = "failed"
+        
+        for attempt in range(max_retries):
+            try:
+                if portal.lower() == "rp":
+                    data = scrape_rynek_pierwotny(identifier, fetcher)
+                elif portal.lower() in ("oto", "otodom"):
+                    data = scrape_otodom(identifier, fetcher)
+                else:
+                    data = scrape_tabelaofert(identifier, fetcher)
+                
+                if data and "error" in data:
+                    error_msg = str(data["error"])
+                    if "429" in error_msg or "timeout" in error_msg.lower():
+                        if on_progress:
+                            on_progress({
+                                "total": total,
+                                "current_index": current_index,
+                                "progress_percent": progress_percent,
+                                "status": "retrying",
+                                "investment": {"identifier": identifier},
+                                "message": f"Próba {attempt + 1}/{max_retries}: {error_msg}. Czekam 10s...",
+                                "error_details": error_msg
+                            })
+                        time.sleep(10)
+                        continue
+                    else:
+                        break # Inny błąd - nie ponawiamy
+                
+                status = "success"
+                error_msg = None
+                break
+            except Exception as e:
+                error_msg = str(e)
+                if attempt < max_retries - 1:
+                    time.sleep(10)
+                    continue
+                break
+
+        # I/O Isolation & Reporting
+        msg = ""
+        inv_info = {"identifier": identifier, "dev_slug": None, "inv_slug": None}
+        
+        if status == "success" and data:
+            dev_slug = data.get("developer_slug", "unknown")
+            inv_slug = data.get("investment_slug", "unknown")
+            inv_info["dev_slug"] = dev_slug
+            inv_info["inv_slug"] = inv_slug
+            
+            # Zapis danych surowych
+            manager.save_raw_data(data, dev_slug, inv_slug, portal_prefix)
+            
+            # Synchronizacja zdjęć
+            image_urls = data.get("image_urls", [])
+            saved_images = manager.sync_images(image_urls, dev_slug, inv_slug)
+            msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
+        else:
+            msg = f"Pobranie nieudane: {error_msg}"
+
+        if on_progress:
+            on_progress({
+                "total": total,
+                "current_index": current_index,
+                "progress_percent": progress_percent,
+                "status": status,
+                "investment": inv_info,
+                "message": msg,
+                "error_details": error_msg if status == "failed" else None
+            })
+
+        results.append(data)
+
+        # Throttling
+        if i < total - 1:
+            time.sleep(random.uniform(*delay_range))
+
+    return results
 
 # DEVELIA agency ID on Otodom — large developer, stable probe target
 _OTO_PROBE_AGENCY_ID = "10556359"

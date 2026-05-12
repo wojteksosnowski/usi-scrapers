@@ -1,3 +1,10 @@
+## Batch Processing i Progress Reporting (0.4.3) — 2026-05-12
+- Dodano funkcję `process_batch` do sekwencyjnego pobierania paczek inwestycji.
+- Zaimplementowano ustandaryzowany system raportowania postępu (`on_progress`) z bogatym payloadem (indeksy, procenty, statusy, błędy).
+- Wprowadzono wbudowany throttling (losowe opóźnienia `delay_range`) chroniący przed wykryciem wzorca bota.
+- Dodano mechanizm Retry dla błędów 429 (Too Many Requests) i timeoutów (10s oczekiwania przed ponowieniem).
+- Pełna izolacja I/O: wykorzystanie `TechnicalDataManager` do natychmiastowego zapisu JSON i zdjęć na dysk podczas procesowania paczki.
+
 ## Refaktoryzacja Discovery i Scrape API (0.4.2) — 2026-05-12
 - Zminimalizowano dane zwracane przez Discovery API do niezbędnego minimum (`id` i `url`).
 - Wprowadzono autonomiczne wykrywanie slugów (dewelopera i inwestycji) bezpośrednio ze stron portali.
