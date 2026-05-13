@@ -3,7 +3,9 @@ import logging
 from datetime import datetime, timezone
 from pathlib import Path
 
-logger = logging.getLogger(__name__)
+from .. import get_logger
+
+logger = get_logger(__name__)
 
 
 def is_multistage(rp_details: dict) -> bool:

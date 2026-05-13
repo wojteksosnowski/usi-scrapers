@@ -8,7 +8,9 @@ from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json
 from .utils.string import slugify
 
-logger = logging.getLogger(__name__)
+from . import get_logger
+
+logger = get_logger(__name__)
 
 def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """

@@ -1,3 +1,7 @@
+## Wersjonowanie Logów (0.4.6) — 2026-05-12
+- Zaimplementowano `USILoggerAdapter`, który automatycznie dopisuje aktualną wersję pakietu (np. `[usi-scrapers v0.4.6]`) do każdego wpisu w logach.
+- Zaktualizowano wszystkie moduły wewnętrzne do korzystania z nowej metody pobierania loggera.
+
 ## Zintegrowane Discovery Deweloperów (0.4.5) — 2026-05-12
 - Zintegrowano logikę dodawania deweloperów bezpośrednio do scraperów inwestycji.
 - Każde pobranie inwestycji automatycznie wyzwala pobranie i zapis surowych danych dewelopera (`raw_*.json`).

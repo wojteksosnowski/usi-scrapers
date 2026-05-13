@@ -7,7 +7,9 @@ from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json
 
-logger = logging.getLogger(__name__)
+from . import get_logger
+
+logger = get_logger(__name__)
 
 
 def _parse_otodom_slug(full_slug: str) -> tuple[str, str | None]:

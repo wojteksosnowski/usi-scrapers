@@ -6,7 +6,9 @@ from pathlib import Path
 from urllib.parse import unquote
 from ..models import ScraperConfig
 
-logger = logging.getLogger(__name__)
+from .. import get_logger
+
+logger = get_logger(__name__)
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 

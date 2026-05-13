@@ -5,7 +5,9 @@ from .fetcher import Fetcher
 from .utils.io import get_investment_dir, get_image_dir, save_raw_json
 from .utils.images import save_images
 
-logger = logging.getLogger(__name__)
+from . import get_logger
+
+logger = get_logger(__name__)
 
 class TechnicalDataManager:
     """

@@ -9,7 +9,9 @@ from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json
 from .utils.stage_detector import extract_groups_id, extract_stages
 
-logger = logging.getLogger(__name__)
+from . import get_logger
+
+logger = get_logger(__name__)
 
 def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """

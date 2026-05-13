@@ -8,7 +8,9 @@ import requests as std_requests
 
 from .models import ScraperConfig
 
-logger = logging.getLogger("usi_scrapers.fetcher")
+from . import get_logger
+
+logger = get_logger("usi_scrapers.fetcher")
 
 SCRAPERAPI_ACCOUNT_URL = "https://api.scraperapi.com/account"
 

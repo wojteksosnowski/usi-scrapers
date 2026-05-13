@@ -6,7 +6,9 @@ from usi_scrapers.utils.images import clean_filename
 from usi_scrapers.scraper_to import filter_investment_images
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-logger = logging.getLogger(__name__)
+from . import get_logger
+
+logger = get_logger(__name__)
 
 def verify_investment_images(public_dir: Path, dev_slug: str, inv_slug: str, portal: str):
     """

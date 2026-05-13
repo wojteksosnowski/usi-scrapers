@@ -3,7 +3,9 @@ import logging
 from pathlib import Path
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+from .. import get_logger
+
+logger = get_logger(__name__)
 
 def save_raw_json(data: dict, public_dir: Path, dev_slug: str, inv_slug: str, portal_prefix: str) -> Path:
     """
