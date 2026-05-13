@@ -202,6 +202,7 @@ def discover_otodom_listing(config: ScraperConfig, fetcher: Fetcher, identifier:
                 
             items = search_ads.get("items", [])
             if not items:
+                logger.warning(f"discover_otodom_listing: no items on page {current_page} for {page_url}")
                 break
 
             for item in items:

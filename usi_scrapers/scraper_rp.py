@@ -110,7 +110,8 @@ def resolve_rp_vendor_id(slug: str, fetcher: Fetcher) -> str | None:
     slug_parts = slug.strip("/").split("-")
     if slug_parts and slug_parts[-1].isdigit():
         return slug_parts[-1]
-        
+
+    logger.warning(f"Could not resolve RP vendor ID for slug '{slug}' — all patterns failed")
     return None
 
 def discover_rp_investments(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:

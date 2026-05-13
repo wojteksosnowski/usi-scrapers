@@ -44,7 +44,6 @@ Pipeline: **Fetch → Scrape → Save**
 
 - `public_dir` — root output directory; `Public/` in the repo root is a **debug symlink** only
 - `scraperapi_key` — ScraperAPI key; credit balance checked live, no local counter
-- `here_api_key` — unused in this repo (geocoding is usi-tracker's responsibility)
 - `rp/otodom/to_discovery_urls` — discovery endpoints per portal
 - `fetch_delays` — per-domain rate limit in seconds
 
@@ -119,8 +118,6 @@ data = fetch_investment(
     fetcher=fetcher,
     portal="tabelaofert",
     identifier="https://tabelaofert.pl/inwestycja/...,i8982461",  # full investment URL
-    dev_slug="unidevelopment",
-    inv_slug="idea-ogrody-3-...",
 )
 # → dict: name/title, latitude, longitude, price_min/max, image_urls, amenities, ...
 ```

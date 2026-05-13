@@ -30,6 +30,7 @@ def extract_to_api_token(html: str) -> str | None:
     m = re.search(r'/_next/static/chunks/[^"]+-([a-f0-9]{10})\.js', html)
     if m:
         return f"v{m.group(1)}"
+    logger.debug("extract_to_api_token: no token found in HTML script hashes")
     return None
 
 def fetch_to_api_gallery(inv_id: str, token: str, fetcher: Fetcher) -> list[str]:
@@ -37,7 +38,9 @@ def fetch_to_api_gallery(inv_id: str, token: str, fetcher: Fetcher) -> list[str]
     url = f"https://tabelaofert.pl/api/{token}/oferty/inwestycja/{inv_id}/galeria"
     logger.info(f"Fetching TO Gallery API: {url}")
     data = fetcher.fetch_json(url)
-    if not data: return []
+    if not data:
+        logger.debug(f"fetch_to_api_gallery: no data returned for {url}")
+        return []
     
     images = data.get("data", {}).get("images", [])
     return [img["url"] for img in images if isinstance(img, dict) and "url" in img]

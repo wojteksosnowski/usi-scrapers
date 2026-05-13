@@ -2,8 +2,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, List
 
-# Called with (current, total) after each item is processed.
-ProgressCallback = Callable[[int, int], None]
+# Called with a progress dict after each item is processed.
+# Keys: total, current_index, progress_percent, status, investment, message, error_details
+ProgressCallback = Callable[[Dict[str, Any]], None]
 
 
 @dataclass

@@ -266,7 +266,7 @@ def fetch_many(
     on_progress: Optional[ProgressCallback] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Pobiera szczegóły listy inwestycji, wołając on_progress(current, total) po każdej.
+    Pobiera szczegóły listy inwestycji z opcjonalnym raportowaniem postępu.
 
     Każdy element investments musi zawierać klucz: "identifier".
     Zwraca listę wyników w tej samej kolejności co investments.
@@ -277,7 +277,16 @@ def fetch_many(
         result = fetch_investment(config, fetcher, portal, inv["identifier"])
         results.append(result)
         if on_progress:
-            on_progress(i + 1, total)
+            current_index = i + 1
+            on_progress({
+                "total": total,
+                "current_index": current_index,
+                "progress_percent": int((current_index / total) * 100) if total else 100,
+                "status": "failed" if result.get("error") else "success",
+                "investment": {"identifier": inv["identifier"]},
+                "message": "",
+                "error_details": str(result["error"]) if result.get("error") else None,
+            })
     return results
 
 def fetch_investment(
