@@ -25,9 +25,6 @@ class ScraperConfig:
     # Ustawienia sieciowe i fallback do ScraperAPI
     scraperapi_key: Optional[str] = None
 
-    # HERE Maps API Key dla geokodowania i wzbogacania danych POI
-    here_api_key: Optional[str] = None
-    
     # Adresy URL do globalnego skanowania portali (Discovery)
     rp_discovery_urls: List[str] = field(default_factory=list)
     otodom_discovery_urls: List[str] = field(default_factory=list)

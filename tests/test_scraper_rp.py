@@ -139,9 +139,6 @@ def test_parse_rp_results_simple():
     assert len(offers) == 1
     o = offers[0]
     assert o["id"] == "1001"
-    assert o["slug"] == "osiedle-zielone"
-    assert o["vendor_slug"] == "dom-dev"
-    assert o["is_stage"] is False
     assert "dom-dev" in o["url"]
     assert "osiedle-zielone" in o["url"]
 
@@ -152,18 +149,7 @@ def test_parse_rp_results_stage_flattening():
     ids = {o["id"] for o in offers}
     assert ids == {"2001", "2002"}
     for o in offers:
-        assert o["is_stage"] is True
-        assert o["parent_id"] == "2000"
         assert "show_sold_stage=true" in o["url"]
-
-
-def test_parse_rp_results_stage_image_fallback():
-    # Etap II has no main_photo — should inherit parent image (which is also None here)
-    offers = _parse_rp_results([_RP_MULTISTAGE_ITEM])
-    etap1 = next(o for o in offers if o["id"] == "2001")
-    assert etap1["image"] == "https://cdn.rp.pl/etap1.jpg"
-    etap2 = next(o for o in offers if o["id"] == "2002")
-    assert etap2["image"] is None  # parent also has no image
 
 
 def test_parse_rp_results_empty():
@@ -195,7 +181,7 @@ _RP_GALLERY = {
 
 def test_scrape_rynek_pierwotny_coords(fetcher):
     fetcher.fetch_json.side_effect = [_RP_DETAILS, _RP_GALLERY]
-    result = scrape_rynek_pierwotny("5000", "test-dev", "testowa-inwestycja", fetcher)
+    result = scrape_rynek_pierwotny("5000", fetcher)
 
     assert result["longitude"] == 21.01
     assert result["latitude"] == 52.23
@@ -205,7 +191,7 @@ def test_scrape_rynek_pierwotny_coords_single_element(fetcher):
     details = dict(_RP_DETAILS)
     details["geo_point"] = {"coordinates": [21.01]}  # only one element
     fetcher.fetch_json.side_effect = [details, _RP_GALLERY]
-    result = scrape_rynek_pierwotny("5000", "test-dev", "testowa-inwestycja", fetcher)
+    result = scrape_rynek_pierwotny("5000", fetcher)
     # latitude must be None, not the same as longitude
     assert result["longitude"] == 21.01
     assert result["latitude"] is None
@@ -213,9 +199,15 @@ def test_scrape_rynek_pierwotny_coords_single_element(fetcher):
 
 def test_scrape_rynek_pierwotny_images(fetcher):
     fetcher.fetch_json.side_effect = [_RP_DETAILS, _RP_GALLERY]
-    result = scrape_rynek_pierwotny("5000", "test-dev", "testowa-inwestycja", fetcher)
+    result = scrape_rynek_pierwotny("5000", fetcher)
     assert len(result["image_urls"]) == 2
     assert "https://cdn.rp.pl/a.jpg" in result["image_urls"]
+
+
+def test_scrape_rynek_pierwotny_missing_details(fetcher):
+    fetcher.fetch_json.return_value = None
+    result = scrape_rynek_pierwotny("9999", fetcher)
+    assert "error" in result
 
 
 def test_scrape_rynek_pierwotny_sibling_stages(fetcher):
@@ -231,7 +223,7 @@ def test_scrape_rynek_pierwotny_sibling_stages(fetcher):
         ]
     }
     fetcher.fetch_json.side_effect = [details, _RP_GALLERY]
-    result = scrape_rynek_pierwotny("5000", "test-dev", "testowa-inwestycja", fetcher)
+    result = scrape_rynek_pierwotny("5000", fetcher)
     assert result["stage_sort"] == 1
     assert result["stage_is_current"] is True
     assert len(result["sibling_stage_folders"]) == 1

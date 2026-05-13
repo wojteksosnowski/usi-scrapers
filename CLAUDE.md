@@ -167,7 +167,28 @@ page = list_developers(
 - **Otodom** — `/firmy/deweloperzy/` is a **legacy PHP page** (no `__NEXT_DATA__`). Must parse HTML with regex. Developer links are absolute `https://www.otodom.pl/pl/firmy/deweloperzy/{slug}-ID{id}`; `total_pages` comes from `?page=N` links in paginator. Verified: 230 pages, ~20 developers per page.
 - **TabelaOfert** — developer links in listing HTML are **absolute URLs** (`https://tabelaofert.pl/katalog-firm/deweloperzy/{slug}`); city/filter links are **relative** (`/katalog-firm/deweloperzy/wroclaw`) — regex must match absolute form only to avoid including city filters. `total_pages` from `?page=N` paginator links. Verified: 117 pages, ~20 developers per page.
 
-### 6. Smoke-test all portals (health check)
+### 6. Batch-scrape multiple investments
+
+```python
+from usi_scrapers.api import process_batch
+
+results = process_batch(
+    config=config,
+    fetcher=fetcher,
+    portal="rp",                          # "rp" | "otodom" | "tabelaofert"
+    identifiers=["12345", "67890"],       # list of investment identifiers
+    on_progress=lambda payload: ...,      # optional; receives rich dict per item
+    delay_range=(0.5, 2.0),              # throttle between requests
+    max_retries=3,
+)
+# → list[dict]: one entry per identifier; includes "error" key on failure
+# Writes raw JSON + images to disk immediately after each item (I/O isolation).
+# Auto-retries on HTTP 429 / timeout with 10s backoff.
+```
+
+The `on_progress` payload keys: `total`, `current_index`, `progress_percent`, `status` (`"success"` | `"failed"` | `"retrying"`), `investment`, `message`, `error_details`.
+
+### 7. Smoke-test all portals (health check)
 
 ```python
 from usi_scrapers.api import health_check
@@ -214,6 +235,10 @@ for inv in investments:
     # ... persist to database
 ```
 
+### Ad-hoc dev scripts (not part of the public API)
+
+`usi_scrapers/` contains several loose scripts that are **not** part of the package API and are not run by pytest: `test_fetch.py`, `test_health.py`, `mock_to_test.py`, `re_download_images.py`, `verify_images.py`. These are one-off diagnostic tools; treat them as scratch files, not production code.
+
 ### What is NOT in this package
 
 Developer profile parsing (logo, description, contact) beyond raw JSON is not implemented — only `identify_developer` extracts the name. Full developer profile structuring is usi-tracker's responsibility.
@@ -221,7 +246,7 @@ Developer profile parsing (logo, description, contact) beyond raw JSON is not im
 ## Key conventions
 
 - **Type hints** required on all public functions.
-- **Logging**: `logger = logging.getLogger(__name__)` per module.
+- **Logging**: `from . import get_logger` then `logger = get_logger(__name__)` per module — this wraps the standard logger with `USILoggerAdapter` to prepend `[usi-scrapers vX.Y.Z]` to every message. Do not use `logging.getLogger` directly.
 - `stage_detector.py` (157 lines) is intentionally duplicated in `usi-tracker` — both copies are kept in sync manually.
 - Otodom investment URLs use `/pl/oferta/{slug}` (not `/pl/inwestycja/`) — confirmed against 2300+ production records.
 - RP API returns coordinates as `[lng, lat]` — index 0 is longitude, index 1 is latitude.

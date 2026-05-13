@@ -352,7 +352,7 @@ def test_scrape_tabelaofert_success(fetcher):
     fetcher.fetch.return_value = _SCRAPE_HTML
     fetcher.fetch_json.return_value = {"data": {"images": [{"url": "https://content.tabelaofert.pl/img.webp"}]}}
 
-    result = scrape_tabelaofert(TO_URL, "test-dev", "test-inv", fetcher)
+    result = scrape_tabelaofert(TO_URL, fetcher)
 
     assert result["source"] == "tabelaofert.pl"
     assert result["to_id"] == "12345"
@@ -371,11 +371,11 @@ def test_scrape_tabelaofert_images_in_result(fetcher):
             ]
         }
     }
-    result = scrape_tabelaofert(TO_URL, "test-dev", "test-inv", fetcher)
+    result = scrape_tabelaofert(TO_URL, fetcher)
     assert len(result["image_urls"]) > 0
 
 
 def test_scrape_tabelaofert_fetch_failure(fetcher):
     fetcher.fetch.return_value = None
-    result = scrape_tabelaofert(TO_URL, "test-dev", "test-inv", fetcher)
+    result = scrape_tabelaofert(TO_URL, fetcher)
     assert "error" in result

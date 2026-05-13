@@ -238,7 +238,6 @@ def list_investments(
     fetcher: Fetcher,
     portal: str,
     identifier: Optional[str] = None,
-    on_progress: Optional[ProgressCallback] = None,
 ) -> List[Dict[str, Any]]:
     """Pobiera listę inwestycji dewelopera ze wskazanego portalu (Discovery)."""
     p = portal.lower()

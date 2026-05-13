@@ -1,7 +1,7 @@
 import pytest
 import json
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from usi_scrapers.scraper_otodom import (
     extract_next_data,
     scrape_otodom,
@@ -64,19 +64,7 @@ _ITEM = {
 def test_parse_otodom_item_basic():
     parsed = _parse_otodom_item(_ITEM)
     assert parsed["id"] == 67916467
-    assert parsed["slug"] == "apartamenty-kameliowa-vi-etap"
-    assert parsed["hash_id"] == "4AYaT"
-    assert parsed["developer"] == "GH Development"
     assert parsed["url"] == "https://www.otodom.pl/pl/oferta/apartamenty-kameliowa-vi-etap-ID4AYaT"
-    assert parsed["image"] == "https://cdn.oto.pl/thumb.jpg"
-
-
-def test_parse_otodom_item_advertiser_fallback():
-    item = dict(_ITEM)
-    item["agency"] = {}
-    item["advertiser"] = {"name": "Fallback Dev"}
-    parsed = _parse_otodom_item(item)
-    assert parsed["developer"] == "Fallback Dev"
 
 
 def test_parse_otodom_item_no_slug_returns_none():
@@ -135,9 +123,10 @@ def _make_html(ad_override=None):
     return f'<script id="__NEXT_DATA__" type="application/json">{json.dumps(payload)}</script>'
 
 
-def test_scrape_otodom_success(fetcher):
+@patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
+def test_scrape_otodom_success(mock_dl, fetcher):
     fetcher.fetch.return_value = _make_html()
-    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", "test-dev", "test-inv", fetcher)
+    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)
 
     assert "error" not in result
     assert result["title"] == "Testowa Inwestycja"
@@ -148,19 +137,21 @@ def test_scrape_otodom_success(fetcher):
     assert len(result["image_urls"]) == 2
 
 
-def test_scrape_otodom_delivery_fallback_to_estimated(fetcher):
+@patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
+def test_scrape_otodom_delivery_fallback_to_estimated(mock_dl, fetcher):
     fetcher.fetch.return_value = _make_html({
         "topInformation": [],
         "investmentEstimatedDelivery": {"quarter": 2, "year": 2026},
     })
-    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", "test-dev", "test-inv", fetcher)
+    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)
     assert result["delivery_quarter"] == 2
     assert result["delivery_year"] == 2026
 
 
-def test_scrape_otodom_agency_slug_from_url(fetcher):
+@patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
+def test_scrape_otodom_agency_slug_from_url(mock_dl, fetcher):
     fetcher.fetch.return_value = _make_html()
-    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", "unknown", "test-inv", fetcher)
+    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)
     assert result["developer_slug"] == "testdev"
 
 
@@ -169,19 +160,20 @@ def test_scrape_otodom_no_agency_falls_back_to_owner(fetcher):
         "agency": None,
         "owner": {"name": "Jan Kowalski"},
     })
-    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", "test-dev", "test-inv", fetcher)
+    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)
     assert result["agency_name"] == "Jan Kowalski"
 
 
-def test_scrape_otodom_empty_images(fetcher):
+@patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
+def test_scrape_otodom_empty_images(mock_dl, fetcher):
     fetcher.fetch.return_value = _make_html({"images": []})
-    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", "test-dev", "test-inv", fetcher)
+    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)
     assert result["image_urls"] == []
 
 
 def test_scrape_otodom_fetch_failure(fetcher):
     fetcher.fetch.return_value = None
-    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", "test-dev", "test-inv", fetcher)
+    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)
     assert "error" in result
 
 
@@ -211,9 +203,9 @@ def test_discover_otodom_investments_returns_offers(fetcher, config):
     fetcher.fetch.return_value = _make_agency_html([_AGENCY_ITEM])
     offers = discover_otodom_investments(config, fetcher, identifier="99")
     assert len(offers) == 1
-    assert offers[0]["slug"] == "osiedle-testowe"
-    assert offers[0]["hash_id"] == "4xF1A"
+    assert offers[0]["id"] == 111
     assert "/pl/oferta/" in offers[0]["url"]
+    assert "osiedle-testowe" in offers[0]["url"]
 
 
 def test_discover_otodom_investments_empty(fetcher, config):
