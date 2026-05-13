@@ -3,7 +3,7 @@ USI Scrapers Package
 """
 import logging
 
-__version__ = "0.4.7"
+__version__ = "0.4.8"
 
 class USILoggerAdapter(logging.LoggerAdapter):
     """Adds version information to every log message."""

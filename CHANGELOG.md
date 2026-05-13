@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.4.8] — 2026-05-14
+
+### Added
+- Developer logo download as side-effect of `download_raw_dev()` for all three portals
+- `extract_rp_dev_logo(profile)` — wyciąga URL logo z odpowiedzi API RP (pola: `logo`, `logo_url`, `image`)
+- `extract_otodom_dev_logo(page_props)` — wyciąga URL logo z `__NEXT_DATA__` pageProps Otodom (szuka w `advertiser`, `agency`, shallow scan)
+- `extract_to_dev_logo(html)` — wyciąga URL logo ze strony dewelopera TO (priorytet: `og:image`, fallback: `<img class/alt="logo">`)
+- `extract_to_dev_data(html, url)` — dedykowana ekstrakcja danych ze strony dewelopera TO (zastąpiła błędne użycie `extract_to_data`)
+- `download_developer_logo(url, dev_slug, config)` w `utils/images.py` — pobiera logo do `{public_dir}/USIdev/{dev_slug}/logo.{ext}`
+- `tests/test_developer_logo.py` — 30 testów jednostkowych
+
+### Fixed
+- `download_raw_to_dev_json` wywoływał `extract_to_data()` (funkcję dla inwestycji, szuka JSON-LD `@type: Product`) na stronach deweloperów — zastąpione przez `extract_to_dev_data()`
+
 ## [0.4.7] — 2026-05-14
 
 ### Changed

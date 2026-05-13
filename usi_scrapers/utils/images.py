@@ -103,6 +103,45 @@ def download_image(url: str, developer_slug: str, investment_slug: str, config: 
         logger.error(f"Error downloading image {url}: {e}")
         return ""
 
+def download_developer_logo(url: str, dev_slug: str, config: ScraperConfig) -> str:
+    """
+    Downloads developer logo and saves to {public_dir}/USIdev/{dev_slug}/logo.{ext}.
+    Returns filename if successful, empty string otherwise.
+    """
+    base = url.split("?")[0].split("#")[0]
+    suffix = Path(base).suffix.lower()
+    if suffix not in IMAGE_EXTENSIONS:
+        suffix = ".jpg"
+    filename = f"logo{suffix}"
+
+    target_dir = config.public_dir / "USIdev" / dev_slug
+    try:
+        target_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError:
+        logger.debug(f"Permission denied creating directory {target_dir}")
+
+    target_path = target_dir / filename
+    try:
+        if target_path.exists() and target_path.stat().st_size > 1024:
+            return filename
+    except PermissionError:
+        pass
+
+    try:
+        logger.info(f"Downloading developer logo: {url}")
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        response = requests.get(url, stream=True, timeout=30, headers=headers)
+        response.raise_for_status()
+        with open(target_path, "wb") as f:
+            shutil.copyfileobj(response.raw, f)
+        return filename
+    except Exception as e:
+        logger.error(f"Error downloading developer logo {url}: {e}")
+        return ""
+
+
 def save_images(urls: list[str], developer_slug: str, investment_slug: str, config: ScraperConfig) -> list[str]:
     """
     Downloads and saves a list of images.

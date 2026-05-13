@@ -16,13 +16,34 @@ logger = get_logger(__name__)
 def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
     Downloads raw JSON for an RP developer profile and saves it.
+    Also downloads developer logo when found in the API response.
     """
+    from .utils.images import download_developer_logo
     profile = fetch_rp_developer_profile(vendor_id_or_slug, fetcher)
     if not profile:
         logger.error(f"Failed to fetch RP developer profile for {vendor_id_or_slug}")
         return None
 
+    logo_url = extract_rp_dev_logo(profile)
+    if logo_url:
+        download_developer_logo(logo_url, dev_slug, config)
+    else:
+        logger.debug(f"No logo URL found in RP developer profile for {dev_slug}")
+
     return save_dev_raw_json(profile, config.public_dir, dev_slug, "rp")
+
+
+def extract_rp_dev_logo(profile: dict) -> str | None:
+    """Extracts logo URL from RP vendor API response."""
+    for field in ("logo", "logo_url", "image"):
+        val = profile.get(field)
+        if isinstance(val, str) and val.startswith("http"):
+            return val
+        if isinstance(val, dict):
+            url = val.get("url") or val.get("src")
+            if url and isinstance(url, str) and url.startswith("http"):
+                return url
+    return None
 
 def fetch_rp_developer_profile(vendor_id_or_slug: str, fetcher: Fetcher) -> dict:
     """

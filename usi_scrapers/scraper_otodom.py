@@ -37,19 +37,51 @@ def _parse_otodom_item(item: dict, offer_id=None) -> dict | None:
 def download_raw_otodom_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
     Downloads raw JSON for an Otodom developer profile and saves it.
+    Also downloads developer logo when found in __NEXT_DATA__.
     """
+    from .utils.images import download_developer_logo
     html = fetch_otodom_html(url, fetcher)
     if not html:
         logger.error(f"Failed to fetch Otodom HTML for {url}")
         return None
-        
+
     page_props = extract_next_data(html)
     if not page_props:
         logger.error(f"Failed to extract __NEXT_DATA__ for {url}")
         return None
 
     page_props["url"] = url
+
+    logo_url = extract_otodom_dev_logo(page_props)
+    if logo_url:
+        download_developer_logo(logo_url, dev_slug, config)
+    else:
+        logger.debug(f"No logo URL found in Otodom pageProps for {dev_slug}")
+
     return save_dev_raw_json(page_props, config.public_dir, dev_slug, "oto")
+
+
+def extract_otodom_dev_logo(page_props: dict) -> str | None:
+    """Extracts logo URL from Otodom developer page __NEXT_DATA__ pageProps."""
+    candidates = [
+        page_props.get("advertiser", {}).get("logoUrl"),
+        page_props.get("advertiser", {}).get("logo"),
+        page_props.get("agency", {}).get("logo", {}).get("url") if isinstance(page_props.get("agency", {}).get("logo"), dict) else None,
+        page_props.get("agency", {}).get("logoUrl"),
+    ]
+    for val in candidates:
+        if isinstance(val, str) and val.startswith("http"):
+            return val
+
+    # shallow scan of top-level keys for any logo-named field
+    for key, val in page_props.items():
+        if "logo" in key.lower() and isinstance(val, str) and val.startswith("http"):
+            return val
+        if isinstance(val, dict):
+            for subkey, subval in val.items():
+                if "logo" in subkey.lower() and isinstance(subval, str) and subval.startswith("http"):
+                    return subval
+    return None
 
 def download_raw_otodom_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """

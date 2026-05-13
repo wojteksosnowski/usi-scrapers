@@ -15,14 +15,74 @@ logger = get_logger(__name__)
 def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
     Downloads raw JSON for a TabelaOfert developer profile and saves it.
+    Also downloads developer logo when found in the page HTML.
     """
+    from .utils.images import download_developer_logo
     html = fetch_to_html(url, fetcher)
     if not html:
         logger.error(f"Failed to fetch TO HTML for {url}")
         return None
 
-    data = extract_to_data(html, url, fetcher=fetcher)
+    data = extract_to_dev_data(html, url)
+
+    logo_url = extract_to_dev_logo(html)
+    if logo_url:
+        data["logo_url"] = logo_url
+        download_developer_logo(logo_url, dev_slug, config)
+    else:
+        logger.debug(f"No logo URL found in TO developer page for {dev_slug}")
+
     return save_dev_raw_json(data, config.public_dir, dev_slug, "to")
+
+
+def extract_to_dev_data(html: str, url: str) -> dict:
+    """Extracts basic data from a TabelaOfert developer page."""
+    data: dict = {"url": url}
+
+    # Name from JSON-LD Organization/LocalBusiness
+    scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.DOTALL)
+    for s in scripts:
+        for org_type in ('"Organization"', '"LocalBusiness"'):
+            if org_type in s:
+                try:
+                    d = json.loads(s.strip())
+                    items = d if isinstance(d, list) else [d]
+                    for item in items:
+                        if isinstance(item, dict) and item.get("@type") in ("Organization", "LocalBusiness"):
+                            if item.get("name"):
+                                data["name"] = item["name"]
+                            break
+                except Exception:
+                    pass
+
+    # Fallback name from <h1>
+    if not data.get("name"):
+        h1 = re.search(r"<h1[^>]*>(.*?)</h1>", html, re.DOTALL)
+        if h1:
+            data["name"] = re.sub(r"<[^>]+>", "", h1.group(1)).strip() or None
+
+    return data
+
+
+def extract_to_dev_logo(html: str) -> str | None:
+    """Extracts developer logo URL from TabelaOfert developer page HTML."""
+    # 1. og:image meta tag — most stable
+    og = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', html, re.IGNORECASE)
+    if og:
+        return og.group(1)
+    og = re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']', html, re.IGNORECASE)
+    if og:
+        return og.group(1)
+
+    # 2. <img> with class or alt containing "logo"
+    img = re.search(r'<img[^>]+(?:class|alt)=["\'][^"\']*logo[^"\']*["\'][^>]+src=["\']([^"\']+)["\']', html, re.IGNORECASE)
+    if img:
+        return img.group(1)
+    img = re.search(r'<img[^>]+src=["\']([^"\']+)["\'][^>]+(?:class|alt)=["\'][^"\']*logo[^"\']*["\']', html, re.IGNORECASE)
+    if img:
+        return img.group(1)
+
+    return None
 
 def extract_to_api_token(html: str) -> str | None:
     """Extracts the API version token from Next.js script hashes."""
