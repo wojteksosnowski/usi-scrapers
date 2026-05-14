@@ -26,7 +26,7 @@ def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: str, fetcher: Fet
 
     logo_url = extract_rp_dev_logo(profile)
     if logo_url:
-        download_developer_logo(logo_url, dev_slug, config)
+        download_developer_logo(logo_url, dev_slug, config, portal_prefix="rp")
     else:
         logger.debug(f"No logo URL found in RP developer profile for {dev_slug}")
 

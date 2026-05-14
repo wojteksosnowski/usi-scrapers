@@ -103,16 +103,16 @@ def download_image(url: str, developer_slug: str, investment_slug: str, config: 
         logger.error(f"Error downloading image {url}: {e}")
         return ""
 
-def download_developer_logo(url: str, dev_slug: str, config: ScraperConfig) -> str:
+def download_developer_logo(url: str, dev_slug: str, config: ScraperConfig, portal_prefix: str = "raw") -> str:
     """
-    Downloads developer logo and saves to {public_dir}/USIdev/{dev_slug}/logo.{ext}.
+    Downloads developer logo and saves to {public_dir}/USIdev/{dev_slug}/logo_{portal_prefix}_{dev_slug}.{ext}.
     Returns filename if successful, empty string otherwise.
     """
     base = url.split("?")[0].split("#")[0]
     suffix = Path(base).suffix.lower()
     if suffix not in IMAGE_EXTENSIONS:
         suffix = ".jpg"
-    filename = f"logo{suffix}"
+    filename = f"logo_{portal_prefix}_{dev_slug}{suffix}"
 
     target_dir = config.public_dir / "USIdev" / dev_slug
     try:

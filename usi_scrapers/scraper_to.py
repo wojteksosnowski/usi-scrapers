@@ -28,7 +28,7 @@ def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: 
     logo_url = extract_to_dev_logo(html)
     if logo_url:
         data["logo_url"] = logo_url
-        download_developer_logo(logo_url, dev_slug, config)
+        download_developer_logo(logo_url, dev_slug, config, portal_prefix="to")
     else:
         logger.debug(f"No logo URL found in TO developer page for {dev_slug}")
 

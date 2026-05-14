@@ -35,12 +35,12 @@ def save_dev_raw_json(data: dict, public_dir: Path, dev_slug: str, portal_prefix
     """
     Saves raw developer profile JSON using centralized path resolution.
     """
-    dev_raw_dir = Path(public_dir) / "USIdev" / "raw"
+    dev_raw_dir = Path(public_dir) / "USIdev" / dev_slug
     dev_raw_dir.mkdir(parents=True, exist_ok=True)
-    
+
     filename = f"raw_{portal_prefix}_{dev_slug}.json"
     file_path = dev_raw_dir / filename
-    
+
     if file_path.exists():
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         archived_filename = f"raw_{portal_prefix}_{dev_slug}_{ts}.json"

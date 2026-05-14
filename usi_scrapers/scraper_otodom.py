@@ -54,7 +54,7 @@ def download_raw_otodom_dev_json(url: str, dev_slug: str, fetcher: Fetcher, conf
 
     logo_url = extract_otodom_dev_logo(page_props)
     if logo_url:
-        download_developer_logo(logo_url, dev_slug, config)
+        download_developer_logo(logo_url, dev_slug, config, portal_prefix="oto")
     else:
         logger.debug(f"No logo URL found in Otodom pageProps for {dev_slug}")
 

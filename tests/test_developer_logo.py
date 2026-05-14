@@ -133,9 +133,9 @@ class TestDownloadDeveloperLogo:
             mock_get.return_value = mock_resp
 
             with patch("shutil.copyfileobj"):
-                result = download_developer_logo("https://cdn.pl/logo.png", "devco", config)
+                result = download_developer_logo("https://cdn.pl/logo.png", "devco", config, portal_prefix="rp")
 
-        assert result == "logo.png"
+        assert result == "logo_rp_devco.png"
         assert (tmp_path / "USIdev" / "devco").exists()
 
     def test_preserves_jpg_extension(self, tmp_path):
@@ -146,8 +146,8 @@ class TestDownloadDeveloperLogo:
             mock_resp.raise_for_status = MagicMock()
             mock_get.return_value = mock_resp
             with patch("shutil.copyfileobj"):
-                result = download_developer_logo("https://cdn.pl/logo.jpg?v=2", "devco", config)
-        assert result == "logo.jpg"
+                result = download_developer_logo("https://cdn.pl/logo.jpg?v=2", "devco", config, portal_prefix="oto")
+        assert result == "logo_oto_devco.jpg"
 
     def test_defaults_to_jpg_for_unknown_extension(self, tmp_path):
         config = ScraperConfig(public_dir=tmp_path)
@@ -157,20 +157,20 @@ class TestDownloadDeveloperLogo:
             mock_resp.raise_for_status = MagicMock()
             mock_get.return_value = mock_resp
             with patch("shutil.copyfileobj"):
-                result = download_developer_logo("https://cdn.pl/logo", "devco", config)
-        assert result == "logo.jpg"
+                result = download_developer_logo("https://cdn.pl/logo", "devco", config, portal_prefix="to")
+        assert result == "logo_to_devco.jpg"
 
     def test_skips_existing_large_file(self, tmp_path):
         config = ScraperConfig(public_dir=tmp_path)
-        logo_path = tmp_path / "USIdev" / "devco" / "logo.png"
+        logo_path = tmp_path / "USIdev" / "devco" / "logo_rp_devco.png"
         logo_path.parent.mkdir(parents=True)
         logo_path.write_bytes(b"x" * 2048)
 
         with patch("requests.get") as mock_get:
-            result = download_developer_logo("https://cdn.pl/logo.png", "devco", config)
+            result = download_developer_logo("https://cdn.pl/logo.png", "devco", config, portal_prefix="rp")
             mock_get.assert_not_called()
 
-        assert result == "logo.png"
+        assert result == "logo_rp_devco.png"
 
     def test_returns_empty_string_on_error(self, tmp_path):
         config = ScraperConfig(public_dir=tmp_path)

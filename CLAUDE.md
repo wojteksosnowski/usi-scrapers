@@ -71,7 +71,7 @@ Pipeline: **Fetch → Scrape → Save**
 
 ### 2. Raw developer JSON
 
-**Path:** `{public_dir}/USIdev/raw/raw_{portal}_{dev_slug}.json`
+**Path:** `{public_dir}/USIdev/{dev_slug}/raw_{portal}_{dev_slug}.json`
 
 **Content:** full developer profile from the portal — RP vendor API response, Otodom developer page `pageProps`, or TabelaOfert developer page data (JSON-LD `Organization`/`LocalBusiness` + `<h1>`).
 
@@ -85,7 +85,9 @@ Pipeline: **Fetch → Scrape → Save**
 
 ### 3. Developer logo
 
-**Path:** `{public_dir}/USIdev/{dev_slug}/logo.{ext}`
+**Path:** `{public_dir}/USIdev/{dev_slug}/logo_{portal}_{dev_slug}.{ext}`
+
+Example: `USIdev/unidevelopment/logo_rp_unidevelopment.png`
 
 **Extension:** taken from the URL path (`.jpg`, `.png`, `.webp`); falls back to `.jpg` if unrecognised.
 
