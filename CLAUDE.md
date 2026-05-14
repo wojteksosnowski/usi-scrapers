@@ -47,29 +47,91 @@ Pipeline: **Fetch → Scrape → Save**
 - `rp/otodom/to_discovery_urls` — discovery endpoints per portal
 - `fetch_delays` — per-domain rate limit in seconds
 
-## Output structure
+## Output files — types, naming and creation
 
-```
-{public_dir}/USIdata/{dev_slug}/{inv_slug}/
-    raw_rp_{inv_slug}.json      # RynekPierwotny raw (investment)
-    raw_oto_{inv_slug}.json     # Otodom raw (investment)
-    raw_to_{inv_slug}.json      # TabelaOfert raw (investment)
+### 1. Raw investment JSON
 
-{public_dir}/USIdev/raw/
-    raw_rp_{dev_slug}.json      # RynekPierwotny raw (developer profile)
-    raw_oto_{dev_slug}.json     # Otodom raw (developer profile)
-    raw_to_{dev_slug}.json      # TabelaOfert raw (developer profile)
+**Path:** `{public_dir}/USIdata/{dev_slug}/{inv_slug}/raw_{portal}_{inv_slug}.json`
 
-{public_dir}/USIdev/{dev_slug}/
-    logo.jpg / logo.png         # developer logo (downloaded as side-effect of download_raw_dev)
+| Portal prefix | Example filename |
+|---|---|
+| `rp` | `raw_rp_osiedle-abc-1234.json` |
+| `oto` | `raw_oto_osiedle-abc-1234.json` |
+| `to` | `raw_to_osiedle-abc-1234.json` |
 
-{public_dir}/USI/{dev_slug}/{inv_slug}/
-    *.webp / *.jpg              # downloaded investment images
-```
+**Content:** full, unprocessed portal response — RP API JSON, Otodom `pageProps`, or TabelaOfert JSON-LD + extracted fields. No normalization.
 
-Existing raw files are archived with a timestamp suffix before being overwritten (`raw_rp_{slug}_20250511_120000.json`).
+**Created by:** `save_raw_json()` in `utils/io.py`, called from:
+- `api.download_raw()` → per-portal `download_raw_*_json()`
+- `TechnicalDataManager.save_raw_data()` inside `process_batch()` (immediately after each successful scrape — I/O isolation)
 
-**Image filenames:** `clean_filename()` in `utils/images.py` transforms CDN URLs — Otodom URLs lose their original name (becomes a hash ID + `.jpg`); TabelaOfert and RP preserve original filenames minus cache-buster suffixes (`_e94b5737` stripped). Developer logos are always saved as `logo.{ext}`.
+**Overwrite behaviour:** existing file is renamed to `raw_{portal}_{inv_slug}_{YYYYMMDD_HHMMSS}.json` in the same directory before the new file is written.
+
+---
+
+### 2. Raw developer JSON
+
+**Path:** `{public_dir}/USIdev/raw/raw_{portal}_{dev_slug}.json`
+
+**Content:** full developer profile from the portal — RP vendor API response, Otodom developer page `pageProps`, or TabelaOfert developer page data (JSON-LD `Organization`/`LocalBusiness` + `<h1>`).
+
+**Created by:** `save_dev_raw_json()` in `utils/io.py`, called from `api.download_raw_dev()` → per-portal `download_raw_*_dev_json()`.
+
+**Overwrite behaviour:** same timestamp-rename archiving as raw investment JSON.
+
+> **TO note:** TabelaOfert developer pages do **not** contain JSON-LD `Product` data. `extract_to_dev_data()` is used (not `extract_to_data()`) — they are not interchangeable.
+
+---
+
+### 3. Developer logo
+
+**Path:** `{public_dir}/USIdev/{dev_slug}/logo.{ext}`
+
+**Extension:** taken from the URL path (`.jpg`, `.png`, `.webp`); falls back to `.jpg` if unrecognised.
+
+**Created by:** `download_developer_logo()` in `utils/images.py`, called as a side-effect inside `download_raw_*_dev_json()` when a logo URL is found. No logo file is created if the portal returns no logo URL.
+
+**Logo extraction per portal:**
+- **RP** — `extract_rp_dev_logo()`: checks fields `logo`, `logo_url`, `image` (string or `{"url": ...}`)
+- **Otodom** — `extract_otodom_dev_logo()`: checks `advertiser.logoUrl`, `agency.logo.url`, `agency.logoUrl`; falls back to shallow key scan for any `*logo*` field
+- **TO** — `extract_to_dev_logo()`: priority `og:image` meta tag, fallback `<img class/alt="logo">`
+
+**Skip condition:** if the file already exists and is larger than 1 KB, it is not re-downloaded.
+
+---
+
+### 4. Investment images
+
+**Path:** `{public_dir}/USI/{dev_slug}/{inv_slug}/{filename}`
+
+**Created by:** `save_images()` / `download_image()` in `utils/images.py`, called via `TechnicalDataManager.sync_images()` inside `process_batch()`.
+
+**Filename derivation — `clean_filename(url)`:**
+
+| Source | Pattern | Result |
+|---|---|---|
+| Otodom CDN | `.../files/{hash}/image;s=800x600` | `{hash}.jpg` |
+| TabelaOfert CDN | `.../ID-photo-name.jpg` | `photo-name.jpg` |
+| RP / other | standard URL basename | basename, with `_[a-f0-9]{8}` cache-buster suffix stripped |
+
+**Skip condition:** file already exists and is larger than 1 KB.
+
+---
+
+### 5. Stage stub (`usi_stage_stub.json`)
+
+**Path:** `{data_dir}/{dev_slug}/{stage_slug}/usi_stage_stub.json`  
+(`data_dir` is passed by the calling application, typically `{public_dir}/USIdata/`)
+
+**Content:** minimal placeholder for a sibling RP multi-stage investment not yet scraped. Fields: `source`, `status: "stub"`, `groups_id`, `groups_name`, `stage_id`, `stage_sort`, `offer_id`, `slug`, `url`, `developer_slug`, `investment_slug`, `sibling_stage_folders`, `created_at`.
+
+**Created by:** `run_stage_detection()` in `utils/stage_detector.py` — called by usi-tracker, not by this package's public API. Only created when: (a) an existing `app_result_*.json` has RP multi-stage data, and (b) the sibling directory has no `app_result_*.json` yet.
+
+---
+
+### 6. `usi_{inv_slug}.json` (reference only)
+
+`TechnicalDataManager.get_usi_json_path()` returns the path `{public_dir}/USIdata/{dev_slug}/{inv_slug}/usi_{inv_slug}.json`. This file is **written by usi-tracker**, not by usi-scrapers — it is the final normalised and merged investment record. This package only resolves its path.
 
 ## api.py — how usi-tracker calls this package
 
