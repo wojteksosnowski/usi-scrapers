@@ -1,6 +1,15 @@
 import re
 from urllib.parse import urlparse, parse_qs
 
+
+def _parse_otodom_slug(full_slug: str) -> tuple[str, str | None]:
+    """Returns (clean_slug, otodom_id) by stripping the Otodom -ID<hash> suffix."""
+    if "-ID" in full_slug:
+        parts = full_slug.split("-ID", 1)
+        return parts[0], parts[1]
+    return full_slug, None
+
+
 def parse_url(url: str) -> dict:
     """
     Parses RynekPierwotny.pl or Otodom.pl URL to extract necessary identifiers.
@@ -50,11 +59,14 @@ def parse_url(url: str) -> dict:
         # Individual offer/investment: /pl/inwestycja/[slug] or /pl/oferta/[slug]
         match = re.search(r'/(inwestycja|oferta)/([^/]+)', path)
         if match:
+            full_slug = match.group(2)
+            clean_slug, otodom_id = _parse_otodom_slug(full_slug)
             return {
                 "type": "otodom",
                 "kind": "investment",
-                "investment_slug": match.group(2),
-                "url": url
+                "investment_slug": clean_slug,
+                "otodom_id": otodom_id,
+                "url": url,
             }
 
     # 3. Tabelaofert.pl

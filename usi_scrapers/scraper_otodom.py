@@ -299,6 +299,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     from .utils.url_parser import parse_url
     parsed = parse_url(url)
     investment_slug = parsed.get("investment_slug", "unknown")
+    investment_slug, _ = _parse_otodom_slug(investment_slug)  # guard against raw slugs with -ID suffix
     developer_slug = "unknown"
         
     ad_data = page_props.get("ad", {})
