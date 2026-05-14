@@ -34,7 +34,7 @@ Pipeline: **Fetch → Scrape → Save**
 
 3. **`scraper_otodom.py`** — Otodom via `__NEXT_DATA__` JSON embedded in HTML (`props.pageProps.ad`). Each stage is a separate offer on Otodom — no flattening needed. Helper `_parse_otodom_item()` normalises slug/image/agency extraction shared by both discovery functions.
 
-4. **`scraper_to.py`** — TabelaOfert via HTML + JSON-LD (`@type: Product`). Gallery uses a hidden Next.js API (`/api/{token}/oferty/inwestycja/{id}/galeria`) with token extracted from script hashes; falls back to HTML regex. `filter_investment_images()` deduplicates by scale and removes maps/logos.
+4. **`scraper_to.py`** — TabelaOfert via HTML + JSON-LD (`@type: Product`). Gallery uses a hidden Next.js API (`/api/{token}/oferty/inwestycja/{id}/galeria`) with token extracted from script hashes; falls back to HTML regex. `filter_investment_images()` deduplicates by scale and removes maps/logos. **Important:** `extract_to_data()` is for investment pages (looks for JSON-LD `Product`); developer pages use `extract_to_dev_data()` (looks for `Organization`/`LocalBusiness`) — do not mix them.
 
 5. **`manager.py` + `utils/`** — `utils/io.py` resolves all save paths; `utils/images.py` downloads images. Always use `clean_filename()` — it strips CDN parameters, cache-busters (`_e94b5737`), and normalises extensions.
 
@@ -60,11 +60,16 @@ Pipeline: **Fetch → Scrape → Save**
     raw_oto_{dev_slug}.json     # Otodom raw (developer profile)
     raw_to_{dev_slug}.json      # TabelaOfert raw (developer profile)
 
+{public_dir}/USIdev/{dev_slug}/
+    logo.jpg / logo.png         # developer logo (downloaded as side-effect of download_raw_dev)
+
 {public_dir}/USI/{dev_slug}/{inv_slug}/
-    *.webp / *.jpg              # downloaded images
+    *.webp / *.jpg              # downloaded investment images
 ```
 
 Existing raw files are archived with a timestamp suffix before being overwritten (`raw_rp_{slug}_20250511_120000.json`).
+
+**Image filenames:** `clean_filename()` in `utils/images.py` transforms CDN URLs — Otodom URLs lose their original name (becomes a hash ID + `.jpg`); TabelaOfert and RP preserve original filenames minus cache-buster suffixes (`_e94b5737` stripped). Developer logos are always saved as `logo.{ext}`.
 
 ## api.py — how usi-tracker calls this package
 
@@ -104,7 +109,8 @@ path = download_raw_dev(
     identifier="unidevelopment",  # developer slug/ID
     dev_slug="unidevelopment",
 )
-# → {public_dir}/USIdata/{dev_slug}/raw_rp_{dev_slug}.json
+# → {public_dir}/USIdev/raw/raw_rp_{dev_slug}.json
+# → also downloads logo to {public_dir}/USIdev/{dev_slug}/logo.{ext} when found
 # → returns Path | None
 ```
 
@@ -223,12 +229,12 @@ for p in range(1, first.total_pages + 1):
 # 1. Discover investments
 investments = list_investments(config, fetcher, "rp", "unidevelopment")
 
-# 2. Save developer profile to disk
+# 2. Save developer profile + logo to disk
 download_raw_dev(config, fetcher, "rp", "unidevelopment", "unidevelopment")
 
 # 3. Scrape each investment
 for inv in investments:
-    data = fetch_investment(config, fetcher, "rp", inv["id"], "unidevelopment", inv["slug"])
+    data = fetch_investment(config, fetcher, "rp", inv["id"])
     # ... persist to database
 ```
 
@@ -238,7 +244,7 @@ for inv in investments:
 
 ### What is NOT in this package
 
-Developer profile parsing (logo, description, contact) beyond raw JSON is not implemented — only `identify_developer` extracts the name. Full developer profile structuring is usi-tracker's responsibility.
+Developer profile parsing (description, contact) beyond raw JSON and logo is not implemented — only `identify_developer` extracts the name. Full developer profile structuring is usi-tracker's responsibility.
 
 ## Key conventions
 
@@ -257,4 +263,4 @@ Developer profile parsing (logo, description, contact) beyond raw JSON is not im
 - **`utils/url_parser.py`** — `parse_url(url)` parses RynekPierwotny, Otodom, and TabelaOfert URLs and returns a dict with `type`, `kind`, and the relevant identifiers (e.g. `developer_slug`, `agency_id`, `to_id`). Use this to extract the `identifier` value needed for API calls from a raw portal URL.
 - **`utils/string.py`** — custom `slugify()` with explicit Polish character transliteration. Prefer this over the `python-slugify` dependency when generating internal slugs; `clean_filename()` in `utils/images.py` strips CDN cache-buster suffixes.
 - **`schemas/`** — JSON Schema files (`usi_unified.schema.json`, `rp_details.schema.json`, etc.) for validating scraped payloads. Used for cross-checking, not enforced at runtime.
-- **`ProgressCallback`** — `from usi_scrapers.models import ProgressCallback`; a `Callable[[int, int], None]` that receives `(current, total)`. Supported by discovery and scrape functions as an optional `progress_cb` kwarg.
+- **`ProgressCallback`** — `from usi_scrapers.models import ProgressCallback`; a `Callable[[Dict[str, Any]], None]`. Payload keys: `total`, `current_index`, `progress_percent`, `status` (`"success"` | `"failed"` | `"retrying"`), `investment`, `message`, `error_details`. Used by `process_batch` and `fetch_investment`.
