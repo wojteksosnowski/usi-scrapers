@@ -54,6 +54,19 @@ def save_dev_raw_json(data: dict, public_dir: Path, dev_slug: str, portal_prefix
     logger.info(f"Saved raw developer JSON: {file_path}")
     return file_path
 
+def save_meta_json(data: dict, public_dir: Path, dev_slug: str, inv_slug: str, portal_prefix: str) -> Path:
+    inv_dir = get_investment_dir(dev_slug, inv_slug, public_dir)
+    inv_dir.mkdir(parents=True, exist_ok=True)
+    filename = f"meta_{portal_prefix}_{inv_slug}.json"
+    file_path = inv_dir / filename
+    if file_path.exists():
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_path.rename(inv_dir / f"meta_{portal_prefix}_{inv_slug}_{ts}.json")
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+    logger.info(f"Saved meta JSON: {file_path}")
+    return file_path
+
 def get_investment_dir(dev_slug: str, inv_slug: str, public_dir: Path) -> Path:
     """
     Returns the absolute path to the investment directory:
