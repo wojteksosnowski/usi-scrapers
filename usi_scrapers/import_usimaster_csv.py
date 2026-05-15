@@ -32,6 +32,38 @@ _NUMERIC_KEYS = {"Gwiazdki", "Balkony", "Fasady", "Wnętrza", "Teren", "Mieszkan
 _OTO_ID_SUFFIX = re.compile(r"-ID[a-zA-Z0-9]+$")
 
 
+def _build_usi_index(public_dir: Path) -> dict[str, Path]:
+    index: dict[str, Path] = {}
+    usi = public_dir / "USI"
+    if not usi.is_dir():
+        return index
+    for p in usi.rglob("*"):
+        if p.is_file() and p.stat().st_size > 0:
+            index.setdefault(p.name, p)
+    return index
+
+
+def _fix_imglist_paths(
+    raw: Optional[str],
+    usi_index: dict[str, Path],
+    repo_root: Path,
+) -> Optional[str]:
+    if not raw:
+        return raw
+    fixed = []
+    for p in (s.strip() for s in raw.split(",") if s.strip()):
+        abs_path = repo_root / p.lstrip("/")
+        if abs_path.exists() and abs_path.stat().st_size > 0:
+            fixed.append(p)
+        else:
+            hit = usi_index.get(Path(p).name)
+            if hit:
+                fixed.append("/" + str(hit.relative_to(repo_root)))
+            else:
+                fixed.append(p)
+    return ", ".join(fixed) or None
+
+
 def _build_usidev_index(public_dir: Path) -> tuple[Dict[str, str], Dict[str, str]]:
     rp_index: Dict[str, str] = {}
     oto_index: Dict[str, str] = {}
@@ -147,6 +179,8 @@ def import_usimaster_csv(
     public_dir: Path = DEFAULT_PUBLIC,
 ) -> None:
     rp_index, oto_index = _build_usidev_index(public_dir)
+    usi_index = _build_usi_index(public_dir)
+    repo_root = public_dir.parent
     skipped_rows: list[dict] = []
     fieldnames: list[str] = []
     skipped = 0
@@ -175,6 +209,8 @@ def import_usimaster_csv(
                 _oto_pre = None
 
             rp_imglist, oto_imglist = _split_imglist(imglist_raw, _rp_pre, _oto_pre)
+            rp_imglist = _fix_imglist_paths(rp_imglist, usi_index, repo_root)
+            oto_imglist = _fix_imglist_paths(oto_imglist, usi_index, repo_root)
 
             # --- RP block ---
             if rp_raw:
