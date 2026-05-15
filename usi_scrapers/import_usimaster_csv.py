@@ -2,9 +2,10 @@ import csv
 import json
 import re
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 
 from . import get_logger
+from .utils.images import clean_filename
 from .utils.io import save_raw_json, save_meta_json
 
 logger = get_logger(__name__)
@@ -81,6 +82,66 @@ def _parse_meta(row: dict) -> dict:
     return meta
 
 
+def _rp_image_filenames(rp_data: dict) -> set[str]:
+    fnames: set[str] = set()
+    main = rp_data.get("main_image") or {}
+    if isinstance(main, dict) and "value" in main:
+        main = main["value"]
+    if isinstance(main, dict):
+        for url in main.values():
+            if isinstance(url, str):
+                fnames.add(clean_filename(url))
+    for item in (rp_data.get("_raw_gallery") or {}).get("gallery") or []:
+        for url in (item.get("image") or {}).values():
+            if isinstance(url, str):
+                fnames.add(clean_filename(url))
+    return fnames - {""}
+
+
+def _oto_image_filenames(oto_data: dict) -> set[str]:
+    fnames: set[str] = set()
+    for item in (oto_data.get("ad") or {}).get("images") or []:
+        for url in item.values():
+            if isinstance(url, str) and "apollo.olxcdn.com" in url:
+                fname = clean_filename(url)
+                fnames.add(fname)
+                # Otodom CDN images land on disk as .webp regardless of URL extension
+                stem = fname.rsplit(".", 1)[0]
+                fnames.add(stem + ".webp")
+    return fnames - {""}
+
+
+def _split_imglist(
+    raw: Optional[str],
+    rp_data: Optional[dict],
+    oto_data: Optional[dict],
+) -> tuple[Optional[str], Optional[str]]:
+    if not raw:
+        return None, None
+    paths = [p.strip() for p in raw.split(",") if p.strip()]
+    if not paths:
+        return None, None
+    rp_fnames = _rp_image_filenames(rp_data) if rp_data else set()
+    oto_fnames = _oto_image_filenames(oto_data) if oto_data else set()
+    rp_paths: list[str] = []
+    oto_paths: list[str] = []
+    unmatched: list[str] = []
+    for p in paths:
+        fname = Path(p).name
+        if fname in rp_fnames:
+            rp_paths.append(p)
+        elif fname in oto_fnames:
+            oto_paths.append(p)
+        else:
+            unmatched.append(p)
+    if unmatched:
+        if rp_data and not oto_data:
+            rp_paths.extend(unmatched)
+        elif oto_data and not rp_data:
+            oto_paths.extend(unmatched)
+    return (", ".join(rp_paths) or None, ", ".join(oto_paths) or None)
+
+
 def import_usimaster_csv(
     csv_path: Path = DEFAULT_CSV,
     public_dir: Path = DEFAULT_PUBLIC,
@@ -99,8 +160,23 @@ def import_usimaster_csv(
             meta = _parse_meta(row)
             row_skipped = False
 
-            # --- RP block ---
             rp_raw = row.get("rpJSON", "").strip()
+            oto_raw = row.get("otoJSON", "").strip()
+            imglist_raw = row.get("imgList", "").strip() or None
+
+            # pre-parse both JSONs for imgList splitting (best-effort)
+            try:
+                _rp_pre: Optional[dict] = json.loads(rp_raw) if rp_raw else None
+            except Exception:
+                _rp_pre = None
+            try:
+                _oto_pre: Optional[dict] = json.loads(oto_raw) if oto_raw else None
+            except Exception:
+                _oto_pre = None
+
+            rp_imglist, oto_imglist = _split_imglist(imglist_raw, _rp_pre, _oto_pre)
+
+            # --- RP block ---
             if rp_raw:
                 try:
                     rp_data = json.loads(rp_raw)
@@ -118,7 +194,7 @@ def import_usimaster_csv(
                         skipped += 1
                     else:
                         save_raw_json(rp_data, public_dir, dev_slug, inv_slug, "rp")
-                        save_meta_json(meta, public_dir, dev_slug, inv_slug, "rp")
+                        save_meta_json({**meta, "imgList": rp_imglist}, public_dir, dev_slug, inv_slug, "rp")
                         saved_rp += 1
                 except Exception as e:
                     logger.warning("row %d RP error: %s", i, e)
@@ -126,7 +202,6 @@ def import_usimaster_csv(
                     skipped += 1
 
             # --- OTO block ---
-            oto_raw = row.get("otoJSON", "").strip()
             if oto_raw:
                 try:
                     oto_data = json.loads(oto_raw)
@@ -144,7 +219,7 @@ def import_usimaster_csv(
                         skipped += 1
                     else:
                         save_raw_json(oto_data, public_dir, dev_slug, inv_slug, "oto")
-                        save_meta_json(meta, public_dir, dev_slug, inv_slug, "oto")
+                        save_meta_json({**meta, "imgList": oto_imglist}, public_dir, dev_slug, inv_slug, "oto")
                         saved_oto += 1
                 except Exception as e:
                     logger.warning("row %d OTO error: %s", i, e)
