@@ -14,7 +14,7 @@ DEFAULT_CSV = REPO_ROOT / "reference" / "usimaster" / "USImaster-prep.csv"
 DEFAULT_PUBLIC = REPO_ROOT / "Public"
 
 META_FIELDS = [
-    ("status",       "Widok"),
+    ("status",       "Ocena"),
     ("Gwiazdki",     "Gwiazdki"),
     ("Balkony",      "Balkony"),
     ("Fasady",       "Fasady"),
@@ -24,9 +24,10 @@ META_FIELDS = [
     ("Udogodnienia", "Udogodnienia"),
     ("komentarz",    "komentarz"),
     ("Segment",      "Segment"),
+    ("ocenaLog",     "ocenaLOG"),
 ]
 
-_NUMERIC_KEYS = {"Gwiazdki", "Balkony", "Fasady", "Wnętrza", "Teren", "Mieszkania", "Udogodnienia"}
+_NUMERIC_KEYS = {"Gwiazdki", "Balkony", "Fasady", "Wnętrza", "Teren", "Mieszkania", "Udogodnienia", "ocenaLog"}
 _OTO_ID_SUFFIX = re.compile(r"-ID[a-zA-Z0-9]+$")
 
 
