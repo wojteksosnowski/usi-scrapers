@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.3] — 2026-05-17
+
+### Fixed
+- **Packaging**: Updated `pyproject.toml` to include `portals.json` and `schemas/*.json` in the distributed package. Previously, these data files were omitted by `pip install`, leading to `FileNotFoundError`.
+
 ## [0.5.2] — 2026-05-17
 
 ### Fixed
