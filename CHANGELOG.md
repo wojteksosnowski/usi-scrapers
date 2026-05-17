@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.4] — 2026-05-17
+
+### Fixed
+- **Logging**: Updated `__version__` in `usi_scrapers/__init__.py` to match the current release. Previously, logs were still showing `v0.4.8` despite package upgrades.
+
 ## [0.5.3] — 2026-05-17
 
 ### Fixed
