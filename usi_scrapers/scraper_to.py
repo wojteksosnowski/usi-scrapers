@@ -67,21 +67,35 @@ def extract_to_dev_data(html: str, url: str) -> dict:
 
 def extract_to_dev_logo(html: str) -> str | None:
     """Extracts developer logo URL from TabelaOfert developer page HTML."""
+    logo_url = None
+    
     # 1. og:image meta tag — most stable
     og = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', html, re.IGNORECASE)
+    if not og:
+        og = re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']', html, re.IGNORECASE)
+    
     if og:
-        return og.group(1)
-    og = re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']', html, re.IGNORECASE)
-    if og:
-        return og.group(1)
+        logo_url = og.group(1)
 
-    # 2. <img> with class or alt containing "logo"
-    img = re.search(r'<img[^>]+(?:class|alt)=["\'][^"\']*logo[^"\']*["\'][^>]+src=["\']([^"\']+)["\']', html, re.IGNORECASE)
-    if img:
-        return img.group(1)
-    img = re.search(r'<img[^>]+src=["\']([^"\']+)["\'][^>]+(?:class|alt)=["\'][^"\']*logo[^"\']*["\']', html, re.IGNORECASE)
-    if img:
-        return img.group(1)
+    # 2. <img> with class or alt containing "logo", but exclude the portal's own logo
+    if not logo_url:
+        imgs = re.finditer(r'<img[^>]+src=["\']([^"\']+)["\'][^>]*>', html, re.IGNORECASE)
+        for m in imgs:
+            img_tag = m.group(0)
+            src = m.group(1)
+            # Skip portal logo
+            if "Logo portalu TabelaOfert.pl" in img_tag or "logo/logo.svg" in src:
+                continue
+            if "logo" in img_tag.lower():
+                logo_url = src
+                break
+
+    if logo_url:
+        if logo_url.startswith("//"):
+            return "https:" + logo_url
+        if logo_url.startswith("/"):
+            return "https://tabelaofert.pl" + logo_url
+        return logo_url
 
     return None
 
@@ -496,10 +510,27 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     investment_slug = parsed.get("investment_slug", "unknown")
     
     developer_slug = "unknown"
-    # Search for developer profile link in HTML
-    dev_link_match = re.search(r'href="/katalog-firm/deweloperzy/([^/"?#]+)"', html)
-    if dev_link_match:
-        to_dev_slug = dev_link_match.group(1)
+    # Search for developer profile link in HTML. 
+    # We look for /katalog-firm/deweloperzy/slug but exclude common city filter slugs.
+    city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
+    
+    # Priority 1: Link with "Informacje o firmie" in title (very specific to TO)
+    dev_info_match = re.search(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"[^>]*title="Informacje o firmie', html)
+    if dev_info_match:
+        to_dev_slug = dev_info_match.group(2)
+        if to_dev_slug not in city_slugs:
+            developer_slug = to_dev_slug
+
+    # Priority 2: Scan all developer links and pick the first one that isn't a city
+    if developer_slug == "unknown":
+        dev_links = re.findall(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"', html)
+        for full_link, to_dev_slug in dev_links:
+            if to_dev_slug not in city_slugs:
+                developer_slug = to_dev_slug
+                break
+
+    if developer_slug != "unknown":
+        to_dev_slug = developer_slug # Keep the original TO slug for lookup/URL
         
         # ID-based lookup (highest priority) - using TO slug as the portal ID
         existing_slug = lookup_developer_by_id(fetcher.config.public_dir, "to", to_dev_slug)

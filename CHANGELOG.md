@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.1] — 2026-05-17
+
+### Fixed
+- **TabelaOfert Scraper**: Improved developer slug extraction to avoid matching city city/filter links (e.g. `wroclaw`, `warszawa`) in breadcrumbs/sidebars.
+- **TabelaOfert Scraper**: Fixed developer logo extraction to exclude portal logo and correctly handle relative URLs.
+
 ## [0.5.0] — 2026-05-17
 
 ### Added
