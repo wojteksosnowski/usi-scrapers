@@ -1,0 +1,71 @@
+{
+  "rp": {
+    "name": "RynekPierwotny",
+    "prefix": "rp",
+    "aliases": ["rp"],
+    "base_url": "https://rynekpierwotny.pl",
+    "rate_limit_domain": "rynekpierwotny.pl",
+    "default_rate_limit": 0.5,
+    "api": {
+      "vendor_detail":     "/api/v2/vendors/vendor/{vendor_id}/?s=vendor-detail",
+      "vendor_list":       "/api/v2/vendors/vendor/?s=vendor-list&page={page}&page_size=30",
+      "offer_detail":      "/api/v2/offers/offer/{offer_id}/?s=offer-detail",
+      "offer_gallery":     "/api/v2/offers/offer/{offer_id}/?s=offer-detail-gallery",
+      "offer_list":        "/api/v2/offers/offer/?s=offer-list&display_type=1&distance=5&for_sale=true&limited_presentation=false&page={page}&page_size=30&show_on_listing=true&type=1",
+      "vendor_offer_list": "/api/v2/offers/offer/?s=vendor-detail-offer-list&country=1&country=2&limited_presentation=false&page={page}&page_size=30&vendor={vendor_id}"
+    },
+    "url_patterns": {
+      "developer":  "/deweloperzy/{slug}/",
+      "investment": "/oferty/{dev_slug}/{inv_slug}-{offer_id}/",
+      "stage":      "/oferty/{dev_slug}/{inv_slug}-{offer_id}/?show_sold_stage=true&stage={stage_id}"
+    },
+    "developer_list_url": "https://rynekpierwotny.pl/deweloperzy/?page={page}",
+    "health_check": {
+      "probe_type": "global_discovery"
+    },
+    "required_fields": ["name", "latitude", "longitude", "image_urls"]
+  },
+
+  "oto": {
+    "name": "Otodom",
+    "prefix": "oto",
+    "aliases": ["oto", "otodom"],
+    "base_url": "https://www.otodom.pl",
+    "rate_limit_domain": "otodom.pl",
+    "default_rate_limit": 1.0,
+    "url_patterns": {
+      "investment": "/pl/oferta/{full_slug}",
+      "developer":  "/pl/firmy/deweloperzy/{slug}-ID{agency_id}"
+    },
+    "developer_list_url": "https://www.otodom.pl/firmy/deweloperzy/?sq=&page={page}",
+    "health_check": {
+      "probe_type": "agency",
+      "probe_id":   "10556359",
+      "probe_name": "Develia"
+    },
+    "required_fields": ["title", "latitude", "longitude", "image_urls"]
+  },
+
+  "to": {
+    "name": "TabelaOfert",
+    "prefix": "to",
+    "aliases": ["to", "tabelaofert"],
+    "base_url": "https://tabelaofert.pl",
+    "rate_limit_domain": "tabelaofert.pl",
+    "default_rate_limit": 0.5,
+    "api": {
+      "gallery": "/api/{token}/oferty/inwestycja/{inv_id}/galeria"
+    },
+    "url_patterns": {
+      "investment": "/inwestycja/{slug},i{to_id}",
+      "developer":  "/katalog-firm/deweloperzy/{slug}"
+    },
+    "developer_list_url": "https://tabelaofert.pl/katalog-firm/deweloperzy?page={page}",
+    "health_check": {
+      "probe_type": "developer_url",
+      "probe_url":  "https://tabelaofert.pl/katalog-firm/deweloperzy/unidevelopment",
+      "probe_name": "Unidevelopment"
+    },
+    "required_fields": ["name", "latitude", "longitude", "image_urls"]
+  }
+}

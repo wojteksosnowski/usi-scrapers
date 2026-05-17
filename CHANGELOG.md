@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.2] — 2026-05-17
+
+### Fixed
+- Added missing `usi_scrapers/utils/portals.py` and `usi_scrapers/portals.json` to git tracking. These files were accidentally omitted in previous v0.5.x releases, causing `ModuleNotFoundError`.
+
 ## [0.5.1] — 2026-05-17
 
 ### Fixed
