@@ -317,6 +317,12 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         
     if not ad_data:
         return {"error": "Could not find investment data in page properties"}
+
+    # Safeguard: Do not process inactive/archived listings to prevent overwriting images
+    status = str(ad_data.get("status", "active")).lower()
+    if status not in ("active", "actual", "none", ""):
+        logger.warning(f"Otodom listing is {status}: {url}. Skipping to protect local data.")
+        return {"error": f"Listing is inactive (status: {status})"}
         
     images = []
     images_raw = ad_data.get("images", [])

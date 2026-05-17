@@ -171,6 +171,18 @@ def test_scrape_otodom_empty_images(mock_dl, fetcher):
     assert result["image_urls"] == []
 
 
+@patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
+def test_scrape_otodom_inactive_listing_returns_error(mock_dl, fetcher):
+    # Mock an archived listing
+    fetcher.fetch.return_value = _make_html({
+        "status": "archive"
+    })
+    result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)
+    assert "error" in result
+    assert "inactive" in result["error"]
+    assert "archive" in result["error"]
+
+
 def test_scrape_otodom_fetch_failure(fetcher):
     fetcher.fetch.return_value = None
     result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)

@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.5] — 2026-05-17
+
+### Fixed
+- **Otodom Scraper**: Added a safeguard to prevent processing inactive, archived, or removed listings. This protects local data and images from being overwritten by empty data when a listing is taken down on the portal.
+
 ## [0.5.4] — 2026-05-17
 
 ### Fixed
