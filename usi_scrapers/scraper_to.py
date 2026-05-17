@@ -5,8 +5,9 @@ from pathlib import Path
 from typing import Optional
 from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
-from .utils.io import save_raw_json, save_dev_raw_json
+from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id
 from .utils.string import slugify
+from .utils.portals import portal_api_url, portal_url, get_portal
 
 from . import get_logger
 
@@ -32,7 +33,7 @@ def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: 
     else:
         logger.debug(f"No logo URL found in TO developer page for {dev_slug}")
 
-    return save_dev_raw_json(data, config.public_dir, dev_slug, "to")
+    return save_dev_raw_json(data, config.public_dir, dev_slug, "to", portal_id=data.get("url", url).rstrip("/").rsplit("/", 1)[-1], source_url=url)
 
 
 def extract_to_dev_data(html: str, url: str) -> dict:
@@ -95,7 +96,7 @@ def extract_to_api_token(html: str) -> str | None:
 
 def fetch_to_api_gallery(inv_id: str, token: str, fetcher: Fetcher) -> list[str]:
     """Fetches investment gallery using the hidden JSON API."""
-    url = f"https://tabelaofert.pl/api/{token}/oferty/inwestycja/{inv_id}/galeria"
+    url = portal_api_url("to", "gallery", token=token, inv_id=inv_id)
     logger.info(f"Fetching TO Gallery API: {url}")
     data = fetcher.fetch_json(url)
     if not data:
@@ -182,7 +183,9 @@ def download_raw_to_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetche
         return None
 
     data = extract_to_data(html, url, fetcher=fetcher)
-    return save_raw_json(data, config.public_dir, dev_slug, inv_slug, "to")
+    to_id = _extract_to_id(url)
+    portal_id = f"i{to_id}" if to_id else None
+    return save_raw_json(data, config.public_dir, dev_slug, inv_slug, "to", portal_id=portal_id)
 
 def fetch_to_html(url: str, fetcher: Fetcher) -> str:
     """Fetch tabelaofert page HTML using the centralized Fetcher."""
@@ -475,7 +478,7 @@ def discover_to_investments(config: ScraperConfig, fetcher: Fetcher, identifier:
                         return all_results
         return all_results
         
-    url = f"https://tabelaofert.pl/katalog-firm/deweloperzy/{identifier}"
+    url = portal_url("to", "developer", slug=identifier)
     return discover_to_listing(config, fetcher, identifier=url, limit=limit)
 
 def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
@@ -496,11 +499,21 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     # Search for developer profile link in HTML
     dev_link_match = re.search(r'href="/katalog-firm/deweloperzy/([^/"?#]+)"', html)
     if dev_link_match:
-        developer_slug = dev_link_match.group(1)
-        # Add developer to database (save raw JSON)
-        full_dev_url = f"https://tabelaofert.pl/katalog-firm/deweloperzy/{developer_slug}"
-        download_raw_to_dev_json(full_dev_url, developer_slug, fetcher, fetcher.config)
-        logger.info(f"Added developer '{developer_slug}' to database from TabelaOfert.")
+        to_dev_slug = dev_link_match.group(1)
+        
+        # ID-based lookup (highest priority) - using TO slug as the portal ID
+        existing_slug = lookup_developer_by_id(fetcher.config.public_dir, "to", to_dev_slug)
+        if existing_slug:
+            developer_slug = existing_slug
+            logger.info(f"Matched TO dev slug {to_dev_slug} to existing developer slug: {developer_slug}")
+        else:
+            developer_slug = to_dev_slug
+
+        # Add/update developer in database
+        if developer_slug != "unknown":
+            full_dev_url = portal_url("to", "developer", slug=to_dev_slug)
+            download_raw_to_dev_json(full_dev_url, developer_slug, fetcher, fetcher.config)
+            logger.info(f"Saved developer '{developer_slug}' data from TabelaOfert.")
     
     ext_loc = product.get("_extracted_location", {})
     address = ext_loc.get("address")
@@ -551,16 +564,13 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     }
 
 
-_TO_DEVELOPER_LISTING_URL = "https://tabelaofert.pl/katalog-firm/deweloperzy?page={page}"
-
-
 def discover_to_developers(
     fetcher: Fetcher,
     page: int = 1,
     base_url: Optional[str] = None,
 ) -> DeveloperPage:
     """Pobiera jedną stronę listy deweloperów z TabelaOfert."""
-    listing_url = base_url or _TO_DEVELOPER_LISTING_URL.format(page=page)
+    listing_url = base_url or get_portal("to")["developer_list_url"].format(page=page)
     if base_url:
         if "page=" in listing_url:
             listing_url = re.sub(r'page=\d+', f'page={page}', listing_url)

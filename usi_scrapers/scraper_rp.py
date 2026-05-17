@@ -6,8 +6,9 @@ from pathlib import Path
 from typing import Optional
 from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
-from .utils.io import save_raw_json, save_dev_raw_json
+from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id
 from .utils.stage_detector import extract_groups_id, extract_stages
+from .utils.portals import portal_api_url, portal_url, get_portal
 
 from . import get_logger
 
@@ -30,7 +31,8 @@ def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: str, fetcher: Fet
     else:
         logger.debug(f"No logo URL found in RP developer profile for {dev_slug}")
 
-    return save_dev_raw_json(profile, config.public_dir, dev_slug, "rp")
+    dev_url = portal_url("rp", "developer", slug=profile.get("slug", vendor_id_or_slug))
+    return save_dev_raw_json(profile, config.public_dir, dev_slug, "rp", portal_id=vendor_id_or_slug, source_url=dev_url)
 
 
 def extract_rp_dev_logo(profile: dict) -> str | None:
@@ -56,7 +58,7 @@ def fetch_rp_developer_profile(vendor_id_or_slug: str, fetcher: Fetcher) -> dict
             logger.error(f"Could not resolve vendor ID for slug: {vendor_id_or_slug}")
             return {}
 
-    url = f"https://rynekpierwotny.pl/api/v2/vendors/vendor/{vendor_id}/?s=vendor-detail"
+    url = portal_api_url("rp", "vendor_detail", vendor_id=vendor_id)
     logger.info(f"Fetching RynekPierwotny developer profile for ID: {vendor_id} from {url}")
     return fetcher.fetch_json(url, use_scraperapi=False) or {}
 
@@ -71,17 +73,17 @@ def download_raw_rp_json(offer_id: str, dev_slug: str, inv_slug: str, fetcher: F
         return None
 
     # Also fetch gallery to make the raw JSON complete
-    gallery_data = fetcher.fetch_json(f"https://rynekpierwotny.pl/api/v2/offers/offer/{offer_id}/?s=offer-detail-gallery", use_scraperapi=False)
+    gallery_data = fetcher.fetch_json(portal_api_url("rp", "offer_gallery", offer_id=offer_id), use_scraperapi=False)
     if gallery_data:
         details["_raw_gallery"] = gallery_data
 
-    return save_raw_json(details, config.public_dir, dev_slug, inv_slug, "rp")
+    return save_raw_json(details, config.public_dir, dev_slug, inv_slug, "rp", portal_id=offer_id)
 
 def fetch_rp_details(offer_id: str, fetcher: Fetcher) -> dict:
     """
     Fetches investment details from RynekPierwotny.pl API v2.
     """
-    url = f"https://rynekpierwotny.pl/api/v2/offers/offer/{offer_id}/?s=offer-detail"
+    url = portal_api_url("rp", "offer_detail", offer_id=offer_id)
     logger.info(f"Fetching RynekPierwotny details for ID: {offer_id} from {url}")
     return fetcher.fetch_json(url, use_scraperapi=False) or {}
 
@@ -89,7 +91,7 @@ def fetch_rp_gallery(offer_id: str, fetcher: Fetcher) -> list[str]:
     """
     Fetches image URLs from RynekPierwotny.pl gallery API.
     """
-    url = f"https://rynekpierwotny.pl/api/v2/offers/offer/{offer_id}/?s=offer-detail-gallery"
+    url = portal_api_url("rp", "offer_gallery", offer_id=offer_id)
     logger.info(f"Fetching RynekPierwotny gallery for ID: {offer_id} from {url}")
     
     data = fetcher.fetch_json(url, use_scraperapi=False) or {}
@@ -108,7 +110,7 @@ def resolve_rp_vendor_id(slug: str, fetcher: Fetcher) -> str | None:
     """
     Scrapes the developer profile page on RynekPierwotny.pl to find their vendor ID.
     """
-    url = f"https://rynekpierwotny.pl/deweloperzy/{slug}/"
+    url = portal_url("rp", "developer", slug=slug)
     logger.info(f"Resolving RP vendor ID for slug: {slug} from {url}")
     html = fetcher.fetch(url, use_scraperapi=False)
     if not html:
@@ -178,7 +180,7 @@ def discover_rp_investments(config: ScraperConfig, fetcher: Fetcher, identifier:
                 logger.error(f"Could not resolve vendor ID for slug: {identifier}")
                 return []
         
-        url_template = f"https://rynekpierwotny.pl/api/v2/offers/offer/?s=vendor-detail-offer-list&country=1&country=2&limited_presentation=false&page=1&page_size={PAGE_SIZE}&vendor={vendor_id}"
+        url_template = portal_api_url("rp", "vendor_offer_list", vendor_id=vendor_id, page="1")
         page = 1
         while fetch_page(url_template, page):
             page += 1
@@ -188,7 +190,7 @@ def discover_rp_investments(config: ScraperConfig, fetcher: Fetcher, identifier:
         if hasattr(config, "rp_discovery_urls") and config.rp_discovery_urls:
             urls = config.rp_discovery_urls
         else:
-            urls = ["https://rynekpierwotny.pl/api/v2/offers/offer/?s=offer-list&display_type=1&distance=5&for_sale=true&limited_presentation=false&page=1&page_size=30&show_on_listing=true&type=1"]
+            urls = [portal_api_url("rp", "offer_list", page="1")]
             
         for url_template in urls:
             page = 1
@@ -261,7 +263,7 @@ def _parse_rp_results(results: list) -> list[dict]:
                     
                     offers.append({
                         "id": s_id,
-                        "url": f"https://rynekpierwotny.pl/oferty/{s_vendor_slug}/{s_slug}-{s_id}/?show_sold_stage=true&stage={s_id_internal}",
+                        "url": portal_url("rp", "stage", dev_slug=s_vendor_slug, inv_slug=s_slug, offer_id=s_id, stage_id=str(s_id_internal)),
                     })
         else:
             v_data = get_val(item, "vendor") or {}
@@ -271,7 +273,7 @@ def _parse_rp_results(results: list) -> list[dict]:
             
             offers.append({
                 "id": o_id,
-                "url": f"https://rynekpierwotny.pl/oferty/{v_slug}/{o_slug}-{o_id}/",
+                "url": portal_url("rp", "investment", dev_slug=v_slug, inv_slug=o_slug, offer_id=o_id),
             })
             
     return offers
@@ -284,10 +286,10 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
     if not details:
         return {"error": "Could not fetch details"}
         
-    gallery_data = fetcher.fetch_json(f"https://rynekpierwotny.pl/api/v2/offers/offer/{offer_id}/?s=offer-detail-gallery", use_scraperapi=False)
+    gallery_data = fetcher.fetch_json(portal_api_url("rp", "offer_gallery", offer_id=offer_id), use_scraperapi=False)
     if gallery_data:
         details["_raw_gallery"] = gallery_data
-        
+
     gallery_urls = []
     if gallery_data:
         gallery = gallery_data.get("gallery", [])
@@ -309,17 +311,28 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         return val
 
     vendor_data = get_val(details, "vendor")
-    developer_slug = get_val(vendor_data, "slug") if vendor_data else "unknown"
     vendor_id = vendor_data.get("id") if vendor_data else None
+    developer_slug = "unknown"
+
+    # ID-based lookup (highest priority)
+    if vendor_id:
+        existing_slug = lookup_developer_by_id(fetcher.config.public_dir, "rp", vendor_id)
+        if existing_slug:
+            developer_slug = existing_slug
+            logger.info(f"Matched vendor ID {vendor_id} to existing developer slug: {developer_slug}")
+
+    if developer_slug == "unknown" and vendor_data:
+        developer_slug = get_val(vendor_data, "slug") or "unknown"
+
     investment_slug = details.get("slug", "unknown")
 
-    # Add developer to database (save raw JSON)
+    # Add/update developer in database
     if vendor_id and developer_slug != "unknown":
         download_raw_rp_dev_json(str(vendor_id), developer_slug, fetcher, fetcher.config)
-        logger.info(f"Added developer '{developer_slug}' to database from RynekPierwotny.")
+        logger.info(f"Saved developer '{developer_slug}' data from RynekPierwotny.")
 
     if not url and developer_slug != "unknown" and investment_slug != "unknown":
-        url = f"https://rynekpierwotny.pl/oferty/{developer_slug}/{investment_slug}-{offer_id}/"
+        url = portal_url("rp", "investment", dev_slug=developer_slug, inv_slug=investment_slug, offer_id=offer_id)
         
     details["url"] = url
     geo_point = get_val(details, "geo_point")
@@ -375,24 +388,20 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
     return result
 
 
-_RP_DEVELOPER_LISTING_URL = "https://rynekpierwotny.pl/deweloperzy/?page={page}"
-_RP_DEVELOPER_API_URL = "https://rynekpierwotny.pl/api/v2/vendors/vendor/?s=vendor-list&page={page}&page_size=30"
-
-
 def discover_rp_developers(
     fetcher: Fetcher,
     page: int = 1,
     base_url: Optional[str] = None,
 ) -> DeveloperPage:
     """Pobiera jedną stronę listy deweloperów z RynekPierwotny."""
-    api_url = _RP_DEVELOPER_API_URL.format(page=page)
+    api_url = portal_api_url("rp", "vendor_list", page=str(page))
     data = fetcher.fetch_json(api_url)
     if data and "results" in data:
         count = data.get("count", 0)
         total_pages = max(1, math.ceil(count / 30))
         developers = [
             {
-                "url": f"https://rynekpierwotny.pl/deweloperzy/{item['slug']}/",
+                "url": portal_url("rp", "developer", slug=item["slug"]),
                 "name": item.get("name"),
                 "slug": item["slug"],
             }
@@ -402,7 +411,7 @@ def discover_rp_developers(
         return DeveloperPage(developers=developers, total_pages=total_pages, page=page)
 
     # Fallback: HTML __NEXT_DATA__
-    html_url = (base_url or _RP_DEVELOPER_LISTING_URL).format(page=page)
+    html_url = (base_url or get_portal("rp")["developer_list_url"]).format(page=page)
     if base_url and "page=" not in base_url:
         connector = "&" if "?" in base_url else "?"
         html_url = f"{base_url}{connector}page={page}"
@@ -429,7 +438,7 @@ def discover_rp_developers(
         total_pages = pagination.get("totalPages", 1)
         developers = [
             {
-                "url": f"https://rynekpierwotny.pl/deweloperzy/{item['slug']}/",
+                "url": portal_url("rp", "developer", slug=item["slug"]),
                 "name": item.get("name"),
                 "slug": item["slug"],
             }

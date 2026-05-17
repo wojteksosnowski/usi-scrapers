@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.0] — 2026-05-17
+
+### Added
+- `lookup_developer_by_id(public_dir, portal, portal_id)` — new lookup mechanism in `utils/io.py` that maps portal IDs to internal `developer_slug`.
+- `tests/test_developer_lookup.py` — new tests verifying ID-based lookup across all three portals, including scenarios with changing URL slugs.
+
+### Changed
+- Refactored `scrape_otodom`, `scrape_rynek_pierwotny`, and `scrape_tabelaofert` to prioritize ID-based developer identification over URL-based slugs.
+- System now strictly uses portal IDs (`agency_id`, `vendor_id`, etc.) as primary keys to maintain data consistency and prevent directory duplication.
+
 ## [0.4.8] — 2026-05-14
 
 ### Added

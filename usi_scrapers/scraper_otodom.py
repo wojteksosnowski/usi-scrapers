@@ -5,7 +5,8 @@ from pathlib import Path
 from typing import Optional
 from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
-from .utils.io import save_raw_json, save_dev_raw_json
+from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id
+from .utils.portals import portal_url, get_portal
 
 from . import get_logger
 
@@ -30,7 +31,7 @@ def _parse_otodom_item(item: dict, offer_id=None) -> dict | None:
         return None
     return {
         "id": offer_id or item.get("id"),
-        "url": f"https://www.otodom.pl/pl/oferta/{full_slug}",
+        "url": portal_url("oto", "investment", full_slug=full_slug),
     }
 
 
@@ -58,7 +59,10 @@ def download_raw_otodom_dev_json(url: str, dev_slug: str, fetcher: Fetcher, conf
     else:
         logger.debug(f"No logo URL found in Otodom pageProps for {dev_slug}")
 
-    return save_dev_raw_json(page_props, config.public_dir, dev_slug, "oto")
+    advertiser = page_props.get("advertiser") or {}
+    agency = page_props.get("agency") or {}
+    oto_dev_id = advertiser.get("id") or agency.get("id")
+    return save_dev_raw_json(page_props, config.public_dir, dev_slug, "oto", portal_id=oto_dev_id, source_url=url)
 
 
 def extract_otodom_dev_logo(page_props: dict) -> str | None:
@@ -99,7 +103,11 @@ def download_raw_otodom_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fe
         return None
 
     page_props["url"] = url
-    return save_raw_json(page_props, config.public_dir, dev_slug, inv_slug, "oto")
+    ad_url = page_props.get("ad", {}).get("url", "")
+    ad_slug = ad_url.rstrip("/").rsplit("/", 1)[-1] if ad_url else ""
+    _, hash_part = _parse_otodom_slug(ad_slug)
+    oto_portal_id = f"ID{hash_part}" if hash_part else None
+    return save_raw_json(page_props, config.public_dir, dev_slug, inv_slug, "oto", portal_id=oto_portal_id)
 
 def fetch_otodom_html(url: str, fetcher: Fetcher) -> str:
     """Fetches the Otodom URL using the centralized Fetcher."""
@@ -320,34 +328,45 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     agency_data = ad_data.get("agency") or {}
     agency_url = agency_data.get("url", "")
     agency_name = agency_data.get("name", "")
+    agency_id = agency_data.get("id")
     
     # If no agency but it is private/unknown, try to use owner name
     if not agency_name:
         owner_data = ad_data.get("owner") or {}
         agency_name = owner_data.get("name") or "Nieznany Deweloper"
 
+    # ID-based lookup (highest priority)
+    if agency_id:
+        existing_slug = lookup_developer_by_id(fetcher.config.public_dir, "oto", agency_id)
+        if existing_slug:
+            developer_slug = existing_slug
+            logger.info(f"Matched agency ID {agency_id} to existing developer slug: {developer_slug}")
+
     if agency_url:
         full_agency_url = agency_url if agency_url.startswith("http") else f"https://www.otodom.pl{agency_url}"
-        dev_match = re.search(r'(?<=/)[^/]+(?=-ID)', agency_url)
-        if dev_match:
-            candidate_slug = dev_match.group(0)
-            if candidate_slug not in ("deweloper", "biuro-nieruchomosci", "agency"):
-                developer_slug = candidate_slug
         
-        # Deep extraction if still unknown or generic
+        # If we still don't have a developer_slug, try to extract it from the URL
         if developer_slug == "unknown":
-            logger.info(f"Deep extracting developer slug from: {full_agency_url}")
-            dev_html = fetch_otodom_html(full_agency_url, fetcher)
-            if dev_html:
-                # Try to find canonical or a better link in the dev page
-                canonical_match = re.search(r'link rel="canonical" href=".*?/firmy/deweloperzy/([^/"?#]+)-ID', dev_html)
-                if canonical_match:
-                    developer_slug = canonical_match.group(1)
+            dev_match = re.search(r'(?<=/)[^/]+(?=-ID)', agency_url)
+            if dev_match:
+                candidate_slug = dev_match.group(0)
+                if candidate_slug not in ("deweloper", "biuro-nieruchomosci", "agency"):
+                    developer_slug = candidate_slug
+            
+            # Deep extraction if still unknown or generic
+            if developer_slug == "unknown":
+                logger.info(f"Deep extracting developer slug from: {full_agency_url}")
+                dev_html = fetch_otodom_html(full_agency_url, fetcher)
+                if dev_html:
+                    # Try to find canonical or a better link in the dev page
+                    canonical_match = re.search(r'link rel="canonical" href=".*?/firmy/deweloperzy/([^/"?#]+)-ID', dev_html)
+                    if canonical_match:
+                        developer_slug = canonical_match.group(1)
         
-        # Add developer to database (save raw JSON)
+        # Add/update developer in database
         if developer_slug != "unknown":
             download_raw_otodom_dev_json(full_agency_url, developer_slug, fetcher, fetcher.config)
-            logger.info(f"Added developer '{developer_slug}' to database from Otodom.")
+            logger.info(f"Saved developer '{developer_slug}' data from Otodom.")
             
     coords = ad_data.get("location", {}).get("coordinates") or {}
     lat = coords.get("latitude")
@@ -394,9 +413,6 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     return result
 
 
-_OTODOM_DEVELOPER_LISTING_URL = "https://www.otodom.pl/firmy/deweloperzy/?sq=&page={page}"
-
-
 def discover_otodom_developers(
     fetcher: Fetcher,
     page: int = 1,
@@ -407,7 +423,7 @@ def discover_otodom_developers(
     Strona /firmy/deweloperzy/ to legacy PHP (brak __NEXT_DATA__) — parsujemy HTML.
     URL deweloperów: https://www.otodom.pl/pl/firmy/deweloperzy/{slug}-ID{id}
     """
-    listing_url = base_url or _OTODOM_DEVELOPER_LISTING_URL.format(page=page)
+    listing_url = base_url or get_portal("oto")["developer_list_url"].format(page=page)
     if base_url:
         if "page=" in listing_url:
             listing_url = re.sub(r'page=\d+', f'page={page}', listing_url)
