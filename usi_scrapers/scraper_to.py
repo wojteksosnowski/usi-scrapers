@@ -9,6 +9,7 @@ from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, 
 from .utils.string import slugify
 from .utils.portals import portal_api_url, portal_url, get_portal
 from .utils.mapping import get_mapping, resolve_path
+from .utils.scrapers import generic_discover_investments, generic_download_dev_json
 
 from . import get_logger
 
@@ -18,26 +19,20 @@ def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: 
     """
     Downloads raw JSON for a TabelaOfert developer profile and saves it.
     Also downloads developer logo when found in the page HTML.
+    klient_id is required — ID-only naming enforced (no slug fallback).
     """
-    from .utils.images import download_developer_logo
-    html = fetch_to_html(url, fetcher)
-    if not html:
-        logger.error(f"Failed to fetch TO HTML for {url}")
-        return None
+    def fetch_to_dev(u, f):
+        html = fetch_to_html(u, f)
+        if not html: return None
+        return extract_to_dev_data(html, u)
 
-    data = extract_to_dev_data(html, url)
-    klient_id = extract_to_klient_id(html)
-    
-    # Priority for ID-based identification
-    portal_id = klient_id or data.get("url", url).rstrip("/").rsplit("/", 1)[-1]
-
-    logo_url = extract_to_dev_logo(html)
-    if logo_url:
-        download_developer_logo(logo_url, dev_slug, config, portal_prefix="to", portal_id=portal_id)
-    else:
-        logger.debug(f"No logo URL found in TO developer page for {dev_slug}")
-
-    return save_dev_raw_json(data, config.public_dir, dev_slug, "to", portal_id=portal_id, source_url=url)
+    return generic_download_dev_json(
+        fetcher, config, url, dev_slug, "to",
+        fetch_func=fetch_to_dev,
+        extract_id_func=lambda d: d.get("klient_id"),
+        extract_logo_func=lambda d: d.get("logo_url"),
+        source_url=url
+    )
 
 
 def extract_to_klient_id(html: str) -> str | None:
@@ -62,6 +57,10 @@ def extract_to_dev_data(html: str, url: str) -> dict:
     klient_id = extract_to_klient_id(html)
     if klient_id:
         data["klient_id"] = klient_id
+
+    logo_url = extract_to_dev_logo(html)
+    if logo_url:
+        data["logo_url"] = logo_url
 
     # Name from JSON-LD Organization/LocalBusiness
     scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.DOTALL)
@@ -515,17 +514,12 @@ def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
 
 def discover_to_investments(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None, max_pages: int = 3) -> list[dict]:
     if not identifier:
-        all_results = []
-        seen_ids = set()
-        for url in config.to_discovery_urls:
-            batch = discover_to_listing(config, fetcher, identifier=url, limit=limit, max_pages=max_pages)
-            for item in batch:
-                if item["id"] not in seen_ids:
-                    all_results.append(item)
-                    seen_ids.add(item["id"])
-                    if limit and len(all_results) >= limit:
-                        return all_results
-        return all_results
+        logger.info("Performing global TabelaOfert discovery via config URLs")
+        return generic_discover_investments(
+            config, fetcher, config.to_discovery_urls,
+            lambda c, f, u, l: discover_to_listing(c, f, identifier=u, limit=l, max_pages=max_pages),
+            limit=limit
+        )
 
     url = portal_url("to", "developer", slug=identifier)
     return discover_to_listing(config, fetcher, identifier=url, limit=limit, max_pages=max_pages)

@@ -32,20 +32,27 @@ def save_raw_json(
     dev_slug: str,
     inv_slug: str,
     portal_prefix: str,
-    portal_id: str | None = None,
+    portal_id: str,
 ) -> Path:
     """
     Saves raw JSON data using centralized path resolution.
+    portal_id is required — ID-only naming enforced (no slug fallback).
     """
+    if not portal_id:
+        raise ValueError(
+            f"save_raw_json: portal_id is required for {portal_prefix}/{dev_slug}/{inv_slug}. "
+            "Slug-based fallback is not allowed (ID-only policy)."
+        )
+
     inv_dir = get_investment_dir(dev_slug, inv_slug, public_dir)
     inv_dir.mkdir(parents=True, exist_ok=True)
 
-    filename = f"raw_{portal_prefix}_{portal_id}.json" if portal_id else f"raw_{portal_prefix}_{inv_slug}.json"
+    filename = f"raw_{portal_prefix}_{portal_id}.json"
     file_path = inv_dir / filename
 
     if file_path.exists():
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        archived_filename = f"raw_{portal_prefix}_{inv_slug}_{ts}.json"
+        archived_filename = f"raw_{portal_prefix}_{portal_id}_{ts}.json"
         archived_path = inv_dir / archived_filename
         file_path.rename(archived_path)
         logger.info(f"Archived existing raw file: {archived_filename}")
@@ -62,22 +69,29 @@ def save_dev_raw_json(
     public_dir: Path,
     dev_slug: str,
     portal_prefix: str,
-    portal_id: str | None = None,
+    portal_id: str,
     source_url: str | None = None,
 ) -> Path:
     """
     Saves raw developer profile JSON using centralized path resolution.
-    Filename: raw_{portal}_{portal_id}.json if portal_id is provided, else raw_{portal}_{dev_slug}.json
+    portal_id is required — ID-only naming enforced (no slug fallback).
+    Filename: raw_{portal}_{portal_id}.json
     """
+    if not portal_id:
+        raise ValueError(
+            f"save_dev_raw_json: portal_id is required for {portal_prefix}/{dev_slug}. "
+            "Slug-based fallback is not allowed (ID-only policy)."
+        )
+
     dev_raw_dir = Path(public_dir) / "USIdev" / dev_slug
     dev_raw_dir.mkdir(parents=True, exist_ok=True)
 
-    filename = f"raw_{portal_prefix}_{portal_id}.json" if portal_id else f"raw_{portal_prefix}_{dev_slug}.json"
+    filename = f"raw_{portal_prefix}_{portal_id}.json"
     file_path = dev_raw_dir / filename
 
     if file_path.exists():
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        archived_filename = f"raw_{portal_prefix}_{dev_slug}_{ts}.json"
+        archived_filename = f"raw_{portal_prefix}_{portal_id}_{ts}.json"
         archived_path = dev_raw_dir / archived_filename
         file_path.rename(archived_path)
         logger.info(f"Archived existing raw developer file: {archived_filename}")
@@ -162,14 +176,23 @@ def lookup_investment_by_id(public_dir: Path, dev_slug: str, portal_prefix: str,
     return None
 
 
-def save_meta_json(data: dict, public_dir: Path, dev_slug: str, inv_slug: str, portal_prefix: str, portal_id: str | None = None) -> Path:
+def save_meta_json(data: dict, public_dir: Path, dev_slug: str, inv_slug: str, portal_prefix: str, portal_id: str) -> Path:
+    """
+    Saves meta JSON (Coda ratings) for an investment.
+    portal_id is required — ID-only naming enforced (no slug fallback).
+    """
+    if not portal_id:
+        raise ValueError(
+            f"save_meta_json: portal_id is required for {portal_prefix}/{dev_slug}/{inv_slug}. "
+            "Slug-based fallback is not allowed (ID-only policy)."
+        )
     inv_dir = get_investment_dir(dev_slug, inv_slug, public_dir)
     inv_dir.mkdir(parents=True, exist_ok=True)
-    filename = f"meta_{portal_prefix}_{portal_id}.json" if portal_id else f"meta_{portal_prefix}_{inv_slug}.json"
+    filename = f"meta_{portal_prefix}_{portal_id}.json"
     file_path = inv_dir / filename
     if file_path.exists():
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        file_path.rename(inv_dir / f"meta_{portal_prefix}_{inv_slug}_{ts}.json")
+        file_path.rename(inv_dir / f"meta_{portal_prefix}_{portal_id}_{ts}.json")
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     logger.info(f"Saved meta JSON: {file_path}")

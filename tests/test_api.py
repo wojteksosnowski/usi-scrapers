@@ -320,4 +320,5 @@ def test_fetch_investment_unsupported_portal(config, fetcher):
     # ValueError is caught internally and returned as an error dict
     result = fetch_investment(config, fetcher, "unknown_portal", "id")
     assert "error" in result
-    assert "Unsupported portal" in result["error"]
+    assert "Unknown portal alias" in result["error"]
+

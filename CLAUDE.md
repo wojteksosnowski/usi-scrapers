@@ -75,13 +75,15 @@ When `portal_id` is unavailable, falls back to `raw_{portal}_{inv_slug}.json`.
 
 ### 2. Raw developer JSON
 
-**Path:** `{public_dir}/USIdev/{dev_slug}/raw_{portal}_{dev_slug}.json`
+**Path:** `{public_dir}/USIdev/{dev_slug}/raw_{portal}_{portal_id}.json`
+
+When `portal_id` is unavailable, falls back to `raw_{portal}_{dev_slug}.json`.
 
 **Content:** full developer profile from the portal — RP vendor API response, Otodom developer page `pageProps`, or TabelaOfert developer page data (JSON-LD `Organization`/`LocalBusiness` + `<h1>`).
 
 **Created by:** `save_dev_raw_json()` in `utils/io.py`, called from `api.download_raw_dev()` → per-portal `download_raw_*_dev_json()`.
 
-**Overwrite behaviour:** same timestamp-rename archiving as raw investment JSON.
+**Overwrite behaviour:** same timestamp-rename archiving as raw investment JSON (using `portal_id` if available).
 
 > **TO note:** TabelaOfert developer pages do **not** contain JSON-LD `Product` data. `extract_to_dev_data()` is used (not `extract_to_data()`) — they are not interchangeable.
 
@@ -89,9 +91,11 @@ When `portal_id` is unavailable, falls back to `raw_{portal}_{inv_slug}.json`.
 
 ### 3. Developer logo
 
-**Path:** `{public_dir}/USIdev/{dev_slug}/logo_{portal}_{dev_slug}.{ext}`
+**Path:** `{public_dir}/USIdev/{dev_slug}/logo_{portal}_{portal_id}.{ext}`
 
-Example: `USIdev/unidevelopment/logo_rp_unidevelopment.png`
+When `portal_id` is unavailable, falls back to `logo_{portal}_{dev_slug}.{ext}`.
+
+Example: `USIdev/unidevelopment/logo_rp_955.png`
 
 **Extension:** taken from the URL path (`.jpg`, `.png`, `.webp`); falls back to `.jpg` if unrecognised.
 

@@ -8,6 +8,7 @@ from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.portals import portal_url, get_portal
 from .utils.mapping import get_mapping, resolve_path
+from .utils.scrapers import generic_discover_investments, generic_download_dev_json, extract_logo_from_dict
 
 from . import get_logger
 
@@ -41,52 +42,33 @@ def download_raw_otodom_dev_json(url: str, dev_slug: str, fetcher: Fetcher, conf
     Downloads raw JSON for an Otodom developer profile and saves it.
     Also downloads developer logo when found in __NEXT_DATA__.
     """
-    from .utils.images import download_developer_logo
-    html = fetch_otodom_html(url, fetcher)
-    if not html:
-        logger.error(f"Failed to fetch Otodom HTML for {url}")
-        return None
+    def fetch_oto_props(u, f):
+        html = fetch_otodom_html(u, f)
+        return extract_next_data(html)
 
-    page_props = extract_next_data(html)
-    if not page_props:
-        logger.error(f"Failed to extract __NEXT_DATA__ for {url}")
-        return None
+    def extract_id(props):
+        advertiser = props.get("advertiser") or {}
+        agency = props.get("agency") or {}
+        return advertiser.get("id") or agency.get("id")
 
-    logo_url = extract_otodom_dev_logo(page_props)
-    
-    advertiser = page_props.get("advertiser") or {}
-    agency = page_props.get("agency") or {}
-    oto_dev_id = advertiser.get("id") or agency.get("id")
-
-    if logo_url:
-        download_developer_logo(logo_url, dev_slug, config, portal_prefix="oto", portal_id=oto_dev_id)
-    else:
-        logger.debug(f"No logo URL found in Otodom pageProps for {dev_slug}")
-
-    return save_dev_raw_json(page_props, config.public_dir, dev_slug, "oto", portal_id=oto_dev_id, source_url=url)
+    return generic_download_dev_json(
+        fetcher, config, url, dev_slug, "oto",
+        fetch_func=fetch_oto_props,
+        extract_id_func=extract_id,
+        extract_logo_func=extract_otodom_dev_logo,
+        source_url=url
+    )
 
 
 def extract_otodom_dev_logo(page_props: dict) -> str | None:
     """Extracts logo URL from Otodom developer page __NEXT_DATA__ pageProps."""
     candidates = [
-        page_props.get("advertiser", {}).get("logoUrl"),
-        page_props.get("advertiser", {}).get("logo"),
-        page_props.get("agency", {}).get("logo", {}).get("url") if isinstance(page_props.get("agency", {}).get("logo"), dict) else None,
-        page_props.get("agency", {}).get("logoUrl"),
+        "advertiser.logoUrl",
+        "advertiser.logo",
+        "agency.logo.url",
+        "agency.logoUrl",
     ]
-    for val in candidates:
-        if isinstance(val, str) and val.startswith("http"):
-            return val
-
-    # shallow scan of top-level keys for any logo-named field
-    for key, val in page_props.items():
-        if "logo" in key.lower() and isinstance(val, str) and val.startswith("http"):
-            return val
-        if isinstance(val, dict):
-            for subkey, subval in val.items():
-                if "logo" in subkey.lower() and isinstance(subval, str) and subval.startswith("http"):
-                    return subval
-    return None
+    return extract_logo_from_dict(page_props, candidates)
 
 def download_raw_otodom_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
@@ -150,63 +132,17 @@ def discover_otodom_investments(config: ScraperConfig, fetcher: Fetcher, identif
     """
     if not identifier:
         logger.info("Performing global Otodom discovery via config URLs")
-        all_results = []
-        seen_ids = set()
-        for url in config.otodom_discovery_urls:
-            batch = discover_otodom_listing(config, fetcher, identifier=url, limit=limit)
-            for item in batch:
-                if item["id"] not in seen_ids:
-                    all_results.append(item)
-                    seen_ids.add(item["id"])
-                    if limit and len(all_results) >= limit:
-                        return all_results
-        return all_results
+        return generic_discover_investments(
+            config, fetcher, config.otodom_discovery_urls, discover_otodom_listing, limit=limit
+        )
 
     base_url = f"https://www.otodom.pl/pl/firmy/deweloperzy/deweloper-ID{identifier}"
     logger.info(f"Discovering Otodom investments for agency ID: {identifier}")
+    
+    # Use discover_otodom_listing but with currentPage pagination
+    return discover_otodom_listing(config, fetcher, base_url, limit, pagination_param="currentPage")
 
-    offers = []
-    seen_ids = set()
-    current_page = 1
-
-    while True:
-        url = base_url if current_page == 1 else f"{base_url}?currentPage={current_page}"
-        html = fetch_otodom_html(url, fetcher)
-        if not html:
-            break
-
-        data = extract_next_data(html)
-        if not data:
-            break
-
-        try:
-            search_ads = data.get("searchAds") or data.get("data", {}).get("searchAds", {})
-            items = search_ads.get("items", [])
-            if not items:
-                break
-
-            for item in items:
-                offer_id = item.get("id")
-                if offer_id in seen_ids:
-                    continue
-                seen_ids.add(offer_id)
-                parsed = _parse_otodom_item(item)
-                if parsed:
-                    offers.append(parsed)
-                    if limit and len(offers) >= limit:
-                        return offers
-
-            pagination = search_ads.get("pagination", {})
-            if current_page >= pagination.get("totalPages", 1):
-                break
-            current_page += 1
-        except Exception as e:
-            logger.error(f"Error parsing Otodom discovery data: {e}")
-            break
-
-    return offers
-
-def discover_otodom_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:
+def discover_otodom_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None, pagination_param: str = "page") -> list[dict]:
     """
     Discovers investments from a general Otodom listing URL (HTML with __NEXT_DATA__).
     Supports pagination. Max page size for Otodom is 72.
@@ -231,11 +167,11 @@ def discover_otodom_listing(config: ScraperConfig, fetcher: Fetcher, identifier:
     
     while True:
         page_url = base_url
-        if "page=" in page_url:
-            page_url = re.sub(r'page=\d+', f'page={current_page}', page_url)
+        if f"{pagination_param}=" in page_url:
+            page_url = re.sub(rf'{pagination_param}=\d+', f'{pagination_param}={current_page}', page_url)
         else:
             connector = "&" if "?" in page_url else "?"
-            page_url += f"{connector}page={current_page}"
+            page_url += f"{connector}{pagination_param}={current_page}"
 
         logger.info(f"Discovering Otodom investments from listing (page {current_page}): {page_url}")
         html = fetch_otodom_html(page_url, fetcher)

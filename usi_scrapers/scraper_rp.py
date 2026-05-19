@@ -10,6 +10,7 @@ from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, 
 from .utils.stage_detector import extract_groups_id, extract_stages
 from .utils.portals import portal_api_url, portal_url, get_portal
 from .utils.mapping import get_mapping, resolve_path
+from .utils.scrapers import generic_discover_investments, generic_download_dev_json, extract_logo_from_dict
 
 from . import get_logger
 
@@ -20,33 +21,32 @@ def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: str, fetcher: Fet
     Downloads raw JSON for an RP developer profile and saves it.
     Also downloads developer logo when found in the API response.
     """
-    from .utils.images import download_developer_logo
-    profile = fetch_rp_developer_profile(vendor_id_or_slug, fetcher)
-    if not profile:
-        logger.error(f"Failed to fetch RP developer profile for {vendor_id_or_slug}")
-        return None
+    def extract_id(profile):
+        rp_dev_mapping = get_mapping("rp", "developer")
+        raw_id = resolve_path(profile, rp_dev_mapping.get("id"))
+        portal_id = str(raw_id) if raw_id else None
+        if not portal_id:
+            if str(vendor_id_or_slug).isdigit():
+                portal_id = vendor_id_or_slug
+            else:
+                portal_id = resolve_rp_vendor_id(vendor_id_or_slug, fetcher)
+        return portal_id
 
-    logo_url = extract_rp_dev_logo(profile)
-    if logo_url:
-        download_developer_logo(logo_url, dev_slug, config, portal_prefix="rp", portal_id=vendor_id_or_slug)
-    else:
-        logger.debug(f"No logo URL found in RP developer profile for {dev_slug}")
-
-    dev_url = portal_url("rp", "developer", slug=profile.get("slug", vendor_id_or_slug))
-    return save_dev_raw_json(profile, config.public_dir, dev_slug, "rp", portal_id=vendor_id_or_slug, source_url=dev_url)
+    dev_url = portal_url("rp", "developer", slug=vendor_id_or_slug) if not str(vendor_id_or_slug).isdigit() else None
+    
+    return generic_download_dev_json(
+        fetcher, config, vendor_id_or_slug, dev_slug, "rp",
+        fetch_func=fetch_rp_developer_profile,
+        extract_id_func=extract_id,
+        extract_logo_func=extract_rp_dev_logo,
+        source_url=dev_url
+    )
 
 
 def extract_rp_dev_logo(profile: dict) -> str | None:
     """Extracts logo URL from RP vendor API response."""
-    for field in ("logo", "logo_url", "image"):
-        val = profile.get(field)
-        if isinstance(val, str) and val.startswith("http"):
-            return val
-        if isinstance(val, dict):
-            url = val.get("url") or val.get("src")
-            if url and isinstance(url, str) and url.startswith("http"):
-                return url
-    return None
+    candidates = ["logo", "logo_url", "image", "logo.url", "logo.src", "image.url", "image.src"]
+    return extract_logo_from_dict(profile, candidates)
 
 def fetch_rp_developer_profile(vendor_id_or_slug: str, fetcher: Fetcher) -> dict:
     """
@@ -146,34 +146,6 @@ def discover_rp_investments(config: ScraperConfig, fetcher: Fetcher, identifier:
     Otherwise, uses global offer-list queries with pagination.
     RP has a max page size of 30.
     """
-    PAGE_SIZE = 30
-    all_results = []
-    seen_ids = set()
-
-    def fetch_page(url_template, page):
-        url = url_template.replace("page=1", f"page={page}").replace("page_size=100", f"page_size={PAGE_SIZE}")
-        if "page=" not in url:
-            connector = "&" if "?" in url else "?"
-            url += f"{connector}page={page}&page_size={PAGE_SIZE}"
-        
-        logger.info(f"Discovering RP investments via query (page {page}): {url}")
-        data = fetcher.fetch_json(url, use_scraperapi=False) or {}
-        batch = _parse_rp_results(data.get("results", []))
-        
-        new_count = 0
-        for item in batch:
-            if item["id"] not in seen_ids:
-                all_results.append(item)
-                seen_ids.add(item["id"])
-                new_count += 1
-                if limit and len(all_results) >= limit:
-                    return False
-        
-        # If batch is smaller than page size, we reached the end
-        if len(batch) < PAGE_SIZE:
-            return False
-        return True
-
     if identifier:
         vendor_id = identifier
         if not str(identifier).isdigit():
@@ -182,10 +154,8 @@ def discover_rp_investments(config: ScraperConfig, fetcher: Fetcher, identifier:
                 logger.error(f"Could not resolve vendor ID for slug: {identifier}")
                 return []
         
-        url_template = portal_api_url("rp", "vendor_offer_list", vendor_id=vendor_id, page="1")
-        page = 1
-        while fetch_page(url_template, page):
-            page += 1
+        url = portal_api_url("rp", "vendor_offer_list", vendor_id=vendor_id, page="1")
+        return discover_rp_listing(config, fetcher, url, limit)
     else:
         # Global discovery
         urls = []
@@ -194,14 +164,49 @@ def discover_rp_investments(config: ScraperConfig, fetcher: Fetcher, identifier:
         else:
             urls = [portal_api_url("rp", "offer_list", page="1")]
             
-        for url_template in urls:
-            page = 1
-            while fetch_page(url_template, page):
-                page += 1
-            if limit and len(all_results) >= limit:
-                break
-                
-    return all_results[:limit] if limit else all_results
+        return generic_discover_investments(config, fetcher, urls, discover_rp_listing, limit)
+
+def discover_rp_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:
+    """
+    Discovers investments from a general RP API listing URL or vendor ID.
+    """
+    if not identifier:
+        return []
+        
+    PAGE_SIZE = 30
+    all_results = []
+    seen_ids = set()
+    
+    url_template = identifier
+    if "page=" not in url_template:
+        connector = "&" if "?" in url_template else "?"
+        url_template += f"{connector}page=1"
+    
+    page = 1
+    while True:
+        url = url_template.replace("page=1", f"page={page}").replace("page_size=100", f"page_size={PAGE_SIZE}")
+        if "page_size=" not in url:
+            url += f"&page_size={PAGE_SIZE}"
+            
+        logger.info(f"Discovering RP investments via query (page {page}): {url}")
+        data = fetcher.fetch_json(url, use_scraperapi=False) or {}
+        results = data.get("results", [])
+        if not results:
+            break
+            
+        batch = _parse_rp_results(results)
+        for item in batch:
+            if item["id"] not in seen_ids:
+                all_results.append(item)
+                seen_ids.add(item["id"])
+                if limit and len(all_results) >= limit:
+                    return all_results
+                    
+        if len(results) < PAGE_SIZE:
+            break
+        page += 1
+        
+    return all_results
 
 def _parse_rp_results(results: list) -> list[dict]:
     """Helper to parse RP API results and flatten stages."""
