@@ -16,6 +16,7 @@ from .scraper_rp import discover_rp_investments, scrape_rynek_pierwotny, downloa
 from .scraper_otodom import discover_otodom_investments, discover_otodom_listing, scrape_otodom, download_raw_otodom_json, download_raw_otodom_dev_json, fetch_otodom_agency_name, discover_otodom_developers
 from .scraper_to import discover_to_investments, discover_to_listing, scrape_tabelaofert, download_raw_to_json, download_raw_to_dev_json, fetch_to_agency_name, discover_to_developers
 from .utils.io import save_raw_json, save_dev_raw_json
+from .utils.portals import resolve_prefix, get_portal
 
 # ... (keep DEVELIA and other constants)
 # ... (keep _check_fields and health_check)
@@ -36,7 +37,10 @@ def process_batch(
     total = len(identifiers)
     results = []
     manager = TechnicalDataManager(config)
-    portal_prefix = {"rp": "rp", "oto": "oto", "otodom": "oto", "to": "to", "tabelaofert": "to"}.get(portal.lower(), "raw")
+    try:
+        portal_prefix = resolve_prefix(portal.lower())
+    except ValueError:
+        portal_prefix = "raw"
 
     for i, identifier in enumerate(identifiers):
         current_index = i + 1
@@ -88,18 +92,24 @@ def process_batch(
         inv_info = {"identifier": identifier, "dev_slug": None, "inv_slug": None}
         
         if status == "success" and data:
-            dev_slug = data.get("developer_slug", "unknown")
-            inv_slug = data.get("investment_slug", "unknown")
-            inv_info["dev_slug"] = dev_slug
-            inv_info["inv_slug"] = inv_slug
+            dev_slug = data.get("developer_slug")
+            inv_slug = data.get("investment_slug")
             
-            # Zapis danych surowych
-            manager.save_raw_data(data, dev_slug, inv_slug, portal_prefix)
-            
-            # Synchronizacja zdjęć
-            image_urls = data.get("image_urls", [])
-            saved_images = manager.sync_images(image_urls, dev_slug, inv_slug)
-            msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
+            if not dev_slug or not inv_slug:
+                status = "failed"
+                error_msg = f"Incomplete data: missing developer_slug ({dev_slug}) or investment_slug ({inv_slug})"
+                msg = f"Pobranie nieudane: {error_msg}"
+            else:
+                inv_info["dev_slug"] = dev_slug
+                inv_info["inv_slug"] = inv_slug
+                
+                # Zapis danych surowych
+                manager.save_raw_data(data, dev_slug, inv_slug, portal_prefix)
+                
+                # Synchronizacja zdjęć
+                image_urls = data.get("image_urls", [])
+                saved_images = manager.sync_images(image_urls, dev_slug, inv_slug)
+                msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
         else:
             msg = f"Pobranie nieudane: {error_msg}"
 
@@ -122,20 +132,14 @@ def process_batch(
 
     return results
 
-# DEVELIA agency ID on Otodom — large developer, stable probe target
-_OTO_PROBE_AGENCY_ID = "10556359"
-_TO_PROBE_URL = "https://tabelaofert.pl/katalog-firm/deweloperzy/unidevelopment"
-
-_REQUIRED_FIELDS: Dict[str, list] = {
-    "rp":          ["name", "latitude", "longitude", "image_urls"],
-    "otodom":      ["title", "latitude", "longitude", "image_urls"],
-    "tabelaofert": ["name", "latitude", "longitude", "image_urls"],
-}
-
-
 def _check_fields(data: Dict[str, Any], portal: str) -> tuple[list[str], list[str]]:
+    try:
+        prefix = resolve_prefix(portal)
+        required = get_portal(prefix).get("required_fields", [])
+    except ValueError:
+        required = []
     ok, missing = [], []
-    for f in _REQUIRED_FIELDS.get(portal, _REQUIRED_FIELDS["rp"]):
+    for f in required:
         val = data.get(f)
         if val is None or val == [] or val == "":
             missing.append(f)
@@ -188,9 +192,9 @@ def health_check(
             if p == "rp":
                 items = discover_rp_investments(config, fetcher, None, limit=1)
             elif p in ("oto", "otodom"):
-                items = discover_otodom_investments(config, fetcher, _OTO_PROBE_AGENCY_ID, limit=1)
+                items = discover_otodom_investments(config, fetcher, get_portal("oto")["health_check"]["probe_id"], limit=1)
             elif p in ("to", "tabelaofert"):
-                items = discover_to_listing(config, fetcher, _TO_PROBE_URL, limit=1)
+                items = discover_to_listing(config, fetcher, get_portal("to")["health_check"]["probe_url"], limit=1)
             else:
                 raise ValueError(f"Nieznany portal: {portal}")
 
@@ -217,7 +221,7 @@ def health_check(
                 results[portal] = entry
                 continue
 
-            ok_fields, missing_fields = _check_fields(data, p if p != "oto" else "otodom")
+            ok_fields, missing_fields = _check_fields(data, p)
             entry["scrape_fields_ok"] = ok_fields
             entry["scrape_fields_missing"] = missing_fields
             entry["ok"] = len(missing_fields) == 0
@@ -322,8 +326,8 @@ def fetch_investment(
 
     if on_progress:
         msg = "Pobrano pomyślnie." if status == "success" else f"Pobranie nieudane: {error_msg}"
-        dev_slug = data.get("developer_slug", "unknown") if status == "success" else None
-        inv_slug = data.get("investment_slug", "unknown") if status == "success" else None
+        dev_slug = data.get("developer_slug") if status == "success" else None
+        inv_slug = data.get("investment_slug") if status == "success" else None
 
         on_progress({
             "total": 1,
@@ -363,9 +367,9 @@ def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, ident
         return download_raw_to_dev_json(identifier, dev_slug, fetcher, config)
     return None
 
-def save_raw(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, inv_slug: str, portal_prefix: str) -> Path:
+def save_raw(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, inv_slug: str, portal_prefix: str, portal_id: Optional[str] = None) -> Path:
     """Zapisuje gotowy słownik jako surowy JSON inwestycji."""
-    return save_raw_json(data, config.public_dir, dev_slug, inv_slug, portal_prefix)
+    return save_raw_json(data, config.public_dir, dev_slug, inv_slug, portal_prefix, portal_id=portal_id)
 
 def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, portal_prefix: str) -> Path:
     """Zapisuje gotowy słownik jako surowy JSON dewelopera."""

@@ -306,9 +306,18 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     # Native slug extraction
     from .utils.url_parser import parse_url
     parsed = parse_url(url)
-    investment_slug = parsed.get("investment_slug", "unknown")
+    investment_slug = parsed.get("investment_slug")
+    if not investment_slug:
+        # Emergency fallback for URL parsing
+        match = re.search(r'/(inwestycja|oferta)/([^/]+)', url)
+        if match:
+            investment_slug = match.group(2)
+            
+    if not investment_slug:
+        return {"error": f"Could not determine investment_slug from URL: {url}"}
+        
     investment_slug, _ = _parse_otodom_slug(investment_slug)  # guard against raw slugs with -ID suffix
-    developer_slug = "unknown"
+    developer_slug = None
         
     ad_data = page_props.get("ad", {})
     if not ad_data:
@@ -336,11 +345,6 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     agency_name = agency_data.get("name", "")
     agency_id = agency_data.get("id")
     
-    # If no agency but it is private/unknown, try to use owner name
-    if not agency_name:
-        owner_data = ad_data.get("owner") or {}
-        agency_name = owner_data.get("name") or "Nieznany Deweloper"
-
     # ID-based lookup (highest priority)
     if agency_id:
         existing_slug = lookup_developer_by_id(fetcher.config.public_dir, "oto", agency_id)
@@ -348,31 +352,40 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
             developer_slug = existing_slug
             logger.info(f"Matched agency ID {agency_id} to existing developer slug: {developer_slug}")
 
-    if agency_url:
+    if not developer_slug and agency_url:
         full_agency_url = agency_url if agency_url.startswith("http") else f"https://www.otodom.pl{agency_url}"
         
-        # If we still don't have a developer_slug, try to extract it from the URL
-        if developer_slug == "unknown":
-            dev_match = re.search(r'(?<=/)[^/]+(?=-ID)', agency_url)
-            if dev_match:
-                candidate_slug = dev_match.group(0)
-                if candidate_slug not in ("deweloper", "biuro-nieruchomosci", "agency"):
-                    developer_slug = candidate_slug
-            
-            # Deep extraction if still unknown or generic
-            if developer_slug == "unknown":
-                logger.info(f"Deep extracting developer slug from: {full_agency_url}")
-                dev_html = fetch_otodom_html(full_agency_url, fetcher)
-                if dev_html:
-                    # Try to find canonical or a better link in the dev page
-                    canonical_match = re.search(r'link rel="canonical" href=".*?/firmy/deweloperzy/([^/"?#]+)-ID', dev_html)
-                    if canonical_match:
-                        developer_slug = canonical_match.group(1)
+        # Try to extract it from the URL first
+        dev_match = re.search(r'(?<=/)[^/]+(?=-ID)', agency_url)
+        if dev_match:
+            candidate_slug = dev_match.group(0)
+            if candidate_slug not in ("deweloper", "biuro-nieruchomosci", "agency"):
+                developer_slug = candidate_slug
+        
+        # Proactive fetch if still unknown or generic
+        if not developer_slug:
+            logger.info(f"Proactively fetching developer profile to resolve slug: {full_agency_url}")
+            dev_html = fetch_otodom_html(full_agency_url, fetcher)
+            if dev_html:
+                # Try to find canonical or a better link in the dev page
+                canonical_match = re.search(r'link rel="canonical" href=".*?/firmy/deweloperzy/([^/"?#]+)-ID', dev_html)
+                if canonical_match:
+                    developer_slug = canonical_match.group(1)
         
         # Add/update developer in database
-        if developer_slug != "unknown":
+        if developer_slug:
             download_raw_otodom_dev_json(full_agency_url, developer_slug, fetcher, fetcher.config)
             logger.info(f"Saved developer '{developer_slug}' data from Otodom.")
+
+    if not developer_slug:
+        # Last resort: if we have agency_name but no slug, we might want to slugify it, 
+        # but the mandate says STRICT API-BASED. 
+        # Private sellers often don't have an agency page.
+        if not agency_id and not agency_url and agency_name:
+             # Private seller / owner
+             developer_slug = "private-seller"
+        else:
+             return {"error": f"Failed to resolve developer_slug for Otodom agency: {agency_name} (ID: {agency_id})"}
             
     coords = ad_data.get("location", {}).get("coordinates") or {}
     lat = coords.get("latitude")

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.6] — 2026-05-19
+
+### Fixed
+- **Strict Developer Resolution**: Implemented a "fail-fast" mechanism across all scrapers (RynekPierwotny, Otodom, TabelaOfert) to prevent the creation of `unknown/` developer folders. 
+- **API-Based Fallbacks**: If the initial investment JSON lacks vendor data, the system now proactively fetches the developer profile from the portal's internal API to resolve the authoritative slug (mirroring the robust logic from the Coda.io prototype).
+- **Data Integrity**: Scrapers now return an explicit error and abort I/O operations if either the `developer_slug` or `investment_slug` cannot be structurally determined from API data.
+
 ## [0.5.5] — 2026-05-17
 
 ### Fixed

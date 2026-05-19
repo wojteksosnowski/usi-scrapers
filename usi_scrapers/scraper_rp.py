@@ -312,26 +312,42 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
 
     vendor_data = get_val(details, "vendor")
     vendor_id = vendor_data.get("id") if vendor_data else None
-    developer_slug = "unknown"
+    
+    if not vendor_id:
+        return {"error": f"Failed to resolve vendor ID from API for offer {offer_id}"}
 
-    # ID-based lookup (highest priority)
-    if vendor_id:
-        existing_slug = lookup_developer_by_id(fetcher.config.public_dir, "rp", vendor_id)
-        if existing_slug:
-            developer_slug = existing_slug
-            logger.info(f"Matched vendor ID {vendor_id} to existing developer slug: {developer_slug}")
+    developer_slug = None
 
-    if developer_slug == "unknown" and vendor_data:
-        developer_slug = get_val(vendor_data, "slug") or "unknown"
+    # 1. ID-based lookup (highest priority)
+    existing_slug = lookup_developer_by_id(fetcher.config.public_dir, "rp", vendor_id)
+    if existing_slug:
+        developer_slug = existing_slug
+        logger.info(f"Matched vendor ID {vendor_id} to existing developer slug: {developer_slug}")
 
-    investment_slug = details.get("slug", "unknown")
+    # 2. Try to get slug from vendor_data in investment details
+    if not developer_slug and vendor_data:
+        developer_slug = get_val(vendor_data, "slug")
+
+    # 3. Proactive API fetch from developer profile (as in Coda.io prototype)
+    if not developer_slug:
+        logger.info(f"Vendor slug missing for ID {vendor_id}. Fetching developer profile proactively...")
+        profile = fetch_rp_developer_profile(str(vendor_id), fetcher)
+        developer_slug = profile.get("slug")
+        if developer_slug:
+            logger.info(f"Resolved developer slug '{developer_slug}' from profile API for ID {vendor_id}")
+
+    if not developer_slug:
+        return {"error": f"Failed to resolve developer_slug from API data for vendor ID {vendor_id}"}
+
+    investment_slug = details.get("slug")
+    if not investment_slug:
+        return {"error": f"Failed to resolve investment_slug from API for offer {offer_id}"}
 
     # Add/update developer in database
-    if vendor_id and developer_slug != "unknown":
-        download_raw_rp_dev_json(str(vendor_id), developer_slug, fetcher, fetcher.config)
-        logger.info(f"Saved developer '{developer_slug}' data from RynekPierwotny.")
+    download_raw_rp_dev_json(str(vendor_id), developer_slug, fetcher, fetcher.config)
+    logger.info(f"Saved developer '{developer_slug}' data from RynekPierwotny.")
 
-    if not url and developer_slug != "unknown" and investment_slug != "unknown":
+    if not url:
         url = portal_url("rp", "investment", dev_slug=developer_slug, inv_slug=investment_slug, offer_id=offer_id)
         
     details["url"] = url

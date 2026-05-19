@@ -507,9 +507,17 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     # Native slug extraction
     from .utils.url_parser import parse_url
     parsed = parse_url(url)
-    investment_slug = parsed.get("investment_slug", "unknown")
+    investment_slug = parsed.get("investment_slug")
+    if not investment_slug:
+        # Emergency fallback for URL parsing
+        match = re.search(r'/inwestycja/([^,]+),i(\d+)', url)
+        if match:
+            investment_slug = match.group(1)
+            
+    if not investment_slug:
+        return {"error": f"Could not determine investment_slug from URL: {url}"}
     
-    developer_slug = "unknown"
+    developer_slug = None
     # Search for developer profile link in HTML. 
     # We look for /katalog-firm/deweloperzy/slug but exclude common city filter slugs.
     city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
@@ -522,14 +530,14 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
             developer_slug = to_dev_slug
 
     # Priority 2: Scan all developer links and pick the first one that isn't a city
-    if developer_slug == "unknown":
+    if not developer_slug:
         dev_links = re.findall(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"', html)
-        for full_link, to_dev_slug in dev_links:
+        for _, to_dev_slug in dev_links:
             if to_dev_slug not in city_slugs:
                 developer_slug = to_dev_slug
                 break
 
-    if developer_slug != "unknown":
+    if developer_slug:
         to_dev_slug = developer_slug # Keep the original TO slug for lookup/URL
         
         # ID-based lookup (highest priority) - using TO slug as the portal ID
@@ -537,14 +545,13 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         if existing_slug:
             developer_slug = existing_slug
             logger.info(f"Matched TO dev slug {to_dev_slug} to existing developer slug: {developer_slug}")
-        else:
-            developer_slug = to_dev_slug
 
         # Add/update developer in database
-        if developer_slug != "unknown":
-            full_dev_url = portal_url("to", "developer", slug=to_dev_slug)
-            download_raw_to_dev_json(full_dev_url, developer_slug, fetcher, fetcher.config)
-            logger.info(f"Saved developer '{developer_slug}' data from TabelaOfert.")
+        full_dev_url = portal_url("to", "developer", slug=to_dev_slug)
+        download_raw_to_dev_json(full_dev_url, developer_slug, fetcher, fetcher.config)
+        logger.info(f"Saved developer '{developer_slug}' data from TabelaOfert.")
+    else:
+        return {"error": f"Failed to resolve developer_slug for TabelaOfert from URL: {url}"}
     
     ext_loc = product.get("_extracted_location", {})
     address = ext_loc.get("address")
