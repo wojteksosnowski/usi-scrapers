@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.8] — 2026-05-19
+
+### Changed
+- **Asset Naming Consistency**: Updated `download_developer_logo` and all scrapers to use portal IDs for logo filenames (`logo_{portal}_{id}.{ext}`), fully aligning with the ID-only identification principle.
+- **Documentation**: Updated `canonical.md` to strictly follow `{id}` naming for all file types (raw JSON, meta JSON, archives, and logos) and clearly defined portal ID extraction rules.
+
 ## [0.5.7] — 2026-05-19
 
 ### Added

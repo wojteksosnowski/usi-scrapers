@@ -25,15 +25,16 @@ def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: 
         return None
 
     data = extract_to_dev_data(html, url)
+    to_dev_id = data.get("url", url).rstrip("/").rsplit("/", 1)[-1]
 
     logo_url = extract_to_dev_logo(html)
     if logo_url:
         data["logo_url"] = logo_url
-        download_developer_logo(logo_url, dev_slug, config, portal_prefix="to")
+        download_developer_logo(logo_url, dev_slug, config, portal_prefix="to", portal_id=to_dev_id)
     else:
         logger.debug(f"No logo URL found in TO developer page for {dev_slug}")
 
-    return save_dev_raw_json(data, config.public_dir, dev_slug, "to", portal_id=data.get("url", url).rstrip("/").rsplit("/", 1)[-1], source_url=url)
+    return save_dev_raw_json(data, config.public_dir, dev_slug, "to", portal_id=to_dev_id, source_url=url)
 
 
 def extract_to_dev_data(html: str, url: str) -> dict:

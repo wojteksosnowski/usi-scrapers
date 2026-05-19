@@ -40,7 +40,7 @@ public_dir/
     └── {dev_slug}/
         ├── raw_{portal}_{id}.json
         ├── raw_{portal}_{id}_{YYYYMMDD_HHMMSS}.json        ← archiwum
-        └── logo_{portal}_{dev_slug}.{ext}
+        └── logo_{portal}_{id}.{ext}
 ```
 
 > `public_dir` pochodzi z `ScraperConfig.public_dir`. Symlink `Public/` w repozytorium to tylko narzędzie debug — nie używać w produkcji.
@@ -53,7 +53,10 @@ public_dir/
 
 **Ścieżka:** `{public_dir}/USIdata/{dev_slug}/{inv_slug}/raw_{portal}_{id}.json`
 
-**Kluczowa zasada:** Pliki identyfikowane są przez `portal_id` (np. `ID12345` dla Otodom, numeric ID dla RP). Jeśli `portal_id` jest niedostępny, fallbackiem jest `{inv_slug}`.
+**Kluczowa zasada:** Pliki identyfikowane są WYŁĄCZNIE przez `portal_id`.
+- **Otodom**: `ad.id` (numeryczny) LUB `ID{hash}` z URL (np. `ID6G8v`).
+- **RynekPierwotny**: `offer_id` (numeryczny).
+- **TabelaOfert**: `id` inwestycji (prefiksowane `i`, np. `i8982461`).
 
 **Zawartość:** surowa odpowiedź portalu bez normalizacji — pełny JSON API RP, `pageProps` Otodom lub JSON-LD + ekstrakcja TabelaOfert. Każdy plik zawiera na początku sekcję `_usi_meta`:
 
@@ -170,16 +173,16 @@ public_dir/
 **Zachowanie przy nadpisaniu:** jak wyżej — archiwum z timestampem.
 
 **Kluczowe pola dla indeksu:**
-- `raw_rp_{dev_slug}.json` → pole `id` (vendor_id RP, np. `"884"`)
-- `raw_oto_{dev_slug}.json` → pole `agency_id` + tablica `agency_ids` (może mieć kilka ID Otodom na dewelopera)
+- `raw_rp_{id}.json` → pole `id` (vendor_id RP, np. `"884"`)
+- `raw_oto_{id}.json` → pole `agency_id` + tablica `agency_ids` (może mieć kilka ID Otodom na dewelopera)
 
 ---
 
-### `logo_{portal}_{dev_slug}.{ext}`
+### `logo_{portal}_{id}.{ext}`
 
-**Ścieżka:** `{public_dir}/USIdev/{dev_slug}/logo_{portal}_{dev_slug}.{ext}`
+**Ścieżka:** `{public_dir}/USIdev/{dev_slug}/logo_{portal}_{id}.{ext}`
 
-**Przykład:** `USIdev/unidevelopment/logo_rp_unidevelopment.png`
+**Przykład:** `USIdev/unidevelopment/logo_rp_955.png`
 
 **Rozszerzenie:** pobrane z URL (`jpg`, `png`, `webp`); fallback `.jpg`.
 
@@ -215,8 +218,8 @@ Otodom zwraca zdjęcia jako `.webp` niezależnie od rozszerzenia w URL — `_oto
 Każdy plik `raw_*` i `meta_*` ma mechanizm archiwowania: przed nadpisaniem istniejący plik jest przemianowany do:
 
 ```
-raw_{portal}_{slug}_{YYYYMMDD_HHMMSS}.json
-meta_{portal}_{slug}_{YYYYMMDD_HHMMSS}.json
+raw_{portal}_{id}_{YYYYMMDD_HHMMSS}.json
+meta_{portal}_{id}_{YYYYMMDD_HHMMSS}.json
 ```
 
 Archiwa pozostają w tym samym katalogu. Nie są automatycznie usuwane.

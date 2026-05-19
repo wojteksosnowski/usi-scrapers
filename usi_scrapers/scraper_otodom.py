@@ -54,14 +54,16 @@ def download_raw_otodom_dev_json(url: str, dev_slug: str, fetcher: Fetcher, conf
     page_props["url"] = url
 
     logo_url = extract_otodom_dev_logo(page_props)
-    if logo_url:
-        download_developer_logo(logo_url, dev_slug, config, portal_prefix="oto")
-    else:
-        logger.debug(f"No logo URL found in Otodom pageProps for {dev_slug}")
-
+    
     advertiser = page_props.get("advertiser") or {}
     agency = page_props.get("agency") or {}
     oto_dev_id = advertiser.get("id") or agency.get("id")
+
+    if logo_url:
+        download_developer_logo(logo_url, dev_slug, config, portal_prefix="oto", portal_id=oto_dev_id)
+    else:
+        logger.debug(f"No logo URL found in Otodom pageProps for {dev_slug}")
+
     return save_dev_raw_json(page_props, config.public_dir, dev_slug, "oto", portal_id=oto_dev_id, source_url=url)
 
 
