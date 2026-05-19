@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Optional
 from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
-from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id
+from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.stage_detector import extract_groups_id, extract_stages
 from .utils.portals import portal_api_url, portal_url, get_portal
 
@@ -76,6 +76,12 @@ def download_raw_rp_json(offer_id: str, dev_slug: str, inv_slug: str, fetcher: F
     gallery_data = fetcher.fetch_json(portal_api_url("rp", "offer_gallery", offer_id=offer_id), use_scraperapi=False)
     if gallery_data:
         details["_raw_gallery"] = gallery_data
+
+    # Resolve Investment Slug (ID-based lookup)
+    existing_inv_slug = lookup_investment_by_id(config.public_dir, dev_slug, "rp", offer_id)
+    if existing_inv_slug:
+        inv_slug = existing_inv_slug
+        logger.info(f"Matched investment ID {offer_id} to existing investment slug: {inv_slug}")
 
     return save_raw_json(details, config.public_dir, dev_slug, inv_slug, "rp", portal_id=offer_id)
 
@@ -343,6 +349,12 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
     if not investment_slug:
         return {"error": f"Failed to resolve investment_slug from API for offer {offer_id}"}
 
+    # ID-based Investment Identification
+    existing_inv_slug = lookup_investment_by_id(fetcher.config.public_dir, developer_slug, "rp", offer_id)
+    if existing_inv_slug:
+        investment_slug = existing_inv_slug
+        logger.info(f"Matched investment ID {offer_id} to existing investment slug: {investment_slug}")
+
     # Add/update developer in database
     download_raw_rp_dev_json(str(vendor_id), developer_slug, fetcher, fetcher.config)
     logger.info(f"Saved developer '{developer_slug}' data from RynekPierwotny.")
@@ -369,6 +381,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
             stage_is_current = s["current"]
             break
 
+    details["id"] = offer_id
     details["image_urls"] = gallery_urls
     sibling_stages = stages
     sibling_stage_folders = [

@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
-from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id
+from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.portals import portal_url, get_portal
 
 from . import get_logger
@@ -106,7 +106,18 @@ def download_raw_otodom_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fe
     ad_url = page_props.get("ad", {}).get("url", "")
     ad_slug = ad_url.rstrip("/").rsplit("/", 1)[-1] if ad_url else ""
     _, hash_part = _parse_otodom_slug(ad_slug)
-    oto_portal_id = f"ID{hash_part}" if hash_part else None
+    
+    oto_portal_id = page_props.get("ad", {}).get("id")
+    if not oto_portal_id and hash_part:
+        oto_portal_id = f"ID{hash_part}"
+
+    # Resolve Investment Slug (ID-based lookup)
+    if oto_portal_id:
+        existing_inv_slug = lookup_investment_by_id(config.public_dir, dev_slug, "oto", oto_portal_id)
+        if existing_inv_slug:
+            inv_slug = existing_inv_slug
+            logger.info(f"Matched investment ID {oto_portal_id} to existing investment slug: {inv_slug}")
+
     return save_raw_json(page_props, config.public_dir, dev_slug, inv_slug, "oto", portal_id=oto_portal_id)
 
 def fetch_otodom_html(url: str, fetcher: Fetcher) -> str:
@@ -316,7 +327,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     if not investment_slug:
         return {"error": f"Could not determine investment_slug from URL: {url}"}
         
-    investment_slug, _ = _parse_otodom_slug(investment_slug)  # guard against raw slugs with -ID suffix
+    investment_slug, hash_part = _parse_otodom_slug(investment_slug)  # guard against raw slugs with -ID suffix
     developer_slug = None
         
     ad_data = page_props.get("ad", {})
@@ -326,6 +337,11 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         
     if not ad_data:
         return {"error": "Could not find investment data in page properties"}
+
+    # ID-based Investment Identification
+    oto_portal_id = ad_data.get("id")
+    if not oto_portal_id and hash_part:
+        oto_portal_id = f"ID{hash_part}"
 
     # Safeguard: Do not process inactive/archived listings to prevent overwriting images
     status = str(ad_data.get("status", "active")).lower()
@@ -340,7 +356,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         if img_url:
             images.append(img_url)
             
-    agency_data = ad_data.get("agency") or {}
+    agency_data = ad_data.get("agency") or ad_data.get("owner") or {}
     agency_url = agency_data.get("url", "")
     agency_name = agency_data.get("name", "")
     agency_id = agency_data.get("id")
@@ -352,31 +368,31 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
             developer_slug = existing_slug
             logger.info(f"Matched agency ID {agency_id} to existing developer slug: {developer_slug}")
 
-    if not developer_slug and agency_url:
+    if agency_url:
         full_agency_url = agency_url if agency_url.startswith("http") else f"https://www.otodom.pl{agency_url}"
-        
-        # Try to extract it from the URL first
-        dev_match = re.search(r'(?<=/)[^/]+(?=-ID)', agency_url)
-        if dev_match:
-            candidate_slug = dev_match.group(0)
-            if candidate_slug not in ("deweloper", "biuro-nieruchomosci", "agency"):
-                developer_slug = candidate_slug
-        
-        # Proactive fetch if still unknown or generic
+
         if not developer_slug:
-            logger.info(f"Proactively fetching developer profile to resolve slug: {full_agency_url}")
-            dev_html = fetch_otodom_html(full_agency_url, fetcher)
-            if dev_html:
-                # Try to find canonical or a better link in the dev page
-                canonical_match = re.search(r'link rel="canonical" href=".*?/firmy/deweloperzy/([^/"?#]+)-ID', dev_html)
-                if canonical_match:
-                    developer_slug = canonical_match.group(1)
-        
+            # Try to extract it from the URL first
+            dev_match = re.search(r'(?<=/)[^/]+(?=-ID)', agency_url)
+            if dev_match:
+                candidate_slug = dev_match.group(0)
+                if candidate_slug not in ("deweloper", "biuro-nieruchomosci", "agency"):
+                    developer_slug = candidate_slug
+
+            # Proactive fetch if still unknown or generic
+            if not developer_slug:
+                logger.info(f"Proactively fetching developer profile to resolve slug: {full_agency_url}")
+                dev_html = fetch_otodom_html(full_agency_url, fetcher)
+                if dev_html:
+                    # Try to find canonical or a better link in the dev page
+                    canonical_match = re.search(r'link rel="canonical" href=".*?/firmy/deweloperzy/([^/"?#]+)-ID', dev_html)
+                    if canonical_match:
+                        developer_slug = canonical_match.group(1)
+
         # Add/update developer in database
         if developer_slug:
             download_raw_otodom_dev_json(full_agency_url, developer_slug, fetcher, fetcher.config)
             logger.info(f"Saved developer '{developer_slug}' data from Otodom.")
-
     if not developer_slug:
         # Last resort: if we have agency_name but no slug, we might want to slugify it, 
         # but the mandate says STRICT API-BASED. 
@@ -387,6 +403,13 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         else:
              return {"error": f"Failed to resolve developer_slug for Otodom agency: {agency_name} (ID: {agency_id})"}
             
+    # Resolve Investment Slug (ID-based lookup)
+    if oto_portal_id:
+        existing_inv_slug = lookup_investment_by_id(fetcher.config.public_dir, developer_slug, "oto", oto_portal_id)
+        if existing_inv_slug:
+            investment_slug = existing_inv_slug
+            logger.info(f"Matched investment ID {oto_portal_id} to existing investment slug: {investment_slug}")
+
     coords = ad_data.get("location", {}).get("coordinates") or {}
     lat = coords.get("latitude")
     lng = coords.get("longitude")

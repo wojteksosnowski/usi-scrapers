@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
-from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id
+from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.string import slugify
 from .utils.portals import portal_api_url, portal_url, get_portal
 
@@ -199,6 +199,14 @@ def download_raw_to_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetche
     data = extract_to_data(html, url, fetcher=fetcher)
     to_id = _extract_to_id(url)
     portal_id = f"i{to_id}" if to_id else None
+
+    # Resolve Investment Slug (ID-based lookup)
+    if portal_id:
+        existing_inv_slug = lookup_investment_by_id(config.public_dir, dev_slug, "to", portal_id)
+        if existing_inv_slug:
+            inv_slug = existing_inv_slug
+            logger.info(f"Matched investment ID {portal_id} to existing investment slug: {inv_slug}")
+
     return save_raw_json(data, config.public_dir, dev_slug, inv_slug, "to", portal_id=portal_id)
 
 def fetch_to_html(url: str, fetcher: Fetcher) -> str:
@@ -546,6 +554,15 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
             developer_slug = existing_slug
             logger.info(f"Matched TO dev slug {to_dev_slug} to existing developer slug: {developer_slug}")
 
+        # ID-based Investment Identification
+        to_id = _extract_to_id(url)
+        portal_id = f"i{to_id}" if to_id else None
+        if portal_id:
+            existing_inv_slug = lookup_investment_by_id(fetcher.config.public_dir, developer_slug, "to", portal_id)
+            if existing_inv_slug:
+                investment_slug = existing_inv_slug
+                logger.info(f"Matched investment ID {portal_id} to existing investment slug: {investment_slug}")
+
         # Add/update developer in database
         full_dev_url = portal_url("to", "developer", slug=to_dev_slug)
         download_raw_to_dev_json(full_dev_url, developer_slug, fetcher, fetcher.config)
@@ -579,6 +596,8 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
             for p in props if isinstance(p, dict) and p.get("name") not in _meta
         ]
 
+    product["image_urls"] = filtered_urls
+    
     return {
         "source": "tabelaofert.pl",
         "to_id": _extract_to_id(url),

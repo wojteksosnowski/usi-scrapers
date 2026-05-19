@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.7] — 2026-05-19
+
+### Added
+- **ID-Based Investment Identification**: Implemented `lookup_investment_by_id(public_dir, dev_slug, portal, portal_id)` to resolve investment directories using portal IDs instead of slugs.
+- **Improved Scraper Stability**: All scrapers (Otodom, RynekPierwotny, TabelaOfert) now use portal-sourced IDs as primary keys to prevent directory duplication when marketing names change.
+
+### Changed
+- **File Naming Convention**: Raw data files for both developers and investments now follow the `raw_{portal}_{id}.json` pattern for faster lookups and better data integrity.
+- **Optimized Lookups**: `lookup_developer_by_id` now performs a fast filename-based check before falling back to internal JSON metadata scanning.
+- **Documentation**: Updated `canonical.md` to reflect the new ID-only identification architecture.
+
 ## [0.5.6] — 2026-05-19
 
 ### Fixed

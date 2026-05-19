@@ -69,11 +69,12 @@ def save_dev_raw_json(
 ) -> Path:
     """
     Saves raw developer profile JSON using centralized path resolution.
+    Filename: raw_{portal}_{portal_id}.json if portal_id is provided, else raw_{portal}_{dev_slug}.json
     """
     dev_raw_dir = Path(public_dir) / "USIdev" / dev_slug
     dev_raw_dir.mkdir(parents=True, exist_ok=True)
 
-    filename = f"raw_{portal_prefix}_{dev_slug}.json"
+    filename = f"raw_{portal_prefix}_{portal_id}.json" if portal_id else f"raw_{portal_prefix}_{dev_slug}.json"
     file_path = dev_raw_dir / filename
 
     if file_path.exists():
@@ -95,7 +96,7 @@ def save_dev_raw_json(
 def lookup_developer_by_id(public_dir: Path, portal_prefix: str, portal_id: str | int) -> str | None:
     """
     Scans USIdev directory to find a developer_slug that matches the given portal_id.
-    Matches against '_usi_meta.portal_id' in raw developer JSON files.
+    Matches against both filename pattern raw_{portal}_{id}.json and internal _usi_meta.
     """
     dev_raw_root = Path(public_dir) / "USIdev"
     if not dev_raw_root.exists():
@@ -108,14 +109,16 @@ def lookup_developer_by_id(public_dir: Path, portal_prefix: str, portal_id: str 
         if not dev_dir.is_dir():
             continue
         
-        # Check raw files for the specific portal
-        # Filename pattern: raw_{portal}_{dev_slug}.json
-        raw_file = dev_dir / f"raw_{portal_prefix}_{dev_dir.name}.json"
-        if raw_file.exists():
+        # 1. Fast check: filename match raw_{portal}_{portal_id}.json
+        fast_file = dev_dir / f"raw_{portal_prefix}_{str_portal_id}.json"
+        if fast_file.exists():
+            return dev_dir.name
+
+        # 2. Slow check: check all raw files for the specific portal in this dir
+        # (Needed for legacy files named raw_{portal}_{slug}.json)
+        for raw_file in dev_dir.glob(f"raw_{portal_prefix}_*.json"):
             try:
                 with open(raw_file, "r", encoding="utf-8") as f:
-                    # To optimize, we could read just the first few lines, 
-                    # but _usi_meta is usually at the top anyway.
                     content = json.load(f)
                     meta = content.get("_usi_meta", {})
                     if str(meta.get("portal_id")) == str_portal_id:
@@ -123,6 +126,41 @@ def lookup_developer_by_id(public_dir: Path, portal_prefix: str, portal_id: str 
             except (json.JSONDecodeError, OSError):
                 continue
                 
+    return None
+
+
+def lookup_investment_by_id(public_dir: Path, dev_slug: str, portal_prefix: str, portal_id: str | int) -> str | None:
+    """
+    Scans USIdata/{dev_slug} directory to find an investment_slug that matches the given portal_id.
+    Matches against filename pattern raw_{portal}_{id}.json and internal _usi_meta.
+    """
+    dev_data_root = Path(public_dir) / "USIdata" / dev_slug
+    if not dev_data_root.exists():
+        return None
+
+    str_portal_id = str(portal_id)
+
+    # Iterate over investment slug directories
+    for inv_dir in dev_data_root.iterdir():
+        if not inv_dir.is_dir():
+            continue
+
+        # 1. Fast check: filename match raw_{portal}_{portal_id}.json
+        fast_file = inv_dir / f"raw_{portal_prefix}_{str_portal_id}.json"
+        if fast_file.exists():
+            return inv_dir.name
+
+        # 2. Slow check: check all raw files for the specific portal in this dir
+        for raw_file in inv_dir.glob(f"raw_{portal_prefix}_*.json"):
+            try:
+                with open(raw_file, "r", encoding="utf-8") as f:
+                    content = json.load(f)
+                    meta = content.get("_usi_meta", {})
+                    if str(meta.get("portal_id")) == str_portal_id:
+                        return inv_dir.name
+            except (json.JSONDecodeError, OSError):
+                continue
+
     return None
 
 
