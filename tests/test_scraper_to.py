@@ -341,6 +341,8 @@ def test_discover_to_listing_no_offers(fetcher, config):
 
 _SCRAPE_HTML = f"""
 <html>
+<meta name="klient-id" content="1035"/>
+<script>self.__next_f.push([1,"{{\\"klientKryterium\\":\\"devco\\"}}"])</script>
 <h1><span>Osiedle Testowe<span>DevCo</span></span></h1>
 <a href="https://tabelaofert.pl/katalog-firm/deweloperzy/devco" title="Informacje o firmie">Profil dewelopera</a>
 <script src="{_TOKEN_SCRIPT}"></script>

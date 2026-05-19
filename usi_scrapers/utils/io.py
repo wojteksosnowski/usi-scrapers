@@ -50,10 +50,8 @@ def save_raw_json(
         file_path.rename(archived_path)
         logger.info(f"Archived existing raw file: {archived_filename}")
 
-    payload = {"_usi_meta": _build_usi_meta(portal_prefix, portal_id), **data}
-
     with open(file_path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, ensure_ascii=False)
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
     logger.info(f"Saved raw JSON: {file_path}")
     return file_path

@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "description": "Source of truth for fundamental data keys across portals using relative paths",
+  "portals": {
+    "rp": {
+      "name": "RynekPierwotny",
+      "investment": {
+        "id": "id",
+        "slug": "slug",
+        "name": "name",
+        "developer_id": "vendor.id",
+        "developer_name": "vendor.name",
+        "units_count": "properties",
+        "price_min": "stats.ranges_price_min",
+        "price_max": "stats.ranges_price_max",
+        "ceiling_height_min": "stats.ranges_height_min",
+        "ceiling_height_max": "stats.ranges_height_max"
+      },
+      "developer": {
+        "id": "id",
+        "slug": "slug",
+        "name": "name"
+      }
+    },
+    "oto": {
+      "name": "Otodom",
+      "investment": {
+        "id": "id",
+        "slug": "slug",
+        "name": "title",
+        "developer_id": "agency.id",
+        "developer_name": "agency.name",
+        "units_count": "topInformation[label=number_of_units_in_project].values[0]",
+        "price_min": "target.Price",
+        "ceiling_height_min": "target.Ceiling_height_from",
+        "ceiling_height_max": "target.Ceiling_height_to"
+      },
+      "developer": {
+        "id": "id",
+        "slug": "slug",
+        "name": "name"
+      }
+    },
+    "to": {
+      "name": "TabelaOfert",
+      "investment": {
+        "id": "id",
+        "slug": "slug",
+        "name": "name",
+        "developer_id": "brand.id",
+        "developer_name": "brand.name",
+        "units_count": "properties_count",
+        "price_min": "offers.lowPrice",
+        "price_max": "offers.highPrice",
+        "ceiling_height_min": "additionalProperty[name=Wysokość pomieszczeń].value",
+        "ceiling_height_max": "additionalProperty[name=Wysokość pomieszczeń].value"
+      },
+      "developer": {
+        "id": "id",
+        "slug": "slug",
+        "name": "name"
+      }
+    }
+  }
+}

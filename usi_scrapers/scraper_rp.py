@@ -9,6 +9,7 @@ from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.stage_detector import extract_groups_id, extract_stages
 from .utils.portals import portal_api_url, portal_url, get_portal
+from .utils.mapping import get_mapping, resolve_path
 
 from . import get_logger
 
@@ -71,11 +72,6 @@ def download_raw_rp_json(offer_id: str, dev_slug: str, inv_slug: str, fetcher: F
     if not details:
         logger.error(f"Failed to fetch RP details for ID {offer_id}")
         return None
-
-    # Also fetch gallery to make the raw JSON complete
-    gallery_data = fetcher.fetch_json(portal_api_url("rp", "offer_gallery", offer_id=offer_id), use_scraperapi=False)
-    if gallery_data:
-        details["_raw_gallery"] = gallery_data
 
     # Resolve Investment Slug (ID-based lookup)
     existing_inv_slug = lookup_investment_by_id(config.public_dir, dev_slug, "rp", offer_id)
@@ -390,20 +386,27 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         if str(s["offer_id"]) != str(offer_id) and s["slug"]
     ]
 
+    rp_mapping = get_mapping("rp", "investment")
+
     result = {
         "source": "rynekpierwotny.pl",
         "id": offer_id,
         "url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
-        "name": details.get("name"),
+        "name": resolve_path(details, rp_mapping.get("name")) or details.get("name"),
+        "developer_name": resolve_path(details, rp_mapping.get("developer_name")),
         "address": details.get("address"),
         "geo_point": coords,
         "latitude": coords[1] if coords and len(coords) > 1 else None,
         "longitude": coords[0] if coords and len(coords) > 0 else None,
         "construction_date_upper": const_upper,
         "website": details.get("website"),
-        "properties_count": details.get("properties"),
+        "properties_count": resolve_path(details, rp_mapping.get("units_count")) or details.get("properties"),
+        "price_min": resolve_path(details, rp_mapping.get("price_min")),
+        "price_max": resolve_path(details, rp_mapping.get("price_max")),
+        "ceiling_height_min": resolve_path(details, rp_mapping.get("ceiling_height_min")),
+        "ceiling_height_max": resolve_path(details, rp_mapping.get("ceiling_height_max")),
         "image_urls": gallery_urls,
         "groups_id": groups_id,
         "groups_name": groups.get("name"),

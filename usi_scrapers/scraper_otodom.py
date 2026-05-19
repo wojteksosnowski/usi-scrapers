@@ -7,6 +7,7 @@ from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.portals import portal_url, get_portal
+from .utils.mapping import get_mapping, resolve_path
 
 from . import get_logger
 
@@ -50,8 +51,6 @@ def download_raw_otodom_dev_json(url: str, dev_slug: str, fetcher: Fetcher, conf
     if not page_props:
         logger.error(f"Failed to extract __NEXT_DATA__ for {url}")
         return None
-
-    page_props["url"] = url
 
     logo_url = extract_otodom_dev_logo(page_props)
     
@@ -104,7 +103,6 @@ def download_raw_otodom_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fe
         logger.error(f"Failed to extract __NEXT_DATA__ for {url}")
         return None
 
-    page_props["url"] = url
     ad_url = page_props.get("ad", {}).get("url", "")
     ad_slug = ad_url.rstrip("/").rsplit("/", 1)[-1] if ad_url else ""
     _, hash_part = _parse_otodom_slug(ad_slug)
@@ -438,18 +436,24 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     ad_data["url"] = url
     ad_data["image_urls"] = images
     
+    oto_mapping = get_mapping("oto", "investment")
+    
     result = {
         "source": "otodom.pl",
         "url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
-        "title": ad_data.get("title"),
-        "agency_name": agency_name,
-        "agency_id": agency_data.get("id"),
+        "title": resolve_path(ad_data, oto_mapping.get("name")) or ad_data.get("title"),
+        "agency_name": resolve_path(ad_data, oto_mapping.get("developer_name")) or agency_name,
+        "agency_id": agency_id,
         "latitude": lat,
         "longitude": lng,
         "delivery_quarter": delivery_quarter,
         "delivery_year": delivery_year,
+        "properties_count": resolve_path(ad_data, oto_mapping.get("units_count")),
+        "price_min": resolve_path(ad_data, oto_mapping.get("price_min")),
+        "ceiling_height_min": resolve_path(ad_data, oto_mapping.get("ceiling_height_min")),
+        "ceiling_height_max": resolve_path(ad_data, oto_mapping.get("ceiling_height_max")),
         "image_urls": images,
         "raw_details": ad_data
     }

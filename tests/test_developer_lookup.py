@@ -107,18 +107,17 @@ def test_scrape_rp_uses_existing_slug_from_id(mock_details, mock_dl, temp_public
 
 @patch("usi_scrapers.scraper_to.download_raw_to_dev_json")
 def test_scrape_to_uses_existing_slug_from_id(mock_dl, temp_public_dir):
-    # Setup existing developer with ID "to-id" mapped to slug "to-slug"
+    # Setup existing developer with ID "12345" mapped to slug "to-slug"
     save_dev_raw_json(
         data={"name": "TO Dev"},
         public_dir=temp_public_dir,
         dev_slug="to-slug",
         portal_prefix="to",
-        portal_id="to-id"
+        portal_id="12345"
     )
-    
+
     # Mock TO HTML with DIFFERENT slug but same portal-ID (in our case slug is ID)
-    html = '<html><body><a href="/katalog-firm/deweloperzy/to-id">Dev</a></body></html>'
-    
+    html = '<html><head><meta name="klient-id" content="12345"></head><body><a href="/katalog-firm/deweloperzy/other-slug">Dev</a></body></html>'    
     config = ScraperConfig(public_dir=temp_public_dir)
     fetcher = MagicMock()
     fetcher.config = config

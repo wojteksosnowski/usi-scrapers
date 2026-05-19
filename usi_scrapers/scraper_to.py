@@ -8,6 +8,7 @@ from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.string import slugify
 from .utils.portals import portal_api_url, portal_url, get_portal
+from .utils.mapping import get_mapping, resolve_path
 
 from . import get_logger
 
@@ -25,21 +26,42 @@ def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: 
         return None
 
     data = extract_to_dev_data(html, url)
-    to_dev_id = data.get("url", url).rstrip("/").rsplit("/", 1)[-1]
+    klient_id = extract_to_klient_id(html)
+    
+    # Priority for ID-based identification
+    portal_id = klient_id or data.get("url", url).rstrip("/").rsplit("/", 1)[-1]
 
     logo_url = extract_to_dev_logo(html)
     if logo_url:
-        data["logo_url"] = logo_url
-        download_developer_logo(logo_url, dev_slug, config, portal_prefix="to", portal_id=to_dev_id)
+        download_developer_logo(logo_url, dev_slug, config, portal_prefix="to", portal_id=portal_id)
     else:
         logger.debug(f"No logo URL found in TO developer page for {dev_slug}")
 
-    return save_dev_raw_json(data, config.public_dir, dev_slug, "to", portal_id=to_dev_id, source_url=url)
+    return save_dev_raw_json(data, config.public_dir, dev_slug, "to", portal_id=portal_id, source_url=url)
+
+
+def extract_to_klient_id(html: str) -> str | None:
+    """Extracts internal klient-id from TabelaOfert HTML (meta tag or Next.js state)."""
+    # 1. From Meta Tag (most reliable)
+    m = re.search(r'<meta[^>]+name=["\']klient-id["\'][^>]+content=["\'](\d+)["\']', html)
+    if m:
+        return m.group(1)
+    
+    # 2. From Next.js state (escaped JSON)
+    m = re.search(r'\\?"klientId\\?":(\d+)', html)
+    if m:
+        return m.group(1)
+        
+    return None
 
 
 def extract_to_dev_data(html: str, url: str) -> dict:
     """Extracts basic data from a TabelaOfert developer page."""
     data: dict = {"url": url}
+    
+    klient_id = extract_to_klient_id(html)
+    if klient_id:
+        data["klient_id"] = klient_id
 
     # Name from JSON-LD Organization/LocalBusiness
     scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.DOTALL)
@@ -197,7 +219,7 @@ def download_raw_to_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetche
         logger.error(f"Failed to fetch TO HTML for {url}")
         return None
 
-    data = extract_to_data(html, url, fetcher=fetcher)
+    data = parse_to_product(html) or {}
     to_id = _extract_to_id(url)
     portal_id = f"i{to_id}" if to_id else None
 
@@ -405,9 +427,10 @@ def fetch_to_agency_name(url: str, fetcher: Fetcher) -> str | None:
 
     return "Nieznany Deweloper"
 
-def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:
+def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None, max_pages: int = 3) -> list[dict]:
     """
     Discovers TabelaOfert investments from a listing page with pagination.
+    max_pages: Limit for pagination to prevent downloading entire catalogs (default: 3).
     """
     if not identifier:
         logger.error("discover_to_listing requires an identifier (URL)")
@@ -416,14 +439,17 @@ def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
     url = identifier
     all_offers = []
     seen_ids = set()
-    
+
     base_url = url
     current_page = 1
-    
+
     while True:
+        if max_pages and current_page > max_pages:
+            logger.info(f"Reached max_pages limit ({max_pages}) for TabelaOfert discovery.")
+            break
+
         page_url = base_url
-        if "page=" in page_url:
-            page_url = re.sub(r'page=\d+', f'page={current_page}', page_url)
+        if "page=" in page_url:            page_url = re.sub(r'page=\d+', f'page={current_page}', page_url)
         else:
             connector = "&" if "?" in page_url else "?"
             page_url += f"{connector}page={current_page}"
@@ -487,12 +513,12 @@ def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
             
     return all_offers
 
-def discover_to_investments(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None) -> list[dict]:
+def discover_to_investments(config: ScraperConfig, fetcher: Fetcher, identifier: str = None, limit: int = None, max_pages: int = 3) -> list[dict]:
     if not identifier:
         all_results = []
         seen_ids = set()
         for url in config.to_discovery_urls:
-            batch = discover_to_listing(config, fetcher, identifier=url, limit=limit)
+            batch = discover_to_listing(config, fetcher, identifier=url, limit=limit, max_pages=max_pages)
             for item in batch:
                 if item["id"] not in seen_ids:
                     all_results.append(item)
@@ -500,9 +526,9 @@ def discover_to_investments(config: ScraperConfig, fetcher: Fetcher, identifier:
                     if limit and len(all_results) >= limit:
                         return all_results
         return all_results
-        
+
     url = portal_url("to", "developer", slug=identifier)
-    return discover_to_listing(config, fetcher, identifier=url, limit=limit)
+    return discover_to_listing(config, fetcher, identifier=url, limit=limit, max_pages=max_pages)
 
 def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     logger.info(f"Scraping TabelaOfert: {url}")
@@ -526,51 +552,55 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     if not investment_slug:
         return {"error": f"Could not determine investment_slug from URL: {url}"}
     
-    developer_slug = None
-    # Search for developer profile link in HTML. 
-    # We look for /katalog-firm/deweloperzy/slug but exclude common city filter slugs.
-    city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
+    # 1. KRYTYCZNA ZASADA: Pierwszeństwo ma zawsze ID (klient-id)
+    klient_id = extract_to_klient_id(html)
+    if not klient_id:
+        return {"error": f"CRITICAL: Could not extract klient-id for TabelaOfert from {url}. Aborting to prevent identity mismatch."}
+
+    logger.info(f"Extracted klient-id {klient_id} for TabelaOfert developer resolution.")
     
-    # Priority 1: Link with "Informacje o firmie" in title (very specific to TO)
-    dev_info_match = re.search(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"[^>]*title="Informacje o firmie', html)
-    if dev_info_match:
-        to_dev_slug = dev_info_match.group(2)
-        if to_dev_slug not in city_slugs:
-            developer_slug = to_dev_slug
-
-    # Priority 2: Scan all developer links and pick the first one that isn't a city
-    if not developer_slug:
-        dev_links = re.findall(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"', html)
-        for _, to_dev_slug in dev_links:
-            if to_dev_slug not in city_slugs:
-                developer_slug = to_dev_slug
-                break
-
+    # Resolve local developer folder slug using the ID
+    developer_slug = lookup_developer_by_id(fetcher.config.public_dir, "to", klient_id)
     if developer_slug:
-        to_dev_slug = developer_slug # Keep the original TO slug for lookup/URL
-        
-        # ID-based lookup (highest priority) - using TO slug as the portal ID
-        existing_slug = lookup_developer_by_id(fetcher.config.public_dir, "to", to_dev_slug)
-        if existing_slug:
-            developer_slug = existing_slug
-            logger.info(f"Matched TO dev slug {to_dev_slug} to existing developer slug: {developer_slug}")
-
-        # ID-based Investment Identification
-        to_id = _extract_to_id(url)
-        portal_id = f"i{to_id}" if to_id else None
-        if portal_id:
-            existing_inv_slug = lookup_investment_by_id(fetcher.config.public_dir, developer_slug, "to", portal_id)
-            if existing_inv_slug:
-                investment_slug = existing_inv_slug
-                logger.info(f"Matched investment ID {portal_id} to existing investment slug: {investment_slug}")
-
-        # Add/update developer in database
-        full_dev_url = portal_url("to", "developer", slug=to_dev_slug)
-        download_raw_to_dev_json(full_dev_url, developer_slug, fetcher, fetcher.config)
-        logger.info(f"Saved developer '{developer_slug}' data from TabelaOfert.")
+        logger.info(f"Matched TO klient-id {klient_id} to existing developer slug: {developer_slug}")
     else:
-        return {"error": f"Failed to resolve developer_slug for TabelaOfert from URL: {url}"}
+        # If not in database, we MUST resolve a temporary slug from HTML to create the directory
+        # Priority 1: Next.js state (often contains the clean slug/kryterium)
+        m = re.search(r'\\?"klientKryterium\\?":\\?"([^"\\?]+)\\?"', html)
+        if m:
+            developer_slug = m.group(1)
+        
+        # Priority 2: Traditional <a> tag links
+        if not developer_slug:
+            city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
+            dev_links = re.findall(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"', html)
+            for _, to_dev_slug in dev_links:
+                if to_dev_slug not in city_slugs:
+                    developer_slug = to_dev_slug
+                    break
+        
+        if not developer_slug:
+            return {"error": f"Failed to resolve even a temporary developer slug for klient-id {klient_id} from {url}"}
+        
+        logger.info(f"New developer detected. Using temporary slug '{developer_slug}' for klient-id {klient_id}")
+
+    to_dev_slug = developer_slug # Store for download_raw_to_dev_json
     
+    # ID-based Investment Identification
+    to_id = _extract_to_id(url)
+    portal_id = f"i{to_id}" if to_id else None
+    if portal_id:
+        existing_inv_slug = lookup_investment_by_id(fetcher.config.public_dir, developer_slug, "to", portal_id)
+        if existing_inv_slug:
+            investment_slug = existing_inv_slug
+            logger.info(f"Matched investment ID {portal_id} to existing investment slug: {investment_slug}")
+
+    # Add/update developer in database
+    full_dev_url = portal_url("to", "developer", slug=to_dev_slug)
+    # Use klient_id as portal_id for the download function
+    download_raw_to_dev_json(full_dev_url, developer_slug, fetcher, fetcher.config)
+    logger.info(f"Saved developer '{developer_slug}' data from TabelaOfert (ID: {klient_id}).")
+
     ext_loc = product.get("_extracted_location", {})
     address = ext_loc.get("address")
     city = ext_loc.get("city")
@@ -599,22 +629,30 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
 
     product["image_urls"] = filtered_urls
     
+    to_mapping = get_mapping("to", "investment")
+    
+    # Try mapping first, fallback to manual extraction
+    mapped_price_min = resolve_path(product, to_mapping.get("price_min"))
+    mapped_price_max = resolve_path(product, to_mapping.get("price_max"))
+
     return {
         "source": "tabelaofert.pl",
         "to_id": _extract_to_id(url),
         "to_url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
-        "name": product.get("name"),
-        "developer_name": brand_name or None,
+        "name": resolve_path(product, to_mapping.get("name")) or product.get("name"),
+        "developer_name": resolve_path(product, to_mapping.get("developer_name")) or brand_name or None,
         "address": address,
         "city": city,
         "region": region,
         "latitude": lat,
         "longitude": lng,
-        "price_min": price_min,
-        "price_max": price_max,
-        "properties_count": offers_data.get("offerCount"),
+        "price_min": mapped_price_min if mapped_price_min is not None else price_min,
+        "price_max": mapped_price_max if mapped_price_max is not None else price_max,
+        "properties_count": resolve_path(product, to_mapping.get("units_count")) or offers_data.get("offerCount"),
+        "ceiling_height_min": resolve_path(product, to_mapping.get("ceiling_height_min")),
+        "ceiling_height_max": resolve_path(product, to_mapping.get("ceiling_height_max")),
         "construction_date_upper": extract_additional_prop(product, "Termin oddania"),
         "amenities": amenities,
         "image_urls": filtered_urls,
