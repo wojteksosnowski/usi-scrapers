@@ -53,6 +53,7 @@ pytest tests/test_scraper_otodom.py
 - `USI/{dev_slug}/{inv_slug}/*.webp`: Pobrane i zoptymalizowane obrazy.
 
 ### Zasady Kodowania:
+- **Identyfikacja Deweloperów**: KRYTYCZNA ZASADA: Zawsze priorytetyzuj identyfikację dewelopera po twardym ID z portalu (`agency_id`, `vendor_id`), a nie po "slugu" z URL. Używaj funkcji `lookup_developer_by_id()` przed stworzeniem nowego rekordu, aby uniknąć duplikacji folderów przy zmianach nazw marketingowych na portalach.
 - **Typowanie**: Obowiązkowe użycie Type Hints dla wszystkich funkcji publicznych.
 - **Discovery**: Funkcje odkrywające inwestycje muszą posiadać ujednoliconą sygnaturę `discover_*(config, fetcher, identifier=None, limit=None)`. Przy `identifier=None` funkcja powinna wykonywać skanowanie globalne na podstawie URL-i z konfiguracji.
 - **Logowanie**: Używaj dedykowanych loggerów per moduł (np. `logger = logging.getLogger(__name__)`).

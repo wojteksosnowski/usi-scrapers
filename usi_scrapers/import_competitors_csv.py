@@ -21,9 +21,12 @@ def import_competitors_csv(
             oto_id   = row.get("otoID", "").strip().lstrip("ID")
 
             if rp_slug and rp_id:
+                rp_dev_url = f"https://rynekpierwotny.pl/deweloperzy/{rp_slug}/"
                 save_dev_raw_json(
                     {"id": rp_id, "slug": rp_slug, "name": name, "_mock": True},
                     public_dir, rp_slug, "rp",
+                    portal_id=rp_id,
+                    source_url=rp_dev_url,
                 )
             if oto_slug and oto_id:
                 existing_path = Path(public_dir) / "USIdev" / oto_slug / f"raw_oto_{oto_slug}.json"
@@ -35,9 +38,12 @@ def import_competitors_csv(
                         pass
                 if oto_id not in known_ids:
                     known_ids.append(oto_id)
+                oto_dev_url = f"https://www.otodom.pl/pl/firmy/deweloperzy/{oto_slug}-ID{oto_id}"
                 save_dev_raw_json(
                     {"agency_id": oto_id, "agency_ids": known_ids, "name": name, "_mock": True},
                     public_dir, oto_slug, "oto",
+                    portal_id=oto_id,
+                    source_url=oto_dev_url,
                 )
 
 

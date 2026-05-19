@@ -27,7 +27,16 @@ class TechnicalDataManager:
 
     def save_raw_data(self, data: dict, dev_slug: str, inv_slug: str, portal_prefix: str) -> Path:
         """Saves raw JSON for an investment"""
-        return save_raw_json(data, self.config.public_dir, dev_slug, inv_slug, portal_prefix)
+        if portal_prefix == "rp":
+            portal_id = str(data.get("id", "")) or None
+        elif portal_prefix == "oto":
+            portal_id = data.get("oto_url_id")
+        elif portal_prefix == "to":
+            to_id = data.get("to_id", "")
+            portal_id = f"i{to_id}" if to_id else None
+        else:
+            portal_id = None
+        return save_raw_json(data, self.config.public_dir, dev_slug, inv_slug, portal_prefix, portal_id=portal_id)
 
     def sync_images(self, urls: list[str], dev_slug: str, inv_slug: str) -> list[str]:
         """Downloads and saves images, returns list of filenames"""

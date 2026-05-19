@@ -38,26 +38,30 @@ Pipeline: **Fetch → Scrape → Save**
 
 5. **`manager.py` + `utils/`** — `utils/io.py` resolves all save paths; `utils/images.py` downloads images. Always use `clean_filename()` — it strips CDN parameters, cache-busters (`_e94b5737`), and normalises extensions.
 
-6. **`api.py`** — Public interface for `usi-tracker`. All external calls go through here. Includes `health_check(config, fetcher, portals=None)` which smoke-tests discovery + scrape for all three portals and returns `{"ok": bool, "portals": {...}, "checked_at": ISO}`. Optional `portals` list limits which portals are tested. Includes `list_developers(config, fetcher, portal, page, base_url)` which returns one page of a portal's developer catalogue as a `DeveloperPage`.
+6. **`portals.json` + `utils/portals.py`** — Single source of truth for all portal constants (base URLs, API endpoint templates, URL patterns, rate limits, health-check probe targets, required fields). Never hardcode portal URLs or IDs in scraper code; use `portal_api_url()`, `portal_url()`, `get_portal()`, or `resolve_prefix()` from `utils/portals.py` instead.
+
+7. **`api.py`** — Public interface for `usi-tracker`. All external calls go through here. Includes `health_check(config, fetcher, portals=None)` which smoke-tests discovery + scrape for all three portals and returns `{"ok": bool, "portals": {...}, "checked_at": ISO}`. Optional `portals` list limits which portals are tested. Includes `list_developers(config, fetcher, portal, page, base_url)` which returns one page of a portal's developer catalogue as a `DeveloperPage`.
 
 ## Config (`models.py` → `ScraperConfig`)
 
 - `public_dir` — root output directory; `Public/` in the repo root is a **debug symlink** only
 - `scraperapi_key` — ScraperAPI key; credit balance checked live, no local counter
 - `rp/otodom/to_discovery_urls` — discovery endpoints per portal
-- `fetch_delays` — per-domain rate limit in seconds
+- `fetch_delays` — per-domain rate limit in seconds; default values are read from `portals.json` via `utils/portals.py:default_fetch_delays()`
 
 ## Output files — types, naming and creation
 
 ### 1. Raw investment JSON
 
-**Path:** `{public_dir}/USIdata/{dev_slug}/{inv_slug}/raw_{portal}_{inv_slug}.json`
+**Path:** `{public_dir}/USIdata/{dev_slug}/{inv_slug}/raw_{portal}_{portal_id}.json`
 
-| Portal prefix | Example filename |
-|---|---|
-| `rp` | `raw_rp_osiedle-abc-1234.json` |
-| `oto` | `raw_oto_osiedle-abc-1234.json` |
-| `to` | `raw_to_osiedle-abc-1234.json` |
+When `portal_id` is unavailable, falls back to `raw_{portal}_{inv_slug}.json`.
+
+| Portal | `portal_id` format | Example filename |
+|---|---|---|
+| `rp` | numeric offer ID | `raw_rp_1234.json` |
+| `oto` | `ID` + URL hash | `raw_oto_ID4lulo.json` |
+| `to` | `i` + numeric TO id | `raw_to_i8982461.json` |
 
 **Content:** full, unprocessed portal response — RP API JSON, Otodom `pageProps`, or TabelaOfert JSON-LD + extracted fields. No normalization.
 
@@ -65,7 +69,7 @@ Pipeline: **Fetch → Scrape → Save**
 - `api.download_raw()` → per-portal `download_raw_*_json()`
 - `TechnicalDataManager.save_raw_data()` inside `process_batch()` (immediately after each successful scrape — I/O isolation)
 
-**Overwrite behaviour:** existing file is renamed to `raw_{portal}_{inv_slug}_{YYYYMMDD_HHMMSS}.json` in the same directory before the new file is written.
+**Overwrite behaviour:** existing file is renamed to `raw_{portal}_{inv_slug}_{YYYYMMDD_HHMMSS}.json` in the same directory before the new file is written. The `_usi_meta` block inside each file records `portal`, `portal_url`, `portal_id`, `source_url`, and `saved_at`.
 
 ---
 
@@ -324,6 +328,8 @@ Developer profile parsing (description, contact) beyond raw JSON and logo is not
 
 ## Additional utilities
 
+- **`portals.json`** — Declarative config for all three portals. Keys per entry: `name`, `prefix`, `aliases`, `base_url`, `rate_limit_domain`, `default_rate_limit`, `api` (endpoint path templates), `url_patterns` (investment/developer/stage URL templates), `developer_list_url`, `health_check` (probe target), `required_fields`.
+- **`utils/portals.py`** — Loader for `portals.json`. Key functions: `resolve_prefix(alias)` (`"otodom" → "oto"`), `get_portal(prefix)` (full config dict), `portal_base_url(prefix)`, `portal_api_url(prefix, endpoint, **kwargs)` (e.g. `portal_api_url("rp", "offer_detail", offer_id="123")`), `portal_url(prefix, pattern, **kwargs)` (e.g. `portal_url("rp", "investment", dev_slug=..., inv_slug=..., offer_id=...)`), `all_prefixes()`, `default_fetch_delays()`.
 - **`utils/url_parser.py`** — `parse_url(url)` parses RynekPierwotny, Otodom, and TabelaOfert URLs and returns a dict with `type`, `kind`, and the relevant identifiers (e.g. `developer_slug`, `agency_id`, `to_id`). Use this to extract the `identifier` value needed for API calls from a raw portal URL.
 - **`utils/string.py`** — custom `slugify()` with explicit Polish character transliteration. Prefer this over the `python-slugify` dependency when generating internal slugs; `clean_filename()` in `utils/images.py` strips CDN cache-buster suffixes.
 - **`schemas/`** — JSON Schema files (`usi_unified.schema.json`, `rp_details.schema.json`, etc.) for validating scraped payloads. Used for cross-checking, not enforced at runtime.

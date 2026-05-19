@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, List
 
+from .utils.portals import default_fetch_delays
+
 # Called with a progress dict after each item is processed.
 # Keys: total, current_index, progress_percent, status, investment, message, error_details
 ProgressCallback = Callable[[Dict[str, Any]], None]
@@ -32,9 +34,4 @@ class ScraperConfig:
     to_discovery_urls: List[str] = field(default_factory=list)
     
     # Limity odpytywania (rate limiting) per domena (w sekundach)
-    fetch_delays: Dict[str, float] = field(default_factory=lambda: {
-        "rynekpierwotny.pl": 0.5,
-        "otodom.pl": 1.0,
-        "tabelaofert.pl": 0.5,
-        "default": 0.5
-    })
+    fetch_delays: Dict[str, float] = field(default_factory=default_fetch_delays)

@@ -7,6 +7,7 @@ from typing import Dict, Optional
 from . import get_logger
 from .utils.images import clean_filename
 from .utils.io import save_raw_json, save_meta_json
+from .scraper_otodom import _parse_otodom_slug
 
 logger = get_logger(__name__)
 
@@ -229,8 +230,9 @@ def import_usimaster_csv(
                         row_skipped = True
                         skipped += 1
                     else:
-                        save_raw_json(rp_data, public_dir, dev_slug, inv_slug, "rp")
-                        save_meta_json({**meta, "imgList": rp_imglist}, public_dir, dev_slug, inv_slug, "rp")
+                        rp_portal_id = str(rp_data.get("id", "")) or None
+                        save_raw_json(rp_data, public_dir, dev_slug, inv_slug, "rp", portal_id=rp_portal_id)
+                        save_meta_json({**meta, "imgList": rp_imglist}, public_dir, dev_slug, inv_slug, "rp", portal_id=rp_portal_id)
                         saved_rp += 1
                 except Exception as e:
                     logger.warning("row %d RP error: %s", i, e)
@@ -254,8 +256,12 @@ def import_usimaster_csv(
                         row_skipped = True
                         skipped += 1
                     else:
-                        save_raw_json(oto_data, public_dir, dev_slug, inv_slug, "oto")
-                        save_meta_json({**meta, "imgList": oto_imglist}, public_dir, dev_slug, inv_slug, "oto")
+                        ad_url = (oto_data.get("ad") or {}).get("url", "")
+                        ad_slug = ad_url.rstrip("/").rsplit("/", 1)[-1] if ad_url else ""
+                        _, hash_part = _parse_otodom_slug(ad_slug)
+                        oto_portal_id = f"ID{hash_part}" if hash_part else None
+                        save_raw_json(oto_data, public_dir, dev_slug, inv_slug, "oto", portal_id=oto_portal_id)
+                        save_meta_json({**meta, "imgList": oto_imglist}, public_dir, dev_slug, inv_slug, "oto", portal_id=oto_portal_id)
                         saved_oto += 1
                 except Exception as e:
                     logger.warning("row %d OTO error: %s", i, e)

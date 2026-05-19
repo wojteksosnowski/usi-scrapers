@@ -166,7 +166,7 @@ _RP_DETAILS = {
     "slug": "testowa-inwestycja",
     "address": "ul. Testowa 1, Warszawa",
     "geo_point": {"coordinates": [21.01, 52.23]},  # [lng, lat]
-    "vendor": {"value": {"slug": "test-dev"}},
+    "vendor": {"value": {"id": 123, "slug": "test-dev"}},
     "construction_date_range": {"upper": "2026-12-31"},
     "groups": None,
 }
@@ -179,10 +179,14 @@ _RP_GALLERY = {
 }
 
 
+_RP_DEV_PROFILE = {"id": 123, "slug": "test-dev", "name": "Test Dev"}
+
+
 def test_scrape_rynek_pierwotny_coords(fetcher):
-    fetcher.fetch_json.side_effect = [_RP_DETAILS, _RP_GALLERY]
+    fetcher.fetch_json.side_effect = [_RP_DETAILS, _RP_GALLERY, _RP_DEV_PROFILE]
     result = scrape_rynek_pierwotny("5000", fetcher)
 
+    assert "error" not in result
     assert result["longitude"] == 21.01
     assert result["latitude"] == 52.23
 
@@ -190,16 +194,18 @@ def test_scrape_rynek_pierwotny_coords(fetcher):
 def test_scrape_rynek_pierwotny_coords_single_element(fetcher):
     details = dict(_RP_DETAILS)
     details["geo_point"] = {"coordinates": [21.01]}  # only one element
-    fetcher.fetch_json.side_effect = [details, _RP_GALLERY]
+    fetcher.fetch_json.side_effect = [details, _RP_GALLERY, _RP_DEV_PROFILE]
     result = scrape_rynek_pierwotny("5000", fetcher)
     # latitude must be None, not the same as longitude
+    assert "error" not in result
     assert result["longitude"] == 21.01
     assert result["latitude"] is None
 
 
 def test_scrape_rynek_pierwotny_images(fetcher):
-    fetcher.fetch_json.side_effect = [_RP_DETAILS, _RP_GALLERY]
+    fetcher.fetch_json.side_effect = [_RP_DETAILS, _RP_GALLERY, _RP_DEV_PROFILE]
     result = scrape_rynek_pierwotny("5000", fetcher)
+    assert "error" not in result
     assert len(result["image_urls"]) == 2
     assert "https://cdn.rp.pl/a.jpg" in result["image_urls"]
 
@@ -217,13 +223,14 @@ def test_scrape_rynek_pierwotny_sibling_stages(fetcher):
         "id": 10,
         "stages": [
             {"id": 1, "sort": 1, "current": True,
-             "offer": {"id": 5000, "slug": "testowa-inwestycja", "vendor": {}}},
+             "offer": {"id": 5000, "slug": "testowa-inwestycja", "vendor": {"id": 123}}},
             {"id": 2, "sort": 2, "current": False,
-             "offer": {"id": 5001, "slug": "testowa-inwestycja-ii", "vendor": {}}},
+             "offer": {"id": 5001, "slug": "testowa-inwestycja-ii", "vendor": {"id": 123}}},
         ]
     }
-    fetcher.fetch_json.side_effect = [details, _RP_GALLERY]
+    fetcher.fetch_json.side_effect = [details, _RP_GALLERY, _RP_DEV_PROFILE]
     result = scrape_rynek_pierwotny("5000", fetcher)
+    assert "error" not in result
     assert result["stage_sort"] == 1
     assert result["stage_is_current"] is True
     assert len(result["sibling_stage_folders"]) == 1
