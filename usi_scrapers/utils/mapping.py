@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-_MAPPING_FILE = Path(__file__).parent.parent.parent / "portal_data_mapping.json"
+_MAPPING_FILE = Path(__file__).parent.parent / "schemas" / "portal_data_mapping.json"
 _MAPPING_DATA = None
 
 def load_mapping() -> dict:
