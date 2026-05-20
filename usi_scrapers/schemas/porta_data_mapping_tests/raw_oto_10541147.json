@@ -1,0 +1,850 @@
+{
+  "_usi_meta": {
+    "portal": "oto",
+    "portal_url": "https://www.otodom.pl",
+    "saved_at": "2026-05-18T23:09:54.506506+00:00",
+    "source_url": "https://www.otodom.pl/pl/firmy/deweloperzy/euro-styl-ID10541147"
+  },
+  "lang": "pl",
+  "owner": {
+    "__typename": "DeveloperOwner",
+    "id": "10541147",
+    "account": {
+      "type": "DEVELOPER",
+      "name": "Euro Styl",
+      "description": "",
+      "photo": "https://ireland.apollo.olxcdn.com/v1/files/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmbiI6ImkzN21vYmRvaW4wYjMtQVBMIn0.wXMUB-dgA9rSSG1WPrjLFcMy4HDXsarcUburd6t5XsI/image",
+      "location": {
+        "address": "Leszczynowa 6",
+        "postalCode": "80-175",
+        "name": "Gdańsk",
+        "fullName": "Gdańsk, pomorskie",
+        "__typename": "AccountLocation"
+      },
+      "contacts": {
+        "phone": "+48587795838",
+        "alternativePhone": "+48587795838",
+        "website": null,
+        "__typename": "AccountContacts"
+      },
+      "attributes": {
+        "slug": "euro-styl-ID10541147",
+        "__typename": "AccountAttributes"
+      },
+      "__typename": "Account"
+    },
+    "contacts": [],
+    "statistics": {
+      "activeAds": 807,
+      "__typename": "Statistics"
+    },
+    "sellerBadges": []
+  },
+  "searchAds": {
+    "__typename": "FoundAds",
+    "geometries": null,
+    "locationsObjects": null,
+    "items": [
+      {
+        "id": 67905051,
+        "title": "Gdańskie Zacisze",
+        "slug": "gdanskie-zacisze-ID4AWcL",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": {
+          "mapDetails": {
+            "radius": 0,
+            "__typename": "MapDetails"
+          },
+          "address": {
+            "street": {
+              "name": "Bysewska",
+              "number": "",
+              "__typename": "Street"
+            },
+            "city": {
+              "name": "Gdańsk",
+              "__typename": "City"
+            },
+            "province": {
+              "name": "pomorskie",
+              "__typename": "Province"
+            },
+            "__typename": "Address"
+          },
+          "reverseGeocoding": {
+            "locations": [
+              {
+                "id": "pomorskie",
+                "fullName": "pomorskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "pomorskie/gdansk/gdansk/gdansk",
+                "fullName": "Gdańsk, pomorskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "pomorskie/gdansk/gdansk/gdansk/kokoszki",
+                "fullName": "Kokoszki, Gdańsk, pomorskie",
+                "__typename": "BasicLocationObject"
+              }
+            ],
+            "__typename": "ReverseGeocoding"
+          },
+          "__typename": "LocationDetails"
+        },
+        "images": [
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im52MnBlaXF3eGs0cDMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.3sVy99K9fMBnLckp7YfZZFVEZzRHzK8YJ_OfGwXJu_c/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im52MnBlaXF3eGs0cDMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.3sVy99K9fMBnLckp7YfZZFVEZzRHzK8YJ_OfGwXJu_c/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InpjcjBsN3AwZHVyYjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.hnfnN34Fhq0pE0TAtZC6dBBq_w7ufi59AHsm_XnTXLI/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InpjcjBsN3AwZHVyYjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.hnfnN34Fhq0pE0TAtZC6dBBq_w7ufi59AHsm_XnTXLI/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjE0eGd4YzM3anNrbzMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.1p6Cyr_5tix0r5c-MwY3HvlhvemPhIJ0Ao8CK_YawAg/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjE0eGd4YzM3anNrbzMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.1p6Cyr_5tix0r5c-MwY3HvlhvemPhIJ0Ao8CK_YawAg/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InRxODNybjZwbzVjdTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.FhvXzhWItyJY6uWFuK3P3lia2Zh9KRc1f4tIK-T2c0Q/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InRxODNybjZwbzVjdTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.FhvXzhWItyJY6uWFuK3P3lia2Zh9KRc1f4tIK-T2c0Q/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImtnaW1ob2p1NWp1dTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.mVlWKREV1Xoh9STp63_KZJpqmGlP_T7UBS2rjXV1AVc/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImtnaW1ob2p1NWp1dTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.mVlWKREV1Xoh9STp63_KZJpqmGlP_T7UBS2rjXV1AVc/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          }
+        ],
+        "isExclusiveOffer": false,
+        "openDays": "",
+        "totalPrice": null,
+        "rentPrice": null,
+        "priceFromPerSquareMeter": null,
+        "pricePerSquareMeter": null,
+        "areaInSquareMeters": null,
+        "terrainAreaInSquareMeters": null,
+        "roomsNumber": null,
+        "floorNumber": null,
+        "shortDescription": "2, 3 i 4-pokojowe mieszkania od35m2 do74m2 od dewelopera Euro StylOsiedle zaprojektowane na wzór małego miasteczka z własnym centrum społecznym i rekreacyjnymZielony park ze strefą rekreacyjnąPrzystan...",
+        "createdAtFirst": "2026-04-14T13:25:10Z",
+        "hidePrice": true,
+        "investmentState": "IN_BUILDING",
+        "investmentUnitsAreaInSquareMeters": {
+          "from": 35,
+          "to": 74,
+          "__typename": "InvestmentUnitsArea"
+        },
+        "peoplePerRoom": null,
+        "investmentUnitsNumber": 75,
+        "investmentUnitsRoomsNumber": {
+          "min": "TWO",
+          "max": "FOUR",
+          "__typename": "InvestmentUnitsRoomsNumber"
+        },
+        "investmentEstimatedDelivery": {
+          "quarter": 2,
+          "year": 2028,
+          "__typename": "InvestmentEstimatedDelivery"
+        },
+        "pushedUpAt": null,
+        "__typename": "AdvertListItem",
+        "specialOffer": null
+      },
+      {
+        "id": 67518310,
+        "title": "Zajezdnia Motława",
+        "slug": "zajezdnia-motlawa-ID4ziB0",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": {
+          "mapDetails": {
+            "radius": 0,
+            "__typename": "MapDetails"
+          },
+          "address": {
+            "street": {
+              "name": "Kurza",
+              "number": "",
+              "__typename": "Street"
+            },
+            "city": {
+              "name": "Gdańsk",
+              "__typename": "City"
+            },
+            "province": {
+              "name": "pomorskie",
+              "__typename": "Province"
+            },
+            "__typename": "Address"
+          },
+          "reverseGeocoding": {
+            "locations": [
+              {
+                "id": "pomorskie",
+                "fullName": "pomorskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "pomorskie/gdansk/gdansk/gdansk",
+                "fullName": "Gdańsk, pomorskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "pomorskie/gdansk/gdansk/gdansk/srodmiescie",
+                "fullName": "Śródmieście, Gdańsk, pomorskie",
+                "__typename": "BasicLocationObject"
+              }
+            ],
+            "__typename": "ReverseGeocoding"
+          },
+          "__typename": "LocationDetails"
+        },
+        "images": [
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImR2MDhwc2c4NWE2aTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.6LOfff9_4yU3Qbe6CQWMpYjePUjh0BcPECilGOw38-U/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImR2MDhwc2c4NWE2aTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.6LOfff9_4yU3Qbe6CQWMpYjePUjh0BcPECilGOw38-U/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Img2c2FnZmQzd2U0aTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.jJa4QkeLSr3saHxV3X8L2r_U708WPwW236DGE32yUv0/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Img2c2FnZmQzd2U0aTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.jJa4QkeLSr3saHxV3X8L2r_U708WPwW236DGE32yUv0/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlhbnNtaDM4M3pwdi1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.WYO--XvjOWKjRbDElBtcMLZyZChy2nZt9ZD3riq2SA0/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlhbnNtaDM4M3pwdi1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.WYO--XvjOWKjRbDElBtcMLZyZChy2nZt9ZD3riq2SA0/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InduOTUwOTI2cXo0bTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.syjdnULvUsppjaET4f8y-DP5AEZUsB4YZyn65CY7xJw/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InduOTUwOTI2cXo0bTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.syjdnULvUsppjaET4f8y-DP5AEZUsB4YZyn65CY7xJw/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjVwcTd3NmNodG80ZjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.-wqaek5BZ_B48cN8TbHXJY45xVr7f9JEdH5jOo1Wtig/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjVwcTd3NmNodG80ZjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.-wqaek5BZ_B48cN8TbHXJY45xVr7f9JEdH5jOo1Wtig/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjFvNmcxNTlzOGg0ZTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.wz1_EFYWg2hsbSH874SlE6XGiOFTDm5Zpj8YSNOiTuc/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjFvNmcxNTlzOGg0ZTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.wz1_EFYWg2hsbSH874SlE6XGiOFTDm5Zpj8YSNOiTuc/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InBjd2pteThwbnppYTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.XGNQBXWKgv_pMGo-BIeOGp6Ag_3iwO4GrJ0QVlxpUxo/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InBjd2pteThwbnppYTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.XGNQBXWKgv_pMGo-BIeOGp6Ag_3iwO4GrJ0QVlxpUxo/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          }
+        ],
+        "isExclusiveOffer": false,
+        "openDays": "",
+        "totalPrice": null,
+        "rentPrice": null,
+        "priceFromPerSquareMeter": null,
+        "pricePerSquareMeter": null,
+        "areaInSquareMeters": null,
+        "terrainAreaInSquareMeters": null,
+        "roomsNumber": null,
+        "floorNumber": null,
+        "shortDescription": "1, 2, 3 i 4-pokojowe mieszkania od28m2 do91m2 od dewelopera Euro StylTereny spacerowe nad Motławą (3 minuty spacerem)Główne Miasto w Gdańsku (20 minut spacerem)Przystanek autobusowy (1 minuta spacerem...",
+        "createdAtFirst": "2025-12-08T11:45:25Z",
+        "hidePrice": true,
+        "investmentState": "IN_BUILDING",
+        "investmentUnitsAreaInSquareMeters": {
+          "from": 28,
+          "to": 91,
+          "__typename": "InvestmentUnitsArea"
+        },
+        "peoplePerRoom": null,
+        "investmentUnitsNumber": 45,
+        "investmentUnitsRoomsNumber": {
+          "min": "ONE",
+          "max": "FOUR",
+          "__typename": "InvestmentUnitsRoomsNumber"
+        },
+        "investmentEstimatedDelivery": {
+          "quarter": 2,
+          "year": 2028,
+          "__typename": "InvestmentEstimatedDelivery"
+        },
+        "pushedUpAt": null,
+        "__typename": "AdvertListItem",
+        "specialOffer": null
+      },
+      {
+        "id": 67373367,
+        "title": "Przystań Brzeźno",
+        "slug": "przystan-brzezno-ID4yGTd",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": {
+          "mapDetails": {
+            "radius": 0,
+            "__typename": "MapDetails"
+          },
+          "address": {
+            "street": {
+              "name": "Uczniowska",
+              "number": "",
+              "__typename": "Street"
+            },
+            "city": {
+              "name": "Gdańsk",
+              "__typename": "City"
+            },
+            "province": {
+              "name": "pomorskie",
+              "__typename": "Province"
+            },
+            "__typename": "Address"
+          },
+          "reverseGeocoding": {
+            "locations": [
+              {
+                "id": "pomorskie",
+                "fullName": "pomorskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "pomorskie/gdansk/gdansk/gdansk",
+                "fullName": "Gdańsk, pomorskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "pomorskie/gdansk/gdansk/gdansk/brzezno",
+                "fullName": "Brzeźno, Gdańsk, pomorskie",
+                "__typename": "BasicLocationObject"
+              }
+            ],
+            "__typename": "ReverseGeocoding"
+          },
+          "__typename": "LocationDetails"
+        },
+        "images": [
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im9yY3Jxa2t0ZWx2ei1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.nB1hcuppiaq1Z4TmelpFznjbp4A8fyXRWo6zSEbTK6A/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im9yY3Jxa2t0ZWx2ei1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.nB1hcuppiaq1Z4TmelpFznjbp4A8fyXRWo6zSEbTK6A/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im9qMmZ2Y3VndTJubC1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.TS2CrsxPE-zuT5cK5LgLqdU3LrYtkzNtF2k73lsTSjA/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im9qMmZ2Y3VndTJubC1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.TS2CrsxPE-zuT5cK5LgLqdU3LrYtkzNtF2k73lsTSjA/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ino1b2kwdXBkbnFtNy1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.hJoCng0o2UtNAcIFsH4z-m5uApUDH7SgVGTPbg4cCpg/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ino1b2kwdXBkbnFtNy1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.hJoCng0o2UtNAcIFsH4z-m5uApUDH7SgVGTPbg4cCpg/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InNwOHdqeXpsZXgwczEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Abidc02zacJTJOdvsrGvE5oCdCn6dZaVSv07c67VeHk/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InNwOHdqeXpsZXgwczEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Abidc02zacJTJOdvsrGvE5oCdCn6dZaVSv07c67VeHk/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjRqNDhtamlhaTJqZTMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Eo4Ds-X7aLMwcT1zNf3P9XG9p6XQLFhS7SWLDVzRGmk/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjRqNDhtamlhaTJqZTMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Eo4Ds-X7aLMwcT1zNf3P9XG9p6XQLFhS7SWLDVzRGmk/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhqNngxZzFxbDhjZDEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.paBWww-kM74zalZAFM3t1LLyLADE7LaaSB52kwVyLOA/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhqNngxZzFxbDhjZDEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.paBWww-kM74zalZAFM3t1LLyLADE7LaaSB52kwVyLOA/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjFiajMyN2lyeTF0azEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.t-571VW_aFpykm_bFA6aoQx2JYVruBNw2tSLUJ4f7sc/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjFiajMyN2lyeTF0azEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.t-571VW_aFpykm_bFA6aoQx2JYVruBNw2tSLUJ4f7sc/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InFtbmQ1dDYxZzU3djItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.hYBbTQa6-lrA2C1m_1r35k6JtIEyVNV3ufLIciB_f50/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InFtbmQ1dDYxZzU3djItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.hYBbTQa6-lrA2C1m_1r35k6JtIEyVNV3ufLIciB_f50/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          }
+        ],
+        "isExclusiveOffer": false,
+        "openDays": "",
+        "totalPrice": null,
+        "rentPrice": null,
+        "priceFromPerSquareMeter": null,
+        "pricePerSquareMeter": null,
+        "areaInSquareMeters": null,
+        "terrainAreaInSquareMeters": null,
+        "roomsNumber": null,
+        "floorNumber": null,
+        "shortDescription": "2, 3 i 4-pokojowe mieszkania od35m2 do70m2 od dewelopera Euro StylWewnętrzna strefa rekreacji, patio z pergolą i ławkamiPanele fotowoltaiczne, ogrody deszczowe, energooszczędne oświetlenie LEDPółki są...",
+        "createdAtFirst": "2025-10-22T13:58:44Z",
+        "hidePrice": true,
+        "investmentState": "IN_BUILDING",
+        "investmentUnitsAreaInSquareMeters": {
+          "from": 35,
+          "to": 70,
+          "__typename": "InvestmentUnitsArea"
+        },
+        "peoplePerRoom": null,
+        "investmentUnitsNumber": 136,
+        "investmentUnitsRoomsNumber": {
+          "min": "TWO",
+          "max": "FOUR",
+          "__typename": "InvestmentUnitsRoomsNumber"
+        },
+        "investmentEstimatedDelivery": {
+          "quarter": 2,
+          "year": 2028,
+          "__typename": "InvestmentEstimatedDelivery"
+        },
+        "pushedUpAt": null,
+        "__typename": "AdvertListItem",
+        "specialOffer": null
+      }
+    ],
+    "trackingSet": {
+      "cat_l1_id": 11,
+      "cat_l1_name": "Investment",
+      "business": null,
+      "selected_street_id": "",
+      "selected_district_id": "",
+      "selected_city_id": "",
+      "selected_subregion_id": "",
+      "selected_region_id": ""
+    },
+    "pagination": {
+      "totalItems": 12,
+      "totalPages": 4,
+      "currentPage": 1,
+      "itemsPerPage": 3,
+      "__typename": "SearchPagination"
+    }
+  },
+  "searchLinksRelatedLocations": {
+    "__typename": "FoundLinksLocations",
+    "items": [
+      {
+        "name": "dolnośląskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "dolnoslaskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "kujawsko-pomorskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "kujawsko--pomorskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "łódzkie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "lodzkie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "lubelskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "lubelskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "lubuskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "lubuskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "małopolskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "malopolskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "mazowieckie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "mazowieckie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "opolskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "opolskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "podkarpackie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "podkarpackie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "podlaskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "podlaskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "pomorskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "pomorskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "śląskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "slaskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "świętokrzyskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "swietokrzyskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "warmińsko-mazurskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "warminsko--mazurskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "wielkopolskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "wielkopolskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "zachodniopomorskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "zachodniopomorskie",
+        "count": null,
+        "__typename": "LocationLink"
+      }
+    ]
+  },
+  "formData": {
+    "estate": {
+      "label": "GYXaW",
+      "value": "INVESTMENT"
+    },
+    "transaction": {
+      "label": "GYVkh",
+      "value": "SELL"
+    },
+    "roomsNumber": [],
+    "market": {
+      "label": "GYVkb",
+      "value": "ALL"
+    },
+    "locations": null,
+    "distanceRadius": 0,
+    "priceMin": null,
+    "priceMax": null,
+    "areaMin": null,
+    "areaMax": null,
+    "hasDiscount": null,
+    "investmentState": null
+  },
+  "sortingOption": {
+    "by": "DEFAULT",
+    "direction": "ASC"
+  },
+  "filterLocations": null,
+  "filterAttributes": {
+    "sellerId": "10541147",
+    "estate": "INVESTMENT",
+    "transaction": "SELL",
+    "roomsNumber": [],
+    "market": "ALL",
+    "distanceRadius": 0,
+    "priceMin": null,
+    "priceMax": null,
+    "areaMin": null,
+    "areaMax": null,
+    "hasDiscount": null,
+    "investmentState": null
+  },
+  "mapBoundingBox": {
+    "__typename": "FoundMapPins",
+    "boundingBox": {
+      "neLat": 54.577110000000005,
+      "neLng": 18.6623,
+      "swLat": 54.327659999999995,
+      "swLng": 18.41095,
+      "__typename": "BoundingBox"
+    }
+  },
+  "urlViewType": "listing",
+  "tracking": {
+    "ad_impressions": [
+      67905051,
+      67518310,
+      67373367
+    ],
+    "business": "INVESTMENT",
+    "cat_l1_id": 11,
+    "cat_l1_name": "investment",
+    "listing_format": "list",
+    "order_by": "default_asc",
+    "page_count": 4,
+    "page_nb": 1,
+    "result_count": 12,
+    "results_per_page": 3,
+    "selected_locations_id": null,
+    "market": "primary or secondary",
+    "seller_id": "10541147",
+    "poster_type": "developer"
+  },
+  "ownerStatistics": {
+    "__typename": "Statistics",
+    "rentAds": null,
+    "investmentAds": 12,
+    "sellAds": 795,
+    "citiesWithAds": 4,
+    "createdAt": "2025-01-08"
+  },
+  "mapPreviewImages": [
+    {
+      "url": "https://maps.googleapis.com/maps/api/staticmap?path=Poland&zoom=6&language=pl&size=640x200&key=AIzaSyBCdQIX4zq9wY3GFTVJpB_qC8U7iAM2Ong&scale=2&signature=dLqA-9tBXLOX4ajZTQKCggKSs0o=",
+      "width": 640,
+      "height": 200
+    },
+    {
+      "url": "https://maps.googleapis.com/maps/api/staticmap?path=Poland&zoom=6&language=pl&size=640x140&key=AIzaSyBCdQIX4zq9wY3GFTVJpB_qC8U7iAM2Ong&scale=2&signature=9oC96CRNqjXtFrh_klTMzDnvRqA=",
+      "width": 640,
+      "height": 140
+    },
+    {
+      "url": "https://maps.googleapis.com/maps/api/staticmap?path=Poland&zoom=6&language=pl&size=640x190&key=AIzaSyBCdQIX4zq9wY3GFTVJpB_qC8U7iAM2Ong&scale=2&signature=fdAeE97qogc_TnLy6KpMu_k-1Bc=",
+      "width": 640,
+      "height": 190
+    }
+  ],
+  "currentUser": null,
+  "viewMode": "default",
+  "cookiesCategorisation": {
+    "eupubconsent-v2": [
+      "C0001"
+    ],
+    "OptanonAlertBoxClosed": [
+      "C0001"
+    ],
+    "OptanonConsent": [
+      "C0001"
+    ],
+    "OTAdditionalConsentString": [
+      "C0001"
+    ],
+    "access_token": [
+      "C0001"
+    ],
+    "id_token": [
+      "C0001"
+    ],
+    "refresh_token": [
+      "C0001"
+    ],
+    "microservice_token": [
+      "C0001"
+    ],
+    "lastoAuthState": [
+      "C0001"
+    ],
+    "PHPSESSID": [
+      "C0001"
+    ],
+    "laquesis": [
+      "C0001"
+    ],
+    "laquesisff": [
+      "C0001"
+    ],
+    "laquesisqa": [
+      "C0001"
+    ],
+    "laquesissu": [
+      "C0001"
+    ],
+    "lqonap": [
+      "C0001"
+    ],
+    "lqstatus": [
+      "C0001"
+    ],
+    "test": [
+      "C0001"
+    ],
+    "onap": [
+      "C0001"
+    ],
+    "onap_dev": [
+      "C0001"
+    ],
+    "lang": [
+      "C0001"
+    ],
+    "dfp_user_id": [
+      "C0004"
+    ],
+    "AuthState": [
+      "C0001"
+    ],
+    "SID": [
+      "C0001"
+    ],
+    "IDPState": [
+      "C0001"
+    ],
+    "LogoutState": [
+      "C0001"
+    ],
+    "datadome": [
+      "C0001"
+    ],
+    "ldctx": [
+      "C0002"
+    ],
+    "ldff": [
+      "C0002"
+    ],
+    "aws-waf-token": [
+      "C0001"
+    ],
+    "thememode": [
+      "C0003"
+    ],
+    "idccsrf": [
+      "C0001"
+    ],
+    "nsr": [
+      "C0001"
+    ],
+    "O_N": [
+      "C0003"
+    ],
+    "O_Y": [
+      "C0002"
+    ],
+    "O_X": [
+      "C0002"
+    ],
+    "O_LOGGED": [
+      "C0003"
+    ],
+    "hotjarSurvey": [
+      "C0004"
+    ],
+    "contentmode": [
+      "C0001"
+    ]
+  },
+  "experiments": {},
+  "featureFlags": {
+    "isAdAvmModuleEnabled": true,
+    "isGenaiAd2videoEnabled": true,
+    "shouldEnableAd2VideoPreview": true,
+    "isAdFinanceBannerEnabled": true,
+    "isAdFinanceLinkEnabled": true,
+    "isAdMortgageSimulatorEnabled": true,
+    "isAdNeighborhoodPoisEnabled": false,
+    "isListingRentPriceEnabled": true,
+    "isBikPromotionEnabled": true,
+    "isSeoAdsDescriptionEnabled": true,
+    "isPropertyEvaluationPageActive": true,
+    "isRESellerLeadsActive": false,
+    "isSellerLeadsMvpEnabled": false,
+    "isXmlReportEnabled": true,
+    "isOneProductPostingFormEnabled": true,
+    "isAgentAccountMailboxEnabled": true,
+    "isDeveloperGeoPricingEnabled": true,
+    "isIntegrationPageEnabled": true,
+    "isNinFieldEnabledForInvoicing": false,
+    "isMandatoryLoginEnabled": true,
+    "isGeoBasedPricingEnabled": true,
+    "isMyAccountPDFReportsEnabled": true,
+    "isReCaptchaEnabled": true,
+    "isAgencyInvoiceReportEnabled": false,
+    "isRECsrfEnabled": true,
+    "isNexusDeveloperRegistrationFormEnabled": true,
+    "isAgencyPortfolioValuePricingEnabled": true,
+    "isAgencyPortfolioBufferEnabled": false,
+    "isBadgesFeatureEnabled": true,
+    "isInboxCrmIdFilteringEnabled": true,
+    "isDashboardWithStatisticsEnabled": false,
+    "isConciergeMigrationPageEnabled": false,
+    "isAIAssistantChatEnabled": true,
+    "arePaymentReminderBannersEnabled": true,
+    "isSapBlackoutBannerEnabled": false,
+    "isPowerVasOnboardingCampaignEnabled": false,
+    "isEnhancedAgentActivationEnabled": true,
+    "shouldShowExternalDeveloperLink": false,
+    "isPowerVasCardDisplayEnabled": true,
+    "isAgentPermissionsPageEnabled": true,
+    "isSecondStepOfBusinessAccountVerificationRemoved": false,
+    "isPowerVasGroupEnabled": true,
+    "shouldUseUnifiedAdSchema": true,
+    "isNoPhotobookingOnImovirtualPricingEnabled": true,
+    "isEInvoicingEnabled": true,
+    "isNinjaBetaVersionEnabled": true,
+    "hasBusinessRegistrationFlowBeenEnhanced": true,
+    "isSelfRefCanonicalLinkLublinOpoleEnabled": false,
+    "areCityLevelLinksKoninSkierniewiceEnabled": false,
+    "isNexusPromotePageEnabled": false,
+    "isVasAutoRenewalEnabled": true,
+    "isPostingFormAgentAccountEnabled": true,
+    "isPostingFormFreeTextStreetEnabled": false,
+    "isAdsAIEnrichmentEnabled": true,
+    "isEnhancedAgentDeletionEnabled": true,
+    "areAccountLevelStatisticsForAgentsEnabled": true,
+    "areAdLevelStatisticsEnabled": false,
+    "isOurTeamPendingTabEnhanced": false,
+    "isPlDynamicMetaTemplatesEnabled": false,
+    "isCompaniesListingPageEnabled": true,
+    "isDynamicFaqEnabled": true,
+    "isLoginDataPageEnabled": false,
+    "isNexusBillingPageEnabled": false,
+    "isTranslateErrorLoggerEnabled": false,
+    "isTranslateErrorFixEnabled": false,
+    "__typename": "FeatureFlags"
+  },
+  "laquesisResult": null,
+  "userSessionId": "2ede1edc-0960-40a9-8f9b-f54f6087d6cf",
+  "unconfirmedUserAuthToken": null,
+  "desktopHeader": {
+    "Is-Desktop": "true"
+  },
+  "url": "https://www.otodom.pl/pl/firmy/deweloperzy/euro-styl-ID10541147"
+}

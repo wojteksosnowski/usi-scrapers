@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "description": "Source of truth for fundamental data keys across portals using relative paths",
+  "version": "1.7.4",
+  "description": "Source of truth for fundamental data keys across portals. Verified strictly against non-mock raw records and specialized test JSONs.",
   "portals": {
     "rp": {
       "name": "RynekPierwotny",
@@ -8,13 +8,17 @@
         "id": "id",
         "slug": "slug",
         "name": "name",
-        "developer_id": "vendor.id",
-        "developer_name": "vendor.name",
-        "units_count": "properties",
-        "price_min": "stats.ranges_price_min",
-        "price_max": "stats.ranges_price_max",
-        "ceiling_height_min": "stats.ranges_height_min",
-        "ceiling_height_max": "stats.ranges_height_max"
+        "developer_id": "vendor.value.id",
+        "developer_slug": {
+          "path": "vendor.value.slug",
+          "regex": "^[a-z0-9\\-]+$"
+        },
+        "developer_name": "vendor.value.name",
+        "units_count": "stats.value.properties_count_for_sale",
+        "price_min": "stats.value.ranges_price_min",
+        "price_max": "stats.value.ranges_price_max",
+        "ceiling_height_min": "stats.value.ranges_height_min",
+        "ceiling_height_max": "stats.value.ranges_height_max"
       },
       "developer": {
         "id": "id",
@@ -25,30 +29,47 @@
     "oto": {
       "name": "Otodom",
       "investment": {
-        "id": "id",
-        "slug": "slug",
-        "name": "title",
-        "developer_id": "agency.id",
-        "developer_name": "agency.name",
-        "units_count": "topInformation[label=number_of_units_in_project].values[0]",
-        "price_min": "target.Price",
-        "ceiling_height_min": "target.Ceiling_height_from",
-        "ceiling_height_max": "target.Ceiling_height_to"
+        "id": "ad.id",
+        "slug": "ad.slug",
+        "name": "ad.title",
+        "developer_id": "ad.agency.id",
+        "developer_name": "ad.agency.name",
+        "developer_slug": {
+          "path": "ad.agency.url",
+          "regex": "deweloperzy/([^/]+)-ID\\d+"
+        },
+        "units_count": "ad.target.Number_of_properties",
+        "price_min": "ad.target.Price",
+        "ceiling_height_min": "ad.target.Ceiling_height_from",
+        "ceiling_height_max": "ad.target.Ceiling_height_to"
       },
       "developer": {
-        "id": "id",
-        "slug": "slug",
-        "name": "name"
+        "id": "owner.id",
+        "slug": {
+          "path": "url",
+          "regex": "deweloperzy/([^/]+)-ID\\d+"
+        },
+        "name": "owner.account.name"
       }
     },
     "to": {
       "name": "TabelaOfert",
       "investment": {
-        "id": "id",
-        "slug": "slug",
+        "id": {
+          "path": "url",
+          "regex": ",i(\\d+)"
+        },
+        "slug": {
+          "path": "url",
+          "regex": "inwestycja/([^,]+)"
+        },
         "name": "name",
-        "developer_id": "brand.id",
+        "developer_id": {
+          "path": "brand.logo",
+          "regex": "\\/(\\d+)-"
+        },
         "developer_name": "brand.name",
+        "developer_slug": "developer_slug",
         "units_count": "offers.offerCount",
         "price_min": "offers.lowPrice",
         "price_max": "offers.highPrice",
@@ -56,8 +77,14 @@
         "ceiling_height_max": "additionalProperty[name=Wysokość mieszkania].value"
       },
       "developer": {
-        "id": "id",
-        "slug": "slug",
+        "id": {
+          "path": "logo_url",
+          "regex": ",(\\d+)-/"
+        },
+        "slug": {
+          "path": "url",
+          "regex": "deweloperzy/([^/]+)$"
+        },
         "name": "name"
       }
     }

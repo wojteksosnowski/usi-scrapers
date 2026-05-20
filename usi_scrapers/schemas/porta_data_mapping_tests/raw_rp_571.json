@@ -1,0 +1,820 @@
+{
+  "address": "Gdańsk, Zaspa-Rozstaje, Al. Jana Pawła",
+  "buildings": 4,
+  "commercial_rental": false,
+  "configuration": {
+    "type": "obj",
+    "value": {
+      "display_type": 2,
+      "hide_is_reserved": false,
+      "hide_properties_prices_for_anonymous_users": false,
+      "hide_publish_date": false,
+      "include_utm": true,
+      "is_autoresponder_enabled": false,
+      "is_boosted": false,
+      "limited_presentation": true,
+      "meta_robots": "index, follow",
+      "pre_sale": false,
+      "price_visibility": 1,
+      "redirect_type": 301,
+      "show_building_models_on_map": false,
+      "show_form_placeholder": false,
+      "show_generated_description": true,
+      "show_meta_fields": false,
+      "show_negotiate_price": true,
+      "show_offer_plans": false,
+      "show_price_m2_range": true,
+      "show_price_range": true
+    }
+  },
+  "construction_date_range": {
+    "type": "obj",
+    "value": {
+      "lower": "2011-04-18",
+      "upper": "2017-01-01",
+      "bounds": "[]"
+    }
+  },
+  "create_date": "2012-02-21T21:04:42.826849",
+  "currency": 1,
+  "description": {
+    "type": "slate",
+    "root": {
+      "children": [
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Budynki AWIATORA mają wyjątkową zieloną oprawę, z mieszkań rozciąga się rozległy widok na otaczający inwestycję od zachodu Park im. Jana Pawła II, od wschodu na Zatokę Gdańska i nowoczesną architekturę PGE Arena. Nadmorski krajobraz i zapach morskiej bryzy towarzyszy na co dzień mieszkańcom Awiatora."
+            }
+          ],
+          "id": "cl-0",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Wyjątkowa lokalizacja, wysokość budynku umożliwiają panoramiczne widoki z każdego piętra; na sąsiadujący z budynkiem Park im. Jana Pawła II, lasy Trójmiejskiego Parku Krajobrazowego, Zatokę Gdańską, pobliskie centrum Wrzeszcza i Gdańska."
+            }
+          ],
+          "id": "cl-1",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Elegancko i reprezentacyjnie zaaranżowana strefa wejścia do budynku. Nowoczesny przeszklony hol z portiernią, poczekalnią i antresolą z widokiem na ogród. W częściach wspólnych budynku wysokiej klasy elementy wyposażenia i zastosowane materiały dekoracyjne."
+            }
+          ],
+          "id": "cl-2",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Budynki zostały wyposażone w portiernie z 24 godzinną ochroną dyskretną i nieuciążliwą dla mieszkańców. Strefa wejścia do budynku, hale parkingowe są monitorowane. System kontroli dostępu z instalacją video –domofonową oraz System Sygnalizacji Pożaru połączony z Państwową Strażą Pożarną."
+            }
+          ],
+          "id": "cl-3",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Sprawną komunikację między piętrami zapewniają 2 szybkobieżne,windy. W budynku podziemne, dwupoziomowe hale garażowe z sąsiadującymi schowkami gospodarczymi, zielony ogród (patio) z piękną, oryginalną zielenią, dostępny wyłącznie dla mieszkańców. W pobliżu portierni znajdują się przestronne pomieszczenia na rowery i wózki."
+            }
+          ],
+          "id": "cl-4",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Stosujemy nowoczesne rozwiązania techniczne i technologiczne. Nasze projekty skutecznie łączą nowoczesną myśl architektoniczną z wymogami ekonomizacji inwestycji, które wpływają na relatywnie niskie koszty utrzymania nieruchomości."
+            }
+          ],
+          "id": "cl-5",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Budynek Delta - odbiory IV kw. 2016 r. / I kw. 2017 r."
+            }
+          ],
+          "id": "cl-6",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        }
+      ]
+    }
+  },
+  "facilities": {
+    "type": "arr",
+    "value": [
+      2,
+      6,
+      10,
+      16,
+      18,
+      19,
+      20,
+      22,
+      24
+    ]
+  },
+  "floors_above_ground_range": {
+    "type": "obj",
+    "value": {
+      "lower": 1,
+      "upper": 12,
+      "bounds": "[]"
+    }
+  },
+  "floors_below_ground": 1,
+  "geo_area": {
+    "type": "obj",
+    "value": {
+      "type": "Polygon",
+      "coordinates": {
+        "type": "arr",
+        "value": [
+          {
+            "type": "arr",
+            "value": [
+              {
+                "type": "arr",
+                "value": [
+                  18.60263944332,
+                  54.396137411478
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  18.603154427449,
+                  54.395887567117
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  18.606973893088,
+                  54.399610090533
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  18.606394535938,
+                  54.399847421175
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  18.60263944332,
+                  54.396137411478
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "geo_point": {
+    "type": "obj",
+    "value": {
+      "type": "Point",
+      "coordinates": {
+        "type": "arr",
+        "value": [
+          18.60481140448332,
+          54.39789056586483
+        ]
+      }
+    }
+  },
+  "has_active_promotions": false,
+  "has_distinction": false,
+  "id": 571,
+  "is_active": true,
+  "is_condohotel": false,
+  "is_holiday_location": false,
+  "is_phone_clip_enabled": true,
+  "location_description": "Inwestycja zlokalizowana w gadńskiej dzielnicy Zaspa-Rozstaje, przy Al. Jana Pawła.",
+  "logo": {
+    "type": "obj",
+    "value": {
+      "m_img_80x60": "https://thumbs.rynekpierwotny.pl/fdb07afb:fJ7b56Qfd46Qz4-KoaXPC42irzQ/80x60/filters:upscale():format(jpg)/offers/offer/logo/awiator_c873fc.png",
+      "m_img_80x60_png": "https://thumbs.rynekpierwotny.pl/fdb07afb:KRAtGglDICuZTluv1HvKPeQhPcg/80x60/filters:upscale():format(png)/offers/offer/logo/awiator_c873fc.png",
+      "o_log_120x120": "https://thumbs.rynekpierwotny.pl/fdb07afb:OUYR2mEW5OiQPKpGnkyNN0jYD3Q/120x120/filters:format(png)/offers/offer/logo/awiator_c873fc.png",
+      "o_log_160x120": "https://thumbs.rynekpierwotny.pl/fdb07afb:XxndWXTuNJBAVoPz12oHO1glm3M/160x120/filters:format(png)/offers/offer/logo/awiator_c873fc.png",
+      "o_log_200x200": "https://thumbs.rynekpierwotny.pl/fdb07afb:FDInGQYMkXEaJzGEukF92WIo3uA/200x200/filters:format(png)/offers/offer/logo/awiator_c873fc.png",
+      "o_log_180": "https://thumbs.rynekpierwotny.pl/fdb07afb:C_jcpGpkEqqdEcnTNzZTi_wjK2U/180x0/offers/offer/logo/awiator_c873fc.png",
+      "o_log_200": "https://thumbs.rynekpierwotny.pl/fdb07afb:5YtLr5dekoP2LkjZEcOCwHkwz4E/200x0/filters:no_upscale():format(png)/offers/offer/logo/awiator_c873fc.png",
+      "o_log_360": "https://thumbs.rynekpierwotny.pl/fdb07afb:ELxhTxzRePhx-fHSKD5Xp8XumuU/360x0/offers/offer/logo/awiator_c873fc.png"
+    }
+  },
+  "main_image": {
+    "type": "obj",
+    "value": {
+      "m_img_375x211": "https://thumbs.rynekpierwotny.pl/3e79b87d:yYEh2gP3601-IYiPS-vBZyhrEvw/375x211/filters:upscale():format(jpg)/offers/offer/main_image/awiator.png",
+      "m_img_440x248": "https://thumbs.rynekpierwotny.pl/3e79b87d:I_1PnNHclV3V2_tyWvcsSdw61ZQ/440x248/filters:upscale():format(jpg)/offers/offer/main_image/awiator.png",
+      "m_img_440x440": "https://thumbs.rynekpierwotny.pl/3e79b87d:_vCXNDNKAqtZSWcEBgzr0XFTFZI/440x440/filters:upscale():format(jpg)/offers/offer/main_image/awiator.png",
+      "m_img_500": "https://thumbs.rynekpierwotny.pl/3e79b87d:ks08AuVE1__DrpIRZaH7gOMbl2Y/500x0/filters:format(jpg)/offers/offer/main_image/awiator.png",
+      "m_img_750": "https://thumbs.rynekpierwotny.pl/3e79b87d:2usjEW0zf_k6S1b-3ZVALI2uVu4/750x0/filters:format(jpg)/offers/offer/main_image/awiator.png",
+      "m_img_760x428": "https://thumbs.rynekpierwotny.pl/3e79b87d:M2IJEynwNh5hij235ykAgHAc-A0/760x428/filters:upscale():format(jpg)/offers/offer/main_image/awiator.png",
+      "m_img_983x552": "https://thumbs.rynekpierwotny.pl/3e79b87d:7hWH1iUjbjqxYgirVuI4FCuf7XU/983x552/filters:upscale():format(jpg)/offers/offer/main_image/awiator.png",
+      "m_img_1500": "https://thumbs.rynekpierwotny.pl/3e79b87d:1VydvMk4NxQaQLTkjy7jXq3vflI/1500x0/filters:format(jpg)/offers/offer/main_image/awiator.png"
+    }
+  },
+  "map_image": "https://media.propertygroup.pl/awiator-mapa-lokalizacji-inwestycji_F7mFqFk.png",
+  "name": "Awiator",
+  "natural_sites": {
+    "type": "arr",
+    "value": [
+      1,
+      6
+    ]
+  },
+  "parking_places": {
+    "type": "arr",
+    "value": [
+      {
+        "type": "obj",
+        "value": {
+          "description": "27 000 zł",
+          "id": 359,
+          "type": 1
+        }
+      }
+    ]
+  },
+  "payment_description": "Indywidualnie.",
+  "price_type": 2,
+  "properties": 600,
+  "properties_for_sale_count": 410,
+  "has_presentable_price": false,
+  "region": {
+    "type": "obj",
+    "value": {
+      "country": 1,
+      "full_name": "pomorskie, Gdańsk, Zaspa-Rozstaje",
+      "full_name_reverted": "Zaspa-Rozstaje, Gdańsk, pomorskie",
+      "id": 52154,
+      "included_location": {
+        "type": "obj",
+        "value": {
+          "description": "Gdańsk Zaspa-Rozstaje to dzielnica o powierzchni 2 km kw zamieszkana przez ok. 13 tys. mieszkańców i granicząca z dzielnicami Brzeźno, Przymorze Wielkie, Wrzeszcz.  Dużą ilość mieszkańców na małej powierzchni tłumaczy fakt, że dzielnica zabudowana jest głównie dużymi blokami mieszkalnymi z lat '70 – '80 XX w. Pozostałą część Zaspy-Rozstaja zajmuje w dużej mierze Park im. Jana Pawła II i Park Millennium Gdańska. Dodając do tego Morze Bałtyckie i plaże położone w odległości ok. 1 km od granic dzielnicy, uzyskujemy pełne zieleni miejsce do życia niemal w samym centrum miasta. Znajduje się tu szpital COPERNICUS, Zespół Szkół Ogólnokształcących, Szkoła Podstawowa nr 80,   Dzieci  i młodzież mogą skorzystać tu ze szkółki piłkarskiej Rozstaje 2000 a dorośli z Miejskiego Klubu Sportowego Atleta. Główną ulicą dzielnicy jest biegnąca z południa na północ Al. Jana Pawła II. Na terenie dzielnicy znajduje się Zajezdnia autobusowa i zajezdnia tramwajowa, dzięki czemu wygodnie można dostać się do pozostałych miejskich dzielnic.",
+          "transport_intro": "Transport SKM i PKP umożliwia stacja Gdańsk Zaspa, która znajduje się w południowej części dzielnicy. Transport autobusowy umożliwia położona na wschodzie pętla autobusowa. Dodatkowo znajduje się tu też pętla tramwajowa. Główną arterią dzielnicy Zaspa-Rozstaje jest Al. Jana Pawła II."
+        }
+      },
+      "is_duplicate": false,
+      "name": "Zaspa-Rozstaje",
+      "name_declension_what": "Zaspy-Rozstajów",
+      "name_declension_where": "na Zaspie-Rozstajach",
+      "parent": {
+        "type": "obj",
+        "value": {
+          "id": 46083,
+          "name": "Gdańsk",
+          "slug": "gdansk",
+          "stats": {
+            "type": "obj",
+            "value": {
+              "properties_flats_count_for_sale": 4170,
+              "properties_houses_count_for_sale": 51
+            }
+          },
+          "type": 4
+        }
+      },
+      "short_name": "Gdańsk, Zaspa-Rozstaje",
+      "short_name_reverted": "Zaspa-Rozstaje, Gdańsk",
+      "slug": "gdansk-zaspa-rozstaje",
+      "stats": {
+        "type": "obj",
+        "value": {
+          "promotions_count_total": 0,
+          "properties_all_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "1": 43,
+              "2": 155,
+              "3": 14,
+              "4": 12
+            }
+          },
+          "properties_commercials_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "1": 1
+            }
+          },
+          "properties_flats_count_for_sale": 224,
+          "properties_flats_count_luxury": 0,
+          "properties_flats_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "1": 43,
+              "2": 155,
+              "3": 14,
+              "4": 12
+            }
+          },
+          "properties_houses_count_for_sale": 0,
+          "properties_houses_count_luxury": 0,
+          "region_type_city": {
+            "type": "obj",
+            "value": {
+              "id": 46083,
+              "slug": "gdansk",
+              "name": "Gdańsk"
+            }
+          },
+          "region_type_district": {
+            "type": "obj",
+            "value": {
+              "id": 52154,
+              "slug": "gdansk-zaspa-rozstaje",
+              "name": "Zaspa-Rozstaje"
+            }
+          },
+          "region_type_voivodeship": {
+            "type": "obj",
+            "value": {
+              "id": 243,
+              "slug": "pomorskie",
+              "name": "pomorskie"
+            }
+          }
+        }
+      },
+      "type": 6
+    }
+  },
+  "reservation_description": "Możliwa bezpłatna rezerwacja do kilku dni (ustalana indywidualnie między klientem a biurem sprzedaży).",
+  "sales_offices": {
+    "type": "arr",
+    "value": [
+      {
+        "type": "obj",
+        "value": {
+          "address": "Aleja Jana Pawła II 3\r\nGdańsk\r\nBudynek BRAVO",
+          "id": 319,
+          "mobile": "48 609300188",
+          "phone": "48 587789312"
+        }
+      }
+    ]
+  },
+  "slogan": "Nowoczesny symbol Zaspy",
+  "slug": "awiator-gdansk-zaspa-rozstaje",
+  "standard_description": {
+    "type": "obj",
+    "value": {
+      "uuid": "400d78be-4655-46d4-a63a-e3d05869f53e",
+      "types": {
+        "type": "arr",
+        "value": [
+          2
+        ]
+      },
+      "building_structure": "Szkielet żelbetowy z wypełnieniem z pustaków ceramicznych.",
+      "roof": "Płaski, pokryty powłoką termozgrzewalną.",
+      "facade": "Część elewacji wykonana systemowo tynkiem cienkowarstwowym, część pokryta panelami aluminiowymi, symbolizująca poszycie samolotu. ",
+      "windows": "Okna PCV, o podwyższonej izolacyjności akustycznej i termicznej.",
+      "exterior_doors": "Drzwi wejściowe do mieszkań antywłamaniowe.",
+      "balconies": "Posadzki balkonów wykończone płytkami. Balustrady szklane lub pełne.",
+      "flooring": "Wylewka betonowa (podłoga pływająca).",
+      "walls": "Wykończone tynkiem III kategorii, malowane na biało.",
+      "ceilings": "Wykończone tynkiem III kategorii, malowane na biało.",
+      "exterior_sills": "Wykonane z blachy powlekanej.",
+      "interior_sills": "Wykonane z konglomeratu marmurowego.",
+      "installations": "Instalacja elektryczna,\r\ninstalacja c.o.\r\ninstalacja wodna i kanalizacyjna,\r\ninstalacja telewizyjna, telefoniczna i internetowa,\r\ninstalacja domofonowa z wideofonem.\r\n",
+      "heating": "Z sieci miejskiej.",
+      "ventilation": "Mechaniczna.",
+      "bathroom_equipment": "Doprowadzone instalacje bez białego montażu.",
+      "kitchen_equipment": "Doprowadzone instalacje bez montażu urządzeń."
+    }
+  },
+  "stats": {
+    "type": "obj",
+    "value": {
+      "building_parameters_stats": {
+        "type": "obj",
+        "value": {
+          "properties_to_45m": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 30
+            }
+          },
+          "properties_45m_to_60m": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 179
+            }
+          },
+          "properties_over_60m": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 202
+            }
+          },
+          "properties_1room": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 21
+            }
+          },
+          "properties_2rooms": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 141
+            }
+          },
+          "properties_3rooms": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 172
+            }
+          },
+          "properties_4rooms": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 77
+            }
+          },
+          "properties_on_middle_floors": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 146
+            }
+          },
+          "properties_on_high_floors": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 265
+            }
+          },
+          "properties_with_balconies": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 3
+            }
+          }
+        }
+      },
+      "boosters_bigdata_stats": {
+        "type": "obj",
+        "value": {
+          "views_last_3_days": 0
+        }
+      },
+      "distance_from_region": {
+        "type": "obj",
+        "value": {
+          "center": true,
+          "coords": {
+            "type": "arr",
+            "value": [
+              18.646331710969662,
+              54.35186336434782
+            ]
+          },
+          "region": "Gdańska",
+          "distance": 5.8
+        }
+      },
+      "has_attic": false,
+      "has_entresol": false,
+      "last_update": "2024-09-24T14:15:13.781074",
+      "nearest_places": {
+        "type": "obj",
+        "value": {
+          "sport": {
+            "type": "obj",
+            "value": {
+              "count": 6,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Studio Fitness i Centrum Jogi Emfit",
+                      "distance": 750
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Atleta",
+                      "distance": 750
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Fitness House Studio Magdalena Jedynak",
+                      "distance": 1050
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "services": {
+            "type": "obj",
+            "value": {
+              "count": 55,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Bar Kaprys",
+                      "distance": 350
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Cuba Libre Club",
+                      "distance": 600
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Urząd Pocztowy Filia Gdańsk 37",
+                      "distance": 700
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "education": {
+            "type": "obj",
+            "value": {
+              "count": 33,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Przedszkole nr 88",
+                      "distance": 250
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Maluszek - żłobek",
+                      "distance": 350
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Przedszkole nr 72 o profilu terapeutycznym",
+                      "distance": 500
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "transport": {
+            "type": "obj",
+            "value": {
+              "count": 61,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Leszczyńskich",
+                      "distance": 200
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Rzeczypospolitej",
+                      "distance": 200
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Jana Pawła II",
+                      "distance": 400
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "medical_care": {
+            "type": "obj",
+            "value": {
+              "count": 21,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Apteka Na Zaspie",
+                      "distance": 450
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Apteka Zaspa",
+                      "distance": 550
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Nadmorskie Centrum Medyczne Sp. z o.o. - Administracja",
+                      "distance": 600
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "entertainment": {
+            "type": "obj",
+            "value": {
+              "count": 9,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Odkrywcy Sztuki",
+                      "distance": 400
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Wojewódzka i Miejska Biblioteka Publiczna w Gdańsku Filia nr 14",
+                      "distance": 750
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Teatr w Blokowisku",
+                      "distance": 1100
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "properties_count_for_sale": 0,
+      "properties_count_mdm": 0,
+      "properties_with_roi_count": 0,
+      "ranges_area_max": 72,
+      "ranges_area_min": 72,
+      "ranges_garages_count": 0,
+      "ranges_height_max": 266,
+      "ranges_height_min": 266,
+      "ranges_plot_area_max": 0,
+      "ranges_plot_area_min": 0,
+      "ranges_price_m2_max": 8856,
+      "ranges_price_m2_min": 6156,
+      "ranges_price_max": 569710,
+      "ranges_price_min": 300230,
+      "rating": 4,
+      "votes_count": 5376
+    }
+  },
+  "status": {
+    "type": "obj",
+    "value": {
+      "offer_status": 2,
+      "substatus": 9,
+      "status_date_range": {
+        "type": "obj",
+        "value": {
+          "lower": "2017-07-11",
+          "bounds": "[)"
+        }
+      }
+    }
+  },
+  "storage": {
+    "type": "obj",
+    "value": {
+      "description": "2 160 brutto/m2"
+    }
+  },
+  "street_name": "Al. Jana Pawła",
+  "type": 1,
+  "vendor": {
+    "type": "obj",
+    "value": {
+      "awards_count": 0,
+      "id": 885,
+      "configuration": {
+        "type": "obj",
+        "value": {
+          "force_show_price": false,
+          "price_visibility": 2
+        }
+      },
+      "name": "ALLCON",
+      "slug": "allcon-osiedla-sp-z-oo",
+      "type": 1,
+      "logo": {
+        "type": "obj",
+        "value": {
+          "v_log_42x32": "https://thumbs.rynekpierwotny.pl/5e89160c:O8S94uvBvdVAH0a1k9UB1_vxCNg/42x32/filters:no_upscale()/vendors/vendor/logo/8f2c25.png",
+          "v_log_53x40": "https://thumbs.rynekpierwotny.pl/5e89160c:InyMOK_-MzJvnbPekvrkgczfRw4/53x40/filters:no_upscale()/vendors/vendor/logo/8f2c25.png",
+          "v_log_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:LRiDmZWGvNvBznlQ_7Iq_iliKZI/80x60/vendors/vendor/logo/8f2c25.png",
+          "m_img_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:kNi9nRScfvqPY-gm8gNkFY9-Kn8/80x60/filters:upscale():format(jpg)/vendors/vendor/logo/8f2c25.png",
+          "m_img_80x60_png": "https://thumbs.rynekpierwotny.pl/5e89160c:5bZAunpMXwXcgZMHjwXcFIfaZ88/80x60/filters:upscale():format(png)/vendors/vendor/logo/8f2c25.png",
+          "v_log_84x64": "https://thumbs.rynekpierwotny.pl/5e89160c:ofxyITdq-7R9XGYrAhTAie9amjM/84x64/filters:no_upscale()/vendors/vendor/logo/8f2c25.png",
+          "v_log_106x80": "https://thumbs.rynekpierwotny.pl/5e89160c:FGPFlFYmhHGfYjYMPcyrL29kl3k/106x80/filters:no_upscale()/vendors/vendor/logo/8f2c25.png",
+          "v_log_120x90": "https://thumbs.rynekpierwotny.pl/5e89160c:CmHQ5wVn63n6EFitUI2CnWbXOdM/120x90/vendors/vendor/logo/8f2c25.png",
+          "v_log_126x96": "https://thumbs.rynekpierwotny.pl/5e89160c:_xmfGd0oUVaElzNgQca5ghHmfMg/126x96/filters:no_upscale()/vendors/vendor/logo/8f2c25.png",
+          "v_log_159x120": "https://thumbs.rynekpierwotny.pl/5e89160c:PPF7NX3wcBryTsBA9mBWSZfhlMs/159x120/filters:no_upscale()/vendors/vendor/logo/8f2c25.png",
+          "v_log_160x120": "https://thumbs.rynekpierwotny.pl/5e89160c:jbqjaonn01Lh27jEYqd8ILl_o4M/160x120/vendors/vendor/logo/8f2c25.png",
+          "v_log_180": "https://thumbs.rynekpierwotny.pl/5e89160c:9LAYzZVdpanodwlsjWJKgnZ4858/180x0/vendors/vendor/logo/8f2c25.png",
+          "v_log_100": "https://thumbs.rynekpierwotny.pl/5e89160c:1znvPeJ1DZKC5EKOPKKRPErhmM0/100x0/vendors/vendor/logo/8f2c25.png"
+        }
+      },
+      "offices": {
+        "type": "arr",
+        "value": [
+          {
+            "type": "obj",
+            "value": {
+              "address": "al. Marsz. Piłsudskiego 11",
+              "phone": "48 583441610",
+              "type": 1,
+              "region": 6196
+            }
+          }
+        ]
+      },
+      "stats": {
+        "type": "obj",
+        "value": {
+          "offers_count_for_sale": 0,
+          "offers_count_sold": 14,
+          "properties_count_for_sale": 0
+        }
+      }
+    }
+  },
+  "website": "http://www.allcon.pl/mieszkania/apartamenty/",
+  "without_contribution": false
+}

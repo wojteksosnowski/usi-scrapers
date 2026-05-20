@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.0] — 2026-05-21
+
+### Added
+- **Public Mapping API**: Exposed `get_mapping`, `resolve_path`, and `load_mapping` in `usi_scrapers/__init__.py`.
+- **Regex Mapping Support**: Enhanced `resolve_path` to process dictionary definitions containing `"path"` and `"regex"` keys.
+
+### Changed
+- **Portal Data Mapping**: Adjusted `portal_data_mapping.json` paths for TabelaOfert (fixed `to_url` to `url`) and RynekPierwotny (fixed `vendor.id` to `vendor.value.id` and updated `stats` paths).
+
 ## [0.5.8] — 2026-05-19
 
 ### Changed

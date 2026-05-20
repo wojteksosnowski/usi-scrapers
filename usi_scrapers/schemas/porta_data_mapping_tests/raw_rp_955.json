@@ -1,0 +1,290 @@
+{
+  "_usi_meta": {
+    "portal": "rp",
+    "portal_url": "https://rynekpierwotny.pl",
+    "saved_at": "2026-05-17T17:53:15.783128+00:00",
+    "portal_id": "955",
+    "source_url": "https://rynekpierwotny.pl/deweloperzy/dom-development-sa/"
+  },
+  "id": 955,
+  "logo": {
+    "v_log_42x32": "https://thumbs.rynekpierwotny.pl/5e89160c:EPysAE5Q7r_EtGgNMUx_OaYSmPE/42x32/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_53x40": "https://thumbs.rynekpierwotny.pl/5e89160c:w-QvH2UKw_ONmIh9mzRia3iVp_U/53x40/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:EHY-A9Itj85ER_ZaUUSA7ysLMOY/80x60/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "m_img_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:i9yFCHTclQ91Op-aosUE7_-BhIU/80x60/filters:upscale():format(jpg)/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "m_img_80x60_png": "https://thumbs.rynekpierwotny.pl/5e89160c:JGyOvHsq79TqkxifTpT4IUQhMmA/80x60/filters:upscale():format(png)/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_84x64": "https://thumbs.rynekpierwotny.pl/5e89160c:EG2RasR38gIbLho_Z_6C8IyuAek/84x64/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_106x80": "https://thumbs.rynekpierwotny.pl/5e89160c:cUAdNGQG6mcnHwvwr5LmqoVWELg/106x80/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_120x90": "https://thumbs.rynekpierwotny.pl/5e89160c:I9BUxJOA3Skj-7-iNFNkH-HoGJo/120x90/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_126x96": "https://thumbs.rynekpierwotny.pl/5e89160c:6BymmLrfHklwyrFP9dk2WQah4WE/126x96/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_159x120": "https://thumbs.rynekpierwotny.pl/5e89160c:PHOnW2KeHKTd3udc431vCxlxYWo/159x120/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_160x120": "https://thumbs.rynekpierwotny.pl/5e89160c:s9oR-KWnUVoug8a4aepnQk-_i-0/160x120/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_180": "https://thumbs.rynekpierwotny.pl/5e89160c:koxGZ3mvTllioJQxTNfXxPSZbWE/180x0/vendors/vendor/logo/dom-development-sa_707b2d.png",
+    "v_log_100": "https://thumbs.rynekpierwotny.pl/5e89160c:SJh30foY8kVix77Kmcyvbe5c2l0/100x0/vendors/vendor/logo/dom-development-sa_707b2d.png"
+  },
+  "is_indexing_allowed": true,
+  "headquarters": {
+    "id": 2514,
+    "region": {
+      "id": 8647,
+      "slug": "warszawa",
+      "name": "Warszawa",
+      "short_name": "Warszawa",
+      "name_declension_where": "w Warszawie"
+    },
+    "type": 1,
+    "address": "Pl. Piłsudskiego 3",
+    "phone": "48 223516369",
+    "mobile": "",
+    "vendor": 955
+  },
+  "configuration": {
+    "vendor": 955,
+    "meta_robots": null,
+    "is_active": true,
+    "include_utm": true,
+    "show_on_our_offer": false,
+    "show_offers_logos": true,
+    "business_type": 1,
+    "recommendation_priority": 2,
+    "show_form_placeholder": false,
+    "form_placeholder_phone": null,
+    "form_placeholder_text": null,
+    "site_color": 3,
+    "show_email_info": false,
+    "email_info": "",
+    "privacy_policy_url": "http://www.domd.pl/pl-pl/krakow/polityka-prywatnosci",
+    "privacy_policy_file": null,
+    "is_locked": false,
+    "rotated_clip_phones_disabled": false,
+    "force_show_price": false,
+    "price_visibility": 2
+  },
+  "stats": {
+    "vendor": 955,
+    "offers_count_total": 198,
+    "offers_count_for_sale": 59,
+    "offers_count_sold": 139,
+    "offers_count_planned": 0,
+    "properties_area_max": 123,
+    "properties_area_min": 25,
+    "properties_flats_area_max": 123,
+    "properties_houses_area_max": 0,
+    "properties_commercials_area_max": 115,
+    "properties_flats_area_min": 25,
+    "properties_houses_area_min": 0,
+    "properties_commercials_area_min": 71,
+    "properties_count_for_sale": 2557,
+    "properties_count_mdm": 0,
+    "response_grade": 1,
+    "regions": {
+      "cadiz": {
+        "offers": 0,
+        "properties": 0
+      },
+      "malaga": {
+        "offers": 0,
+        "properties": 0
+      },
+      "murcja": {
+        "offers": 0,
+        "properties": 0
+      },
+      "almeria": {
+        "offers": 0,
+        "properties": 0
+      },
+      "baleary": {
+        "offers": 0,
+        "properties": 0
+      },
+      "lodzkie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "slaskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "alicante": {
+        "offers": 0,
+        "properties": 0
+      },
+      "lubuskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "opolskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "valencia": {
+        "offers": 0,
+        "properties": 0
+      },
+      "castellon": {
+        "offers": 0,
+        "properties": 0
+      },
+      "katalonia": {
+        "offers": 0,
+        "properties": 0
+      },
+      "lubelskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "podlaskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "pomorskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "malopolskie": {
+        "offers": 12,
+        "properties": 600
+      },
+      "mazowieckie": {
+        "offers": 27,
+        "properties": 1457
+      },
+      "dolnoslaskie": {
+        "offers": 20,
+        "properties": 500
+      },
+      "podkarpackie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "wielkopolskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "swietokrzyskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "kujawsko-pomorskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "zachodniopomorskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "warminsko-mazurskie": {
+        "offers": 0,
+        "properties": 0
+      }
+    },
+    "is_indexing_allowed": true
+  },
+  "recommendation": {
+    "vendor": 955,
+    "stats": [
+      {
+        "id": 103,
+        "sort": 1,
+        "label": 1,
+        "value": 105000,
+        "recommendation": 955
+      },
+      {
+        "id": 104,
+        "sort": 1,
+        "label": 2,
+        "value": 53000,
+        "recommendation": 955
+      },
+      {
+        "id": 105,
+        "sort": 1,
+        "label": 5,
+        "value": 29,
+        "recommendation": 955
+      },
+      {
+        "id": 106,
+        "sort": 1,
+        "label": 6,
+        "value": 19,
+        "recommendation": 955
+      }
+    ],
+    "award_set": [
+      {
+        "id": 36,
+        "image_thumbnail": {
+          "m_img_200x200": "https://thumbs.rynekpierwotny.pl/a9ce3207:tzguNh_Z-UouPlJ_suKmh4jDv74/200x200/filters:noupscale():format(jpg)/recommendations/award/image/955/4b63d1.png",
+          "m_img_1280x1280": "https://thumbs.rynekpierwotny.pl/a9ce3207:NK-fs6AIrKcM5Qtys8X0cyk7W7I/1280x1280/filters:upscale():format(png)/recommendations/award/image/955/4b63d1.png"
+        },
+        "sort": 1,
+        "image": "https://media.propertygroup.pl/recommendations/award/image/955/4b63d1.png",
+        "image_height": 387,
+        "image_width": 285,
+        "description": "Najlepszy Projekt Mieszkaniowy 2012-2015",
+        "recommendation": 955
+      },
+      {
+        "id": 35,
+        "image_thumbnail": {
+          "m_img_200x200": "https://thumbs.rynekpierwotny.pl/a9ce3207:bRwrdDKZwjKqfdc1vQnz8CS3XYA/200x200/filters:noupscale():format(jpg)/recommendations/award/image/955/8c8f9d.png",
+          "m_img_1280x1280": "https://thumbs.rynekpierwotny.pl/a9ce3207:33Xw_NihVgKH9pAezDPs6MgAxDE/1280x1280/filters:upscale():format(png)/recommendations/award/image/955/8c8f9d.png"
+        },
+        "sort": 1,
+        "image": "https://media.propertygroup.pl/recommendations/award/image/955/8c8f9d.png",
+        "image_height": 229,
+        "image_width": 285,
+        "description": "Residential Developer of the Year 2015",
+        "recommendation": 955
+      },
+      {
+        "id": 34,
+        "image_thumbnail": {
+          "m_img_200x200": "https://thumbs.rynekpierwotny.pl/a9ce3207:S9E-Qzqbb-GcivNRaZ_Tgffz1Ec/200x200/filters:noupscale():format(jpg)/recommendations/award/image/955/54d7a6.jpg",
+          "m_img_1280x1280": "https://thumbs.rynekpierwotny.pl/a9ce3207:UgSx4s2WmazZwUcf5CBSXtx2zFM/1280x1280/filters:upscale():format(png)/recommendations/award/image/955/54d7a6.jpg"
+        },
+        "sort": 1,
+        "image": "https://media.propertygroup.pl/recommendations/award/image/955/54d7a6.jpg",
+        "image_height": 380,
+        "image_width": 285,
+        "description": "Eurobild 2010",
+        "recommendation": 955
+      }
+    ],
+    "date_range": {
+      "lower": "2016-12-05",
+      "upper": null,
+      "bounds": "[)"
+    },
+    "claim": "Wiodący deweloper na polskim rynku",
+    "pzfd_member": true,
+    "awards": null,
+    "description": ""
+  },
+  "application_form_note": "Administratorem danych jest Property Group sp. z o.o. i deweloper, którego dotyczy zapytanie, Dom Development S.A., a także agencja Media Choice obsługująca dewelopera.",
+  "promotions": [],
+  "name": "Dom Development S.A.",
+  "slug": "dom-development-sa",
+  "type": 1,
+  "on_the_market_since": "1996-10-25",
+  "description": "Jesteśmy wiodącym deweloperem na polskim rynku, o wieloletnim doświadczeniu  i ugruntowanej pozycji na rynku budownictwa mieszkaniowego – z sukcesami działamy od 1996 roku. W październiku 2006 roku dołączyliśmy do prestiżowego grona spółek giełdowych, co dodatkowo wzmocniło naszą wiarygodność oraz transparentność, zarówno wśród inwestorów, akcjonariuszy, jak i Klientów.\r\n\r\nDzięki naszemu wieloletniemu doświadczeniu – na polskim i międzynarodowym rynku potrafimy trafnie ocenić sytuację rynkową i przewidzieć jej konsekwencje oraz zabezpieczyć interesy naszych Klientów przed jej wpływami – jesteśmy firmą stabilną finansowo, co w tak szybko zmieniającej się rzeczywistości rynku nieruchomości gwarantuje pewność i bezpieczeństwo inwestycji.\r\n\r\nNaszą misją jest wspieranie Klientów w spełnianiu marzeń o własnym mieszkaniu, a Państwa zadowolenie, spełnienie i poczucie bezpieczeństwa to największa satysfakcja z naszej pracy. Do końca 2014 roku oddaliśmy do użytku blisko 21,5 tysiąca mieszkań, apartamentów i domów jednorodzinnych. To niemal 65 tysięcy zrealizowanych dążeń  o wyjątkowym, bo własnym miejscu na ziemi...\r\n\r\nZostaliśmy wyróżnieni wieloma prestiżowymi nagrodami przyznawanymi przez uznane środowiska branżowe. W 2012 roku uhonorowano nas tytułem Dewelopera Mieszkaniowego, a w 2010 roku nasza spółka zdobyła pierwsze miejsce w rankingu 50 największych europejskich deweloperów. Jesteśmy też laureatem licznych nagród, takich jak np. Perły Polskiej Gospodarki czy Diamenty Forbesa.\r\n\r\nNależymy także do Polskiego Związku Firm Deweloperskich – jesteśmy członkiem założycielem oraz współtwórcą Kodeksu Dobrych Praktyk PZFD. W uznaniu naszej znaczącej pozycji na rynku budownictwa mieszkaniowego, solidności i rzetelności oraz gwarancji bezpieczeństwa prawnego i finansowego naszych Klientów otrzymaliśmy Certyfikat Dewelopera. Jesteśmy dumni, że nasze kolejne realizacje zdobywają prestiżowe nagrody  i wyróżnienia. Najważniejsze dla nas jest jednak uznanie naszych Klientów. W trosce o wysoki standard obsługi i oferowanych produktów od ponad 9 lat regularnie przeprowadzamy badania satysfakcji Klientów. Pozwalają nam one na ciągłe usprawnianie procesów wewnątrz firmy \r\ni wdrażanie nowych, przyjaznych Klientom rozwiązań.\r\n\r\nWychodząc naprzeciw oczekiwaniom jak najszerszej rzeszy Klientów, oferujemy mieszkania  z różnych segmentów cenowych – od wysokiej jakości osiedli mieszkaniowych w przystępnych cenach, łączących komfort i jakość wykonania, po luksusowe apartamenty czy rezydencje o podwyższonym standardzie w najatrakcyjniejszych lokalizacjach.\r\n\r\nNasza działalność nie kończy się tylko na etapie realizacji inwestycji, wspieramy naszych Klientów także w finansowaniu zakupu mieszkań, dlatego stworzyliśmy własny Dział Doradztwa Kredytowego, który pomaga naszym Klientom przez dobór optymalnego produktu finansowego, minimalizując koszt uzyskania kredytu oraz skracając czas oczekiwania na jego przyznanie. Jako pierwsi na rynku wprowadziliśmy na szeroką skalę program wykończenia wnętrz we wszystkich naszych inwestycjach. Klienci mogą zwrócić się do Działu Aranżacji Wnętrz, który przygotuje indywidualny projekt mieszkania, co oznacza, że przejmiemy na siebie koordynację wykończenia mieszkania, a Klient wprowadzi się do już gotowego lokalu.",
+  "logo_height": 113,
+  "logo_width": 150,
+  "website": "http://www.domd.pl/pl-pl/warszawa",
+  "related_vendors_comment": "",
+  "business_type": null,
+  "nip": "8971821726",
+  "krs": null,
+  "street": null,
+  "zipcode": "00-078",
+  "city": null,
+  "stock": null,
+  "is_custom_rodo_terms_enabled": false,
+  "custom_rodo_terms": null,
+  "contract_information": null,
+  "trader_update_date": null,
+  "agency": 2
+}

@@ -1,0 +1,913 @@
+{
+  "address": "Kraków, Czyżyny, ul. Akacjowa",
+  "buildings": 2,
+  "commercial_rental": false,
+  "configuration": {
+    "type": "obj",
+    "value": {
+      "display_type": 1,
+      "hide_is_reserved": false,
+      "hide_properties_prices_for_anonymous_users": false,
+      "hide_publish_date": false,
+      "include_utm": true,
+      "is_autoresponder_enabled": false,
+      "is_boosted": false,
+      "limited_presentation": false,
+      "meta_robots": "index, follow",
+      "phone_clip": "48 122916352",
+      "pre_sale": false,
+      "price_visibility": 1,
+      "privacy_policy_url": "https://akacjowawita.pl/polityka-prywatnosci/",
+      "publish_date": "2024-09-30T10:36:00",
+      "redirect_type": 301,
+      "show_building_models_on_map": false,
+      "show_form_placeholder": false,
+      "show_generated_description": true,
+      "show_meta_fields": false,
+      "show_negotiate_price": true,
+      "show_offer_plans": false,
+      "show_price_m2_range": true,
+      "show_price_range": true,
+      "show_floors_navigator": false,
+      "show_2d_plans": false
+    }
+  },
+  "construction_date_range": {
+    "type": "obj",
+    "value": {
+      "lower": "2024-10-01",
+      "upper": "2026-09-30",
+      "bounds": "[]"
+    }
+  },
+  "create_date": "2024-09-30T10:36:14.237602",
+  "currency": 1,
+  "description": {
+    "type": "slate",
+    "root": {
+      "children": [
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Akacjowa Wita to nowoczesna inwestycja, która harmonijnie połączy komfort życia z wyjątkową lokalizacją. Bliskość al. Bora-Komorowskiego oraz doskonała komunikacja z kluczowymi punktami Krakowa zapewnią mieszkańcom dostęp do bogatej infrastruktury rekreacyjnej i edukacyjnej. Znajdujące się w okolicy centra handlowe, kino, obiekty sportowe oraz tereny zielone, takie jak Park Lotników Polskich, sprawią, że Akacjowa Wita stanie się idealnym miejscem zarówno dla miłośników aktywnego stylu życia, jak i rodzin z dziećmi."
+            }
+          ],
+          "id": "cl-0",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Architektura inwestycji wyróżni się minimalistyczną formą i eleganckim wykończeniem. Jasne elewacje, duże przeszklenia oraz kontrastowe, ciemne dodatki stworzą nowoczesną, a zarazem przytulną przestrzeń do życia. Wszystkie mieszkania wyposażone będą w przestronny balkon lub ogródek, umożliwiające zagospodarowanie prywatnej strefy relaksu."
+            }
+          ],
+          "id": "cl-1",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Akacjowa Wita zaoferuje szeroki wachlarz udogodnień, które spełnią oczekiwania najbardziej wymagających mieszkańców. Na parterach budynków powstaną lokale usługowe, ułatwiające codzienne funkcjonowanie. Dla najmłodszych przewidziano plac zabaw, pozwalający dzieciom na bezpieczną zabawę. Z kolei miłośnicy ekologicznych środków transportów docenią liczne stojaki na rowery oraz rowerownie."
+            }
+          ],
+          "id": "cl-2",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Lokalizacja Akacjowej Wita to również łatwy dostęp do szerokiej oferty kulturalno-rozrywkowej. W sąsiedztwie znajduje się Tauron Arena, gdzie odbywają się koncerty i wydarzenia sportowe, a także Centrum Nauki Cogiteon, które oferuje atrakcyjne formy spędzania czasu zarówno dla dzieci, jak i dorosłych. Ponadto, pobliskie popularne centra handlowe zapewnią łatwy dostęp do różnorodnych sklepów i usług bez konieczności długich dojazdów. Niedaleko mieści się również Park Wodny, idealny na rodzinny relaks i aktywne spędzenie czasu. Z kolei obecność szkół i przedszkoli w okolicy sprawia, że jest to doskonały wybór dla rodzin."
+            }
+          ],
+          "id": "cl-3",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Akacjowa Wita będzie miejscem, które zapewni nie tylko komfortowe mieszkania, ale także dostęp do licznych atrakcji. Wszystkie udogodnienia z pewnością podniosą jakość codziennego życia. To idealna propozycja dla osób ceniących sobie wygodę, nowoczesność oraz bliskość natury i miasta."
+            }
+          ],
+          "id": "cl-4",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        }
+      ]
+    }
+  },
+  "facilities": {
+    "type": "arr",
+    "value": [
+      19,
+      3,
+      22
+    ]
+  },
+  "floors_above_ground_range": {
+    "type": "obj",
+    "value": {
+      "lower": 5,
+      "upper": 5,
+      "bounds": "[]"
+    }
+  },
+  "floors_below_ground": 1,
+  "funds_protection": 5,
+  "geo_area": {
+    "type": "obj",
+    "value": {
+      "type": "Polygon",
+      "coordinates": {
+        "type": "arr",
+        "value": [
+          {
+            "type": "arr",
+            "value": [
+              {
+                "type": "arr",
+                "value": [
+                  19.979796558208903,
+                  50.085605162124025
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  19.979812651462993,
+                  50.08538831325204
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  19.981792121715984,
+                  50.08552255314563
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  19.981765299625835,
+                  50.08576693762766
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  19.979796558208903,
+                  50.085605162124025
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "geo_point": {
+    "type": "obj",
+    "value": {
+      "type": "Point",
+      "coordinates": {
+        "type": "arr",
+        "value": [
+          19.980811741192813,
+          50.085572167779894
+        ]
+      }
+    }
+  },
+  "has_active_promotions": true,
+  "has_distinction": false,
+  "id": 17812,
+  "is_active": true,
+  "is_condohotel": false,
+  "is_holiday_location": false,
+  "is_phone_clip_enabled": true,
+  "main_image": {
+    "type": "obj",
+    "value": {
+      "m_img_375x211": "https://thumbs.rynekpierwotny.pl/3e79b87d:L4N21wX_P-YlZ0k5xH6Atp27gHM/375x211/filters:upscale():format(jpg)/offers/offer/17812/gallery/image/akacjowa-wita-zdjecie-inwestycji_f330fa.jpg",
+      "m_img_440x248": "https://thumbs.rynekpierwotny.pl/3e79b87d:7pfEyhsg4YUVjDBEpmualfeLQR4/440x248/filters:upscale():format(jpg)/offers/offer/17812/gallery/image/akacjowa-wita-zdjecie-inwestycji_f330fa.jpg",
+      "m_img_440x440": "https://thumbs.rynekpierwotny.pl/3e79b87d:9APHrugh76VZFQPB2Ewktuh8k8A/440x440/filters:upscale():format(jpg)/offers/offer/17812/gallery/image/akacjowa-wita-zdjecie-inwestycji_f330fa.jpg",
+      "m_img_500": "https://thumbs.rynekpierwotny.pl/3e79b87d:lxpy52mcTeK1tquPlv2CikrBQps/500x0/filters:format(jpg)/offers/offer/17812/gallery/image/akacjowa-wita-zdjecie-inwestycji_f330fa.jpg",
+      "m_img_750": "https://thumbs.rynekpierwotny.pl/3e79b87d:BR2YahptCbf4HjeBT0SpEg_tsmk/750x0/filters:format(jpg)/offers/offer/17812/gallery/image/akacjowa-wita-zdjecie-inwestycji_f330fa.jpg",
+      "m_img_760x428": "https://thumbs.rynekpierwotny.pl/3e79b87d:QcNZFYu01OGQIYZoCq1GGM4g2w8/760x428/filters:upscale():format(jpg)/offers/offer/17812/gallery/image/akacjowa-wita-zdjecie-inwestycji_f330fa.jpg",
+      "m_img_983x552": "https://thumbs.rynekpierwotny.pl/3e79b87d:0BkBYl8lpQgr0jxcHYY-YDaqGrY/983x552/filters:upscale():format(jpg)/offers/offer/17812/gallery/image/akacjowa-wita-zdjecie-inwestycji_f330fa.jpg",
+      "m_img_1500": "https://thumbs.rynekpierwotny.pl/3e79b87d:U1xF9XJh3K98bmjjnqZEsYuiQBg/1500x0/filters:format(jpg)/offers/offer/17812/gallery/image/akacjowa-wita-zdjecie-inwestycji_f330fa.jpg"
+    }
+  },
+  "map_image": "https://media.propertygroup.pl/offers/offer/map_image/11e3c0.png",
+  "name": "Akacjowa Wita",
+  "parking_places": {
+    "type": "arr",
+    "value": [
+      {
+        "type": "obj",
+        "value": {
+          "id": 19135,
+          "type": 1
+        }
+      },
+      {
+        "type": "obj",
+        "value": {
+          "id": 19136,
+          "type": 2
+        }
+      }
+    ]
+  },
+  "payment_description": "Informacja u dewelopera",
+  "price_type": 2,
+  "properties": 100,
+  "properties_for_sale_count": 100,
+  "has_presentable_price": true,
+  "region": {
+    "type": "obj",
+    "value": {
+      "country": 1,
+      "full_name": "małopolskie, Kraków, Czyżyny",
+      "full_name_reverted": "Czyżyny, Kraków, małopolskie",
+      "id": 52138,
+      "included_location": {
+        "type": "obj",
+        "value": {
+          "description": "Czyżyny, czyli dzielnica XIV Krakowa leży w centralnej części miasta i zajmuje powierzchnię 1225,68 ha. Mieszka w niej 26 699 osób. Jest to jedna z bardziej zindustrializowanych części miasta. Znajduje się tu m.in. Elektrociepłownia Kraków i Krakowski Park Technologiczny. Początkowo krajobraz Czyżyn miał charakter stricte przemysłowy, jednak w latach 70-tych i 80-tych XXw. zaczęły powstawać także osiedla mieszkaniowe dla pracowników pobliskich zakładów. Z czasem zostały one odnowione, a zabudowa jest w ostatnich latach uzupełniana kolejnymi nieruchomościami pełniącymi funkcję mieszkalną. Zadbano również o rozbudowę infrastruktury społecznej w postaci m.in. przedszkoli i szkół. W dzielnicy znajduje się także krakowska Akademia Wychowania Fizycznego. Na Czyżynach bez problemu znajdziemy tereny zielone. Poza działkami, mamy tu Lasek Łęgowski i 60-hektarowy Park Lotników Polskich będący drugim, co do wielkości parkiem w mieście. W dzielnicy mieści się także Muzeum Lotnictwa Polskiego. Ze względu na swoje znaczenie przemysłowe, Czyżyny są dobrze skomunikowane z resztą miasta. Biegnie przez nie także droga krajowa i droga wojewódzka.",
+          "transport_intro": "Czyżyny mają bardzo dobre połączenie komunikacyjne z pozostałymi częściami Krakowa. Regularnie odbywają się tu kursy linii autobusowych i tramwajowych. Dodatkowo biegnie tędy droga wojewódzka nr. 776, a północną granicę dzielnicy stanowi droga krajowa nr. 79."
+        }
+      },
+      "is_duplicate": false,
+      "name": "Czyżyny",
+      "name_declension_what": "Czyżyn",
+      "name_declension_where": "na Czyżynach",
+      "parent": {
+        "type": "obj",
+        "value": {
+          "id": 11158,
+          "name": "Kraków",
+          "slug": "krakow",
+          "stats": {
+            "type": "obj",
+            "value": {
+              "properties_flats_count_for_sale": 8173,
+              "properties_houses_count_for_sale": 119
+            }
+          },
+          "type": 4
+        }
+      },
+      "short_name": "Kraków, Czyżyny",
+      "short_name_reverted": "Czyżyny, Kraków",
+      "slug": "krakow-czyzyny",
+      "stats": {
+        "type": "obj",
+        "value": {
+          "promotions_count_total": 3,
+          "properties_all_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "1": 88,
+              "2": 206,
+              "3": 166,
+              "4": 79,
+              "5": 11
+            }
+          },
+          "properties_commercials_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "1": 1
+            }
+          },
+          "properties_flats_count_for_sale": 557,
+          "properties_flats_count_luxury": 20,
+          "properties_flats_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "1": 88,
+              "2": 206,
+              "3": 166,
+              "4": 79,
+              "5": 11
+            }
+          },
+          "properties_houses_count_for_sale": 0,
+          "properties_houses_count_luxury": 0,
+          "properties_houses_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "5": 5
+            }
+          },
+          "region_type_city": {
+            "type": "obj",
+            "value": {
+              "id": 11158,
+              "slug": "krakow",
+              "name": "Kraków"
+            }
+          },
+          "region_type_district": {
+            "type": "obj",
+            "value": {
+              "id": 52138,
+              "slug": "krakow-czyzyny",
+              "name": "Czyżyny"
+            }
+          },
+          "region_type_voivodeship": {
+            "type": "obj",
+            "value": {
+              "id": 120,
+              "slug": "malopolskie",
+              "name": "małopolskie"
+            }
+          }
+        }
+      },
+      "type": 6
+    }
+  },
+  "reservation_description": "Informacja u dewelopera",
+  "sales_offices": {
+    "type": "arr",
+    "value": [
+      {
+        "type": "obj",
+        "value": {
+          "address": "ul. Zabłocie 23/18, 30-701 Kraków",
+          "id": 15585,
+          "mobile": "48 669751050",
+          "open_hours_1": {
+            "type": "obj",
+            "value": {
+              "lower": "10:00:00",
+              "upper": "18:00:00",
+              "bounds": "[)"
+            }
+          },
+          "open_hours_2": {
+            "type": "obj",
+            "value": {
+              "lower": "08:00:00",
+              "upper": "16:00:00",
+              "bounds": "[)"
+            }
+          },
+          "open_hours_3": {
+            "type": "obj",
+            "value": {
+              "lower": "08:00:00",
+              "upper": "16:00:00",
+              "bounds": "[)"
+            }
+          },
+          "open_hours_4": {
+            "type": "obj",
+            "value": {
+              "lower": "08:00:00",
+              "upper": "16:00:00",
+              "bounds": "[)"
+            }
+          },
+          "open_hours_5": {
+            "type": "obj",
+            "value": {
+              "lower": "08:00:00",
+              "upper": "16:00:00",
+              "bounds": "[)"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "slogan": "ŚWIĘTUJ Z NAMI 35. URODZINY!",
+  "slug": "akacjowa-wita-krakow-pradnik-czerwony",
+  "standard_description": {
+    "type": "obj",
+    "value": {
+      "uuid": "df56e643-3840-44e4-acbb-8f5347c432cb",
+      "types": {
+        "type": "arr",
+        "value": [
+          2
+        ]
+      },
+      "description": "Pakiety wykończeń:\nPakiet Classic – 950 zł/mkw\nPakiet Comfort – 1 150 zł/mkw\nPakiet Premium – 1 650 zł/mkw"
+    }
+  },
+  "stats": {
+    "type": "obj",
+    "value": {
+      "additional_areas": {
+        "type": "arr",
+        "value": [
+          "Ogródek",
+          "Balkon"
+        ]
+      },
+      "building_parameters_stats": {
+        "type": "obj",
+        "value": {
+          "properties_to_45m": {
+            "type": "obj",
+            "value": {
+              "left": 12,
+              "total": 26
+            }
+          },
+          "properties_45m_to_60m": {
+            "type": "obj",
+            "value": {
+              "left": 26,
+              "total": 29
+            }
+          },
+          "properties_over_60m": {
+            "type": "obj",
+            "value": {
+              "left": 30,
+              "total": 55
+            }
+          },
+          "properties_1room": {
+            "type": "obj",
+            "value": {
+              "left": 0,
+              "total": 7
+            }
+          },
+          "properties_2rooms": {
+            "type": "obj",
+            "value": {
+              "left": 26,
+              "total": 33
+            }
+          },
+          "properties_3rooms": {
+            "type": "obj",
+            "value": {
+              "left": 34,
+              "total": 44
+            }
+          },
+          "properties_4rooms": {
+            "type": "obj",
+            "value": {
+              "left": 8,
+              "total": 26
+            }
+          },
+          "properties_on_low_floor": {
+            "type": "obj",
+            "value": {
+              "left": 11,
+              "total": 14
+            }
+          },
+          "properties_on_middle_floors": {
+            "type": "obj",
+            "value": {
+              "left": 57,
+              "total": 96
+            }
+          },
+          "properties_with_balconies": {
+            "type": "obj",
+            "value": {
+              "left": 55,
+              "total": 86
+            }
+          }
+        }
+      },
+      "boosters_bigdata_stats": {
+        "type": "obj",
+        "value": {
+          "views_last_3_days": 0
+        }
+      },
+      "distance_from_region": {
+        "type": "obj",
+        "value": {
+          "center": true,
+          "coords": {
+            "type": "arr",
+            "value": [
+              19.944964449431154,
+              50.064610275974566
+            ]
+          },
+          "region": "Krakowa",
+          "distance": 3.5
+        }
+      },
+      "has_attic": false,
+      "has_entresol": false,
+      "last_update": "2026-02-10T10:30:09.315093",
+      "nearest_places": {
+        "type": "obj",
+        "value": {
+          "sport": {
+            "type": "obj",
+            "value": {
+              "count": 8,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Aquapark Kraków",
+                      "distance": 400
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "OJK Eden-PolSad ",
+                      "distance": 500
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Profesjonalne Studio Figury SLIMBODY",
+                      "distance": 650
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "services": {
+            "type": "obj",
+            "value": {
+              "count": 32,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "EURONET. BANKOMAT",
+                      "distance": 300
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "ECARD. BANKOMAT",
+                      "distance": 350
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "AP Kraków",
+                      "distance": 450
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "education": {
+            "type": "obj",
+            "value": {
+              "count": 24,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Liceum Ogólnokształcące Zakonu Pijarów im. ks. Stanisława Konarskiego",
+                      "distance": 200
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Prywatne Przedszkole Montessori \"Samodzielny Maluch\"",
+                      "distance": 550
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Szkoła Podstawowa nr 64",
+                      "distance": 600
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "transport": {
+            "type": "obj",
+            "value": {
+              "count": 35,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Bora-Komorowskiego",
+                      "distance": 150
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Akacjowa",
+                      "distance": 500
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Spadochroniarzy",
+                      "distance": 650
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "medical_care": {
+            "type": "obj",
+            "value": {
+              "count": 16,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "AKACJOWA S.C. APTEKA",
+                      "distance": 450
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "NOWA. APTEKA",
+                      "distance": 650
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "ANEMED SP. Z O.O. NZOZ",
+                      "distance": 650
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "entertainment": {
+            "type": "obj",
+            "value": {
+              "count": 5,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Multikino",
+                      "distance": 400
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "PARAFIA RZYMSKOKATOLICKA ŚW. JANA CHRZCICIELA",
+                      "distance": 600
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "PARAFIA RZYMSKOKATOLICKA ŚW. MAKSYMILIANA MARII KOLBEGO",
+                      "distance": 1400
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "ownership_forms": {
+        "type": "arr",
+        "value": [
+          "Odrębna własność z własnością gruntu"
+        ]
+      },
+      "properties_count_for_sale": 66,
+      "properties_count_mdm": 0,
+      "properties_with_roi_count": 0,
+      "ranges_area_max": 78,
+      "ranges_area_min": 42,
+      "ranges_garages_count": 0,
+      "ranges_height_max": 260,
+      "ranges_height_min": 260,
+      "ranges_plot_area_max": 0,
+      "ranges_plot_area_min": 0,
+      "ranges_price_m2_max": 17072,
+      "ranges_price_m2_min": 12744,
+      "ranges_price_max": 1036788,
+      "ranges_price_min": 655386,
+      "rating": 4.1,
+      "rooms": {
+        "type": "arr",
+        "value": [
+          2,
+          3,
+          4
+        ]
+      },
+      "rooms_ranges": {
+        "type": "obj",
+        "value": {
+          "2": {
+            "type": "obj",
+            "value": {
+              "area": {
+                "type": "obj",
+                "value": {
+                  "max": 47,
+                  "min": 42
+                }
+              },
+              "count": 26,
+              "price": {
+                "type": "obj",
+                "value": {
+                  "max": 783454,
+                  "min": 655386
+                }
+              }
+            }
+          },
+          "3": {
+            "type": "obj",
+            "value": {
+              "area": {
+                "type": "obj",
+                "value": {
+                  "max": 69,
+                  "min": 49
+                }
+              },
+              "count": 34,
+              "price": {
+                "type": "obj",
+                "value": {
+                  "max": 937714,
+                  "min": 732904
+                }
+              }
+            }
+          },
+          "4": {
+            "type": "obj",
+            "value": {
+              "area": {
+                "type": "obj",
+                "value": {
+                  "max": 78,
+                  "min": 75
+                }
+              },
+              "count": 6,
+              "price": {
+                "type": "obj",
+                "value": {
+                  "max": 1036788,
+                  "min": 954367
+                }
+              }
+            }
+          }
+        }
+      },
+      "votes_count": 2213
+    }
+  },
+  "status": {
+    "type": "obj",
+    "value": {
+      "offer_status": 1,
+      "substatus": 7,
+      "status": 2,
+      "status_date_range": {
+        "type": "obj",
+        "value": {
+          "lower": "2024-09-30",
+          "bounds": "[)"
+        }
+      }
+    }
+  },
+  "storage": {
+    "type": "obj",
+    "value": {}
+  },
+  "street_name": "ul. Akacjowa",
+  "tags": {
+    "type": "arr",
+    "value": [
+      {
+        "type": "obj",
+        "value": {
+          "id": 44,
+          "name": "Blisko terenów zielonych",
+          "description": "4 parki w okolicy"
+        }
+      }
+    ]
+  },
+  "type": 1,
+  "uuid": "624f0ec3-cc7f-4e2b-bfcc-c1d25b8a65da",
+  "vendor": {
+    "type": "obj",
+    "value": {
+      "awards_count": 0,
+      "id": 1084,
+      "configuration": {
+        "type": "obj",
+        "value": {
+          "force_show_price": false,
+          "price_visibility": 2
+        }
+      },
+      "name": "ATAL S.A.",
+      "slug": "atal-sa",
+      "type": 1,
+      "logo": {
+        "type": "obj",
+        "value": {
+          "v_log_42x32": "https://thumbs.rynekpierwotny.pl/5e89160c:scMbs6myIos_f2nq1TabLyWrHww/42x32/filters:no_upscale()/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_53x40": "https://thumbs.rynekpierwotny.pl/5e89160c:M6JGI8lvCVfUUPl2kQDYH7YSQkc/53x40/filters:no_upscale()/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:GaJ01Tm1a2QCVXciwRhPydsls7k/80x60/vendors/vendor/logo/atal-sa_70133c.png",
+          "m_img_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:HNE3jCS7cojmcgczMn7zFhrBQ-E/80x60/filters:upscale():format(jpg)/vendors/vendor/logo/atal-sa_70133c.png",
+          "m_img_80x60_png": "https://thumbs.rynekpierwotny.pl/5e89160c:HPnekqk77keoAYCvlNoOXhMFF90/80x60/filters:upscale():format(png)/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_84x64": "https://thumbs.rynekpierwotny.pl/5e89160c:BAGyEX7q-sYMXkacO_uUULfXvhM/84x64/filters:no_upscale()/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_106x80": "https://thumbs.rynekpierwotny.pl/5e89160c:bzL-Mr4R2RfKffnJ38czHeKLJw8/106x80/filters:no_upscale()/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_120x90": "https://thumbs.rynekpierwotny.pl/5e89160c:tEBLWtAYfsZcG_YQUbNYG838ePg/120x90/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_126x96": "https://thumbs.rynekpierwotny.pl/5e89160c:Y807dBL0AdqdKylbrTtXoYAjvDk/126x96/filters:no_upscale()/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_159x120": "https://thumbs.rynekpierwotny.pl/5e89160c:SgMiZS7ko45rLw2xWXcbVQcPW9Q/159x120/filters:no_upscale()/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_160x120": "https://thumbs.rynekpierwotny.pl/5e89160c:jPIAZ27kWZ9ThJv0P0katgza3CM/160x120/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_180": "https://thumbs.rynekpierwotny.pl/5e89160c:dv78XfLkJp8AMXrcbguDAgZaOAs/180x0/vendors/vendor/logo/atal-sa_70133c.png",
+          "v_log_100": "https://thumbs.rynekpierwotny.pl/5e89160c:L6_V0dg1L2zzTa7d94NZKMdg9eE/100x0/vendors/vendor/logo/atal-sa_70133c.png"
+        }
+      },
+      "offices": {
+        "type": "arr",
+        "value": [
+          {
+            "type": "obj",
+            "value": {
+              "address": "ul.Stawowa 27",
+              "phone": "48 338575901",
+              "type": 1,
+              "region": 16000
+            }
+          }
+        ]
+      },
+      "stats": {
+        "type": "obj",
+        "value": {
+          "offers_count_for_sale": 32,
+          "offers_count_sold": 183,
+          "properties_count_for_sale": 3939,
+          "response_grade": 2
+        }
+      }
+    }
+  },
+  "website": "https://akacjowawita.pl/",
+  "without_contribution": false
+}

@@ -1,0 +1,99 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "additionalType": "RealEstateListing",
+  "name": "ATAL Aura",
+  "url": "https://tabelaofert.pl/inwestycja/atal-aura-telefoniczna-21-lodz-srodmiescie-mieszkania-na-sprzedaz,i8975118",
+  "image": "https://content.tabelaofert.pl/thumb_200x200,1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-15.webp",
+  "brand": {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ATAL S.A.",
+    "logo": "https://content.tabelaofert.pl/1035-/logo-atal.webp"
+  },
+  "description": "ATAL Aura ➤ ATAL ✔️ Łódź, Śródmieście, ul. Telefoniczna 21 ✔️ Nowe mieszkania - Rynek pierwotny ⭐ Sprawdź!",
+  "additionalProperty": [
+    {
+      "@type": "PropertyValue",
+      "name": "Garaż",
+      "value": "parking naziemny, parking podziemny"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "Winda",
+      "value": "tak"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "Budynek",
+      "value": "rowerownia"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "Teren",
+      "value": "miejsca parkingowe"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "Termin oddania",
+      "value": "gotowe do odbioru"
+    }
+  ],
+  "offers": {
+    "@type": "AggregateOffer",
+    "lowPrice": 0,
+    "highPrice": 0,
+    "priceCurrency": "PLN",
+    "businessFunction": "http://purl.org/goodrelations/v1#Sell",
+    "offerCount": 0,
+    "offers": []
+  },
+  "to_id": "8975118",
+  "_extracted_location": {
+    "address": null,
+    "city": null,
+    "region": null,
+    "latitude": null,
+    "longitude": null
+  },
+  "_raw_gallery_urls": [
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-15.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-8.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-7.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-9.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-10.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-11.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-12.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-13.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-14.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-2.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-1.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-4.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-3.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-18.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-17.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-16.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-5.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-6.webp"
+  ],
+  "image_urls": [
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-15.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-8.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-7.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-9.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-10.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-11.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-12.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-13.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-14.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-2.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-1.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-4.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-3.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-18.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-17.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-16.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-5.webp",
+    "https://content.tabelaofert.pl/1035-/wizualizacja-atal-aura-atal-lodzkie-lodz-baluty-ul-telefoniczna-21-mieszkanie-2024-10-10-6.webp"
+  ]
+}

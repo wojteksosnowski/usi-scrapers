@@ -379,6 +379,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         "url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
+        "oto_url_id": oto_portal_id,
         "title": resolve_path(ad_data, oto_mapping.get("name")) or ad_data.get("title"),
         "agency_name": resolve_path(ad_data, oto_mapping.get("developer_name")) or agency_name,
         "agency_id": agency_id,

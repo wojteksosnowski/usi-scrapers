@@ -1,0 +1,865 @@
+{
+  "lang": "pl",
+  "_sentryTraceData": "d594a6b704014741bac0e32a5326b7e3-89e0fd1000875600-0",
+  "_sentryBaggage": "sentry-environment=otodompl-prd,sentry-release=frontend-platform%40v20241031T135307-otodompl,sentry-public_key=6c4675ab868d06ef702e62aaf3fd60fd,sentry-trace_id=d594a6b704014741bac0e32a5326b7e3,sentry-transaction=%2Fpl%2Finwestycja%2F%5Bid%5D,sentry-sampled=false",
+  "id": "4pImz",
+  "ad": {
+    "id": 65234079,
+    "price": {
+      "type": "",
+      "__typename": "AdvertPrice"
+    },
+    "market": "",
+    "services": [],
+    "publicId": "",
+    "slug": "nowa-polnica-ID4pImz",
+    "advertiserType": "business",
+    "advertType": "DEVELOPER",
+    "source": "urn:site:local",
+    "createdAt": "2024-03-19T09:46:56+01:00",
+    "modifiedAt": "2024-10-15T11:35:21+02:00",
+    "description": "<p><strong>Nowa Pólnica</strong> to wyjątkowa propozycja mieszkań i apartamentów w kameralnym budynku wielorodzinnym realizowanym przez trójmiejskiego dewelopera <strong>3City Invest</strong>. </p>\n<p><strong>Nowa Pólnica </strong>oferuje przyszłym mieszkańcom komfort, nowoczesność i dogodną lokalizację. Jest to idealne miejsce dla singli, rodzin oraz osób starszych dzięki bliskości terenów rekreacyjnych oraz doskonałej infrastrukturze komunikacyjnej. Nowa Pólnica realizowana jest w sercu <strong>Jasienia</strong>, przy ulicy Pólnicy w Gdańsku. </p>\n<p>Nowa Pólnica to dwadzieścia jeden mieszkań o zróżnicowanej powierzchni <strong>od 35 do 110 m²</strong>. Mieszkania parterowe zostały wzbogacone o przynależne ogródki, a mieszkania i apartamenty znajdujące się na wyższych kondygnacjach mają dostęp do balkonów oraz tarasów. Budynek wyposażony jest w podziemną halę garażową, komórki lokatorskie i windę. Obiekt składa się łącznie z sześciu kondygnacji. </p>\n<p>Odbiory mieszkań zostały zaplanowane na <strong>IV kwartał 2025 roku</strong>!</p>\n<p>Więcej informacji dotyczących tej inwestycji mieszkaniowej dostępne na stronie www 3cityinvest pl</p>",
+    "developmentId": 0,
+    "developmentTitle": "",
+    "developmentUrl": "",
+    "exclusiveOffer": false,
+    "externalId": "",
+    "features": [
+      "Balkon",
+      "Piwnica",
+      "Komórki lokatorskie",
+      "Taras",
+      "Miejsce parkingowe podziemne",
+      "Przyjazny dla osób niepełnosprawnych",
+      "Windy"
+    ],
+    "creationSource": "none",
+    "featuresByCategory": [
+      {
+        "label": "Przestrzeń dodatkowa",
+        "values": [
+          "Balkon",
+          "Piwnica",
+          "Komórki lokatorskie",
+          "Taras",
+          "Miejsce parkingowe podziemne"
+        ],
+        "__typename": "FeatureGroup"
+      },
+      {
+        "label": "Udogodnienia",
+        "values": [
+          "Przyjazny dla osób niepełnosprawnych",
+          "Windy"
+        ],
+        "__typename": "FeatureGroup"
+      }
+    ],
+    "featuresWithoutCategory": [],
+    "openDay": null,
+    "referenceId": "",
+    "target": {
+      "Area_from": "36.03",
+      "Area_to": "105.31",
+      "Ceiling_height_from": "255",
+      "Ceiling_height_to": "400",
+      "City": "gdansk",
+      "City_id": "40",
+      "Country": "Polska",
+      "Extra_spaces": [
+        "balcony",
+        "basement",
+        "storage_room",
+        "terrace",
+        "underground_parking_space"
+      ],
+      "Floors_num": "6",
+      "Id": "65234079",
+      "MarketType": "primary",
+      "Number_of_properties": "21",
+      "ObidoAdvert": "n",
+      "Offered_estates_type": [
+        "flats"
+      ],
+      "Photo": "aHR0cHM6Ly9pcmVsYW5kLmFwb2xsby5vbHhjZG4uY29tL3YxL2ZpbGVzL2V5Sm1iaUk2SW1zM2JXZ3dNRFp0ZFc1MmJqRXRRVkJNSWl3aWR5STZXM3NpWm00aU9pSmxiblptY1hGbE1XRjVOR3N4TFVGUVRDSXNJbk1pT2lJeE5DSXNJbkFpT2lJeE1Dd3RNVEFpTENKaElqb2lNQ0o5WFgwLkd3MlpIRkd5X3hnbmwtZ0ZJZERoNHZZRGFaQzRrRGJ0NnBKRUVFYlRFNzAvaW1hZ2U7cz02NTV4NDkxO3E9ODA=",
+      "Price_per_m_from": "10800",
+      "Project_amenities": [
+        "disabled_friendly",
+        "elevators"
+      ],
+      "ProperType": "inwestycje",
+      "Province": "pomorskie",
+      "RegularUser": "n",
+      "State": [
+        "in_building"
+      ],
+      "Subregion": "powiat-gdansk",
+      "Title": "Tm93YSBQw7NsbmljYQ==",
+      "categoryId": "11",
+      "env": "production",
+      "hidePrice": "0",
+      "seller_id": "9519337",
+      "user_type": "developer"
+    },
+    "title": "Nowa Pólnica",
+    "topInformation": [
+      {
+        "label": "offered_estates_types_project",
+        "values": [
+          "offered_estates_types_project::flats"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "project_finish_date",
+        "values": [
+          "2025-11-30"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "number_of_adverts",
+        "values": [
+          "11"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "number_of_units_in_project",
+        "values": [
+          "21"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      }
+    ],
+    "additionalInformation": [
+      {
+        "label": "advertiser_type",
+        "values": [
+          "advertiser_type::developer"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "project_begin_date",
+        "values": [
+          "2023-10-01"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "number_of_floors_project",
+        "values": [
+          "6"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "state",
+        "values": [
+          "state::in_building"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "area_range",
+        "values": [
+          "36.03",
+          "105.31"
+        ],
+        "unit": "m²",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "ceiling_height_range",
+        "values": [
+          "255",
+          "400"
+        ],
+        "unit": "cm",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "security",
+        "values": [],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "project_amenities",
+        "values": [
+          "project_amenities::disabled_friendly",
+          "project_amenities::elevators"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "extra_spaces",
+        "values": [
+          "extra_spaces::balcony",
+          "extra_spaces::basement",
+          "extra_spaces::storage_room",
+          "extra_spaces::terrace",
+          "extra_spaces::underground_parking_space"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      }
+    ],
+    "url": "https://www.otodom.pl/pl/oferta/nowa-polnica-ID4pImz",
+    "status": "active",
+    "adCategory": {
+      "id": "11",
+      "name": "FLAT",
+      "type": "INVESTMENT",
+      "__typename": "AdvertCategory"
+    },
+    "category": {
+      "id": 11,
+      "name": [
+        {
+          "locale": "pl",
+          "value": "Inwestycje",
+          "__typename": "LocalizedString"
+        },
+        {
+          "locale": "uk",
+          "value": "Новостройки",
+          "__typename": "LocalizedString"
+        }
+      ],
+      "__typename": "AdCategory"
+    },
+    "characteristics": [
+      {
+        "key": "area_from",
+        "value": "36.03",
+        "label": "Metraż od",
+        "localizedValue": "36,03 m²",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "area_to",
+        "value": "105.31",
+        "label": "Metraż do",
+        "localizedValue": "105,31 m²",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "price_per_m_from",
+        "value": "10800",
+        "label": "Cena za m² od",
+        "localizedValue": "10 800 zł/m²",
+        "currency": "PLN",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "floors_num",
+        "value": "6",
+        "label": "Liczba kondygnacji",
+        "localizedValue": "6",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "ceiling_height_to",
+        "value": "400",
+        "label": "Wysokość sufitu do (cm)",
+        "localizedValue": "400",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "ceiling_height_from",
+        "value": "255",
+        "label": "Wysokość sufitu od (cm)",
+        "localizedValue": "255",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "number_of_properties",
+        "value": "21",
+        "label": "Łączna liczba nieruchomości w inwestycji",
+        "localizedValue": "21",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "begin_date",
+        "value": "2023-10-01",
+        "label": "Data rozpoczęcia",
+        "localizedValue": "2023-10-01",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "finish_date",
+        "value": "2025-11-30",
+        "label": "Data planowanego zakończenia",
+        "localizedValue": "2025-11-30",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "state",
+        "value": "in_building",
+        "label": "Stan inwestycji",
+        "localizedValue": "w budowie",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "offered_estates_type",
+        "value": "flats",
+        "label": "Typ oferowanych nieruchomości",
+        "localizedValue": "mieszkania",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      }
+    ],
+    "images": [
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ims3bWgwMDZtdW52bjEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Gw2ZHFGy_xgnl-gFIdDh4vYDaZC4kDbt6pJEEEbTE70/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ims3bWgwMDZtdW52bjEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Gw2ZHFGy_xgnl-gFIdDh4vYDaZC4kDbt6pJEEEbTE70/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ims3bWgwMDZtdW52bjEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Gw2ZHFGy_xgnl-gFIdDh4vYDaZC4kDbt6pJEEEbTE70/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ims3bWgwMDZtdW52bjEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Gw2ZHFGy_xgnl-gFIdDh4vYDaZC4kDbt6pJEEEbTE70/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjFvYm45amFwZTcyMDEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.2zI6yuUAIRmc6zmCXrCroFhIM6Fz9bMuy8PBaRK-_Jo/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjFvYm45amFwZTcyMDEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.2zI6yuUAIRmc6zmCXrCroFhIM6Fz9bMuy8PBaRK-_Jo/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjFvYm45amFwZTcyMDEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.2zI6yuUAIRmc6zmCXrCroFhIM6Fz9bMuy8PBaRK-_Jo/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjFvYm45amFwZTcyMDEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.2zI6yuUAIRmc6zmCXrCroFhIM6Fz9bMuy8PBaRK-_Jo/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhqY3g4Y3NweTV1NDItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.0NsRIJnL8sfNym69TzockCmikjfbVD3jD0d9vWFnuMU/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhqY3g4Y3NweTV1NDItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.0NsRIJnL8sfNym69TzockCmikjfbVD3jD0d9vWFnuMU/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhqY3g4Y3NweTV1NDItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.0NsRIJnL8sfNym69TzockCmikjfbVD3jD0d9vWFnuMU/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhqY3g4Y3NweTV1NDItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.0NsRIJnL8sfNym69TzockCmikjfbVD3jD0d9vWFnuMU/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjM2c3VsdHBwejQ4YjEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.n9GpJAnS_whH1seQSu7HOgxyKVCx7wdym5u_x8b7rI8/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjM2c3VsdHBwejQ4YjEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.n9GpJAnS_whH1seQSu7HOgxyKVCx7wdym5u_x8b7rI8/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjM2c3VsdHBwejQ4YjEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.n9GpJAnS_whH1seQSu7HOgxyKVCx7wdym5u_x8b7rI8/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjM2c3VsdHBwejQ4YjEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.n9GpJAnS_whH1seQSu7HOgxyKVCx7wdym5u_x8b7rI8/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjVqYmZuODh3ODgybi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.O2UddwCfK3WuS79Y75KbisFvStmfBUL0D6K5kC-HCyI/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjVqYmZuODh3ODgybi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.O2UddwCfK3WuS79Y75KbisFvStmfBUL0D6K5kC-HCyI/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjVqYmZuODh3ODgybi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.O2UddwCfK3WuS79Y75KbisFvStmfBUL0D6K5kC-HCyI/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjVqYmZuODh3ODgybi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.O2UddwCfK3WuS79Y75KbisFvStmfBUL0D6K5kC-HCyI/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InY2emlrNXl2bG5uajEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Rm5p9dcBYY_IDLzo7mhOZM5ZCIHUzh-ETNi0ZaVos6E/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InY2emlrNXl2bG5uajEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Rm5p9dcBYY_IDLzo7mhOZM5ZCIHUzh-ETNi0ZaVos6E/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InY2emlrNXl2bG5uajEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Rm5p9dcBYY_IDLzo7mhOZM5ZCIHUzh-ETNi0ZaVos6E/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InY2emlrNXl2bG5uajEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Rm5p9dcBYY_IDLzo7mhOZM5ZCIHUzh-ETNi0ZaVos6E/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImdsMGJrem5qMGlmZy1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.vNBgE_aYzmxjoBYW2eVPozMHj05nYUb6ZLRAhUyZ-C8/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImdsMGJrem5qMGlmZy1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.vNBgE_aYzmxjoBYW2eVPozMHj05nYUb6ZLRAhUyZ-C8/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImdsMGJrem5qMGlmZy1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.vNBgE_aYzmxjoBYW2eVPozMHj05nYUb6ZLRAhUyZ-C8/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImdsMGJrem5qMGlmZy1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.vNBgE_aYzmxjoBYW2eVPozMHj05nYUb6ZLRAhUyZ-C8/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImoyYjF2NDI3dXV0czEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ej-WVzMDRV_ZTeY4dlIAhiYfbXsDAFYdwvj0MeqO9OA/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImoyYjF2NDI3dXV0czEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ej-WVzMDRV_ZTeY4dlIAhiYfbXsDAFYdwvj0MeqO9OA/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImoyYjF2NDI3dXV0czEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ej-WVzMDRV_ZTeY4dlIAhiYfbXsDAFYdwvj0MeqO9OA/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImoyYjF2NDI3dXV0czEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ej-WVzMDRV_ZTeY4dlIAhiYfbXsDAFYdwvj0MeqO9OA/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImN4djd2cmQ0eXpseTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.jOt7PdiiDRBtZ0_EA9flck_bPOHDY1Vzkod3GCy65eA/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImN4djd2cmQ0eXpseTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.jOt7PdiiDRBtZ0_EA9flck_bPOHDY1Vzkod3GCy65eA/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImN4djd2cmQ0eXpseTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.jOt7PdiiDRBtZ0_EA9flck_bPOHDY1Vzkod3GCy65eA/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImN4djd2cmQ0eXpseTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.jOt7PdiiDRBtZ0_EA9flck_bPOHDY1Vzkod3GCy65eA/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjF1cGo2anR4emZtYzEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.5hoLqbQX4L4v0PKTqCAFQN908WhBLBI_xdvMKLljmz0/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjF1cGo2anR4emZtYzEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.5hoLqbQX4L4v0PKTqCAFQN908WhBLBI_xdvMKLljmz0/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjF1cGo2anR4emZtYzEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.5hoLqbQX4L4v0PKTqCAFQN908WhBLBI_xdvMKLljmz0/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjF1cGo2anR4emZtYzEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.5hoLqbQX4L4v0PKTqCAFQN908WhBLBI_xdvMKLljmz0/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjgyNDMwYjY1d214Yi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.CgsEBXPZnSU-czEHXwuQJqNP8kbfknJpofF3ipeqWHU/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjgyNDMwYjY1d214Yi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.CgsEBXPZnSU-czEHXwuQJqNP8kbfknJpofF3ipeqWHU/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjgyNDMwYjY1d214Yi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.CgsEBXPZnSU-czEHXwuQJqNP8kbfknJpofF3ipeqWHU/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjgyNDMwYjY1d214Yi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.CgsEBXPZnSU-czEHXwuQJqNP8kbfknJpofF3ipeqWHU/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImlvNHV3NnhibTR5MTItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.rqEZY82waixtfsAyUnItF5u_NfDfRWG_QX6pjIV0_ig/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImlvNHV3NnhibTR5MTItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.rqEZY82waixtfsAyUnItF5u_NfDfRWG_QX6pjIV0_ig/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImlvNHV3NnhibTR5MTItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.rqEZY82waixtfsAyUnItF5u_NfDfRWG_QX6pjIV0_ig/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImlvNHV3NnhibTR5MTItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.rqEZY82waixtfsAyUnItF5u_NfDfRWG_QX6pjIV0_ig/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Imh3NjZlZ2N1ajlrMDItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.38AaOqa-7uyBfZKK7WGgj6G80UszezjRDzxbytDltfw/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Imh3NjZlZ2N1ajlrMDItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.38AaOqa-7uyBfZKK7WGgj6G80UszezjRDzxbytDltfw/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Imh3NjZlZ2N1ajlrMDItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.38AaOqa-7uyBfZKK7WGgj6G80UszezjRDzxbytDltfw/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Imh3NjZlZ2N1ajlrMDItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.38AaOqa-7uyBfZKK7WGgj6G80UszezjRDzxbytDltfw/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      }
+    ],
+    "links": {
+      "localPlanUrl": "",
+      "videoUrl": "https://www.youtube.com/embed/PNb4LsVGTTs",
+      "view3dUrl": "",
+      "walkaroundUrl": "",
+      "__typename": "AdvertLinks"
+    },
+    "location": {
+      "id": null,
+      "coordinates": {
+        "latitude": 54.340973,
+        "longitude": 18.562529,
+        "__typename": "Coordinates"
+      },
+      "mapDetails": {
+        "radius": 0,
+        "zoom": 14,
+        "__typename": "MapDetails"
+      },
+      "address": {
+        "street": {
+          "id": "82688",
+          "code": "",
+          "name": "ul. Pólnicy",
+          "number": "",
+          "__typename": "Street"
+        },
+        "subdistrict": null,
+        "district": {
+          "id": "1195",
+          "code": "jasien",
+          "name": "Jasień",
+          "__typename": "District"
+        },
+        "city": {
+          "id": "40",
+          "code": "gdansk",
+          "name": "Gdańsk",
+          "__typename": "City"
+        },
+        "municipality": null,
+        "county": {
+          "id": "439",
+          "code": "powiat-gdansk",
+          "name": "Gdańsk",
+          "__typename": "County"
+        },
+        "province": {
+          "id": "11",
+          "code": "pomorskie",
+          "name": "pomorskie",
+          "__typename": "Province"
+        },
+        "postalCode": null,
+        "__typename": "Address"
+      },
+      "reverseGeocoding": {
+        "locations": [
+          {
+            "id": "pomorskie",
+            "locationLevel": "voivodeship",
+            "name": "pomorskie",
+            "fullName": "pomorskie",
+            "fullNameItems": [
+              "pomorskie"
+            ],
+            "parentIds": [],
+            "__typename": "BasicLocationObject"
+          },
+          {
+            "id": "pomorskie/gdansk/gdansk/gdansk",
+            "locationLevel": "city_or_village",
+            "name": "Gdańsk",
+            "fullName": "Gdańsk, pomorskie",
+            "fullNameItems": [
+              "Gdańsk",
+              "pomorskie"
+            ],
+            "parentIds": [
+              "pomorskie",
+              "pomorskie/gdansk",
+              "pomorskie/gdansk/gdansk"
+            ],
+            "__typename": "BasicLocationObject"
+          },
+          {
+            "id": "pomorskie/gdansk/gdansk/gdansk/jasien",
+            "locationLevel": "district",
+            "name": "Jasień",
+            "fullName": "Jasień, Gdańsk, pomorskie",
+            "fullNameItems": [
+              "Jasień",
+              "Gdańsk",
+              "pomorskie"
+            ],
+            "parentIds": [
+              "pomorskie",
+              "pomorskie/gdansk",
+              "pomorskie/gdansk/gdansk",
+              "pomorskie/gdansk/gdansk/gdansk"
+            ],
+            "__typename": "BasicLocationObject"
+          }
+        ],
+        "__typename": "ReverseGeocoding"
+      },
+      "__typename": "LocationDetails"
+    },
+    "property": null,
+    "owner": {
+      "id": 9519337,
+      "name": "Biuro Sprzedaży",
+      "type": "developer",
+      "phones": [
+        "+48790307193"
+      ],
+      "imageUrl": "https://statics.otodom.pl/static/otodompl/naspersclassifieds-regional/verticalsre-atlas-web-otodompl/static/img/user_placeholder.png",
+      "contacts": [
+        {
+          "name": "Biuro Sprzedaży",
+          "phone": "+48790307193",
+          "imageURLSmall": "https://statics.otodom.pl/static/otodompl/naspersclassifieds-regional/verticalsre-atlas-web-otodompl/static/img/user_placeholder.png",
+          "__typename": "Agent"
+        }
+      ],
+      "__typename": "LegacyAdvertOwner"
+    },
+    "agency": {
+      "id": 9519337,
+      "name": "3CityInvest",
+      "licenseNumber": "",
+      "type": "developer",
+      "phones": [
+        "+48790307193"
+      ],
+      "address": "Stefana Batorego 23/3, 81-365, Gdynia, pomorskie",
+      "imageUrl": "",
+      "url": "https://www.otodom.pl/pl/firmy/deweloperzy/3cityinvest-ID9519337",
+      "leaderYear": "",
+      "brandingVisible": true,
+      "enabledFeatures": [
+        "AD_HOMEPAGE_1_SCHEDULE",
+        "AD_STATISTICS",
+        "ADDITIONAL_CONTACT_FORMS_AD_PAGE",
+        "ADVANCED_PICTURE_GALLERY_AD_PAGE",
+        "BANNER_DISCOUNT",
+        "CRM_INTEGRATION",
+        "DEDICATED_CS",
+        "EXPORT_OLX",
+        "FEATURED_DEVELOPMENT_1",
+        "IMPROVED_DEVELOPERS_PAGE",
+        "IMPROVED_INVESTMENT_PAGE",
+        "LOGO_AD_PAGE",
+        "MEGABUMP",
+        "OLX_BUNDLE_BASIC",
+        "OLX_BUNDLE_NORMAL",
+        "OLX_BUNDLE_PREMIUM",
+        "OLX_PUSHUP",
+        "OLX_TOPADS_30",
+        "OLX_TOPADS_7",
+        "OPEN_DAY_SCHEDULER",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT",
+        "PAID_FOR_POST_30_DEVELOPER_UNIT",
+        "PREDEFINED_MESSAGES_CONTACT_FORM",
+        "PROMOTION_PLANNER",
+        "PROMOTION_RECOMMENDER",
+        "PUSHUP",
+        "SPECIAL_OFFER",
+        "STOCK_AND_PRICING_OPTIMISATION",
+        "SUGGEST_PRICE_FORM",
+        "TOPADS_1",
+        "VAS_PLANNER_WITH_AUTOMATIC_SCHEDULING",
+        "WEBINARS_AND_TRAININGS_ACCESS"
+      ],
+      "__typename": "AdvertAgency"
+    },
+    "seo": {
+      "title": "Nowa Pólnica, mieszkania from 3CityInvest - Gdańsk, Jasień - 65234079 • www.otodom.pl",
+      "description": "Ad11Description. Otodom 65234079",
+      "__typename": "AdvertSeo"
+    },
+    "breadcrumbs": [
+      {
+        "label": "Inwestycja deweloperska",
+        "locative": "",
+        "url": "https://www.otodom.pl/pl/oferty/sprzedaz/inwestycja",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "pomorskie",
+        "locative": "pomorskie",
+        "url": "https://www.otodom.pl/pl/oferty/sprzedaz/inwestycja/pomorskie",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "Gdańsk",
+        "locative": "Gdańsk",
+        "url": "https://www.otodom.pl/pl/oferty/sprzedaz/inwestycja/gdansk",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "Jasień",
+        "locative": "Jasień",
+        "url": "https://www.otodom.pl/pl/oferty/sprzedaz/inwestycja/gdansk/jasien",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "ul. Pólnicy",
+        "locative": "ul. Pólnicy",
+        "url": "https://www.otodom.pl/pl/oferty/sprzedaz/inwestycja/gdansk?locations%5B0%5D%5BstreetId%5D=82688&locations%5B0%5D%5BcityId%5D=40&locations=%5Bstreets-82688%5D",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "Nowa Pólnica",
+        "locative": "",
+        "url": "",
+        "__typename": "AdvertBreadcrumb"
+      }
+    ],
+    "userAdverts": [
+      {
+        "adId": "64926789",
+        "url": "https://www.otodom.pl/pl/oferta/sosnova-dom-d1-kompaktowe-domy-z-ogrodkiem-ID4oqqh",
+        "image": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjNwb3M2ZGw3dnc2bTItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.2l_JYYEapn0k9ycL7Oaw7YSAMMC8s_voE27DfqvNluo/image;s=314x236;q=80",
+        "roomsNum": "4",
+        "pricePerM": 11339,
+        "price": {
+          "value": "995000",
+          "unit": "PLN",
+          "__typename": "UserAdvertPrice"
+        },
+        "netArea": "87.75",
+        "title": "Sosnova - dom D1 - kompaktowe domy z ogródkiem",
+        "__typename": "UserAdvert"
+      },
+      {
+        "adId": "65234502",
+        "url": "https://www.otodom.pl/pl/oferta/nowe-mieszkania-gdansk-jasien-nowa-polnica-m09-ID4pIto",
+        "image": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Imx2bW83amsxeGhqZDMtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.kIPH3VUjSIBkEaISngLvZOBiFi_LmKSTQlexd8nYhBM/image;s=314x236;q=80",
+        "roomsNum": "3",
+        "pricePerM": 12695,
+        "price": {
+          "value": "602000",
+          "unit": "PLN",
+          "__typename": "UserAdvertPrice"
+        },
+        "netArea": "47.42",
+        "title": "Nowe Mieszkania Gdańsk Jasień - Nowa Pólnica M09",
+        "__typename": "UserAdvert"
+      },
+      {
+        "adId": "64926785",
+        "url": "https://www.otodom.pl/pl/oferta/sosnova-dom-c2-kompaktowe-domy-z-ogrodkiem-ID4oqqd",
+        "image": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InBraDI2eDI4MDF0NjEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.RfgT4ThaS6wt2yfl3D0y9w5X1DVxI5OCnA-44F9ZjyU/image;s=314x236;q=80",
+        "roomsNum": "5",
+        "pricePerM": 9833,
+        "price": {
+          "value": "869000",
+          "unit": "PLN",
+          "__typename": "UserAdvertPrice"
+        },
+        "netArea": "88.38",
+        "title": "Sosnova - dom C2 - kompaktowe domy z ogródkiem",
+        "__typename": "UserAdvert"
+      },
+      {
+        "adId": "64926797",
+        "url": "https://www.otodom.pl/pl/oferta/sosnova-dom-d2-kompaktowe-domy-z-ogrodkiem-ID4oqqp",
+        "image": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InY1M2xxbThnbWR1dzEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.cqeLBjFYc_ZuK511LZULhTX0qN-ZuUYosweZumcXNj8/image;s=314x236;q=80",
+        "roomsNum": "4",
+        "pricePerM": 10974,
+        "price": {
+          "value": "963000",
+          "unit": "PLN",
+          "__typename": "UserAdvertPrice"
+        },
+        "netArea": "87.75",
+        "title": "Sosnova - dom D2 - kompaktowe domy z ogródkiem",
+        "__typename": "UserAdvert"
+      }
+    ],
+    "specialOffer": null,
+    "__typename": "Advert",
+    "contactDetails": {
+      "name": "Biuro Sprzedaży",
+      "type": "developer",
+      "phones": [
+        "+48790307193"
+      ],
+      "imageUrl": "https://statics.otodom.pl/static/otodompl/naspersclassifieds-regional/verticalsre-atlas-web-otodompl/static/img/user_placeholder.png"
+    },
+    "videoThumbnailUrl": "https://img.youtube.com/vi/PNb4LsVGTTs/"
+  },
+  "relativeUrl": "/pl/inwestycja/nowa-polnica-ID4pImz",
+  "adTrackingData": {
+    "touch_point_page": "project_page",
+    "lat": 54.340973,
+    "long": 18.562529,
+    "ad_photo": 13,
+    "price_currency": null,
+    "cat_l1_id": 11,
+    "cat_l1_name": "Inwestycje",
+    "special_offer_type": null,
+    "ad_id": "65234079",
+    "ad_price": null,
+    "business": null,
+    "city_id": "40",
+    "city_name": "gdansk",
+    "market": "primary",
+    "poster_type": "developer",
+    "surface": null,
+    "region_id": "pomorskie",
+    "region_name": "pomorskie",
+    "subregion_id": "powiat-gdansk",
+    "seller_id": "9519337",
+    "obido_advert": "n",
+    "nb_ads": 11,
+    "open_day": false,
+    "finish_date": "2025-4",
+    "project_status": "in_building",
+    "selected_location_id": []
+  },
+  "referer": null,
+  "currentUser": null,
+  "cookiesCategorisation": {
+    "eupubconsent-v2": [
+      "C0001"
+    ],
+    "OptanonAlertBoxClosed": [
+      "C0001"
+    ],
+    "OptanonConsent": [
+      "C0001"
+    ],
+    "OTAdditionalConsentString": [
+      "C0001"
+    ],
+    "access_token": [
+      "C0001"
+    ],
+    "id_token": [
+      "C0001"
+    ],
+    "refresh_token": [
+      "C0001"
+    ],
+    "microservice_token": [
+      "C0001"
+    ],
+    "lastoAuthState": [
+      "C0001"
+    ],
+    "PHPSESSID": [
+      "C0001"
+    ],
+    "laquesis": [
+      "C0002"
+    ],
+    "laquesisff": [
+      "C0002"
+    ],
+    "laquesisqa": [
+      "C0002"
+    ],
+    "laquesissu": [
+      "C0002"
+    ],
+    "lqonap": [
+      "C0002"
+    ],
+    "lqstatus": [
+      "C0002"
+    ],
+    "onap": [
+      "C0002"
+    ],
+    "onap_dev": [
+      "C0002"
+    ],
+    "lang": [
+      "C0003"
+    ],
+    "dfp_user_id": [
+      "C0004"
+    ],
+    "hciam_in_use": [
+      "C0001"
+    ]
+  },
+  "experiments": {},
+  "featureFlags": {
+    "isAdAvmModuleEnabled": true,
+    "isAdFinanceBannerEnabled": true,
+    "isAdFinanceLinkEnabled": true,
+    "isAdMortgageSimulatorEnabled": true,
+    "isFeaturedDevelopmentVASEnabled": true,
+    "isListingRentPriceEnabled": true,
+    "isNewApartmentsForSalePostingFormEnabled": false,
+    "isOldSaveSearchQueryEnabled": false,
+    "isFinanceCheckboxEnabled": true,
+    "isObservedAdsPageEnabled": true,
+    "isBikPromotionEnabled": true,
+    "isSpecialOfferForUnitsExperimentEnabled": false,
+    "isSpecialOfferEnabled": true,
+    "isSeoAdsDescriptionEnabled": true,
+    "isPropertyEvaluationPageActive": true,
+    "isSettingsContactsTabMigrated": false,
+    "isExtendedBillingDataEnabled": false,
+    "isRESellerLeadsActive": false,
+    "isBadgesFeatureEnabled": true,
+    "isSettingsOurTeamTabEnabled": false,
+    "isHCIAMEnabled": true,
+    "isSellerLeadsMvpEnabled": false,
+    "isNexusSellerPageEnabled": true,
+    "isHCIAMAgencyRegistrationEnabled": true,
+    "isHCIAMAgentRegistrationEnabled": true,
+    "isHCIAMDeveloperRegistrationEnabled": true,
+    "isMessagingCenterEnabled": false,
+    "isMessagingCenterChatEnabled": false,
+    "isNexusInvestmentPageEnabled": false,
+    "isXmlReportEnabled": false,
+    "__typename": "FeatureFlags"
+  },
+  "laquesisResult": null,
+  "userSessionId": "725f5dd8-1ccb-4f71-91d5-fa99fc829c0b",
+  "unconfirmedUserAuthToken": null,
+  "desktopHeader": {
+    "Is-Desktop": "true"
+  }
+}

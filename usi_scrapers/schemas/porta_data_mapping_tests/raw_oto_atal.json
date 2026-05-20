@@ -1,0 +1,883 @@
+{
+  "_usi_meta": {
+    "portal": "oto",
+    "portal_url": "https://www.otodom.pl",
+    "saved_at": "2026-05-19T08:23:36.257021+00:00",
+    "source_url": "https://www.otodom.pl/pl/firmy/deweloperzy/atal-ID10554231"
+  },
+  "lang": "pl",
+  "owner": {
+    "__typename": "DeveloperOwner",
+    "id": "10554231",
+    "account": {
+      "type": "DEVELOPER",
+      "name": "ATAL",
+      "description": "",
+      "photo": "https://ireland.apollo.olxcdn.com/v1/files/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmbiI6InJycnpvcGcyMWlhZjMtQVBMIn0.nYRsjCKnej16zJ7_i0xF26telQr5shaZnI9Jk-Fqd1c/image",
+      "location": {
+        "address": "ul. Stawowa 27",
+        "postalCode": "43-400",
+        "name": "Cieszyn",
+        "fullName": "Cieszyn, cieszyński, śląskie",
+        "__typename": "AccountLocation"
+      },
+      "contacts": {
+        "phone": "+48338575901",
+        "alternativePhone": "+48338575901",
+        "website": null,
+        "__typename": "AccountContacts"
+      },
+      "attributes": {
+        "slug": "atal-ID10554231",
+        "__typename": "AccountAttributes"
+      },
+      "__typename": "Account"
+    },
+    "contacts": [],
+    "statistics": {
+      "activeAds": 4914,
+      "__typename": "Statistics"
+    },
+    "sellerBadges": []
+  },
+  "searchAds": {
+    "__typename": "FoundAds",
+    "geometries": null,
+    "locationsObjects": null,
+    "items": [
+      {
+        "id": 68020042,
+        "title": "Skwer Witosa",
+        "slug": "skwer-witosa-ID4Bp7s",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": {
+          "mapDetails": {
+            "radius": 0,
+            "__typename": "MapDetails"
+          },
+          "address": {
+            "street": {
+              "name": "ul. Wincentego Witosa",
+              "number": "",
+              "__typename": "Street"
+            },
+            "city": {
+              "name": "Piastów",
+              "__typename": "City"
+            },
+            "province": {
+              "name": "mazowieckie",
+              "__typename": "Province"
+            },
+            "__typename": "Address"
+          },
+          "reverseGeocoding": {
+            "locations": [
+              {
+                "id": "mazowieckie",
+                "fullName": "mazowieckie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "mazowieckie/pruszkowski",
+                "fullName": "pruszkowski, mazowieckie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "mazowieckie/pruszkowski/piastow/piastow",
+                "fullName": "Piastów, pruszkowski, mazowieckie",
+                "__typename": "BasicLocationObject"
+              }
+            ],
+            "__typename": "ReverseGeocoding"
+          },
+          "__typename": "LocationDetails"
+        },
+        "images": [
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjE4bjg2Zm93dm5oYTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.6FQ5rMHTz6YDsuZ4uu_Kv8vEiAZ9puZPdAkEpchM65I/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjE4bjg2Zm93dm5oYTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.6FQ5rMHTz6YDsuZ4uu_Kv8vEiAZ9puZPdAkEpchM65I/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImM5MnNmcnl5c2l2ZTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.DP8Rq8B-drpY3dFw0hTynJ4WN7LInGKx3MQQf2lSZ_4/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImM5MnNmcnl5c2l2ZTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.DP8Rq8B-drpY3dFw0hTynJ4WN7LInGKx3MQQf2lSZ_4/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Inc2eDczY3ZjcWkxMi1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.NafQ57fBHMw9Ys7xa9baM0qJ8zE9AkfgEwmM7vvFXJA/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Inc2eDczY3ZjcWkxMi1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.NafQ57fBHMw9Ys7xa9baM0qJ8zE9AkfgEwmM7vvFXJA/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImNodHd5NGNsbHNpazMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.XPoUtBF1_zGoFT5UjqUL01cT9Z2NolgTjGBicuDAsTs/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImNodHd5NGNsbHNpazMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.XPoUtBF1_zGoFT5UjqUL01cT9Z2NolgTjGBicuDAsTs/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          }
+        ],
+        "isExclusiveOffer": false,
+        "openDays": "",
+        "totalPrice": null,
+        "rentPrice": null,
+        "priceFromPerSquareMeter": {
+          "value": 12610,
+          "currency": "PLN",
+          "__typename": "Money"
+        },
+        "pricePerSquareMeter": null,
+        "areaInSquareMeters": null,
+        "terrainAreaInSquareMeters": null,
+        "roomsNumber": null,
+        "floorNumber": null,
+        "shortDescription": "2, 3 i 4-pokojowe mieszkania od43m2 do88m2 w cenie od 572779 zł od dewelopera ATALNiska zabudowa – tylko 3 piętraPawilon usługowy na terenie osiedlaZieleń wokół budynków, alejki spacerowe oraz element...",
+        "createdAtFirst": "2026-05-19T10:16:27Z",
+        "hidePrice": false,
+        "investmentState": "IN_BUILDING",
+        "investmentUnitsAreaInSquareMeters": {
+          "from": 43,
+          "to": 88,
+          "__typename": "InvestmentUnitsArea"
+        },
+        "peoplePerRoom": null,
+        "investmentUnitsNumber": 0,
+        "investmentUnitsRoomsNumber": null,
+        "investmentEstimatedDelivery": {
+          "quarter": 4,
+          "year": 2027,
+          "__typename": "InvestmentEstimatedDelivery"
+        },
+        "pushedUpAt": null,
+        "__typename": "AdvertListItem",
+        "specialOffer": null
+      },
+      {
+        "id": 67932618,
+        "title": "Atal Floriana",
+        "slug": "atal-floriana-ID4B2no",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": {
+          "mapDetails": {
+            "radius": 0,
+            "__typename": "MapDetails"
+          },
+          "address": {
+            "street": {
+              "name": "ul. św. Floriana",
+              "number": "",
+              "__typename": "Street"
+            },
+            "city": {
+              "name": "Szczecin",
+              "__typename": "City"
+            },
+            "province": {
+              "name": "zachodniopomorskie",
+              "__typename": "Province"
+            },
+            "__typename": "Address"
+          },
+          "reverseGeocoding": {
+            "locations": [
+              {
+                "id": "zachodniopomorskie",
+                "fullName": "zachodniopomorskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "zachodniopomorskie/szczecin/szczecin/szczecin",
+                "fullName": "Szczecin, zachodniopomorskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "zachodniopomorskie/szczecin/szczecin/szczecin/srodmiescie",
+                "fullName": "Śródmieście, Szczecin, zachodniopomorskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "zachodniopomorskie/szczecin/szczecin/szczecin/srodmiescie/lasztownia",
+                "fullName": "Łasztownia, Śródmieście, Szczecin, zachodniopomorskie",
+                "__typename": "BasicLocationObject"
+              }
+            ],
+            "__typename": "ReverseGeocoding"
+          },
+          "__typename": "LocationDetails"
+        },
+        "images": [
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjI2c3VnaW4wdThwNi1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.1Zc5w3fULCbstVW4gI_8QuoYGLFzRQIZ7Q_Ip8UltMA/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjI2c3VnaW4wdThwNi1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.1Zc5w3fULCbstVW4gI_8QuoYGLFzRQIZ7Q_Ip8UltMA/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InhiaTZqYndtd295aDMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.3R0033n-rH-RRnSbltMeXFWzaj4QMGryrsPtcBxkhto/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InhiaTZqYndtd295aDMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.3R0033n-rH-RRnSbltMeXFWzaj4QMGryrsPtcBxkhto/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjdldDgwbmliYzY0NzItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.H9UfnRpidCbPzDOzZqZZa0M3ahzNzcstA3rs2X1qrR0/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjdldDgwbmliYzY0NzItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.H9UfnRpidCbPzDOzZqZZa0M3ahzNzcstA3rs2X1qrR0/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImlwdnVocWNyc3FjeTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.DGuqoIivTkh437bM6qH17w4UT9dvy8PY-f03YFaVASQ/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImlwdnVocWNyc3FjeTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.DGuqoIivTkh437bM6qH17w4UT9dvy8PY-f03YFaVASQ/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjYzMzlsZXBkMDJpNzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.0Nnz9WbQk2MQoIhV6klXzx3oPxzqhiGkHOsStcR1nkY/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjYzMzlsZXBkMDJpNzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.0Nnz9WbQk2MQoIhV6klXzx3oPxzqhiGkHOsStcR1nkY/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijdram41aGJqb3U0ZTMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ohNdxbGT-i426ZuW38TaG8igU-rDyxbu3-ACFHFStFw/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijdram41aGJqb3U0ZTMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ohNdxbGT-i426ZuW38TaG8igU-rDyxbu3-ACFHFStFw/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImpzN3Ficm52ZTkyZTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.1gDM1gK0MPJULgQ9ZMK7Vd1YqnkbcKwFF_TqqUCf1M0/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImpzN3Ficm52ZTkyZTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.1gDM1gK0MPJULgQ9ZMK7Vd1YqnkbcKwFF_TqqUCf1M0/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InBpcjA3bjN4ZDhicjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.DMqi_JOFvrE4aQiW4Nsc1A_W6diJs3h66e6yW8jAd4w/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InBpcjA3bjN4ZDhicjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.DMqi_JOFvrE4aQiW4Nsc1A_W6diJs3h66e6yW8jAd4w/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjhhZXFrM2Z0ZmNzNDEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.tSrrruJbI0YwHCC3v9nI1D8EF4IvWgwwBpRmI12QeLQ/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjhhZXFrM2Z0ZmNzNDEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.tSrrruJbI0YwHCC3v9nI1D8EF4IvWgwwBpRmI12QeLQ/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImlscDlrbzU4NWpoNzItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ieXeMdMMXY-IktYssBQN6qasdndqgdxXBkyyidxhuLE/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImlscDlrbzU4NWpoNzItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ieXeMdMMXY-IktYssBQN6qasdndqgdxXBkyyidxhuLE/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          }
+        ],
+        "isExclusiveOffer": false,
+        "openDays": "",
+        "totalPrice": null,
+        "rentPrice": null,
+        "priceFromPerSquareMeter": {
+          "value": 11600,
+          "currency": "PLN",
+          "__typename": "Money"
+        },
+        "pricePerSquareMeter": null,
+        "areaInSquareMeters": null,
+        "terrainAreaInSquareMeters": null,
+        "roomsNumber": null,
+        "floorNumber": null,
+        "shortDescription": "1, 2, 3 i 4-pokojowe mieszkania od26m2 do77m2 w cenie od 329640 zł od dewelopera ATALReprezentacyjne lobbySiłownia zewnętrzna, rowerowniaPlac zabaw dla dzieciPrzystanek tranzytowy (2 minuty pieszo), s...",
+        "createdAtFirst": "2026-04-22T13:38:21Z",
+        "hidePrice": false,
+        "investmentState": "IN_BUILDING",
+        "investmentUnitsAreaInSquareMeters": {
+          "from": 26,
+          "to": 77,
+          "__typename": "InvestmentUnitsArea"
+        },
+        "peoplePerRoom": null,
+        "investmentUnitsNumber": 191,
+        "investmentUnitsRoomsNumber": {
+          "min": "ONE",
+          "max": "FOUR",
+          "__typename": "InvestmentUnitsRoomsNumber"
+        },
+        "investmentEstimatedDelivery": {
+          "quarter": 2,
+          "year": 2028,
+          "__typename": "InvestmentEstimatedDelivery"
+        },
+        "pushedUpAt": null,
+        "__typename": "AdvertListItem",
+        "specialOffer": null
+      },
+      {
+        "id": 67842713,
+        "title": "Atal Parkowa",
+        "slug": "atal-parkowa-ID4AEZj",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": {
+          "mapDetails": {
+            "radius": 0,
+            "__typename": "MapDetails"
+          },
+          "address": {
+            "street": {
+              "name": "ul. Mogileńska",
+              "number": "",
+              "__typename": "Street"
+            },
+            "city": {
+              "name": "Poznań",
+              "__typename": "City"
+            },
+            "province": {
+              "name": "wielkopolskie",
+              "__typename": "Province"
+            },
+            "__typename": "Address"
+          },
+          "reverseGeocoding": {
+            "locations": [
+              {
+                "id": "wielkopolskie",
+                "fullName": "wielkopolskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "wielkopolskie/poznan/poznan/poznan",
+                "fullName": "Poznań, wielkopolskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "wielkopolskie/poznan/poznan/poznan/nowe-miasto",
+                "fullName": "Nowe Miasto, Poznań, wielkopolskie",
+                "__typename": "BasicLocationObject"
+              },
+              {
+                "id": "wielkopolskie/poznan/poznan/poznan/nowe-miasto/os.-warszawskie",
+                "fullName": "os. Warszawskie, Nowe Miasto, Poznań, wielkopolskie",
+                "__typename": "BasicLocationObject"
+              }
+            ],
+            "__typename": "ReverseGeocoding"
+          },
+          "__typename": "LocationDetails"
+        },
+        "images": [
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InFlZW1kY3BxaTQzay1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.tiexEPtKLJb3EFOM9lTJ7i_0cFSpolixthu_-wcOKMc/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InFlZW1kY3BxaTQzay1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.tiexEPtKLJb3EFOM9lTJ7i_0cFSpolixthu_-wcOKMc/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Iml4aGU1YjcxbTl3bDEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.U9NQSGz43fSM9l2laJ68SLTwm-0bifTwlYJTFc8wQh8/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Iml4aGU1YjcxbTl3bDEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.U9NQSGz43fSM9l2laJ68SLTwm-0bifTwlYJTFc8wQh8/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImpteHY2dDYxd3FlcS1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.L57ZVTw0T8qLlEu6ziHeaiVczKqmY9zMjnSf5XUSVII/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImpteHY2dDYxd3FlcS1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.L57ZVTw0T8qLlEu6ziHeaiVczKqmY9zMjnSf5XUSVII/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InB2NG0ycnlrMzZmbi1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.LMHSK2AyRPwuEro09Wnja2GHHU6SNCU0Nigfuj65RAo/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InB2NG0ycnlrMzZmbi1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.LMHSK2AyRPwuEro09Wnja2GHHU6SNCU0Nigfuj65RAo/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImN5emU5Z2o5Z2dqZjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.NEbNoXLsDKxr5KjLw1qzsWlC4hhYl2UXYcKoUAatV7M/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImN5emU5Z2o5Z2dqZjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.NEbNoXLsDKxr5KjLw1qzsWlC4hhYl2UXYcKoUAatV7M/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Imc3cW1ib2wxd2UwdTMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.GAAT0lUSO99aAYxUfKiW_va3PAfqpTBNGpUIm_dr_bA/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Imc3cW1ib2wxd2UwdTMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.GAAT0lUSO99aAYxUfKiW_va3PAfqpTBNGpUIm_dr_bA/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1wMGNzd3pqZGxmazItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.wVghKCiNm-1lnle78ERt1FDvbC9BDDbERZDthGuOwJY/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1wMGNzd3pqZGxmazItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.wVghKCiNm-1lnle78ERt1FDvbC9BDDbERZDthGuOwJY/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjUyZndtOWlvZ2JuczItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.guXibh_1tIbseo9aBgRGzLBvld7QyhEGmKQcY1BTbBI/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjUyZndtOWlvZ2JuczItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.guXibh_1tIbseo9aBgRGzLBvld7QyhEGmKQcY1BTbBI/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          },
+          {
+            "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImY3Z2RjMDFwaW80YS1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.050CajcwjMZCxktgDyUAfIw-pGiE3gCe98aTE23H9mk/image;s=655x491;q=80",
+            "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImY3Z2RjMDFwaW80YS1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.050CajcwjMZCxktgDyUAfIw-pGiE3gCe98aTE23H9mk/image;s=1280x1024;q=80",
+            "__typename": "AdImage"
+          }
+        ],
+        "isExclusiveOffer": false,
+        "openDays": "",
+        "totalPrice": null,
+        "rentPrice": null,
+        "priceFromPerSquareMeter": {
+          "value": 10464,
+          "currency": "PLN",
+          "__typename": "Money"
+        },
+        "pricePerSquareMeter": null,
+        "areaInSquareMeters": null,
+        "terrainAreaInSquareMeters": null,
+        "roomsNumber": null,
+        "floorNumber": null,
+        "shortDescription": "1, 2, 3 i 4-pokojowe mieszkania od27m2 do99m2 w cenie od 359598 zł od dewelopera ATALKameralne miejsca do odpoczynku z ławkami, stojaki rowerowePark Tysiąclecia, Jezioro Maltańskie (6 minut rowerem)Pr...",
+        "createdAtFirst": "2026-03-25T09:34:26Z",
+        "hidePrice": false,
+        "investmentState": "IN_BUILDING",
+        "investmentUnitsAreaInSquareMeters": {
+          "from": 27,
+          "to": 99,
+          "__typename": "InvestmentUnitsArea"
+        },
+        "peoplePerRoom": null,
+        "investmentUnitsNumber": 204,
+        "investmentUnitsRoomsNumber": {
+          "min": "ONE",
+          "max": "FOUR",
+          "__typename": "InvestmentUnitsRoomsNumber"
+        },
+        "investmentEstimatedDelivery": {
+          "quarter": 1,
+          "year": 2027,
+          "__typename": "InvestmentEstimatedDelivery"
+        },
+        "pushedUpAt": null,
+        "__typename": "AdvertListItem",
+        "specialOffer": null
+      }
+    ],
+    "trackingSet": {
+      "cat_l1_id": 11,
+      "cat_l1_name": "Investment",
+      "business": null,
+      "selected_street_id": "",
+      "selected_district_id": "",
+      "selected_city_id": "",
+      "selected_subregion_id": "",
+      "selected_region_id": ""
+    },
+    "pagination": {
+      "totalItems": 31,
+      "totalPages": 11,
+      "currentPage": 1,
+      "itemsPerPage": 3,
+      "__typename": "SearchPagination"
+    }
+  },
+  "searchLinksRelatedLocations": {
+    "__typename": "FoundLinksLocations",
+    "items": [
+      {
+        "name": "dolnośląskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "dolnoslaskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "kujawsko-pomorskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "kujawsko--pomorskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "łódzkie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "lodzkie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "lubelskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "lubelskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "lubuskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "lubuskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "małopolskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "malopolskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "mazowieckie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "mazowieckie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "opolskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "opolskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "podkarpackie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "podkarpackie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "podlaskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "podlaskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "pomorskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "pomorskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "śląskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "slaskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "świętokrzyskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "swietokrzyskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "warmińsko-mazurskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "warminsko--mazurskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "wielkopolskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "wielkopolskie",
+        "count": null,
+        "__typename": "LocationLink"
+      },
+      {
+        "name": "zachodniopomorskie",
+        "estate": "INVESTMENT",
+        "transaction": "SELL",
+        "location": "zachodniopomorskie",
+        "count": null,
+        "__typename": "LocationLink"
+      }
+    ]
+  },
+  "formData": {
+    "estate": {
+      "label": "GYXaW",
+      "value": "INVESTMENT"
+    },
+    "transaction": {
+      "label": "GYVkh",
+      "value": "SELL"
+    },
+    "roomsNumber": [],
+    "market": {
+      "label": "GYVkb",
+      "value": "ALL"
+    },
+    "locations": null,
+    "distanceRadius": 0,
+    "priceMin": null,
+    "priceMax": null,
+    "areaMin": null,
+    "areaMax": null,
+    "hasDiscount": null,
+    "investmentState": null
+  },
+  "sortingOption": {
+    "by": "DEFAULT",
+    "direction": "ASC"
+  },
+  "filterLocations": null,
+  "filterAttributes": {
+    "sellerId": "10554231",
+    "estate": "INVESTMENT",
+    "transaction": "SELL",
+    "roomsNumber": [],
+    "market": "ALL",
+    "distanceRadius": 0,
+    "priceMin": null,
+    "priceMax": null,
+    "areaMin": null,
+    "areaMax": null,
+    "hasDiscount": null,
+    "investmentState": null
+  },
+  "mapBoundingBox": {
+    "__typename": "FoundMapPins",
+    "boundingBox": {
+      "neLat": 54.54787,
+      "neLng": 21.204839999999997,
+      "swLat": 50.01401,
+      "swLng": 14.5536,
+      "__typename": "BoundingBox"
+    }
+  },
+  "urlViewType": "listing",
+  "tracking": {
+    "ad_impressions": [
+      68020042,
+      67932618,
+      67842713
+    ],
+    "business": "INVESTMENT",
+    "cat_l1_id": 11,
+    "cat_l1_name": "investment",
+    "listing_format": "list",
+    "order_by": "default_asc",
+    "page_count": 11,
+    "page_nb": 1,
+    "result_count": 31,
+    "results_per_page": 3,
+    "selected_locations_id": null,
+    "market": "primary or secondary",
+    "seller_id": "10554231",
+    "poster_type": "developer"
+  },
+  "ownerStatistics": {
+    "__typename": "Statistics",
+    "rentAds": null,
+    "investmentAds": 31,
+    "sellAds": 4883,
+    "citiesWithAds": 12,
+    "createdAt": "2025-01-13"
+  },
+  "mapPreviewImages": [
+    {
+      "url": "https://maps.googleapis.com/maps/api/staticmap?path=Poland&zoom=6&language=pl&size=640x200&key=AIzaSyBCdQIX4zq9wY3GFTVJpB_qC8U7iAM2Ong&scale=2&signature=dLqA-9tBXLOX4ajZTQKCggKSs0o=",
+      "width": 640,
+      "height": 200
+    },
+    {
+      "url": "https://maps.googleapis.com/maps/api/staticmap?path=Poland&zoom=6&language=pl&size=640x140&key=AIzaSyBCdQIX4zq9wY3GFTVJpB_qC8U7iAM2Ong&scale=2&signature=9oC96CRNqjXtFrh_klTMzDnvRqA=",
+      "width": 640,
+      "height": 140
+    },
+    {
+      "url": "https://maps.googleapis.com/maps/api/staticmap?path=Poland&zoom=6&language=pl&size=640x190&key=AIzaSyBCdQIX4zq9wY3GFTVJpB_qC8U7iAM2Ong&scale=2&signature=fdAeE97qogc_TnLy6KpMu_k-1Bc=",
+      "width": 640,
+      "height": 190
+    }
+  ],
+  "currentUser": null,
+  "viewMode": "default",
+  "cookiesCategorisation": {
+    "eupubconsent-v2": [
+      "C0001"
+    ],
+    "OptanonAlertBoxClosed": [
+      "C0001"
+    ],
+    "OptanonConsent": [
+      "C0001"
+    ],
+    "OTAdditionalConsentString": [
+      "C0001"
+    ],
+    "access_token": [
+      "C0001"
+    ],
+    "id_token": [
+      "C0001"
+    ],
+    "refresh_token": [
+      "C0001"
+    ],
+    "microservice_token": [
+      "C0001"
+    ],
+    "lastoAuthState": [
+      "C0001"
+    ],
+    "PHPSESSID": [
+      "C0001"
+    ],
+    "laquesis": [
+      "C0001"
+    ],
+    "laquesisff": [
+      "C0001"
+    ],
+    "laquesisqa": [
+      "C0001"
+    ],
+    "laquesissu": [
+      "C0001"
+    ],
+    "lqonap": [
+      "C0001"
+    ],
+    "lqstatus": [
+      "C0001"
+    ],
+    "test": [
+      "C0001"
+    ],
+    "onap": [
+      "C0001"
+    ],
+    "onap_dev": [
+      "C0001"
+    ],
+    "lang": [
+      "C0001"
+    ],
+    "dfp_user_id": [
+      "C0004"
+    ],
+    "AuthState": [
+      "C0001"
+    ],
+    "SID": [
+      "C0001"
+    ],
+    "IDPState": [
+      "C0001"
+    ],
+    "LogoutState": [
+      "C0001"
+    ],
+    "datadome": [
+      "C0001"
+    ],
+    "ldctx": [
+      "C0002"
+    ],
+    "ldff": [
+      "C0002"
+    ],
+    "aws-waf-token": [
+      "C0001"
+    ],
+    "thememode": [
+      "C0003"
+    ],
+    "idccsrf": [
+      "C0001"
+    ],
+    "nsr": [
+      "C0001"
+    ],
+    "O_N": [
+      "C0003"
+    ],
+    "O_Y": [
+      "C0002"
+    ],
+    "O_X": [
+      "C0002"
+    ],
+    "O_LOGGED": [
+      "C0003"
+    ],
+    "hotjarSurvey": [
+      "C0004"
+    ],
+    "contentmode": [
+      "C0001"
+    ]
+  },
+  "experiments": {},
+  "featureFlags": {
+    "isAdAvmModuleEnabled": true,
+    "isGenaiAd2videoEnabled": true,
+    "shouldEnableAd2VideoPreview": true,
+    "isAdFinanceBannerEnabled": true,
+    "isAdFinanceLinkEnabled": true,
+    "isAdMortgageSimulatorEnabled": true,
+    "isAdNeighborhoodPoisEnabled": false,
+    "isListingRentPriceEnabled": true,
+    "isBikPromotionEnabled": true,
+    "isSeoAdsDescriptionEnabled": true,
+    "isPropertyEvaluationPageActive": true,
+    "isRESellerLeadsActive": false,
+    "isSellerLeadsMvpEnabled": false,
+    "isXmlReportEnabled": true,
+    "isOneProductPostingFormEnabled": true,
+    "isAgentAccountMailboxEnabled": true,
+    "isDeveloperGeoPricingEnabled": true,
+    "isIntegrationPageEnabled": true,
+    "isNinFieldEnabledForInvoicing": false,
+    "isMandatoryLoginEnabled": true,
+    "isGeoBasedPricingEnabled": true,
+    "isMyAccountPDFReportsEnabled": true,
+    "isReCaptchaEnabled": true,
+    "isAgencyInvoiceReportEnabled": false,
+    "isRECsrfEnabled": true,
+    "isNexusDeveloperRegistrationFormEnabled": true,
+    "isAgencyPortfolioValuePricingEnabled": true,
+    "isAgencyPortfolioBufferEnabled": false,
+    "isBadgesFeatureEnabled": true,
+    "isInboxCrmIdFilteringEnabled": true,
+    "isDashboardWithStatisticsEnabled": false,
+    "isConciergeMigrationPageEnabled": false,
+    "isAIAssistantChatEnabled": true,
+    "arePaymentReminderBannersEnabled": true,
+    "isSapBlackoutBannerEnabled": false,
+    "isPowerVasOnboardingCampaignEnabled": false,
+    "isEnhancedAgentActivationEnabled": true,
+    "shouldShowExternalDeveloperLink": false,
+    "isPowerVasCardDisplayEnabled": true,
+    "isAgentPermissionsPageEnabled": true,
+    "isSecondStepOfBusinessAccountVerificationRemoved": false,
+    "isPowerVasGroupEnabled": true,
+    "shouldUseUnifiedAdSchema": true,
+    "isNoPhotobookingOnImovirtualPricingEnabled": true,
+    "isEInvoicingEnabled": true,
+    "isNinjaBetaVersionEnabled": true,
+    "hasBusinessRegistrationFlowBeenEnhanced": true,
+    "isSelfRefCanonicalLinkLublinOpoleEnabled": false,
+    "areCityLevelLinksKoninSkierniewiceEnabled": false,
+    "isNexusPromotePageEnabled": false,
+    "isVasAutoRenewalEnabled": true,
+    "isPostingFormAgentAccountEnabled": true,
+    "isPostingFormFreeTextStreetEnabled": false,
+    "isAdsAIEnrichmentEnabled": true,
+    "isEnhancedAgentDeletionEnabled": true,
+    "areAccountLevelStatisticsForAgentsEnabled": true,
+    "areAdLevelStatisticsEnabled": false,
+    "isOurTeamPendingTabEnhanced": false,
+    "isPlDynamicMetaTemplatesEnabled": false,
+    "isCompaniesListingPageEnabled": true,
+    "isDynamicFaqEnabled": true,
+    "isLoginDataPageEnabled": false,
+    "isNexusBillingPageEnabled": false,
+    "isTranslateErrorLoggerEnabled": false,
+    "isTranslateErrorFixEnabled": false,
+    "__typename": "FeatureFlags"
+  },
+  "laquesisResult": null,
+  "userSessionId": "7f6d1afd-051b-4ac4-b984-3e7dcf3e84ca",
+  "unconfirmedUserAuthToken": null,
+  "desktopHeader": {
+    "Is-Desktop": "true"
+  },
+  "url": "https://www.otodom.pl/pl/firmy/deweloperzy/atal-ID10554231"
+}

@@ -238,7 +238,11 @@ def health_check(
     results: Dict[str, Any] = {}
 
     for portal in portals:
-        p = portal.lower()
+        try:
+            p = resolve_prefix(portal.lower())
+        except ValueError:
+            p = portal.lower()
+            
         entry: Dict[str, Any] = {
             "ok": False,
             "discovery_count": None,

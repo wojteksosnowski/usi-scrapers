@@ -1,0 +1,748 @@
+{
+  "lang": "pl",
+  "_sentryTraceData": "4158e11d10d54efb911ebefeb50ccd16-93b9c6fe40bc1a21-0",
+  "_sentryBaggage": "sentry-environment=otodompl-prd,sentry-release=frontend-platform%40v20241031T135307-otodompl,sentry-public_key=6c4675ab868d06ef702e62aaf3fd60fd,sentry-trace_id=4158e11d10d54efb911ebefeb50ccd16,sentry-transaction=%2Fpl%2Finwestycja%2F%5Bid%5D,sentry-sampled=false",
+  "id": "4jDHU",
+  "ad": {
+    "id": 63786214,
+    "price": {
+      "type": "",
+      "__typename": "AdvertPrice"
+    },
+    "market": "",
+    "services": [],
+    "publicId": "",
+    "slug": "afi-home-zlota-83-zelazna-24-warszawa-ID4jDHU",
+    "advertiserType": "business",
+    "advertType": "DEVELOPER",
+    "source": "urn:site:local",
+    "createdAt": "2022-12-19T11:14:09+01:00",
+    "modifiedAt": "2024-05-12T15:09:10+02:00",
+    "description": "<p><strong>O inwestycji</strong></p>\n<p>AFI Home Złota 83/Żelazna 24 w Warszawie to doskonała propozycja dla osób szukających <strong>apartamentu na wynajem</strong> w śródmieściu. Położone w samym sercu Warszawy apartamenty o wysokim standardzie to oferta dla klientów wymagających, szukających eleganckiego designu i komfortu. Inwestycja zlokalizowana jest w bezpośrednim sąsiedztwie biznesowego centrum stolicy.</p>\n<p><strong>Zamieszkaj w prestiżowym apartamencie na wynajem w Warszawie </strong></p>\n<p>Apartamenty na wynajem długoterminowy zaprojektowane zostały z myślą o osobach, które nie akceptują kompromisów. Oferujemy zarówno mieszkania zlokalizowane bezpośrednio w zabytkowej części kamienicy Krongolda, jak i zbudowane w zupełnie nowej przestrzeni od ulicy Żelaznej. Apartamenty na Złotej/Żelaznej są w pełni wyposażone – poprzez design łączą klasykę z najbardziej aktualnymi trendami.</p>\n<p><strong>Udogodnienia</strong></p>\n<p><strong>AFI Home Złota 83/Żelazna 24 – apartamenty w centrum </strong></p>\n<p>Apartamenty na wynajem przy skrzyżowaniu ulicy Złotej i Żelaznej znajdują są w ścisłym śródmieściu, jednak charakteryzują się spokojem i ciszą. Ich doskonała lokalizacja jest jednym z głównych atutów – mieszczą się nie tylko bliskiej odległości od biznesowego centrum miasta, ale także niedaleko najważniejszych atrakcji kulturalnych, parków  i centrów handlowych. </p>\n<p><strong>Udogodnienia dla mieszkańców</strong></p>\n<ul><li>Prywatna siłownia dla mieszkańców</li>\n<li>Garaż podziemny</li>\n<li>Parking dla rowerów</li>\n<li>Całodobowa ochrona </li>\n<li>Różnorodne usługi na parterze budynku</li>\n</ul>",
+    "developmentId": 0,
+    "developmentTitle": "",
+    "developmentUrl": "",
+    "exclusiveOffer": false,
+    "externalId": "",
+    "features": [
+      "Balkon",
+      "Pomieszczenie na rowery",
+      "Taras",
+      "Miejsce parkingowe podziemne",
+      "Przyjazny dla osób niepełnosprawnych",
+      "Windy",
+      "Siłownia",
+      "System alarmowy",
+      "Monitoring",
+      "Ochrona"
+    ],
+    "creationSource": "none",
+    "featuresByCategory": [
+      {
+        "label": "Przestrzeń dodatkowa",
+        "values": [
+          "Balkon",
+          "Pomieszczenie na rowery",
+          "Taras",
+          "Miejsce parkingowe podziemne"
+        ],
+        "__typename": "FeatureGroup"
+      },
+      {
+        "label": "Udogodnienia",
+        "values": [
+          "Przyjazny dla osób niepełnosprawnych",
+          "Windy",
+          "Siłownia"
+        ],
+        "__typename": "FeatureGroup"
+      },
+      {
+        "label": "Bezpieczeństwo",
+        "values": [
+          "System alarmowy",
+          "Monitoring",
+          "Ochrona"
+        ],
+        "__typename": "FeatureGroup"
+      }
+    ],
+    "featuresWithoutCategory": [],
+    "openDay": null,
+    "referenceId": "",
+    "target": {
+      "Area_from": "27",
+      "Area_to": "115",
+      "City": "warszawa",
+      "City_id": "26",
+      "Country": "Polska",
+      "Extra_spaces": [
+        "balcony",
+        "bicycle_room",
+        "terrace",
+        "underground_parking_space"
+      ],
+      "Floors_num": "7",
+      "Id": "63786214",
+      "MarketType": "primary",
+      "Number_of_properties": "146",
+      "ObidoAdvert": "n",
+      "Offered_estates_type": [
+        "flats"
+      ],
+      "Photo": "aHR0cHM6Ly9pcmVsYW5kLmFwb2xsby5vbHhjZG4uY29tL3YxL2ZpbGVzL2V5Sm1iaUk2SW0xcE5YWnpabkp0ZW5wNmFpMUJVRXdpTENKM0lqcGJleUptYmlJNkltVnVkbVp4Y1dVeFlYazBhekV0UVZCTUlpd2ljeUk2SWpFMElpd2ljQ0k2SWpFd0xDMHhNQ0lzSW1FaU9pSXdJbjFkZlEuM2pTbTd0V2RObnloV0V3RVFmU0dPa1N1R3YzRGdOMTVmMnJCS1hCdTk0ay9pbWFnZTtzPTY1NXg0OTE7cT04MA==",
+      "Price_per_m_from": "92",
+      "Project_amenities": [
+        "disabled_friendly",
+        "elevators",
+        "gym"
+      ],
+      "ProperType": "inwestycje",
+      "Province": "mazowieckie",
+      "RegularUser": "n",
+      "Security": [
+        "alarm_system",
+        "monitoring",
+        "security_vigilance"
+      ],
+      "State": [
+        "ready"
+      ],
+      "Subregion": "powiat-warszawa",
+      "Title": "QUZJIEhvbWUgWsWCb3RhIDgzIC8gxbtlbGF6bmEgMjQsIFdhcnN6YXdh",
+      "categoryId": "11",
+      "env": "production",
+      "hidePrice": "0",
+      "seller_id": "8972977",
+      "user_type": "developer"
+    },
+    "title": "AFI Home Złota 83 / Żelazna 24, Warszawa",
+    "topInformation": [
+      {
+        "label": "offered_estates_types_project",
+        "values": [
+          "offered_estates_types_project::flats"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "project_finish_date",
+        "values": [],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "number_of_adverts",
+        "values": [],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "number_of_units_in_project",
+        "values": [
+          "146"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      }
+    ],
+    "additionalInformation": [
+      {
+        "label": "advertiser_type",
+        "values": [
+          "advertiser_type::developer"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "project_begin_date",
+        "values": [],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "number_of_floors_project",
+        "values": [
+          "7"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "state",
+        "values": [
+          "state::ready"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "area_range",
+        "values": [
+          "27",
+          "115"
+        ],
+        "unit": "m²",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "ceiling_height_range",
+        "values": [],
+        "unit": "cm",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "security",
+        "values": [
+          "security::alarm_system",
+          "security::monitoring",
+          "security::security_vigilance"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "project_amenities",
+        "values": [
+          "project_amenities::disabled_friendly",
+          "project_amenities::elevators",
+          "project_amenities::gym"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "extra_spaces",
+        "values": [
+          "extra_spaces::balcony",
+          "extra_spaces::bicycle_room",
+          "extra_spaces::terrace",
+          "extra_spaces::underground_parking_space"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      }
+    ],
+    "url": "https://www.otodom.pl/pl/oferta/afi-home-zlota-83-zelazna-24-warszawa-ID4jDHU",
+    "status": "removed_by_user",
+    "adCategory": {
+      "id": "11",
+      "name": "FLAT",
+      "type": "INVESTMENT",
+      "__typename": "AdvertCategory"
+    },
+    "category": {
+      "id": 11,
+      "name": [
+        {
+          "locale": "pl",
+          "value": "Inwestycje",
+          "__typename": "LocalizedString"
+        },
+        {
+          "locale": "uk",
+          "value": "Новостройки",
+          "__typename": "LocalizedString"
+        }
+      ],
+      "__typename": "AdCategory"
+    },
+    "characteristics": [
+      {
+        "key": "area_from",
+        "value": "27",
+        "label": "Metraż od",
+        "localizedValue": "27 m²",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "area_to",
+        "value": "115",
+        "label": "Metraż do",
+        "localizedValue": "115 m²",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "price_per_m_from",
+        "value": "92",
+        "label": "Cena za m² od",
+        "localizedValue": "92 zł/m²",
+        "currency": "PLN",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "floors_num",
+        "value": "7",
+        "label": "Liczba kondygnacji",
+        "localizedValue": "7",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "number_of_properties",
+        "value": "146",
+        "label": "Łączna liczba nieruchomości w inwestycji",
+        "localizedValue": "146",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "state",
+        "value": "ready",
+        "label": "Stan inwestycji",
+        "localizedValue": "ukończona",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "offered_estates_type",
+        "value": "flats",
+        "label": "Typ oferowanych nieruchomości",
+        "localizedValue": "mieszkania",
+        "currency": "",
+        "suffix": "",
+        "__typename": "Characteristic"
+      }
+    ],
+    "images": [
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1pNXZzZnJtenp6ai1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.3jSm7tWdNnyhWEwEQfSGOkSuGv3DgN15f2rBKXBu94k/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1pNXZzZnJtenp6ai1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.3jSm7tWdNnyhWEwEQfSGOkSuGv3DgN15f2rBKXBu94k/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1pNXZzZnJtenp6ai1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.3jSm7tWdNnyhWEwEQfSGOkSuGv3DgN15f2rBKXBu94k/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1pNXZzZnJtenp6ai1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.3jSm7tWdNnyhWEwEQfSGOkSuGv3DgN15f2rBKXBu94k/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InFuaTd3MDFnNHpubTItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.GqyLbbVJv5sl9LeA1ICFinrZ6ixfvvFZqnjqSRFuyns/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InFuaTd3MDFnNHpubTItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.GqyLbbVJv5sl9LeA1ICFinrZ6ixfvvFZqnjqSRFuyns/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InFuaTd3MDFnNHpubTItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.GqyLbbVJv5sl9LeA1ICFinrZ6ixfvvFZqnjqSRFuyns/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InFuaTd3MDFnNHpubTItQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.GqyLbbVJv5sl9LeA1ICFinrZ6ixfvvFZqnjqSRFuyns/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhjYWFiaGYyeXY4ZTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.E5325WbNF3zc4D-5xQpHy_FvnqkAo13TPMJdzILJEqA/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhjYWFiaGYyeXY4ZTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.E5325WbNF3zc4D-5xQpHy_FvnqkAo13TPMJdzILJEqA/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhjYWFiaGYyeXY4ZTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.E5325WbNF3zc4D-5xQpHy_FvnqkAo13TPMJdzILJEqA/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhjYWFiaGYyeXY4ZTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.E5325WbNF3zc4D-5xQpHy_FvnqkAo13TPMJdzILJEqA/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImY1bXpvZ2xmejVwdi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ._lzdf_f5A4gTXLeFtmFUE8MqnR1vIO3758VEKtIOoco/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImY1bXpvZ2xmejVwdi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ._lzdf_f5A4gTXLeFtmFUE8MqnR1vIO3758VEKtIOoco/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImY1bXpvZ2xmejVwdi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ._lzdf_f5A4gTXLeFtmFUE8MqnR1vIO3758VEKtIOoco/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImY1bXpvZ2xmejVwdi1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ._lzdf_f5A4gTXLeFtmFUE8MqnR1vIO3758VEKtIOoco/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InR0ZWVtZTBlYW9udS1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.qoG_P4_0PMB9fZm7SJgdNxGItsw9JEFoF8mUt5XrfPE/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InR0ZWVtZTBlYW9udS1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.qoG_P4_0PMB9fZm7SJgdNxGItsw9JEFoF8mUt5XrfPE/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InR0ZWVtZTBlYW9udS1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.qoG_P4_0PMB9fZm7SJgdNxGItsw9JEFoF8mUt5XrfPE/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InR0ZWVtZTBlYW9udS1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.qoG_P4_0PMB9fZm7SJgdNxGItsw9JEFoF8mUt5XrfPE/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1mdHRiN3RmM2gydTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.2KF11oY277cVYnT-PvY32kOfJ4Bg_JNw-FxzMnHMmR8/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1mdHRiN3RmM2gydTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.2KF11oY277cVYnT-PvY32kOfJ4Bg_JNw-FxzMnHMmR8/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1mdHRiN3RmM2gydTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.2KF11oY277cVYnT-PvY32kOfJ4Bg_JNw-FxzMnHMmR8/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im1mdHRiN3RmM2gydTEtQVBMIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.2KF11oY277cVYnT-PvY32kOfJ4Bg_JNw-FxzMnHMmR8/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijk2YXp2eWo3M2psdS1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.NJXX6IL4kkpThhbpoxWB2yPhG3jakjd6hvRh-p9-zxs/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijk2YXp2eWo3M2psdS1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.NJXX6IL4kkpThhbpoxWB2yPhG3jakjd6hvRh-p9-zxs/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijk2YXp2eWo3M2psdS1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.NJXX6IL4kkpThhbpoxWB2yPhG3jakjd6hvRh-p9-zxs/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijk2YXp2eWo3M2psdS1BUEwiLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.NJXX6IL4kkpThhbpoxWB2yPhG3jakjd6hvRh-p9-zxs/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      }
+    ],
+    "links": {
+      "localPlanUrl": "",
+      "videoUrl": "https://www.youtube.com/embed/dNIrgKlfZVc",
+      "view3dUrl": "",
+      "walkaroundUrl": "",
+      "__typename": "AdvertLinks"
+    },
+    "location": {
+      "id": null,
+      "coordinates": {
+        "latitude": 52.231094,
+        "longitude": 21.003458,
+        "__typename": "Coordinates"
+      },
+      "mapDetails": {
+        "radius": 100,
+        "zoom": 13,
+        "__typename": "MapDetails"
+      },
+      "address": {
+        "street": null,
+        "subdistrict": null,
+        "district": {
+          "id": "117",
+          "code": "wola",
+          "name": "Wola",
+          "__typename": "District"
+        },
+        "city": {
+          "id": "26",
+          "code": "warszawa",
+          "name": "Warszawa",
+          "__typename": "City"
+        },
+        "municipality": null,
+        "county": {
+          "id": "197",
+          "code": "powiat-warszawa",
+          "name": "Warszawa",
+          "__typename": "County"
+        },
+        "province": {
+          "id": "7",
+          "code": "mazowieckie",
+          "name": "mazowieckie",
+          "__typename": "Province"
+        },
+        "postalCode": null,
+        "__typename": "Address"
+      },
+      "reverseGeocoding": {
+        "locations": [
+          {
+            "id": "mazowieckie",
+            "locationLevel": "voivodeship",
+            "name": "mazowieckie",
+            "fullName": "mazowieckie",
+            "fullNameItems": [
+              "mazowieckie"
+            ],
+            "parentIds": [],
+            "__typename": "BasicLocationObject"
+          },
+          {
+            "id": "mazowieckie/warszawa/warszawa/warszawa",
+            "locationLevel": "city_or_village",
+            "name": "Warszawa",
+            "fullName": "Warszawa, mazowieckie",
+            "fullNameItems": [
+              "Warszawa",
+              "mazowieckie"
+            ],
+            "parentIds": [
+              "mazowieckie",
+              "mazowieckie/warszawa",
+              "mazowieckie/warszawa/warszawa"
+            ],
+            "__typename": "BasicLocationObject"
+          },
+          {
+            "id": "mazowieckie/warszawa/warszawa/warszawa/srodmiescie",
+            "locationLevel": "district",
+            "name": "Śródmieście",
+            "fullName": "Śródmieście, Warszawa, mazowieckie",
+            "fullNameItems": [
+              "Śródmieście",
+              "Warszawa",
+              "mazowieckie"
+            ],
+            "parentIds": [
+              "mazowieckie",
+              "mazowieckie/warszawa",
+              "mazowieckie/warszawa/warszawa",
+              "mazowieckie/warszawa/warszawa/warszawa"
+            ],
+            "__typename": "BasicLocationObject"
+          },
+          {
+            "id": "mazowieckie/warszawa/warszawa/warszawa/srodmiescie/srodmiescie-polnocne",
+            "locationLevel": "residential",
+            "name": "Śródmieście Północne",
+            "fullName": "Śródmieście Północne, Śródmieście, Warszawa, mazowieckie",
+            "fullNameItems": [
+              "Śródmieście Północne",
+              "Śródmieście",
+              "Warszawa",
+              "mazowieckie"
+            ],
+            "parentIds": [
+              "mazowieckie",
+              "mazowieckie/warszawa",
+              "mazowieckie/warszawa/warszawa",
+              "mazowieckie/warszawa/warszawa/warszawa",
+              "mazowieckie/warszawa/warszawa/warszawa/srodmiescie"
+            ],
+            "__typename": "BasicLocationObject"
+          }
+        ],
+        "__typename": "ReverseGeocoding"
+      },
+      "__typename": "LocationDetails"
+    },
+    "property": null,
+    "owner": {
+      "id": 8972977,
+      "name": "AFI Home",
+      "type": "developer",
+      "phones": [
+        "+48698089999"
+      ],
+      "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im90djJzbTk2NTFjYS1BUEwifQ.qrwqLlX02CfzBfFQv7lywCPloh3pmxpyok7N49lLTmo/image;s=97x97;q=100",
+      "contacts": [
+        {
+          "name": "AFI Home",
+          "phone": "+48698089999",
+          "imageURLSmall": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im90djJzbTk2NTFjYS1BUEwifQ.qrwqLlX02CfzBfFQv7lywCPloh3pmxpyok7N49lLTmo/image;s=97x97;q=100",
+          "__typename": "Agent"
+        }
+      ],
+      "__typename": "LegacyAdvertOwner"
+    },
+    "agency": {
+      "id": 8972977,
+      "name": "AFI Home Złota/Żelazna",
+      "licenseNumber": "",
+      "type": "developer",
+      "phones": [
+        "+48698089999"
+      ],
+      "address": "ul. Złota 83, 00-824, Warszawa, mazowieckie",
+      "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InJydWgxdm1jcmQ5cDEtQVBMIn0.fCLnzGgYxV9ALOqUrCZR0hmFAnf2AMmonYV8p5nCmJA/image;s=800x600;q=90",
+      "url": "https://www.otodom.pl/pl/firmy/deweloperzy/afi-home-zlota-zelazna-ID8972977",
+      "leaderYear": "",
+      "brandingVisible": true,
+      "enabledFeatures": [
+        "AD_HOMEPAGE_1_SCHEDULE",
+        "AD_STATISTICS",
+        "ADDITIONAL_CONTACT_FORMS_AD_PAGE",
+        "ADVANCED_PICTURE_GALLERY_AD_PAGE",
+        "BANNER_DISCOUNT",
+        "CRM_INTEGRATION",
+        "DEDICATED_CS",
+        "DYNAMIC_REMARKETING_OTODOM_ADSPACE",
+        "EXPORT_OLX",
+        "FEATURED_DEVELOPMENT_1",
+        "IMPROVED_DEVELOPERS_PAGE",
+        "IMPROVED_INVESTMENT_PAGE",
+        "LOGO_AD_PAGE",
+        "LOGO_SEARCH_PAGE",
+        "MEGABUMP",
+        "OLX_BUNDLE_BASIC",
+        "OLX_BUNDLE_NORMAL",
+        "OLX_BUNDLE_PREMIUM",
+        "OLX_PUSHUP",
+        "OLX_TOPADS_30",
+        "OLX_TOPADS_7",
+        "OPEN_DAY_SCHEDULER",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT",
+        "PAID_FOR_POST_30_DEVELOPER_UNIT",
+        "PREDEFINED_MESSAGES_CONTACT_FORM",
+        "PROMOTION_PLANNER",
+        "PROMOTION_RECOMMENDER",
+        "PUSHUP",
+        "SPECIAL_OFFER",
+        "STOCK_AND_PRICING_OPTIMISATION",
+        "SUGGEST_PRICE_FORM",
+        "TOPADS_1",
+        "VAS_PLANNER_WITH_AUTOMATIC_SCHEDULING",
+        "WEBINARS_AND_TRAININGS_ACCESS"
+      ],
+      "__typename": "AdvertAgency"
+    },
+    "seo": {
+      "title": "Archiwalne: AFI Home Złota 83 / Żelazna 24, Warszawa, mieszkania from AFI Home Złota/Żelazna - Warszawa, Wola - 63786214 • www.otodom.pl",
+      "description": "Ad11Description. Otodom 63786214",
+      "__typename": "AdvertSeo"
+    },
+    "breadcrumbs": [
+      {
+        "label": "Inwestycja deweloperska",
+        "locative": "",
+        "url": "https://www.otodom.pl/pl/oferty/sprzedaz/inwestycja",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "mazowieckie",
+        "locative": "mazowieckie",
+        "url": "https://www.otodom.pl/pl/oferty/sprzedaz/inwestycja/mazowieckie",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "Warszawa",
+        "locative": "Warszawa",
+        "url": "https://www.otodom.pl/pl/oferty/sprzedaz/inwestycja/warszawa",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "Wola",
+        "locative": "Wola",
+        "url": "https://www.otodom.pl/pl/oferty/sprzedaz/inwestycja/warszawa/wola",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "AFI Home Złota 83 / Żelazna 24, Warszawa",
+        "locative": "",
+        "url": "",
+        "__typename": "AdvertBreadcrumb"
+      }
+    ],
+    "userAdverts": [],
+    "specialOffer": null,
+    "__typename": "Advert",
+    "shouldShowExpiredAdPage": true,
+    "similarAdsLinkUrl": "/pl/wyniki/sprzedaz/inwestycja/mazowieckie/warszawa/warszawa/warszawa/srodmiescie/srodmiescie-polnocne",
+    "contactDetails": {
+      "name": "AFI Home",
+      "type": "developer",
+      "phones": [
+        "+48698089999"
+      ],
+      "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im90djJzbTk2NTFjYS1BUEwifQ.qrwqLlX02CfzBfFQv7lywCPloh3pmxpyok7N49lLTmo/image;s=97x97;q=100"
+    },
+    "videoThumbnailUrl": "https://img.youtube.com/vi/dNIrgKlfZVc/"
+  },
+  "relativeUrl": "/pl/inwestycja/afi-home-zlota-83-zelazna-24-warszawa-ID4jDHU",
+  "adTrackingData": {
+    "touch_point_page": "error_410",
+    "lat": 52.231094,
+    "long": 21.003458,
+    "ad_photo": 7,
+    "price_currency": null,
+    "cat_l1_id": 11,
+    "cat_l1_name": "Inwestycje",
+    "special_offer_type": null,
+    "ad_id": "63786214",
+    "ad_price": null,
+    "business": null,
+    "city_id": "26",
+    "city_name": "warszawa",
+    "market": "primary",
+    "poster_type": "developer",
+    "surface": null,
+    "region_id": "mazowieckie",
+    "region_name": "mazowieckie",
+    "subregion_id": "powiat-warszawa",
+    "seller_id": "8972977",
+    "obido_advert": "n",
+    "nb_ads": 0,
+    "open_day": false,
+    "finish_date": null,
+    "project_status": "ready",
+    "selected_location_id": []
+  },
+  "referer": null,
+  "currentUser": null,
+  "cookiesCategorisation": {
+    "eupubconsent-v2": [
+      "C0001"
+    ],
+    "OptanonAlertBoxClosed": [
+      "C0001"
+    ],
+    "OptanonConsent": [
+      "C0001"
+    ],
+    "OTAdditionalConsentString": [
+      "C0001"
+    ],
+    "access_token": [
+      "C0001"
+    ],
+    "id_token": [
+      "C0001"
+    ],
+    "refresh_token": [
+      "C0001"
+    ],
+    "microservice_token": [
+      "C0001"
+    ],
+    "lastoAuthState": [
+      "C0001"
+    ],
+    "PHPSESSID": [
+      "C0001"
+    ],
+    "laquesis": [
+      "C0002"
+    ],
+    "laquesisff": [
+      "C0002"
+    ],
+    "laquesisqa": [
+      "C0002"
+    ],
+    "laquesissu": [
+      "C0002"
+    ],
+    "lqonap": [
+      "C0002"
+    ],
+    "lqstatus": [
+      "C0002"
+    ],
+    "onap": [
+      "C0002"
+    ],
+    "onap_dev": [
+      "C0002"
+    ],
+    "lang": [
+      "C0003"
+    ],
+    "dfp_user_id": [
+      "C0004"
+    ],
+    "hciam_in_use": [
+      "C0001"
+    ]
+  },
+  "experiments": {},
+  "featureFlags": {
+    "isAdAvmModuleEnabled": true,
+    "isAdFinanceBannerEnabled": true,
+    "isAdFinanceLinkEnabled": true,
+    "isAdMortgageSimulatorEnabled": true,
+    "isFeaturedDevelopmentVASEnabled": true,
+    "isListingRentPriceEnabled": true,
+    "isNewApartmentsForSalePostingFormEnabled": false,
+    "isOldSaveSearchQueryEnabled": false,
+    "isFinanceCheckboxEnabled": true,
+    "isObservedAdsPageEnabled": true,
+    "isBikPromotionEnabled": true,
+    "isSpecialOfferForUnitsExperimentEnabled": false,
+    "isSpecialOfferEnabled": true,
+    "isSeoAdsDescriptionEnabled": true,
+    "isPropertyEvaluationPageActive": true,
+    "isSettingsContactsTabMigrated": false,
+    "isExtendedBillingDataEnabled": false,
+    "isRESellerLeadsActive": false,
+    "isBadgesFeatureEnabled": true,
+    "isSettingsOurTeamTabEnabled": false,
+    "isHCIAMEnabled": true,
+    "isSellerLeadsMvpEnabled": false,
+    "isNexusSellerPageEnabled": true,
+    "isHCIAMAgencyRegistrationEnabled": true,
+    "isHCIAMAgentRegistrationEnabled": true,
+    "isHCIAMDeveloperRegistrationEnabled": true,
+    "isMessagingCenterEnabled": false,
+    "isMessagingCenterChatEnabled": false,
+    "isNexusInvestmentPageEnabled": false,
+    "isXmlReportEnabled": false,
+    "__typename": "FeatureFlags"
+  },
+  "laquesisResult": null,
+  "userSessionId": "25eecc9a-e162-451d-bdbf-58933179aab2",
+  "unconfirmedUserAuthToken": null,
+  "desktopHeader": {
+    "Is-Desktop": "true"
+  }
+}

@@ -1,0 +1,948 @@
+{
+  "address": "Warszawa, Mokotów, Sielce, ul. Dziekońskiego 10",
+  "buildings": 2,
+  "commercial_rental": false,
+  "configuration": {
+    "type": "obj",
+    "value": {
+      "display_type": 1,
+      "hide_is_reserved": false,
+      "hide_properties_prices_for_anonymous_users": false,
+      "hide_publish_date": false,
+      "include_utm": true,
+      "is_autoresponder_enabled": false,
+      "is_boosted": false,
+      "limited_presentation": false,
+      "meta_robots": "index, follow",
+      "phone_clip": "48 224459737",
+      "pre_sale": false,
+      "price_visibility": 1,
+      "privacy_policy_url": "https://www.domd.pl/pl-pl/warszawa/polityka-prywatnosci",
+      "publish_date": "2025-12-03T00:00:00",
+      "redirect_type": 301,
+      "show_building_models_on_map": false,
+      "show_form_placeholder": false,
+      "show_generated_description": true,
+      "show_meta_fields": false,
+      "show_negotiate_price": true,
+      "show_offer_plans": false,
+      "show_price_m2_range": true,
+      "show_price_range": true,
+      "show_floors_navigator": false,
+      "show_2d_plans": false
+    }
+  },
+  "construction_date_range": {
+    "type": "obj",
+    "value": {
+      "lower": "2025-06-01",
+      "upper": "2026-12-31",
+      "bounds": "[]"
+    }
+  },
+  "create_date": "2025-12-03T10:55:16.803556",
+  "currency": 1,
+  "description": {
+    "type": "slate",
+    "root": {
+      "children": [
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "Zapraszamy do Apartamentów Beethovena, nowej inwestycji na Mokotowie. Lokalizacja w sercu dzielnicy oraz bliskość tramwaju ułatwiają korzystanie z uroków dużego miasta, a wysokiej jakości materiały, unikalny design oraz atrakcyjnie zaaranżowana zieleń tworzą przyjazne miejsce do życia. Apartamenty Beethovena to idealna propozycja dla wymagających."
+            }
+          ],
+          "id": "cl-0",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "GŁÓWNE ZALETY\n- materiały wykończeniowe wysokiej jakości\n- artystyczny, unikalny design części wspólnych\n- atrakcyjnie zaaranżowane, zielone dziedzińce\n- sprawna komunikacja dzięki ul. Sobieskiego i al. Sikorskiego\n- rozbudowany transport miejski, w tym nowa trasa tramwajowa z Wilanowa\n- pełna infrastruktura miejska w okolicy: szkoły, przedszkola, supermarkety, centra handlowe, tereny zielone"
+            }
+          ],
+          "id": "cl-1",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "ZNAKOMITA LOKALIZACJA\nApartamenty Beethovena położone są niedaleko skrzyżowania ul. Sobieskiego i al. Sikorskiego. Pobliskie arterie i rozbudowana komunikacja miejska, w tym nowy tramwaj z Wilanowa, zapewniają wygodne poruszanie się po mieście. W okolicy znajdują się sklepy i punkty usługowe oraz centrum handlowe Sadyba Best Mall. Rodziców ucieszą liczne szkoły i przedszkola, a spacerowiczów przyciągną popularne tereny zielone, m.in. Park Arkadia czy Rezerwat przyrody Jeziorko Czerniakowskie."
+            }
+          ],
+          "id": "cl-2",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "STYLOWA ARCHITEKTURA\nW ramach osiedla powstanie zabudowa o wysokości 5 pięter. Punktowe wcięcia i zwyżki urozmaicą bryły budynków, a elewację ozdobią szklane balustrady, wstawki przy oknach w kolorze ciemnego dębu, dekoracyjne ryfle oraz artystyczne grafiki przy wejściach. Przestronne dziedzińce wyróżni bogato zaaranżowana zieleń, w tym m.in. zróżnicowane gatunki drzew i krzewów oraz atrakcyjne elementy małej architektury, jak np. dająca cień pergola."
+            }
+          ],
+          "id": "cl-3",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        },
+        {
+          "alignment": "Left",
+          "children": [
+            {
+              "text": "ELEGANCKIE WNĘTRZA\nWe wnętrzach zaplanowano szereg atrakcyjnych rozwiązań, w tym m.in. portale drzwiowe i ryflowane okładziny w kolorze dębowym, tapety strukturalne, ozdobne lustra oraz posadzki z modernistycznymi wstawkami. Stylowy charakter inwestycji podkreśli specjalnie zaprojektowany system informacji wizualnej, stworzony przy użyciu czcionki inspirowanej literami z warszawskich przedwojennych szyldów."
+            }
+          ],
+          "id": "cl-4",
+          "lineLevel": 0,
+          "style": "Paragraph",
+          "type": "Line"
+        }
+      ]
+    }
+  },
+  "facilities": {
+    "type": "arr",
+    "value": [
+      3,
+      22,
+      23,
+      30
+    ]
+  },
+  "floors_above_ground_range": {
+    "type": "obj",
+    "value": {
+      "lower": 6,
+      "upper": 6,
+      "bounds": "[]"
+    }
+  },
+  "floors_below_ground": 1,
+  "geo_area": {
+    "type": "obj",
+    "value": {
+      "type": "Polygon",
+      "coordinates": {
+        "type": "arr",
+        "value": [
+          {
+            "type": "arr",
+            "value": [
+              {
+                "type": "arr",
+                "value": [
+                  21.045406217489706,
+                  52.194799202520926
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  21.04627525321053,
+                  52.194457220669
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  21.046913618956076,
+                  52.195039245903175
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  21.04604994765328,
+                  52.19530559389238
+                ]
+              },
+              {
+                "type": "arr",
+                "value": [
+                  21.045406217489706,
+                  52.194799202520926
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "geo_point": {
+    "type": "obj",
+    "value": {
+      "type": "Point",
+      "coordinates": {
+        "type": "arr",
+        "value": [
+          21.046164060462406,
+          52.19489438779884
+        ]
+      }
+    }
+  },
+  "has_active_promotions": false,
+  "has_distinction": false,
+  "id": 19840,
+  "is_active": true,
+  "is_condohotel": false,
+  "is_holiday_location": false,
+  "is_phone_clip_enabled": true,
+  "main_image": {
+    "type": "obj",
+    "value": {
+      "m_img_375x211": "https://thumbs.rynekpierwotny.pl/3e79b87d:PletXloyVLyiFtE6x9n9yCxV3RM/375x211/filters:upscale():format(jpg)/offers/offer/19840/main_image/apartamenty-beethovena-etap-2-apartamenty-inwestycyjne_19480d.jpg",
+      "m_img_440x248": "https://thumbs.rynekpierwotny.pl/3e79b87d:TLJYg7GIPrea_70B_BDsz5wSySE/440x248/filters:upscale():format(jpg)/offers/offer/19840/main_image/apartamenty-beethovena-etap-2-apartamenty-inwestycyjne_19480d.jpg",
+      "m_img_440x440": "https://thumbs.rynekpierwotny.pl/3e79b87d:QwhTUYBKysb8Gcf0KwhiROct_y8/440x440/filters:upscale():format(jpg)/offers/offer/19840/main_image/apartamenty-beethovena-etap-2-apartamenty-inwestycyjne_19480d.jpg",
+      "m_img_500": "https://thumbs.rynekpierwotny.pl/3e79b87d:gnEKJLtKGywit1rbZDWwHUxhqMs/500x0/filters:format(jpg)/offers/offer/19840/main_image/apartamenty-beethovena-etap-2-apartamenty-inwestycyjne_19480d.jpg",
+      "m_img_750": "https://thumbs.rynekpierwotny.pl/3e79b87d:XSIQPcxIrLIUPL_JbZuiPsE2M2c/750x0/filters:format(jpg)/offers/offer/19840/main_image/apartamenty-beethovena-etap-2-apartamenty-inwestycyjne_19480d.jpg",
+      "m_img_760x428": "https://thumbs.rynekpierwotny.pl/3e79b87d:LyHtyM-CKAhxeVf8K5sy1jqLw2Q/760x428/filters:upscale():format(jpg)/offers/offer/19840/main_image/apartamenty-beethovena-etap-2-apartamenty-inwestycyjne_19480d.jpg",
+      "m_img_983x552": "https://thumbs.rynekpierwotny.pl/3e79b87d:Wj3KmN95PSnlkjycWnZwxKS58Ws/983x552/filters:upscale():format(jpg)/offers/offer/19840/main_image/apartamenty-beethovena-etap-2-apartamenty-inwestycyjne_19480d.jpg",
+      "m_img_1500": "https://thumbs.rynekpierwotny.pl/3e79b87d:sK2w0PF-k_ylrYD369LfJI3OUBk/1500x0/filters:format(jpg)/offers/offer/19840/main_image/apartamenty-beethovena-etap-2-apartamenty-inwestycyjne_19480d.jpg"
+    }
+  },
+  "map_image": "https://media.propertygroup.pl/offers/offer/map_image/8e0e45.png",
+  "name": "Apartamenty Beethovena etap 2 - apartamenty inwestycyjne",
+  "natural_sites": {
+    "type": "arr",
+    "value": [
+      1,
+      3,
+      7
+    ]
+  },
+  "parking_places": {
+    "type": "arr",
+    "value": [
+      {
+        "type": "obj",
+        "value": {
+          "id": 22476,
+          "type": 1
+        }
+      },
+      {
+        "type": "obj",
+        "value": {
+          "id": 22475,
+          "type": 2
+        }
+      }
+    ]
+  },
+  "payment_description": "Informacja u dewelopera",
+  "price_type": 2,
+  "properties": 11,
+  "properties_for_sale_count": 11,
+  "has_presentable_price": false,
+  "region": {
+    "type": "obj",
+    "value": {
+      "country": 1,
+      "full_name": "mazowieckie, Warszawa, Mokotów, Sielce",
+      "full_name_reverted": "Sielce, Mokotów, Warszawa, mazowieckie",
+      "id": 52563,
+      "included_location": {
+        "type": "obj",
+        "value": {
+          "description": "Na położonym w lewobrzeżnej części stolicy Mokotowie mieszka ok. 219 tys. osób, co sprawia, że jest to najludniejsza spośród warszawskich dzielnic. Mimo dużej liczby mieszkańców, obszar o powierzchni ok. 35 km2 nie należy do zatłoczonych, bowiem zabudowa jest zróżnicowana. Mokotów słynie z luksusowych apartamentowców, jak: Apartamenty przy Królikarni, Rezydencja Merliniego czy Osiedle Eco Park. Występują tutaj zarówno otoczone zielenią wille, jak i wielkie blokowiska na osiedlach: Stegny, Służew i Domaniewska. Dawny Służewiec Przemysłowy zagospodarowany jest na rzecz centrów handlowo-usługowych, jak Galeria Mokotów lub biurowo-biznesowych typu: GTC, TOP 2000, Zepter, Curtis Plaza. Funkcję rekreacyjną pełnią liczne parki, skwery i zieleńce oraz rezerwat Jezioro Czerniakowskie. Niezwykle bogata jest oferta kulturalna: 18 teatrów, 10 muzeów, 5 kin oraz 15 galerii sztuki. W dzielnicy kursuje metro, a główne arterie to: most Siekierkowski, Wisłostrada, Al. Niepodległości i ul. Puławska.",
+          "transport_intro": "Przez Mokotów przebiegają liczne linie tramwaje, autobusowe i I linia metra. Most Siekierkowski łączy dzielnicę z prawobrzeżną częścią Warszawy, a ważnymi arteriami są: Wisłostrada, Al. Niepodległości, Al. Wilanowska oraz ulice: Puławska, Czerniakowska, Woronicza."
+        }
+      },
+      "is_duplicate": false,
+      "name": "Sielce",
+      "name_declension_what": "Sielc",
+      "name_declension_where": "na Sielcach",
+      "parent": {
+        "type": "obj",
+        "value": {
+          "id": 20284,
+          "name": "Mokotów",
+          "slug": "warszawa-mokotow",
+          "stats": {
+            "type": "obj",
+            "value": {
+              "properties_flats_count_for_sale": 2205,
+              "properties_houses_count_for_sale": 14
+            }
+          },
+          "type": 6
+        }
+      },
+      "short_name": "Warszawa, Mokotów, Sielce",
+      "short_name_reverted": "Sielce, Mokotów, Warszawa",
+      "slug": "warszawa-sielce",
+      "stats": {
+        "type": "obj",
+        "value": {
+          "promotions_count_total": 1,
+          "properties_all_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "1": 6,
+              "2": 77,
+              "3": 57,
+              "4": 29,
+              "5": 2
+            }
+          },
+          "properties_commercials_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "1": 1,
+              "3": 1
+            }
+          },
+          "properties_flats_count_for_sale": 196,
+          "properties_flats_count_luxury": 57,
+          "properties_flats_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "1": 6,
+              "2": 77,
+              "3": 57,
+              "4": 29,
+              "5": 2
+            }
+          },
+          "properties_houses_count_for_sale": 0,
+          "properties_houses_count_luxury": 0,
+          "properties_houses_rooms_ranges": {
+            "type": "obj",
+            "value": {
+              "6": 15
+            }
+          },
+          "region_type_city": {
+            "type": "obj",
+            "value": {
+              "id": 8647,
+              "slug": "warszawa",
+              "name": "Warszawa"
+            }
+          },
+          "region_type_district": {
+            "type": "obj",
+            "value": {
+              "id": 20284,
+              "slug": "warszawa-mokotow",
+              "name": "Mokotów"
+            }
+          },
+          "region_type_housing_estate": {
+            "type": "obj",
+            "value": {
+              "id": 52563,
+              "slug": "warszawa-sielce",
+              "name": "Sielce"
+            }
+          },
+          "region_type_voivodeship": {
+            "type": "obj",
+            "value": {
+              "id": 143,
+              "slug": "mazowieckie",
+              "name": "mazowieckie"
+            }
+          }
+        }
+      },
+      "type": 7
+    }
+  },
+  "rent_price_m2_range": {
+    "type": "obj",
+    "value": {
+      "bounds": "()"
+    }
+  },
+  "reservation_description": "Informacja u dewelopera",
+  "sales_offices": {
+    "type": "arr",
+    "value": [
+      {
+        "type": "obj",
+        "value": {
+          "address": "ul. Dziekońskiego 4, Warszawa, Mokotów",
+          "id": 16130,
+          "open_hours_1": {
+            "type": "obj",
+            "value": {
+              "lower": "10:00:00",
+              "upper": "18:00:00",
+              "bounds": "[)"
+            }
+          },
+          "open_hours_2": {
+            "type": "obj",
+            "value": {
+              "lower": "10:00:00",
+              "upper": "18:00:00",
+              "bounds": "[)"
+            }
+          },
+          "open_hours_3": {
+            "type": "obj",
+            "value": {
+              "lower": "10:00:00",
+              "upper": "18:00:00",
+              "bounds": "[)"
+            }
+          },
+          "open_hours_4": {
+            "type": "obj",
+            "value": {
+              "lower": "11:00:00",
+              "upper": "18:00:00",
+              "bounds": "[)"
+            }
+          },
+          "open_hours_5": {
+            "type": "obj",
+            "value": {
+              "lower": "10:00:00",
+              "upper": "18:00:00",
+              "bounds": "[)"
+            }
+          },
+          "open_hours_6": {
+            "type": "obj",
+            "value": {
+              "lower": "10:00:00",
+              "upper": "15:00:00",
+              "bounds": "[)"
+            }
+          },
+          "phone": "48 223516633"
+        }
+      }
+    ]
+  },
+  "slug": "apartamenty-beethovena-etap-2-apartamenty-inwestycyjne-warszawa-sielce",
+  "standard_description": {
+    "type": "obj",
+    "value": {
+      "uuid": "f28f4126-e653-4054-aa2e-9f89958ee465",
+      "types": {
+        "type": "arr",
+        "value": [
+          2
+        ]
+      }
+    }
+  },
+  "stats": {
+    "type": "obj",
+    "value": {
+      "additional_areas": {
+        "type": "arr",
+        "value": [
+          "Ogródek",
+          "Balkon"
+        ]
+      },
+      "all_flat_types": {
+        "type": "obj",
+        "value": {
+          "3": 11
+        }
+      },
+      "building_parameters_stats": {
+        "type": "obj",
+        "value": {
+          "properties_to_45m": {
+            "type": "obj",
+            "value": {
+              "left": 3,
+              "total": 3
+            }
+          },
+          "properties_45m_to_60m": {
+            "type": "obj",
+            "value": {
+              "left": 5,
+              "total": 5
+            }
+          },
+          "properties_over_60m": {
+            "type": "obj",
+            "value": {
+              "left": 3,
+              "total": 3
+            }
+          },
+          "properties_1room": {
+            "type": "obj",
+            "value": {
+              "left": 1,
+              "total": 1
+            }
+          },
+          "properties_2rooms": {
+            "type": "obj",
+            "value": {
+              "left": 3,
+              "total": 3
+            }
+          },
+          "properties_3rooms": {
+            "type": "obj",
+            "value": {
+              "left": 7,
+              "total": 7
+            }
+          },
+          "properties_on_low_floor": {
+            "type": "obj",
+            "value": {
+              "left": 6,
+              "total": 6
+            }
+          },
+          "properties_on_middle_floors": {
+            "type": "obj",
+            "value": {
+              "left": 5,
+              "total": 5
+            }
+          },
+          "properties_with_balconies": {
+            "type": "obj",
+            "value": {
+              "left": 4,
+              "total": 4
+            }
+          }
+        }
+      },
+      "boosters_bigdata_stats": {
+        "type": "obj",
+        "value": {
+          "views_last_3_days": 71
+        }
+      },
+      "distance_from_region": {
+        "type": "obj",
+        "value": {
+          "center": true,
+          "coords": {
+            "type": "arr",
+            "value": [
+              21.011694136916844,
+              52.229755301880594
+            ]
+          },
+          "region": "Warszawy",
+          "distance": 4.5
+        }
+      },
+      "flat_types": {
+        "type": "obj",
+        "value": {
+          "3": 11
+        }
+      },
+      "has_attic": false,
+      "has_entresol": false,
+      "last_update": "2025-12-04T14:26:47.735907",
+      "nearest_places": {
+        "type": "obj",
+        "value": {
+          "sport": {
+            "type": "obj",
+            "value": {
+              "count": 27,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "ForSpa",
+                      "distance": 350
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Inter-Arch for Garden",
+                      "distance": 350
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Akant",
+                      "distance": 450
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "services": {
+            "type": "obj",
+            "value": {
+              "count": 177,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Frykas S.C.",
+                      "distance": 300
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Galeria Antyki",
+                      "distance": 300
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Bank Pekao SA VII Oddział",
+                      "distance": 300
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "education": {
+            "type": "obj",
+            "value": {
+              "count": 57,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Success Story",
+                      "distance": 100
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "CZAS NA MUZYKĘ",
+                      "distance": 100
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Szkoła Podstawowa Nr 302 W Ośrodku Terapii Dziecka W Środowisku",
+                      "distance": 300
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "transport": {
+            "type": "obj",
+            "value": {
+              "count": 106,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Bartoszka",
+                      "distance": 200
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "BARTOSZKA 04",
+                      "distance": 200
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Bartoszka",
+                      "distance": 200
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "medical_care": {
+            "type": "obj",
+            "value": {
+              "count": 115,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "AVI. Centrum Medyczne",
+                      "distance": 300
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "CM LUX MED",
+                      "distance": 300
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Avalon - Centrum Rehabilitacji - Fundacja",
+                      "distance": 350
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "entertainment": {
+            "type": "obj",
+            "value": {
+              "count": 18,
+              "place_list": {
+                "type": "arr",
+                "value": [
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "Galeria Żak",
+                      "distance": 350
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "\"Galeria Żak\" - Skup i sprzedaż antyków i dzieł sztuki",
+                      "distance": 350
+                    }
+                  },
+                  {
+                    "type": "obj",
+                    "value": {
+                      "name": "św. Antoniego z Padwy",
+                      "distance": 650
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "ownership_forms": {
+        "type": "arr",
+        "value": [
+          "Odrębna własność z własnością gruntu"
+        ]
+      },
+      "properties_count_for_sale": 11,
+      "properties_count_mdm": 0,
+      "properties_with_roi_count": 0,
+      "ranges_area_max": 66,
+      "ranges_area_min": 26,
+      "ranges_garages_count": 0,
+      "ranges_height_max": 280,
+      "ranges_height_min": 260,
+      "ranges_plot_area_max": 0,
+      "ranges_plot_area_min": 0,
+      "ranges_price_m2_max": 22800,
+      "ranges_price_m2_min": 20600,
+      "ranges_price_max": 1357334,
+      "ranges_price_min": 588468,
+      "rating": 4.5,
+      "rooms": {
+        "type": "arr",
+        "value": [
+          1,
+          2,
+          3
+        ]
+      },
+      "rooms_ranges": {
+        "type": "obj",
+        "value": {
+          "1": {
+            "type": "obj",
+            "value": {
+              "area": {
+                "type": "obj",
+                "value": {
+                  "max": 26,
+                  "min": 26
+                }
+              },
+              "count": 1,
+              "price": {
+                "type": "obj",
+                "value": {
+                  "max": 588468,
+                  "min": 588468
+                }
+              }
+            }
+          },
+          "2": {
+            "type": "obj",
+            "value": {
+              "area": {
+                "type": "obj",
+                "value": {
+                  "max": 51,
+                  "min": 37
+                }
+              },
+              "count": 3,
+              "price": {
+                "type": "obj",
+                "value": {
+                  "max": 1133310,
+                  "min": 815288
+                }
+              }
+            }
+          },
+          "3": {
+            "type": "obj",
+            "value": {
+              "area": {
+                "type": "obj",
+                "value": {
+                  "max": 66,
+                  "min": 54
+                }
+              },
+              "count": 7,
+              "price": {
+                "type": "obj",
+                "value": {
+                  "max": 1357334,
+                  "min": 1164225
+                }
+              }
+            }
+          }
+        }
+      },
+      "votes_count": 81
+    }
+  },
+  "status": {
+    "type": "obj",
+    "value": {
+      "offer_status": 1,
+      "substatus": 6,
+      "status": 2,
+      "status_date_range": {
+        "type": "obj",
+        "value": {
+          "lower": "2025-12-03",
+          "bounds": "[)"
+        }
+      }
+    }
+  },
+  "storage": {
+    "type": "obj",
+    "value": {}
+  },
+  "street_name": "ul. Dziekońskiego",
+  "street_number": "10",
+  "tags": {
+    "type": "arr",
+    "value": [
+      {
+        "type": "obj",
+        "value": {
+          "id": 44,
+          "name": "Blisko terenów zielonych",
+          "description": "3 parki w okolicy"
+        }
+      }
+    ]
+  },
+  "type": 1,
+  "uuid": "a583a2db-4813-4f34-924b-44a72e842e18",
+  "vendor": {
+    "type": "obj",
+    "value": {
+      "awards_count": 0,
+      "id": 955,
+      "configuration": {
+        "type": "obj",
+        "value": {
+          "force_show_price": false,
+          "price_visibility": 2
+        }
+      },
+      "name": "Dom Development S.A.",
+      "slug": "dom-development-sa",
+      "type": 1,
+      "logo": {
+        "type": "obj",
+        "value": {
+          "v_log_42x32": "https://thumbs.rynekpierwotny.pl/5e89160c:EPysAE5Q7r_EtGgNMUx_OaYSmPE/42x32/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_53x40": "https://thumbs.rynekpierwotny.pl/5e89160c:w-QvH2UKw_ONmIh9mzRia3iVp_U/53x40/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:EHY-A9Itj85ER_ZaUUSA7ysLMOY/80x60/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "m_img_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:i9yFCHTclQ91Op-aosUE7_-BhIU/80x60/filters:upscale():format(jpg)/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "m_img_80x60_png": "https://thumbs.rynekpierwotny.pl/5e89160c:JGyOvHsq79TqkxifTpT4IUQhMmA/80x60/filters:upscale():format(png)/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_84x64": "https://thumbs.rynekpierwotny.pl/5e89160c:EG2RasR38gIbLho_Z_6C8IyuAek/84x64/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_106x80": "https://thumbs.rynekpierwotny.pl/5e89160c:cUAdNGQG6mcnHwvwr5LmqoVWELg/106x80/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_120x90": "https://thumbs.rynekpierwotny.pl/5e89160c:I9BUxJOA3Skj-7-iNFNkH-HoGJo/120x90/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_126x96": "https://thumbs.rynekpierwotny.pl/5e89160c:6BymmLrfHklwyrFP9dk2WQah4WE/126x96/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_159x120": "https://thumbs.rynekpierwotny.pl/5e89160c:PHOnW2KeHKTd3udc431vCxlxYWo/159x120/filters:no_upscale()/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_160x120": "https://thumbs.rynekpierwotny.pl/5e89160c:s9oR-KWnUVoug8a4aepnQk-_i-0/160x120/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_180": "https://thumbs.rynekpierwotny.pl/5e89160c:koxGZ3mvTllioJQxTNfXxPSZbWE/180x0/vendors/vendor/logo/dom-development-sa_707b2d.png",
+          "v_log_100": "https://thumbs.rynekpierwotny.pl/5e89160c:SJh30foY8kVix77Kmcyvbe5c2l0/100x0/vendors/vendor/logo/dom-development-sa_707b2d.png"
+        }
+      },
+      "offices": {
+        "type": "arr",
+        "value": [
+          {
+            "type": "obj",
+            "value": {
+              "address": "Pl. Piłsudskiego 3",
+              "phone": "48 223516369",
+              "type": 1,
+              "region": 8647
+            }
+          }
+        ]
+      },
+      "stats": {
+        "type": "obj",
+        "value": {
+          "offers_count_for_sale": 60,
+          "offers_count_sold": 124,
+          "properties_count_for_sale": 2478,
+          "response_grade": 1
+        }
+      }
+    }
+  },
+  "website": "https://www.domd.pl/pl-pl/warszawa/lista-inwestycji/apartamenty-beethovena?tabInTabs=1",
+  "without_contribution": false
+}

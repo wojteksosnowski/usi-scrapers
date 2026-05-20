@@ -20,16 +20,24 @@ def get_mapping(portal_prefix: str, entity_type: str = "investment") -> dict:
     mapping = load_mapping()
     return mapping.get("portals", {}).get(portal_prefix, {}).get(entity_type, {})
 
-def resolve_path(data: dict | list, path: str) -> Any:
+def resolve_path(data: dict | list, path: str | dict) -> Any:
     """
     Resolves a custom path string against a JSON-like dictionary or list.
     Supports:
     - Dot notation: a.b.c
     - Array indices: a[0].b
     - Array filtering: a[label=something].b
+    - Dict with regex: {"path": "a.b", "regex": "pattern"}
     """
     if not path or data is None:
         return None
+
+    regex_pattern = None
+    if isinstance(path, dict):
+        regex_pattern = path.get("regex")
+        path = path.get("path")
+        if not path:
+            return None
 
     parts = path.split('.')
     current = data
@@ -79,4 +87,11 @@ def resolve_path(data: dict | list, path: str) -> Any:
             else:
                 return None
                 
+    if regex_pattern and current is not None:
+        match = re.search(regex_pattern, str(current))
+        if match:
+            return match.group(1) if match.lastindex else match.group(0)
+        else:
+            return None
+
     return current
