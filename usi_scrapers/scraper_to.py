@@ -149,6 +149,10 @@ def extract_to_data(html: str, url: str, fetcher: Fetcher = None) -> dict:
     data = parse_to_product(html) or {}
     data["url"] = url
     
+    to_id = _extract_to_id(url)
+    if to_id:
+        data["to_id"] = to_id
+    
     # 1. Clean Name extraction
     clean_name = None
     h1_match = re.search(r"<h1[^>]*>(.*?)</h1>", html, re.DOTALL)
