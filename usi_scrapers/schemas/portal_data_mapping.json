@@ -49,11 +49,11 @@
         "name": "name",
         "developer_id": "brand.id",
         "developer_name": "brand.name",
-        "units_count": "properties_count",
+        "units_count": "offers.offerCount",
         "price_min": "offers.lowPrice",
         "price_max": "offers.highPrice",
-        "ceiling_height_min": "additionalProperty[name=Wysokość pomieszczeń].value",
-        "ceiling_height_max": "additionalProperty[name=Wysokość pomieszczeń].value"
+        "ceiling_height_min": "additionalProperty[name=Wysokość mieszkania].value",
+        "ceiling_height_max": "additionalProperty[name=Wysokość mieszkania].value"
       },
       "developer": {
         "id": "id",

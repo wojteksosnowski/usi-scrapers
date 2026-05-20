@@ -18,31 +18,74 @@ logger = get_logger(__name__)
 def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
     Downloads raw JSON for a TabelaOfert developer profile and saves it.
-    Also downloads developer logo when found in the page HTML.
-    klient_id is required — ID-only naming enforced (no slug fallback).
+    Enforces PURE-RAW rule: saves the exact JSON from the portal.
     """
     def fetch_to_dev(u, f):
         html = fetch_to_html(u, f)
         if not html: return None
-        return extract_to_dev_data(html, u)
+        return extract_to_dev_raw_json(html)
+
+    def extract_id(d):
+        if not d: return None
+        if "klientId" in d: return str(d["klientId"])
+        if "klient_id" in d: return str(d["klient_id"])
+        if "identifier" in d: return str(d["identifier"])
+        
+        # From Next.js pageProps if it's __NEXT_DATA__
+        props = d.get("props", {}).get("pageProps", {})
+        if props.get("klientId"): return str(props["klientId"])
+        if props.get("developer", {}).get("id"): return str(props["developer"]["id"])
+        
+        # From JSON-LD URL
+        for key in ["@id", "url"]:
+            val = d.get(key)
+            if val and isinstance(val, str):
+                m = re.search(r',i?(\d+)(?:[/?]|$)', val)
+                if m: return m.group(1)
+        return None
+
+    def extract_logo(d):
+        if not d: return None
+        if "logo_url" in d: return d["logo_url"]
+        if "logo" in d:
+            if isinstance(d["logo"], dict): return d["logo"].get("url")
+            return d["logo"]
+        if "image" in d:
+            if isinstance(d["image"], dict): return d["image"].get("url")
+            return d["image"]
+        return None
 
     return generic_download_dev_json(
         fetcher, config, url, dev_slug, "to",
         fetch_func=fetch_to_dev,
-        extract_id_func=lambda d: d.get("klient_id"),
-        extract_logo_func=lambda d: d.get("logo_url"),
+        extract_id_func=extract_id,
+        extract_logo_func=extract_logo,
         source_url=url
     )
 
 
-def extract_to_klient_id(html: str) -> str | None:
-    """Extracts internal klient-id from TabelaOfert HTML (meta tag or Next.js state)."""
-    # 1. From Meta Tag (most reliable)
+def extract_to_klient_id(html: str, raw_json: dict = None) -> str | None:
+    """Extracts internal klient-id from TabelaOfert JSON or HTML fallback."""
+    # 1. PURE-RAW: read from JSON directly!
+    if raw_json:
+        if "klientId" in raw_json: return str(raw_json["klientId"])
+        
+        brand = raw_json.get("brand", {})
+        if isinstance(brand, dict):
+            if "klientId" in brand: return str(brand["klientId"])
+            if "identifier" in brand: return str(brand["identifier"])
+            
+        publisher = raw_json.get("publisher", {})
+        if isinstance(publisher, dict):
+            if "klientId" in publisher: return str(publisher["klientId"])
+            if "identifier" in publisher: return str(publisher["identifier"])
+
+    # 2. From Meta Tag (fallback)
     m = re.search(r'<meta[^>]+name=["\']klient-id["\'][^>]+content=["\'](\d+)["\']', html)
     if m:
         return m.group(1)
     
-    # 2. From Next.js state (escaped JSON)
+    # 3. From Next.js state (escaped JSON fallback)
     m = re.search(r'\\?"klientId\\?":(\d+)', html)
     if m:
         return m.group(1)
@@ -50,76 +93,41 @@ def extract_to_klient_id(html: str) -> str | None:
     return None
 
 
-def extract_to_dev_data(html: str, url: str) -> dict:
-    """Extracts basic data from a TabelaOfert developer page."""
-    data: dict = {"url": url}
-    
-    klient_id = extract_to_klient_id(html)
-    if klient_id:
-        data["klient_id"] = klient_id
+def extract_to_dev_raw_json(html: str) -> dict:
+    """Extracts pure raw JSON for TabelaOfert developer (no aggregations or fake dicts)."""
+    # 1. Check for Next.js data (purest form if available)
+    m_next = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL)
+    if m_next:
+        try:
+            return json.loads(m_next.group(1))
+        except:
+            pass
 
-    logo_url = extract_to_dev_logo(html)
-    if logo_url:
-        data["logo_url"] = logo_url
-
-    # Name from JSON-LD Organization/LocalBusiness
+    # 2. Check for JSON-LD Organization/LocalBusiness
     scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.DOTALL)
     for s in scripts:
-        for org_type in ('"Organization"', '"LocalBusiness"'):
-            if org_type in s:
+        if '"@type":"Organization"' in s or '"@type": "Organization"' in s or '"@type":"LocalBusiness"' in s or '"@type": "LocalBusiness"' in s:
+            try:
+                d = json.loads(s.strip())
+                items = d if isinstance(d, list) else [d]
+                for item in items:
+                    if isinstance(item, dict) and item.get("@type") in ("Organization", "LocalBusiness"):
+                        return item
+            except Exception:
+                pass
+
+    # 3. Extract JSON object containing klientId from Next_f or window
+    for s in scripts:
+        if 'klientId' in s or 'klient-id' in s:
+            # Match innermost json object containing klientId
+            match = re.search(r'(\{.*?["\']klientId["\']\s*:\s*\d+.*?\})', s)
+            if match:
                 try:
-                    d = json.loads(s.strip())
-                    items = d if isinstance(d, list) else [d]
-                    for item in items:
-                        if isinstance(item, dict) and item.get("@type") in ("Organization", "LocalBusiness"):
-                            if item.get("name"):
-                                data["name"] = item["name"]
-                            break
-                except Exception:
+                    return json.loads(match.group(1).replace(r'\"', '"'))
+                except:
                     pass
-
-    # Fallback name from <h1>
-    if not data.get("name"):
-        h1 = re.search(r"<h1[^>]*>(.*?)</h1>", html, re.DOTALL)
-        if h1:
-            data["name"] = re.sub(r"<[^>]+>", "", h1.group(1)).strip() or None
-
-    return data
-
-
-def extract_to_dev_logo(html: str) -> str | None:
-    """Extracts developer logo URL from TabelaOfert developer page HTML."""
-    logo_url = None
-    
-    # 1. og:image meta tag — most stable
-    og = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', html, re.IGNORECASE)
-    if not og:
-        og = re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']', html, re.IGNORECASE)
-    
-    if og:
-        logo_url = og.group(1)
-
-    # 2. <img> with class or alt containing "logo", but exclude the portal's own logo
-    if not logo_url:
-        imgs = re.finditer(r'<img[^>]+src=["\']([^"\']+)["\'][^>]*>', html, re.IGNORECASE)
-        for m in imgs:
-            img_tag = m.group(0)
-            src = m.group(1)
-            # Skip portal logo
-            if "Logo portalu TabelaOfert.pl" in img_tag or "logo/logo.svg" in src:
-                continue
-            if "logo" in img_tag.lower():
-                logo_url = src
-                break
-
-    if logo_url:
-        if logo_url.startswith("//"):
-            return "https:" + logo_url
-        if logo_url.startswith("/"):
-            return "https://tabelaofert.pl" + logo_url
-        return logo_url
-
-    return None
+                    
+    return {}
 
 def extract_to_api_token(html: str) -> str | None:
     """Extracts the API version token from Next.js script hashes."""
@@ -551,7 +559,7 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         return {"error": f"Could not determine investment_slug from URL: {url}"}
     
     # 1. KRYTYCZNA ZASADA: Pierwszeństwo ma zawsze ID (klient-id)
-    klient_id = extract_to_klient_id(html)
+    klient_id = extract_to_klient_id(html, raw_json=product)
     if not klient_id:
         return {"error": f"CRITICAL: Could not extract klient-id for TabelaOfert from {url}. Aborting to prevent identity mismatch."}
 
