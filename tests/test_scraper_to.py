@@ -351,7 +351,9 @@ _SCRAPE_HTML = f"""
 """
 
 
-def test_scrape_tabelaofert_success(fetcher):
+@patch("usi_scrapers.scraper_to.download_raw_to_dev_json")
+def test_scrape_tabelaofert_success(mock_dl, fetcher):
+    mock_dl.return_value = "devco"
     fetcher.fetch.return_value = _SCRAPE_HTML
     fetcher.fetch_json.return_value = {"data": {"images": [{"url": "https://content.tabelaofert.pl/img.webp"}]}}
 
@@ -364,7 +366,9 @@ def test_scrape_tabelaofert_success(fetcher):
     assert "raw_details" in result
 
 
-def test_scrape_tabelaofert_images_in_result(fetcher):
+@patch("usi_scrapers.scraper_to.download_raw_to_dev_json")
+def test_scrape_tabelaofert_images_in_result(mock_dl, fetcher):
+    mock_dl.return_value = "devco"
     fetcher.fetch.return_value = _SCRAPE_HTML
     fetcher.fetch_json.return_value = {
         "data": {

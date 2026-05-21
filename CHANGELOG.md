@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.0] — 2026-05-21
+
+### Added
+- **MAX-reuse Principle**: Established a mandate to prioritize existing functions and APIs over creating new logic, ensuring architectural consistency.
+- **PURE-RAW Enforcement**: Guaranteed that `raw_*.json` files are "virgin" structural mirrors of portal responses. Removed all data injection, including `_usi_meta`.
+- **Intelligent Developer Resolution**: Scrapers now automatically resolve and create missing developer records by fetching canonical profiles from portals when local ID-lookups fail.
+
+### Changed
+- **Unified Developer API**: Refactored all scrapers to use a standardized `download_raw_*_dev_json` flow for identity resolution, eliminating code duplication.
+- **Fast Lookups**: Identity lookup functions now rely exclusively on ID-based filenames, aligning with the "ID-only" policy and improving performance.
+
+### Fixed
+- **'unknown' Directory Viral Infection**: Fixed a bug where a single `unknown/` directory could "poison" multiple developers. The system now strictly rejects `unknown` as a valid slug and enforces Fail-fast resolution.
+
 ## [0.6.0] — 2026-05-21
 
 ### Added

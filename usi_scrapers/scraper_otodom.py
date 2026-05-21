@@ -37,10 +37,11 @@ def _parse_otodom_item(item: dict, offer_id=None) -> dict | None:
     }
 
 
-def download_raw_otodom_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
+def download_raw_otodom_dev_json(url: str, dev_slug: Optional[str], fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
     """
     Downloads raw JSON for an Otodom developer profile and saves it.
     Also downloads developer logo when found in __NEXT_DATA__.
+    Returns the resolved developer slug.
     """
     def fetch_oto_props(u, f):
         html = fetch_otodom_html(u, f)
@@ -306,29 +307,13 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
 
     if agency_url:
         full_agency_url = agency_url if agency_url.startswith("http") else f"https://www.otodom.pl{agency_url}"
-
-        if not developer_slug:
-            # Try to extract it from the URL first
-            dev_match = re.search(r'(?<=/)[^/]+(?=-ID)', agency_url)
-            if dev_match:
-                candidate_slug = dev_match.group(0)
-                if candidate_slug not in ("deweloper", "biuro-nieruchomosci", "agency"):
-                    developer_slug = candidate_slug
-
-            # Proactive fetch if still unknown or generic
-            if not developer_slug:
-                logger.info(f"Proactively fetching developer profile to resolve slug: {full_agency_url}")
-                dev_html = fetch_otodom_html(full_agency_url, fetcher)
-                if dev_html:
-                    # Try to find canonical or a better link in the dev page
-                    canonical_match = re.search(r'link rel="canonical" href=".*?/firmy/deweloperzy/([^/"?#]+)-ID', dev_html)
-                    if canonical_match:
-                        developer_slug = canonical_match.group(1)
-
-        # Add/update developer in database
+        
+        # Resolve (if needed) and Update developer data using the internal API
+        # If developer_slug is None, it will be resolved from the profile data
+        developer_slug = download_raw_otodom_dev_json(full_agency_url, developer_slug, fetcher, fetcher.config)
         if developer_slug:
-            download_raw_otodom_dev_json(full_agency_url, developer_slug, fetcher, fetcher.config)
-            logger.info(f"Saved developer '{developer_slug}' data from Otodom.")
+            logger.info(f"Resolved/Updated developer '{developer_slug}' data from Otodom.")
+
     if not developer_slug:
         # Last resort: if we have agency_name but no slug, we might want to slugify it, 
         # but the mandate says STRICT API-BASED. 
@@ -369,9 +354,6 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         delivery_quarter = old_delivery.get("quarter")
         delivery_year = old_delivery.get("year")
 
-    ad_data["url"] = url
-    ad_data["image_urls"] = images
-    
     oto_mapping = get_mapping("oto", "investment")
     
     result = {

@@ -80,8 +80,9 @@ def test_archiving_uses_portal_id(tmp_path):
     assert len(meta_archives) == 1
 
 @patch("usi_scrapers.scraper_rp.fetch_rp_developer_profile")
-@patch("usi_scrapers.utils.images.download_developer_logo")
+@patch("usi_scrapers.utils.scrapers.download_developer_logo")
 def test_download_raw_rp_dev_json_resolves_portal_id(mock_logo, mock_fetch, tmp_path):
+
     public_dir = tmp_path / "public"
     public_dir.mkdir()
     
@@ -116,8 +117,11 @@ def test_download_raw_rp_dev_json_resolves_portal_id(mock_logo, mock_fetch, tmp_
     dev_dir = public_dir / "USIdev" / "dev-slug-folder"
     saved_file = dev_dir / "raw_rp_9876.json"
     assert saved_file.exists()
-    
-    # Verify content has meta with portal_id
+
+    # Verify content is identical to the mock source (PURE-RAW)
     with open(saved_file, "r") as f:
         content = json.load(f)
-    assert content["_usi_meta"]["portal_id"] == "9876"
+    assert content["id"] == 9876
+    assert content["slug"] == "some-dev-slug"
+    assert "_usi_meta" not in content
+

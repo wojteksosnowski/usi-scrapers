@@ -155,9 +155,9 @@ def process_batch(
             dev_slug = data.get("developer_slug")
             inv_slug = data.get("investment_slug")
             
-            if not dev_slug or not inv_slug:
+            if not dev_slug or not inv_slug or str(dev_slug).lower() == "unknown":
                 status = "failed"
-                error_msg = f"Incomplete data: missing developer_slug ({dev_slug}) or investment_slug ({inv_slug})"
+                error_msg = f"Invalid or incomplete data: missing or unknown developer_slug ({dev_slug}) or investment_slug ({inv_slug})"
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
                 inv_info["dev_slug"] = dev_slug
@@ -409,8 +409,8 @@ def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifie
         return func(identifier, dev_slug, inv_slug, fetcher, config)
     return None
 
-def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: str) -> Optional[Path]:
-    """Pobiera i zapisuje surowy JSON profilu dewelopera."""
+def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: Optional[str] = None) -> Optional[str]:
+    """Pobiera i zapisuje surowy JSON profilu dewelopera. Zwraca ustalony slug."""
     p = resolve_prefix(portal)
     func = get_scraper_func(p, "download_raw_dev")
     if func:

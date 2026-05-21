@@ -16,10 +16,11 @@ from . import get_logger
 
 logger = get_logger(__name__)
 
-def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
+def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: Optional[str], fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
     """
     Downloads raw JSON for an RP developer profile and saves it.
     Also downloads developer logo when found in the API response.
+    Returns the resolved developer slug.
     """
     def extract_id(profile):
         rp_dev_mapping = get_mapping("rp", "developer")
@@ -331,17 +332,11 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         developer_slug = existing_slug
         logger.info(f"Matched vendor ID {vendor_id} to existing developer slug: {developer_slug}")
 
-    # 2. Try to get slug from vendor_data in investment details
-    if not developer_slug and vendor_data:
-        developer_slug = get_val(vendor_data, "slug")
-
-    # 3. Proactive API fetch from developer profile (as in Coda.io prototype)
-    if not developer_slug:
-        logger.info(f"Vendor slug missing for ID {vendor_id}. Fetching developer profile proactively...")
-        profile = fetch_rp_developer_profile(str(vendor_id), fetcher)
-        developer_slug = profile.get("slug")
-        if developer_slug:
-            logger.info(f"Resolved developer slug '{developer_slug}' from profile API for ID {vendor_id}")
+    # Resolve (if needed) and Update developer data using the internal API
+    # If developer_slug is None, it will be resolved from the profile data
+    developer_slug = download_raw_rp_dev_json(str(vendor_id), developer_slug, fetcher, fetcher.config)
+    if developer_slug:
+        logger.info(f"Resolved/Updated developer '{developer_slug}' data from RynekPierwotny.")
 
     if not developer_slug:
         return {"error": f"Failed to resolve developer_slug from API data for vendor ID {vendor_id}"}
@@ -355,10 +350,6 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
     if existing_inv_slug:
         investment_slug = existing_inv_slug
         logger.info(f"Matched investment ID {offer_id} to existing investment slug: {investment_slug}")
-
-    # Add/update developer in database
-    download_raw_rp_dev_json(str(vendor_id), developer_slug, fetcher, fetcher.config)
-    logger.info(f"Saved developer '{developer_slug}' data from RynekPierwotny.")
 
     if not url:
         url = portal_url("rp", "investment", dev_slug=developer_slug, inv_slug=investment_slug, offer_id=offer_id)
@@ -382,8 +373,6 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
             stage_is_current = s["current"]
             break
 
-    details["id"] = offer_id
-    details["image_urls"] = gallery_urls
     sibling_stages = stages
     sibling_stage_folders = [
         f"{developer_slug}/{s['slug']}"

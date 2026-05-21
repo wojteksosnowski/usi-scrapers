@@ -15,10 +15,11 @@ from . import get_logger
 
 logger = get_logger(__name__)
 
-def download_raw_to_dev_json(url: str, dev_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
+def download_raw_to_dev_json(url: str, dev_slug: Optional[str], fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
     """
     Downloads raw JSON for a TabelaOfert developer profile and saves it.
     Enforces PURE-RAW rule: saves the exact JSON from the portal.
+    Returns the resolved developer slug.
     """
     def fetch_to_dev(u, f):
         html = fetch_to_html(u, f)
@@ -569,28 +570,33 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     developer_slug = lookup_developer_by_id(fetcher.config.public_dir, "to", klient_id)
     if developer_slug:
         logger.info(f"Matched TO klient-id {klient_id} to existing developer slug: {developer_slug}")
-    else:
-        # If not in database, we MUST resolve a temporary slug from HTML to create the directory
-        # Priority 1: Next.js state (often contains the clean slug/kryterium)
-        m = re.search(r'\\?"klientKryterium\\?":\\?"([^"\\?]+)\\?"', html)
-        if m:
-            developer_slug = m.group(1)
-        
-        # Priority 2: Traditional <a> tag links
-        if not developer_slug:
-            city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
-            dev_links = re.findall(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"', html)
-            for _, to_dev_slug in dev_links:
-                if to_dev_slug not in city_slugs:
-                    developer_slug = to_dev_slug
-                    break
-        
-        if not developer_slug:
-            return {"error": f"Failed to resolve even a temporary developer slug for klient-id {klient_id} from {url}"}
-        
-        logger.info(f"New developer detected. Using temporary slug '{developer_slug}' for klient-id {klient_id}")
 
-    to_dev_slug = developer_slug # Store for download_raw_to_dev_json
+    # Resolve (if needed) and Update developer data using the internal API
+    # If developer_slug is None, it will be resolved from the profile data
+    to_dev_url = None
+    if developer_slug:
+        to_dev_url = portal_url("to", "developer", slug=developer_slug)
+    else:
+        # Try to find a temporary slug from HTML to build the profile URL
+        m = re.search(r'\\?"klientKryterium\\?":\\?"([^"\\?]+)\\?"', html)
+        temp_slug = m.group(1) if m else None
+        if not temp_slug or temp_slug == "unknown":
+            dev_links = re.findall(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"', html)
+            city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
+            for link, s in dev_links:
+                if s not in city_slugs and s != "unknown":
+                    temp_slug = s
+                    break
+        if temp_slug:
+            to_dev_url = portal_url("to", "developer", slug=temp_slug)
+
+    if to_dev_url:
+        developer_slug = download_raw_to_dev_json(to_dev_url, developer_slug, fetcher, fetcher.config)
+        if developer_slug:
+            logger.info(f"Resolved/Updated developer '{developer_slug}' data from TabelaOfert.")
+
+    if not developer_slug:
+        return {"error": f"Failed to resolve developer_slug from API for klient-id {klient_id} from {url}"}
     
     # ID-based Investment Identification
     to_id = _extract_to_id(url)
@@ -600,12 +606,6 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         if existing_inv_slug:
             investment_slug = existing_inv_slug
             logger.info(f"Matched investment ID {portal_id} to existing investment slug: {investment_slug}")
-
-    # Add/update developer in database
-    full_dev_url = portal_url("to", "developer", slug=to_dev_slug)
-    # Use klient_id as portal_id for the download function
-    download_raw_to_dev_json(full_dev_url, developer_slug, fetcher, fetcher.config)
-    logger.info(f"Saved developer '{developer_slug}' data from TabelaOfert (ID: {klient_id}).")
 
     ext_loc = product.get("_extracted_location", {})
     address = ext_loc.get("address")
@@ -633,8 +633,6 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
             for p in props if isinstance(p, dict) and p.get("name") not in _meta
         ]
 
-    product["image_urls"] = filtered_urls
-    
     to_mapping = get_mapping("to", "investment")
     
     # Try mapping first, fallback to manual extraction

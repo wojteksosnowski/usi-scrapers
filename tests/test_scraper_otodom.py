@@ -150,6 +150,7 @@ def test_scrape_otodom_delivery_fallback_to_estimated(mock_dl, fetcher):
 
 @patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
 def test_scrape_otodom_agency_slug_from_url(mock_dl, fetcher):
+    mock_dl.return_value = "testdev"
     fetcher.fetch.return_value = _make_html()
     result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)
     assert result["developer_slug"] == "testdev"

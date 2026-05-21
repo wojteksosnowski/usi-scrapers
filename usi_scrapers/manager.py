@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from typing import Optional
 from .models import ScraperConfig
 from .fetcher import Fetcher
 from .utils.io import get_investment_dir, get_image_dir, save_raw_json
@@ -25,8 +26,13 @@ class TechnicalDataManager:
         """Centralized path for USI images"""
         return get_image_dir(dev_slug, inv_slug, self.config.public_dir)
 
-    def save_raw_data(self, data: dict, dev_slug: str, inv_slug: str, portal_prefix: str) -> Path:
-        """Saves raw JSON for an investment"""
+    def save_raw_data(self, data: dict, dev_slug: str, inv_slug: str, portal_prefix: str) -> Optional[Path]:
+        """Saves virgin raw JSON for an investment"""
+        raw_details = data.get("raw_details")
+        if not raw_details:
+            logger.error(f"save_raw_data: missing 'raw_details' for {portal_prefix}/{dev_slug}/{inv_slug}. Aborting save.")
+            return None
+
         if portal_prefix == "rp":
             portal_id = str(data.get("id", "")) or None
         elif portal_prefix == "oto":
@@ -36,7 +42,8 @@ class TechnicalDataManager:
             portal_id = f"i{to_id}" if to_id else None
         else:
             portal_id = None
-        return save_raw_json(data, self.config.public_dir, dev_slug, inv_slug, portal_prefix, portal_id=portal_id)
+        
+        return save_raw_json(raw_details, self.config.public_dir, dev_slug, inv_slug, portal_prefix, portal_id=portal_id)
 
     def sync_images(self, urls: list[str], dev_slug: str, inv_slug: str) -> list[str]:
         """Downloads and saves images, returns list of filenames"""

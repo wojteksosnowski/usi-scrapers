@@ -6,6 +6,7 @@ from ..models import ScraperConfig
 from ..fetcher import Fetcher
 from .io import save_dev_raw_json
 from .images import download_developer_logo
+from .mapping import get_mapping, resolve_path
 
 from .. import get_logger
 
@@ -46,19 +47,34 @@ def generic_download_dev_json(
     fetcher: Fetcher,
     config: ScraperConfig,
     url_or_id: str,
-    dev_slug: str,
+    dev_slug: Optional[str],
     portal_prefix: str,
     fetch_func: Callable[[str, Fetcher], Any],
     extract_id_func: Callable[[Any], Optional[str]],
     extract_logo_func: Callable[[Any], Optional[str]],
     source_url: Optional[str] = None
-) -> Optional[Path]:
+) -> Optional[str]:
     """
     Generic flow for downloading and saving developer profile data.
+    If dev_slug is None, attempts to extract it from the fetched data using portal mapping.
+    Returns the resolved/provided developer_slug on success.
     """
     data = fetch_func(url_or_id, fetcher)
     if not data:
         logger.error(f"Failed to fetch {portal_prefix} developer data for {url_or_id}")
+        return None
+
+    # Slug resolution (Internal API logic)
+    if not dev_slug:
+        dev_mapping = get_mapping(portal_prefix, "developer")
+        slug_path = dev_mapping.get("slug")
+        if slug_path:
+            dev_slug = resolve_path(data, slug_path)
+            if dev_slug:
+                logger.info(f"Resolved canonical {portal_prefix} slug from API: {dev_slug}")
+
+    if not dev_slug or str(dev_slug).lower() == "unknown":
+        logger.error(f"Could not resolve a valid {portal_prefix} developer slug from {url_or_id} (slug: {dev_slug})")
         return None
 
     portal_id = extract_id_func(data)
@@ -72,7 +88,7 @@ def generic_download_dev_json(
     else:
         logger.debug(f"No logo URL found for {portal_prefix} developer {dev_slug}")
 
-    return save_dev_raw_json(
+    save_dev_raw_json(
         data if isinstance(data, dict) else {"content": data}, 
         config.public_dir, 
         dev_slug, 
@@ -80,6 +96,8 @@ def generic_download_dev_json(
         portal_id=portal_id, 
         source_url=source_url or (url_or_id if url_or_id.startswith("http") else None)
     )
+    
+    return dev_slug
 
 def extract_logo_from_dict(data: dict, candidates: List[str]) -> Optional[str]:
     """
