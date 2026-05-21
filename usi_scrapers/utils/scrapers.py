@@ -6,7 +6,7 @@ from ..models import ScraperConfig
 from ..fetcher import Fetcher
 from .io import save_dev_raw_json
 from .images import download_developer_logo
-from .mapping import get_mapping, resolve_path
+from ..mapping import get_mapping, resolve_path
 
 from .. import get_logger
 

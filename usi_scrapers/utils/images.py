@@ -56,16 +56,16 @@ def clean_filename(url: str) -> str:
 
     return filename
 
-def download_image(url: str, developer_slug: str, investment_slug: str, config: ScraperConfig) -> str:
+def download_image(url: str, developer_slug: str, investment_slug: str, config: ScraperConfig) -> tuple[str, bool]:
     """
     Downloads image from URL and saves it to {public_dir}/USI/{dev_slug}/{inv_slug}/{filename}.
-    Returns filename if successful, empty string otherwise.
+    Returns a tuple: (filename if successful or empty string otherwise, was_skipped boolean).
     """
     filename = clean_filename(url)
     
     if not filename:
         logger.warning(f"Could not extract filename from URL: {url}")
-        return ""
+        return "", False
         
     # Standardize image directory path
     usi_root = config.public_dir / "USI"
@@ -80,10 +80,10 @@ def download_image(url: str, developer_slug: str, investment_slug: str, config: 
     target_path = target_dir / filename
     
     try:
-        if target_path.exists():
+        if not config.force_image_download and target_path.exists():
             # Skip if already exists and is not a tiny placeholder
             if target_path.stat().st_size > 1024:
-                return filename
+                return filename, True
     except PermissionError:
         logger.debug(f"Permission denied checking existence of {target_path}")
         
@@ -98,10 +98,10 @@ def download_image(url: str, developer_slug: str, investment_slug: str, config: 
         with open(target_path, 'wb') as f:
             shutil.copyfileobj(response.raw, f)
             
-        return filename
+        return filename, False
     except Exception as e:
         logger.error(f"Error downloading image {url}: {e}")
-        return ""
+        return "", False
 
 def download_developer_logo(url: str, dev_slug: str, config: ScraperConfig, portal_prefix: str = "raw", portal_id: str | None = None) -> str:
     """
@@ -156,12 +156,22 @@ def save_images(urls: list[str], developer_slug: str, investment_slug: str, conf
     Returns list of successful filenames.
     """
     saved_filenames = []
+    skipped_count = 0
     unique_urls = [u for u in set(urls) if u and u.strip()]
     
     for url in unique_urls:
-        fname = download_image(url, developer_slug, investment_slug, config)
+        fname, was_skipped = download_image(url, developer_slug, investment_slug, config)
         if fname:
             saved_filenames.append(fname)
+            if was_skipped:
+                skipped_count += 1
             
-    logger.info(f"Successfully saved {len(saved_filenames)} images for {investment_slug}")
+    downloaded_count = len(saved_filenames) - skipped_count
+    if downloaded_count > 0:
+        logger.info(f"Successfully downloaded {downloaded_count} images (skipped {skipped_count} existing) for {investment_slug}")
+    elif skipped_count > 0:
+        logger.info(f"Skipped {skipped_count} existing images for {investment_slug}")
+    else:
+        logger.info(f"No valid images to process for {investment_slug}")
+        
     return saved_filenames

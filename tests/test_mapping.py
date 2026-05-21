@@ -1,5 +1,5 @@
 import pytest
-from usi_scrapers.utils.mapping import resolve_path
+from usi_scrapers.mapping import resolve_path
 
 def test_resolve_path_simple():
     data = {"a": {"b": {"c": 123}}}

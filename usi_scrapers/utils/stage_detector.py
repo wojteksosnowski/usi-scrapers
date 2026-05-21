@@ -3,7 +3,7 @@ import logging
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .mapping import get_mapping, resolve_path
+from ..mapping import get_mapping, resolve_path
 from .. import get_logger
 
 logger = get_logger(__name__)

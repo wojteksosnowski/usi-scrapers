@@ -9,7 +9,7 @@ from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.stage_detector import extract_groups_id, extract_stages
 from .utils.portals import portal_api_url, portal_url, get_portal
-from .utils.mapping import get_mapping, resolve_path
+from .mapping import get_mapping, resolve_path
 from .utils.scrapers import generic_discover_investments, generic_download_dev_json, extract_logo_from_dict
 
 from . import get_logger

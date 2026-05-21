@@ -7,7 +7,7 @@ from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.portals import portal_url, get_portal
-from .utils.mapping import get_mapping, resolve_path
+from .mapping import get_mapping, resolve_path
 from .utils.url_parser import parse_url
 from .utils.scrapers import generic_discover_investments, generic_download_dev_json, extract_logo_from_dict
 
@@ -390,7 +390,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         "url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
-        "oto_url_id": numeric_id,
+        "oto_url_id": oto_portal_id,
         "title": resolve_path(page_props, oto_mapping.get("name")),
         "agency_name": agency_name,
         "agency_id": agency_id,

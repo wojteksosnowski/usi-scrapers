@@ -35,3 +35,6 @@ class ScraperConfig:
     
     # Limity odpytywania (rate limiting) per domena (w sekundach)
     fetch_delays: Dict[str, float] = field(default_factory=default_fetch_delays)
+    
+    # Wymuś ponowne pobieranie obrazów pomimo tego, że już istnieją
+    force_image_download: bool = False

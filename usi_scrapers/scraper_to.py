@@ -8,7 +8,7 @@ from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.string import slugify
 from .utils.portals import portal_api_url, portal_url, get_portal
-from .utils.mapping import get_mapping, resolve_path
+from .mapping import get_mapping, resolve_path
 from .utils.scrapers import generic_discover_investments, generic_download_dev_json
 
 from . import get_logger
