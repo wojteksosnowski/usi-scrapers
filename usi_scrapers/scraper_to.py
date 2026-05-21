@@ -24,7 +24,10 @@ def download_raw_to_dev_json(url: str, dev_slug: Optional[str], fetcher: Fetcher
     def fetch_to_dev(u, f):
         html = fetch_to_html(u, f)
         if not html: return None
-        return extract_to_dev_raw_json(html)
+        d = extract_to_dev_raw_json(html)
+        if isinstance(d, dict) and "url" not in d:
+            d["url"] = u
+        return d
 
     def extract_id(d):
         if not d: return None
