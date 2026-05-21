@@ -91,8 +91,13 @@ def extract_to_klient_id(html: str, raw_json: dict = None) -> str | None:
     if m:
         return m.group(1)
     
-    # 3. From Next.js state (escaped JSON fallback)
+    # 3. From Next.js Pages Router state (escaped JSON fallback)
     m = re.search(r'\\?"klientId\\?":(\d+)', html)
+    if m:
+        return m.group(1)
+        
+    # 4. From Next.js App Router state (self.__next_f.push)
+    m = re.search(r'\\?"klient\\?"\s*:\s*\{\s*\\?"id\\?"\s*:\s*(\d+)', html)
     if m:
         return m.group(1)
         
@@ -132,6 +137,37 @@ def extract_to_dev_raw_json(html: str) -> dict:
                     return json.loads(match.group(1).replace(r'\"', '"'))
                 except:
                     pass
+
+    # 4. Extract from Next.js App Router (self.__next_f.push)
+    m_klient = re.search(r'\\?"klient\\?"\s*:\s*(\{\s*\\?"id\\?":\d+.*?\\?"nazwaKlienta\\?".*?\})[,\}\]]', html)
+    if m_klient:
+        try:
+            # Clean up escape characters and try to parse the substring.
+            # Next.js App Router escapes strings in __next_f.push
+            raw_str = m_klient.group(1).replace(r'\"', '"').replace(r'\\', '\\')
+            
+            # Since regex matching of nested brackets is brittle, we'll construct a simplified dict manually
+            # if full JSON parsing fails.
+            try:
+                # Attempt to parse fully if the regex happened to capture a balanced object
+                return json.loads(raw_str)
+            except json.JSONDecodeError:
+                # Fallback: extract key fields manually and construct a synthetic dict
+                synthetic = {}
+                
+                id_match = re.search(r'"id":(\d+)', raw_str)
+                if id_match: synthetic["klient_id"] = int(id_match.group(1))
+                
+                nazwa_match = re.search(r'"nazwaKlienta":"([^"]+)"', raw_str)
+                if nazwa_match: synthetic["nazwa"] = nazwa_match.group(1)
+                
+                logo_match = re.search(r'"logo":"([^"]+)"', raw_str)
+                if logo_match: synthetic["logo"] = logo_match.group(1)
+                
+                return synthetic
+                
+        except Exception:
+            pass
                     
     return {}
 
