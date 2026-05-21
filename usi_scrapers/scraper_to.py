@@ -614,21 +614,21 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     # Resolve (if needed) and Update developer data using the internal API
     # If developer_slug is None, it will be resolved from the profile data
     to_dev_url = None
-    if developer_slug:
-        to_dev_url = portal_url("to", "developer", slug=developer_slug)
-    else:
-        # Try to find a temporary slug from HTML to build the profile URL
-        m = re.search(r'\\?"klientKryterium\\?":\\?"([^"\\?]+)\\?"', html)
-        temp_slug = m.group(1) if m else None
-        if not temp_slug or temp_slug == "unknown":
-            dev_links = re.findall(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"', html)
-            city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
-            for link, s in dev_links:
-                if s not in city_slugs and s != "unknown":
-                    temp_slug = s
-                    break
-        if temp_slug:
-            to_dev_url = portal_url("to", "developer", slug=temp_slug)
+    # Zawsze wyciagamy natywny temp_slug ze zrodla HTML inwestycji
+    m = re.search(r'klientKryterium[^\w]+([a-zA-Z0-9-]+)', html)
+    temp_slug = m.group(1) if m else None
+
+    # Ewentualny fallback na linki:
+    if not temp_slug or temp_slug == "unknown":
+        dev_links = re.findall(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"', html)
+        city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
+        for link, s in dev_links:
+            if s not in city_slugs and s != "unknown":
+                temp_slug = s
+                break
+
+    if temp_slug:
+        to_dev_url = portal_url("to", "developer", slug=temp_slug)
 
     if to_dev_url:
         developer_slug = download_raw_to_dev_json(to_dev_url, developer_slug, fetcher, fetcher.config)
