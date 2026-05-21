@@ -109,19 +109,19 @@
         "ceiling_height_max": "additionalProperty[name=Wysokość mieszkania].value",
         "brand_klient_id": "brand.klientId",
         "publisher_klient_id": "publisher.klientId",
-        "klient_id": "klientId",
+        "klient_id": "klientId|klient_id",
         "offers_list": "offers.offers"
       },
       "developer": {
         "id": {
-          "path": "logo_url",
+          "path": "logo_url|logo",
           "regex": ",(\\d+)-/"
         },
         "slug": {
           "path": "url",
           "regex": "deweloperzy/([^/]+)$"
         },
-        "name": "name"
+        "name": "name|nazwa"
       }
     }
   }

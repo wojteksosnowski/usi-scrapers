@@ -39,6 +39,18 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
         if not path:
             return None
 
+    if regex_pattern and isinstance(path, str) and '|' not in path:
+        pass # Will handle below
+        
+    if isinstance(path, str) and '|' in path:
+        paths = path.split('|')
+        for p in paths:
+            temp_path = {"path": p.strip(), "regex": regex_pattern} if regex_pattern else p.strip()
+            res = resolve_path(data, temp_path)
+            if res is not None:
+                return res
+        return None
+
     parts = path.split('.')
     current = data
     
