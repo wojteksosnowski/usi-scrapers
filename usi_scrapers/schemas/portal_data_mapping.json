@@ -8,12 +8,12 @@
         "id": "id",
         "slug": "slug",
         "name": "name",
-        "developer_id": "vendor.value.id",
+        "developer_id": "vendor.value.id|vendor.id",
         "developer_slug": {
-          "path": "vendor.value.slug",
+          "path": "vendor.value.slug|vendor.slug",
           "regex": "^[a-z0-9\\-]+$"
         },
-        "developer_name": "vendor.value.name",
+        "developer_name": "vendor.value.name|vendor.name",
         "units_count": "stats.value.properties_count_for_sale",
         "price_min": "stats.value.ranges_price_min",
         "price_max": "stats.value.ranges_price_max",

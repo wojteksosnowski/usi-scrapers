@@ -111,13 +111,40 @@ Starsza wersja wsadowego scrapingu. Zaleca się używanie `process_batch` dla le
 
 ---
 
+### `list_developers`
+Pobiera listę deweloperów z katalogu wskazanego portalu. Obsługuje paginację.
+
+```python
+from usi_scrapers.api import list_developers
+
+dev_page = list_developers(config, fetcher, portal="rp", page=1)
+print(f"Strona {dev_page.page}/{dev_page.total_pages}. Znaleziono {len(dev_page.developers)} deweloperów.")
+```
+
+---
+
 ## Narzędzia Techniczne
 
 ### `download_raw` / `download_raw_dev`
 Pobierają i automatycznie zapisują surowe pliki JSON w strukturze katalogowej `USIdata/` (ścieżka pobierana z `config.public_dir`).
 
+### `save_raw` / `save_raw_developer`
+Zapisuje przekazany słownik jako surowy plik JSON w strukturze katalogowej `USIdata/`. Wymaga ręcznego podania `portal_id`.
+
+```python
+from usi_scrapers.api import save_raw
+
+saved_path = save_raw(config, data_dict, dev_slug="moj-dev", inv_slug="moja-inw", portal_prefix="rp", portal_id="123")
+```
+
 ### `identify_developer`
-Próbuje wyciągnąć nazwę dewelopera ze strony oferty (szczególnie przydatne dla Otodom i TabelaOfert).
+Próbuje wyciągnąć nazwę dewelopera ze strony oferty na podstawie podanego adresu URL (szczególnie przydatne dla Otodom i TabelaOfert, gdzie nazwa dewelopera może być zaszyta głęboko w HTML).
+
+```python
+from usi_scrapers.api import identify_developer
+
+dev_name = identify_developer(fetcher, portal="otodom", url="https://www.otodom.pl/pl/oferta/...")
+```
 
 ---
 

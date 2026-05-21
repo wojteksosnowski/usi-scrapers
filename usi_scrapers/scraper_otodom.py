@@ -352,7 +352,11 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
              # Private seller / owner
              developer_slug = "private-seller"
         else:
-             return {"error": f"Failed to resolve developer_slug for Otodom agency: {agency_name} (ID: {agency_id})"}
+             err_msg = (
+                 f"Developer resolution failed for Otodom agency '{agency_name}' (ID: {agency_id}). "
+                 f"Local ID lookup failed, and API download from developer URL '{full_agency_url if agency_url else 'None'}' did not yield a valid slug."
+             )
+             return {"error": err_msg}
             
     # Resolve Investment Slug (ID-based lookup)
     if oto_portal_id:

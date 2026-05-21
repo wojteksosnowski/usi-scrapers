@@ -15,6 +15,47 @@ from . import get_logger
 
 logger = get_logger(__name__)
 
+
+# --- Compiled Regex Constants ---
+RE_URL_ID_JSON = re.compile(r',i?(\d+)(?:[/?]|$)')
+RE_META_KLIENT_ID = re.compile(r'<meta[^>]+name=["\']klient-id["\'][^>]+content=["\'](\d+)["\']')
+RE_NEXT_KLIENT_ID = re.compile(r'\\?"klientId\\?":(\d+)')
+RE_NEXT_F_KLIENT_ID = re.compile(r'\\?"klient\\?"\s*:\s*\{\s*\\?"id\\?"\s*:\s*(\d+)')
+RE_NEXT_DATA = re.compile(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', re.DOTALL)
+RE_SCRIPT_TAG = re.compile(r"<script[^>]*>(.*?)</script>", re.DOTALL)
+RE_KLIENT_ID_OBJ = re.compile(r'(\{.*?["\']klientId["\']\s*:\s*\d+.*?\})')
+RE_NEXT_F_KLIENT_OBJ = re.compile(r'\\?"klient\\?"\s*:\s*(\{\s*\\?"id\\?":\d+.*?\\?"nazwaKlienta\\?".*?\})[,\}\]]')
+RE_ID_MATCH = re.compile(r'"id":(\d+)')
+RE_NAZWA_MATCH = re.compile(r'"nazwaKlienta":"([^"]+)"')
+RE_LOGO_MATCH = re.compile(r'"logo":"([^"]+)"')
+RE_API_TOKEN = re.compile(r'/_next/static/chunks/[^"]+-([a-f0-9]{10})\.js')
+RE_H1_TAG = re.compile(r"<h1[^>]*>(.*?)</h1>", re.DOTALL)
+RE_SPAN_TAG = re.compile(r"<span[^>]*>(.*?)</span>", re.DOTALL)
+RE_HTML_TAGS = re.compile(r"<[^>]+>")
+RE_NAZWA_RSC = re.compile(r'"nazwa":"([^"]+)"')
+RE_TITLE_TAG = re.compile(r"<title>(.*?)</title>", re.IGNORECASE)
+RE_GALLERY_URL = re.compile(r'\\"url\\":\\"(https?://content\.tabelaofert\.pl/[^\\]+)')
+RE_CONTENT_IMAGE = re.compile(r'(?:https?:)?//content\.tabelaofert\.pl/[^\s\"\\<>]+\.(?:webp|jpg|jpeg|png)', re.IGNORECASE)
+RE_CDN_FNAME_END = re.compile(r"[^/]+-/(.+)$")
+RE_CDN_FNAME_HASH = re.compile(r'_[a-f0-9]{8}\.')
+RE_STEM_DIGITS = re.compile(r'-\d+$')
+RE_STEM_8DIGITS = re.compile(r"-\d{8}")
+RE_INV_SLUG = re.compile(r'/inwestycja/([^,]+)')
+RE_SCALE = re.compile(r"scale_(\d+)")
+RE_URL_ID_EXTRACT = re.compile(r",i(\d+)(?:[/?]|$)")
+RE_DEV_CANDIDATE = re.compile(r'data-developer="([^"]+)"')
+RE_DEV_CANDIDATE_SPAN = re.compile(r'<span>([^<]+)</span>')
+RE_PAGE_PARAM = re.compile(r'page=\d+')
+RE_LISTING_HREF = re.compile(r'href="(/inwestycja/([^",]+),i(\d+))"')
+RE_IMG_SRC = re.compile(r'src="(https?://content\.tabelaofert\.pl/[^"]+\.(?:webp|jpg|png|jpeg))"')
+RE_URL_PARSER_FALLBACK = re.compile(r'/inwestycja/([^,]+),i(\d+)')
+RE_KRYTERIUM_ID = re.compile(r'klientKryterium[^\w]+([a-zA-Z0-9-]+)')
+RE_KRYTERIUM_OBJ = re.compile(r'\\?"kryterium\\?"\s*:\s*\\?"([a-zA-Z0-9-]+)\\?"')
+RE_DEV_LINK = re.compile(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"')
+RE_DEV_LIST_LINK = re.compile(r'href="https://tabelaofert\.pl(/katalog-firm/deweloperzy/([^"/?]+))"')
+RE_PAGE_NUM = re.compile(r'href="[^"]*[?&]page=(\d+)"')
+# --------------------------------
+
 def download_raw_to_dev_json(url: str, dev_slug: Optional[str], fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
     """
     Downloads raw JSON for a TabelaOfert developer profile and saves it.
@@ -44,7 +85,7 @@ def download_raw_to_dev_json(url: str, dev_slug: Optional[str], fetcher: Fetcher
         for key in ["@id", "url"]:
             val = d.get(key)
             if val and isinstance(val, str):
-                m = re.search(r',i?(\d+)(?:[/?]|$)', val)
+                m = RE_URL_ID_JSON.search(val)
                 if m: return m.group(1)
         return None
 
@@ -90,17 +131,17 @@ def extract_to_klient_id(html: str, raw_json: dict = None) -> str | None:
         if isinstance(publisher, dict) and "identifier" in publisher: return str(publisher["identifier"])
 
     # 2. From Meta Tag (fallback)
-    m = re.search(r'<meta[^>]+name=["\']klient-id["\'][^>]+content=["\'](\d+)["\']', html)
+    m = RE_META_KLIENT_ID.search(html)
     if m:
         return m.group(1)
     
     # 3. From Next.js Pages Router state (escaped JSON fallback)
-    m = re.search(r'\\?"klientId\\?":(\d+)', html)
+    m = RE_NEXT_KLIENT_ID.search(html)
     if m:
         return m.group(1)
         
     # 4. From Next.js App Router state (self.__next_f.push)
-    m = re.search(r'\\?"klient\\?"\s*:\s*\{\s*\\?"id\\?"\s*:\s*(\d+)', html)
+    m = RE_NEXT_F_KLIENT_ID.search(html)
     if m:
         return m.group(1)
         
@@ -110,7 +151,7 @@ def extract_to_klient_id(html: str, raw_json: dict = None) -> str | None:
 def extract_to_dev_raw_json(html: str) -> dict:
     """Extracts pure raw JSON for TabelaOfert developer (no aggregations or fake dicts)."""
     # 1. Check for Next.js data (purest form if available)
-    m_next = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL)
+    m_next = RE_NEXT_DATA.search(html)
     if m_next:
         try:
             return json.loads(m_next.group(1))
@@ -118,7 +159,7 @@ def extract_to_dev_raw_json(html: str) -> dict:
             pass
 
     # 2. Check for JSON-LD Organization/LocalBusiness
-    scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.DOTALL)
+    scripts = RE_SCRIPT_TAG.findall(html)
     for s in scripts:
         if '"@type":"Organization"' in s or '"@type": "Organization"' in s or '"@type":"LocalBusiness"' in s or '"@type": "LocalBusiness"' in s:
             try:
@@ -134,7 +175,7 @@ def extract_to_dev_raw_json(html: str) -> dict:
     for s in scripts:
         if 'klientId' in s or 'klient-id' in s:
             # Match innermost json object containing klientId
-            match = re.search(r'(\{.*?["\']klientId["\']\s*:\s*\d+.*?\})', s)
+            match = RE_KLIENT_ID_OBJ.search(s)
             if match:
                 try:
                     return json.loads(match.group(1).replace(r'\"', '"'))
@@ -142,7 +183,7 @@ def extract_to_dev_raw_json(html: str) -> dict:
                     pass
 
     # 4. Extract from Next.js App Router (self.__next_f.push)
-    m_klient = re.search(r'\\?"klient\\?"\s*:\s*(\{\s*\\?"id\\?":\d+.*?\\?"nazwaKlienta\\?".*?\})[,\}\]]', html)
+    m_klient = RE_NEXT_F_KLIENT_OBJ.search(html)
     if m_klient:
         try:
             # Clean up escape characters and try to parse the substring.
@@ -158,13 +199,13 @@ def extract_to_dev_raw_json(html: str) -> dict:
                 # Fallback: extract key fields manually and construct a synthetic dict
                 synthetic = {}
                 
-                id_match = re.search(r'"id":(\d+)', raw_str)
+                id_match = RE_ID_MATCH.search(raw_str)
                 if id_match: synthetic["klient_id"] = int(id_match.group(1))
                 
-                nazwa_match = re.search(r'"nazwaKlienta":"([^"]+)"', raw_str)
+                nazwa_match = RE_NAZWA_MATCH.search(raw_str)
                 if nazwa_match: synthetic["nazwa"] = nazwa_match.group(1)
                 
-                logo_match = re.search(r'"logo":"([^"]+)"', raw_str)
+                logo_match = RE_LOGO_MATCH.search(raw_str)
                 if logo_match: synthetic["logo"] = logo_match.group(1)
                 
                 return synthetic
@@ -177,7 +218,7 @@ def extract_to_dev_raw_json(html: str) -> dict:
 def extract_to_api_token(html: str) -> str | None:
     """Extracts the API version token from Next.js script hashes."""
     # Pattern for hashes like c1661a4a02 in /_next/static/chunks/main-app-c1661a4a02.js
-    m = re.search(r'/_next/static/chunks/[^"]+-([a-f0-9]{10})\.js', html)
+    m = RE_API_TOKEN.search(html)
     if m:
         return f"v{m.group(1)}"
     logger.debug("extract_to_api_token: no token found in HTML script hashes")
@@ -208,22 +249,22 @@ def extract_to_data(html: str, url: str, fetcher: Fetcher = None) -> dict:
     
     # 1. Clean Name extraction
     clean_name = None
-    h1_match = re.search(r"<h1[^>]*>(.*?)</h1>", html, re.DOTALL)
+    h1_match = RE_H1_TAG.search(html)
     if h1_match:
         content = h1_match.group(1)
-        span_match = re.search(r"<span[^>]*>(.*?)</span>", content, re.DOTALL)
+        span_match = RE_SPAN_TAG.search(content)
         if span_match:
-            clean_name = re.sub(r"<[^>]+>", "", span_match.group(1)).strip()
+            clean_name = RE_HTML_TAGS.sub("", span_match.group(1)).strip()
     
     if not clean_name:
-        rsc_names = re.findall(r'"nazwa":"([^"]+)"', html)
+        rsc_names = RE_NAZWA_RSC.findall(html)
         if rsc_names:
             clean_name = rsc_names[0]
             
     if clean_name:
         data["name"] = clean_name
     elif not data.get("name"):
-        title_match = re.search(r"<title>(.*?)</title>", html, re.IGNORECASE)
+        title_match = RE_TITLE_TAG.search(html)
         if title_match:
             data["name"] = title_match.group(1).split("-")[0].strip()
 
@@ -293,7 +334,7 @@ def fetch_to_html(url: str, fetcher: Fetcher) -> str:
     return fetcher.fetch(url) or ""
 
 def parse_to_product(html: str) -> dict:
-    scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.DOTALL)
+    scripts = RE_SCRIPT_TAG.findall(html)
     for s in scripts:
         if '"@type":"Product"' in s or '"@type": "Product"' in s:
             try:
@@ -350,16 +391,16 @@ def extract_gallery_urls(html: str) -> list[str]:
             break
 
     # 1. From script tags (often contains the main gallery)
-    scripts = re.findall(r"<script[^>]*>(.*?)</script>", main_window, re.DOTALL)
+    scripts = RE_SCRIPT_TAG.findall(main_window)
     for s in scripts:
         if '"galeria"' in s and '"zdjecia"' in s:
-            urls = re.findall(r'\\"url\\":\\"(https?://content\.tabelaofert\.pl/[^\\]+)', s)
+            urls = RE_GALLERY_URL.findall(s)
             if urls:
                 found_urls.extend([u.rstrip('"') for u in urls])
                 
     # 2. Targeted regex on main window
     regex = r'(?:https?:)?//content\.tabelaofert\.pl/[^\s\"\\<>]+\.(?:webp|jpg|jpeg|png)'
-    found = re.findall(regex, main_window, re.IGNORECASE)
+    found = RE_CONTENT_IMAGE.findall(main_window)
     for u in found:
         u_clean = u if u.startswith("http") else ("https:" + u)
         # Skip thumbnails
@@ -371,14 +412,14 @@ def extract_gallery_urls(html: str) -> list[str]:
 
 def _cdn_filename(url: str) -> str:
     fname = url.rsplit("/", 1)[-1]
-    m = re.search(r"[^/]+-/(.+)$", url)
+    m = RE_CDN_FNAME_END.search(url)
     if m: 
         fname = m.group(1)
     else:
         parts = fname.split(",")
         if len(parts) > 1: fname = parts[-1]
     
-    fname = re.sub(r'_[a-f0-9]{8}\.', '.', fname)
+    fname = RE_CDN_FNAME_HASH.sub('.', fname)
     return fname
 
 def _investment_image_prefix(image_url: str) -> str | None:
@@ -387,9 +428,9 @@ def _investment_image_prefix(image_url: str) -> str | None:
         fname = fname.rsplit("/", 1)[-1]
         
     stem = fname.rsplit(".", 1)[0]
-    stem = re.sub(r'-\d+$', '', stem)
+    stem = RE_STEM_DIGITS.sub('', stem)
     
-    m = re.search(r"-\d{8}", stem)
+    m = RE_STEM_8DIGITS.search(stem)
     if m:
         return stem[: m.start()]
     
@@ -408,7 +449,7 @@ def filter_investment_images(urls: list[str], product: dict, inv_url: str = None
     
     if prefix and (len(prefix) < 5 or prefix.lower() in ("mieszkanie", "logo", "mapa")):
         if inv_url:
-            slug_match = re.search(r'/inwestycja/([^,]+)', inv_url)
+            slug_match = RE_INV_SLUG.search(inv_url)
             if slug_match:
                 prefix = "-".join(slug_match.group(1).split("-")[:3])
 
@@ -447,7 +488,7 @@ def filter_investment_images(urls: list[str], product: dict, inv_url: str = None
     by_filename: dict[str, tuple[int, str]] = {}
     for url in candidates:
         fname = _cdn_filename(url)
-        m = re.search(r"scale_(\d+)", url)
+        m = RE_SCALE.search(url)
         scale = int(m.group(1)) if m else 0
         if fname not in by_filename or scale > by_filename[fname][0]:
             by_filename[fname] = (scale, url)
@@ -456,7 +497,7 @@ def filter_investment_images(urls: list[str], product: dict, inv_url: str = None
 
 def _extract_to_id(url: str) -> str | None:
     if not url: return None
-    m = re.search(r",i(\d+)(?:[/?]|$)", url)
+    m = RE_URL_ID_EXTRACT.search(url)
     return m.group(1) if m else None
 
 def fetch_to_agency_name(url: str, fetcher: Fetcher) -> str | None:
@@ -469,15 +510,15 @@ def fetch_to_agency_name(url: str, fetcher: Fetcher) -> str | None:
         name = product.get("brand", {}).get("name")
         if name: return name
 
-    h1_match = re.search(r"<h1[^>]*>(.*?)</h1>", html, re.DOTALL)
+    h1_match = RE_H1_TAG.search(html)
     if h1_match:
-        spans = re.findall(r"<span[^>]*>(.*?)</span>", h1_match.group(1), re.DOTALL)
+        spans = RE_SPAN_TAG.findall(h1_match.group(1))
         if len(spans) >= 2:
-            dev_candidate = re.sub(r"<[^>]+>", "", spans[-1]).strip()
+            dev_candidate = RE_HTML_TAGS.sub("", spans[-1]).strip()
             if dev_candidate and len(dev_candidate) < 100:
                 return dev_candidate
 
-    dev_match = re.search(r'data-developer="([^"]+)"', html)
+    dev_match = RE_DEV_CANDIDATE.search(html)
     if dev_match:
         return dev_match.group(1).strip()
 
@@ -505,7 +546,7 @@ def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
             break
 
         page_url = base_url
-        if "page=" in page_url:            page_url = re.sub(r'page=\d+', f'page={current_page}', page_url)
+        if "page=" in page_url:            page_url = RE_PAGE_PARAM.sub(f'page={current_page}', page_url)
         else:
             connector = "&" if "?" in page_url else "?"
             page_url += f"{connector}page={current_page}"
@@ -516,7 +557,7 @@ def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
             break
         
         page_offers = []
-        matches = list(re.finditer(r'href="(/inwestycja/([^",]+),i(\d+))"', html))
+        matches = list(RE_LISTING_HREF.finditer(html))
         
         if not matches:
             break
@@ -534,7 +575,7 @@ def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
             end_search = min(len(html), m.end() + 1000)
             window = html[start_search:end_search]
             
-            img_matches = list(re.finditer(r'src="(https?://content\.tabelaofert\.pl/[^"]+\.(?:webp|jpg|png|jpeg))"', window))
+            img_matches = list(RE_IMG_SRC.finditer(window))
             
             image_url = None
             if img_matches:
@@ -547,9 +588,9 @@ def discover_to_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
                     image_url = img_matches[-1].group(1)
 
             dev_name = None
-            dev_match = re.search(r'data-developer="([^"]+)"', window)
+            dev_match = RE_DEV_CANDIDATE.search(window)
             if not dev_match:
-                dev_match = re.search(r'<span>([^<]+)</span>', window)
+                dev_match = RE_DEV_CANDIDATE_SPAN.search(window)
             
             if dev_match:
                 dev_name = dev_match.group(1).strip()
@@ -595,7 +636,7 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     investment_slug = parsed.get("investment_slug")
     if not investment_slug:
         # Emergency fallback for URL parsing
-        match = re.search(r'/inwestycja/([^,]+),i(\d+)', url)
+        match = RE_URL_PARSER_FALLBACK.search(url)
         if match:
             investment_slug = match.group(1)
             
@@ -618,12 +659,14 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     # If developer_slug is None, it will be resolved from the profile data
     to_dev_url = None
     # Zawsze wyciagamy natywny temp_slug ze zrodla HTML inwestycji
-    m = re.search(r'klientKryterium[^\w]+([a-zA-Z0-9-]+)', html)
+    m = RE_KRYTERIUM_ID.search(html)
+    if not m:
+        m = RE_KRYTERIUM_OBJ.search(html)
     temp_slug = m.group(1) if m else None
 
     # Ewentualny fallback na linki:
     if not temp_slug or temp_slug == "unknown":
-        dev_links = re.findall(r'href="([^"]*/katalog-firm/deweloperzy/([^/"?#]+))"', html)
+        dev_links = RE_DEV_LINK.findall(html)
         city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
         for link, s in dev_links:
             if s not in city_slugs and s != "unknown":
@@ -639,7 +682,11 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
             logger.info(f"Resolved/Updated developer '{developer_slug}' data from TabelaOfert.")
 
     if not developer_slug:
-        return {"error": f"Failed to resolve developer_slug from API for klient-id {klient_id} from {url}"}
+        err_msg = (
+            f"Developer resolution failed for TabelaOfert klient-id {klient_id}. "
+            f"Local ID lookup failed, and API download from developer URL '{to_dev_url if to_dev_url else 'None'}' did not yield a valid slug."
+        )
+        return {"error": err_msg}
     
     # ID-based Investment Identification
     to_id = _extract_to_id(url)
@@ -711,7 +758,7 @@ def discover_to_developers(
     listing_url = base_url or get_portal("to")["developer_list_url"].format(page=page)
     if base_url:
         if "page=" in listing_url:
-            listing_url = re.sub(r'page=\d+', f'page={page}', listing_url)
+            listing_url = RE_PAGE_PARAM.sub(f'page={page}', listing_url)
         else:
             connector = "&" if "?" in listing_url else "?"
             listing_url = f"{listing_url}{connector}page={page}"
@@ -724,7 +771,7 @@ def discover_to_developers(
     seen_slugs: set[str] = set()
     developers = []
     # Developer profile links are absolute URLs; city/filter links are relative — match only absolute
-    for m in re.finditer(r'href="https://tabelaofert\.pl(/katalog-firm/deweloperzy/([^"/?]+))"', html):
+    for m in RE_DEV_LIST_LINK.finditer(html):
         full_path, slug = m.group(1), m.group(2)
         if slug in seen_slugs:
             continue
@@ -736,7 +783,7 @@ def discover_to_developers(
         })
 
     # Determine total_pages from paginator links
-    page_nums = [int(n) for n in re.findall(r'href="[^"]*[?&]page=(\d+)"', html)]
+    page_nums = [int(n) for n in RE_PAGE_NUM.findall(html)]
     if page_nums:
         total_pages = max(page_nums)
     elif 'class="next"' in html or 'rel="next"' in html:

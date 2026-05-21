@@ -343,7 +343,12 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         logger.info(f"Resolved/Updated developer '{developer_slug}' data from RynekPierwotny.")
 
     if not developer_slug:
-        return {"error": f"Failed to resolve developer_slug from API data for vendor ID {vendor_id}"}
+        dev_url = portal_url("rp", "developer", slug=str(vendor_id))
+        err_msg = (
+            f"Developer resolution failed for RP vendor ID {vendor_id}. "
+            f"Local ID lookup failed, and API download from developer URL '{dev_url}' did not yield a valid slug."
+        )
+        return {"error": err_msg}
 
     investment_slug = resolve_path(details, rp_mapping.get("slug"))
     if not investment_slug:
