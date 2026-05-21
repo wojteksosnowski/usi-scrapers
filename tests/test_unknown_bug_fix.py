@@ -21,8 +21,7 @@ def test_generic_download_dev_json_resolves_slug_from_mapping(mock_fetcher, tmp_
     # For Otodom, the mapping for 'slug' is:
     # "path": "url", "regex": "deweloperzy/([^/]+)-ID\\d+"
     profile_data = {
-        "url": "https://www.otodom.pl/pl/firmy/deweloperzy/atal-ID123",
-        "owner": {"id": "123"}
+        "owner": {"id": "123", "account": {"attributes": {"slug": "atal-ID123"}}}
     }
     
     def mock_fetch(url, f):
@@ -51,8 +50,7 @@ def test_generic_download_dev_json_rejects_unknown_slug(mock_fetcher, tmp_path):
     
     # Mock data that contains 'unknown' in URL
     profile_data = {
-        "url": "https://www.otodom.pl/pl/firmy/deweloperzy/unknown-ID123",
-        "owner": {"id": "123"}
+        "owner": {"id": "123", "account": {"attributes": {"slug": "unknown-ID123"}}}
     }
     
     def mock_fetch(url, f):

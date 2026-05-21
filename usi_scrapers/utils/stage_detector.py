@@ -3,39 +3,37 @@ import logging
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .mapping import get_mapping, resolve_path
 from .. import get_logger
 
 logger = get_logger(__name__)
 
 
 def is_multistage(rp_details: dict) -> bool:
-    groups = rp_details.get("groups")
-    return bool(groups and groups.get("stages"))
+    rp_mapping = get_mapping("rp", "investment")
+    return bool(resolve_path(rp_details, rp_mapping.get("groups_stages")))
 
 
 def extract_groups_id(rp_details: dict):
-    groups = rp_details.get("groups")
-    return groups.get("id") if groups else None
+    rp_mapping = get_mapping("rp", "investment")
+    return resolve_path(rp_details, rp_mapping.get("groups_id"))
 
 
 def extract_stages(rp_details: dict) -> list:
-    groups = rp_details.get("groups")
-    if not groups:
-        return []
-    stages = groups.get("stages") or []
+    rp_mapping = get_mapping("rp", "investment")
+    stage_mapping = get_mapping("rp", "stage")
+    stages = resolve_path(rp_details, rp_mapping.get("groups_stages")) or []
     result = []
     for stage in stages:
-        offer = stage.get("offer") or {}
-        vendor = offer.get("vendor") or {}
-        vendor_slug = vendor.get("slug", "")
-        offer_id = str(offer.get("id", ""))
-        offer_slug = offer.get("slug", "")
-        stage_id = stage.get("id")
+        vendor_slug = resolve_path(stage, stage_mapping.get("vendor_slug")) or ""
+        offer_id = str(resolve_path(stage, stage_mapping.get("offer_id")) or "")
+        offer_slug = resolve_path(stage, stage_mapping.get("offer_slug"))
+        stage_id = resolve_path(stage, stage_mapping.get("id"))
         result.append({
             "stage_id": stage_id,
             "offer_id": offer_id,
             "slug": offer_slug,
-            "name": offer.get("name"),
+            "name": resolve_path(stage, stage_mapping.get("offer_name")),
             "vendor_slug": vendor_slug,
             "sort": stage.get("sort"),
             "current": bool(stage.get("current")),
@@ -83,9 +81,9 @@ def run_stage_detection(data_dir: Path) -> dict:
         if not stages:
             continue
 
-        groups = raw.get("groups") or {}
-        groups_id = groups.get("id")
-        groups_name = groups.get("name", "")
+        rp_mapping = get_mapping("rp", "investment")
+        groups_id = resolve_path(raw, rp_mapping.get("groups_id"))
+        groups_name = resolve_path(raw, rp_mapping.get("groups_name")) or ""
         dev_slug = result.get("developer_slug", "")
         current_offer_id = str(result.get("id", ""))
 

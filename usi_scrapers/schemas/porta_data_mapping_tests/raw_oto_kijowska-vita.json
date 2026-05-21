@@ -1,0 +1,2586 @@
+{
+  "lang": "pl",
+  "id": "4ARiu",
+  "ad": {
+    "id": 67890030,
+    "price": {
+      "type": "",
+      "__typename": "AdvertPrice"
+    },
+    "market": "",
+    "services": [],
+    "publicId": "",
+    "slug": "kijowska-vita-ID4ARiu",
+    "advertiserType": "business",
+    "advertType": "DEVELOPER",
+    "source": "urn:partner:obidointegration",
+    "createdAt": "2026-04-09T14:02:06+02:00",
+    "modifiedAt": "2026-05-20T10:38:11+02:00",
+    "description": "<ul><li><strong>1, 2, 3 i 4-pokojowe</strong> mieszkania <strong>od 35 m2 do 85 m2</strong> w cenie <strong>od 734 721 z\u0142</strong> od dewelopera <strong>DEVELIA</strong></li><li>Park Skaryszewski (17 minut spacerem)</li><li>P\u0119tla tramwajowa (1 minuta spacerem)</li><li>Dworzec Warszawa Wschodnia, przystanki autobusowe (2 minuty spacerem)</li><li>Stacja metra Stadion Narodowy (17 minut spacerem)</li><li>Centrum Praskie Koneser (12 minut spacerem)</li><li>Galeria Wile\u0144ska (18 minut spacerem)</li></ul><br/><strong>Kijowska Vita - poznaj inwestycj\u0119</strong><br/><p><strong>Kijowska Vita</strong> powstaje w jednej z najbardziej dynamicznie rozwijaj\u0105cych si\u0119 cz\u0119\u015bci Warszawy, gdzie rewitalizowane przestrzenie postindustrialne tworz\u0105 unikalny, miejski klimat. W bezpo\u015brednim otoczeniu znajduj\u0105 si\u0119 liczne kawiarnie, restauracje, galerie i miejsca wydarze\u0144, a tak\u017ce pe\u0142na infrastruktura handlowo-us\u0142ugowa \u2013 m.in. Centrum Praskie Koneser i CH Wile\u0144ska. Lokalizacja gwarantuje tak\u017ce \u015bwietn\u0105 komunikacj\u0119: stacja metra Stadion Narodowy, Dworzec Warszawa Wschodnia, Dworzec Wile\u0144ski, liczne tramwaje i autobusy zapewniaj\u0105 szybkie po\u0142\u0105czenia z ca\u0142ym miastem. W pobli\u017cu dost\u0119pne s\u0105 r\u00f3wnie\u017c tereny zielone i skwery, idealne do rekreacji i odpoczynku. To adres, kt\u00f3ry \u0142\u0105czy wygod\u0119 codziennego \u017cycia z energi\u0105 t\u0119tni\u0105cej kultur\u0105 dzielnicy.</p><p><strong>Nowoczesne mieszkania w wyj\u0105tkowym otoczeniu</strong></p><p>W 8-kondygnacyjnym budynku powstanie 84 funkcjonalnych mieszka\u0144 o powierzchniach od 36 do 83 mkw. \u2013 od kompaktowych lokali po przestronne apartamenty, kt\u00f3re dzi\u0119ki du\u017cym przeszkleniom i panoramicznym oknom oferuj\u0105 jasne, pe\u0142ne naturalnego \u015bwiat\u0142a wn\u0119trza. W projekcie zastosowano m.in. portfenetry i okna si\u0119gaj\u0105ce do pod\u0142ogi, co dodatkowo zwi\u0119ksza do\u015bwietlenie pomieszcze\u0144 i podkre\u015bla nowoczesny charakter inwestycji. Dodatkowym udogodnieniem dla mieszka\u0144c\u00f3w b\u0119dzie gara\u017c podziemny, zapewniaj\u0105cy wygodne i bezpieczne parkowanie na co dzie\u0144.</p><p><strong>ATUTY</strong></p><ul><li>Kameralny projekt w modnej cz\u0119\u015bci Pragi P\u00f3\u0142noc</li><li>Wysoka dost\u0119pno\u015b\u0107 komunikacji miejskiej \u2013 tramwaje, autobusy, dworzec kolejowy i stacje metra</li><li>Bogata infrastruktura handlowo-us\u0142ugowa w s\u0105siedztwie</li><li>Tereny zielone i skwery w okolicy</li><li>Dynamicznie rozwijaj\u0105ce si\u0119 otoczenie po rewitalizacji</li></ul><p>Niniejszy materia\u0142 nie stanowi oferty w rozumieniu Kodeksu cywilnego i ma charakter wy\u0142\u0105cznie informacyjny.</p><br/><strong>Kijowska Vita - lokalizacja</strong><br/><br/>ul. Kijowska 27, Praga P\u00f3\u0142noc, Warszawa<br/><ul><li>3,9 km do centrum</li><li>3 min. spacerem do przystanku autobusowego</li><li>4 min. spacerem do przystanku tramwajowego</li><li>5 min. spacerem do planowanego metra</li><li>dojazd do centrum: 16 min samochodem</li></ul>Istotne punkty w okolicy inwestycji<ul><li>Przystanek autobusowy (153 m, 3 minuty spacerem)</li><li>Przystanek tramwajowy (270 m, 4 minuty spacerem)</li><li>Przystanek planowanego metra (292 m, 5 minut spacerem)</li><li>Stacja kolejowa (333 m, 5 minut spacerem)</li><li>Stacja SKM (333 m, 5 minut spacerem)</li></ul><br/>",
+    "developmentId": 0,
+    "developmentTitle": "",
+    "developmentUrl": "",
+    "exclusiveOffer": false,
+    "externalId": "7dc2f724-d97c-4b47-83d6-25c1beb1f786",
+    "features": [
+      "Miejsce parkingowe podziemne",
+      "Miejsce parkingowe naziemne",
+      "Kom\u00f3rki lokatorskie",
+      "Windy",
+      "Strefa wypoczynku",
+      "Monitoring"
+    ],
+    "creationSource": "api",
+    "pushedUpAt": null,
+    "featuresByCategory": [
+      {
+        "label": "Przestrze\u0144 dodatkowa",
+        "values": [
+          "Miejsce parkingowe podziemne",
+          "Miejsce parkingowe naziemne",
+          "Kom\u00f3rki lokatorskie"
+        ],
+        "__typename": "FeatureGroup"
+      },
+      {
+        "label": "Udogodnienia",
+        "values": [
+          "Windy",
+          "Strefa wypoczynku"
+        ],
+        "__typename": "FeatureGroup"
+      },
+      {
+        "label": "Bezpiecze\u0144stwo",
+        "values": [
+          "Monitoring"
+        ],
+        "__typename": "FeatureGroup"
+      }
+    ],
+    "featuresWithoutCategory": [],
+    "openDay": null,
+    "referenceId": "",
+    "target": {
+      "Area_from": "35",
+      "Area_to": "85",
+      "Ceiling_height_from": "265",
+      "Ceiling_height_to": "300",
+      "City": "warszawa",
+      "City_id": "26",
+      "Country": "Polska",
+      "Extra_spaces": [
+        "underground_parking_space",
+        "ground_parking_space",
+        "storage_room"
+      ],
+      "Floors_num": "7",
+      "Id": "67890030",
+      "MarketType": "primary",
+      "Number_of_properties": "84",
+      "ObidoAdvert": "y",
+      "Offered_estates_type": [
+        "flats"
+      ],
+      "Photo": "aHR0cHM6Ly9pcmVsYW5kLmFwb2xsby5vbHhjZG4uY29tL3YxL2ZpbGVzL2V5Sm1iaUk2SW1WbmVXbHBabUp6YjNFM2VqRXRSVU5QVTFsVFZFVk5JaXdpZHlJNlczc2labTRpT2lKbGJuWm1jWEZsTVdGNU5Hc3hMVUZRVENJc0luTWlPaUl4TkNJc0luQWlPaUl4TUN3dE1UQWlMQ0poSWpvaU1DSjlYWDAubm5HUUpxYlZFcFBqaVBKNG4zU0hDQW10R0Y4UHczbU5OZWt4QTRSdV9BNC9pbWFnZTtzPTY1NXg0OTE7cT04MA==",
+      "Price_per_m_from": "18349",
+      "Project_amenities": [
+        "elevators",
+        "relax_area"
+      ],
+      "ProperType": "inwestycje",
+      "Province": "mazowieckie",
+      "RegularUser": "n",
+      "Security": [
+        "monitoring"
+      ],
+      "State": [
+        "in_building"
+      ],
+      "Subregion": "powiat-warszawa",
+      "Title": "S2lqb3dza2EgVml0YQ==",
+      "categoryId": "11",
+      "env": "production",
+      "hidePrice": "0",
+      "seller_id": "10556359",
+      "user_type": "developer"
+    },
+    "title": "Kijowska Vita",
+    "topInformation": [
+      {
+        "label": "offered_estates_types_project",
+        "values": [
+          "offered_estates_types_project::flats"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "project_finish_date",
+        "values": [
+          "2027-11-30"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "number_of_adverts",
+        "values": [
+          "73"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "number_of_units_in_project",
+        "values": [
+          "84"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      }
+    ],
+    "additionalInformation": [
+      {
+        "label": "advertiser_type",
+        "values": [
+          "advertiser_type::developer"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "project_begin_date",
+        "values": [
+          "2026-04-30"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "number_of_floors_project",
+        "values": [
+          "7"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "state",
+        "values": [
+          "state::in_building"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "area_range",
+        "values": [
+          "35",
+          "85"
+        ],
+        "unit": "m\u00b2",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "ceiling_height_range",
+        "values": [
+          "265",
+          "300"
+        ],
+        "unit": "cm",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "security",
+        "values": [
+          "security::monitoring"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "project_amenities",
+        "values": [
+          "project_amenities::elevators",
+          "project_amenities::relax_area"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "extra_spaces",
+        "values": [
+          "extra_spaces::underground_parking_space",
+          "extra_spaces::ground_parking_space",
+          "extra_spaces::storage_room"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      },
+      {
+        "label": "rooms_number_range",
+        "values": [
+          "ONE",
+          "FOUR"
+        ],
+        "unit": "",
+        "__typename": "AdditionalInfo"
+      }
+    ],
+    "url": "https://www.otodom.pl/pl/oferta/kijowska-vita-ID4ARiu",
+    "status": "active",
+    "adCategory": {
+      "id": "11",
+      "name": "FLAT",
+      "type": "INVESTMENT",
+      "__typename": "AdvertCategory"
+    },
+    "category": {
+      "id": 11,
+      "__typename": "AdCategory"
+    },
+    "characteristics": [
+      {
+        "key": "area_from",
+        "value": "35",
+        "localizedValue": "35 m\u00b2",
+        "currency": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "area_to",
+        "value": "85",
+        "localizedValue": "85 m\u00b2",
+        "currency": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "price_per_m_from",
+        "value": "18349",
+        "localizedValue": "18 349 z\u0142/m\u00b2",
+        "currency": "PLN",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "floors_num",
+        "value": "7",
+        "localizedValue": "7",
+        "currency": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "ceiling_height_to",
+        "value": "300",
+        "localizedValue": "300",
+        "currency": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "ceiling_height_from",
+        "value": "265",
+        "localizedValue": "265",
+        "currency": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "number_of_properties",
+        "value": "84",
+        "localizedValue": "84",
+        "currency": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "begin_date",
+        "value": "2026-04-30",
+        "localizedValue": "2026-04-30",
+        "currency": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "finish_date",
+        "value": "2027-11-30",
+        "localizedValue": "2027-11-30",
+        "currency": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "state",
+        "value": "in_building",
+        "localizedValue": "w budowie",
+        "currency": "",
+        "__typename": "Characteristic"
+      },
+      {
+        "key": "offered_estates_type",
+        "value": "flats",
+        "localizedValue": "mieszkania",
+        "currency": "",
+        "__typename": "Characteristic"
+      }
+    ],
+    "images": [
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      },
+      {
+        "thumbnail": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=184x138;q=80",
+        "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+        "medium": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=655x491;q=80",
+        "large": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=1280x1024;q=80",
+        "__typename": "AdImage"
+      }
+    ],
+    "links": {
+      "localPlanUrl": "",
+      "videoUrl": "",
+      "view3dUrl": "",
+      "walkaroundUrl": "",
+      "__typename": "AdvertLinks"
+    },
+    "videos": [],
+    "location": {
+      "id": null,
+      "coordinates": {
+        "latitude": 52.253595537516,
+        "longitude": 21.053958070842,
+        "__typename": "Coordinates"
+      },
+      "mapDetails": {
+        "radius": 0,
+        "zoom": 12,
+        "__typename": "MapDetails"
+      },
+      "address": {
+        "street": {
+          "id": "130744",
+          "code": "",
+          "name": "ul. Kijowska",
+          "number": "",
+          "__typename": "Street"
+        },
+        "subdistrict": null,
+        "district": {
+          "id": "42",
+          "code": "praga-polnoc",
+          "name": "Praga-P\u00f3\u0142noc",
+          "__typename": "District"
+        },
+        "city": {
+          "id": "26",
+          "code": "warszawa",
+          "name": "Warszawa",
+          "__typename": "City"
+        },
+        "municipality": null,
+        "county": {
+          "id": "197",
+          "code": "powiat-warszawa",
+          "name": "Warszawa",
+          "__typename": "County"
+        },
+        "province": {
+          "id": "7",
+          "code": "mazowieckie",
+          "name": "mazowieckie",
+          "__typename": "Province"
+        },
+        "postalCode": null,
+        "__typename": "Address"
+      },
+      "reverseGeocoding": {
+        "locations": [
+          {
+            "id": "mazowieckie",
+            "locationLevel": "voivodeship",
+            "name": "mazowieckie",
+            "fullName": "mazowieckie",
+            "fullNameItems": [
+              "mazowieckie"
+            ],
+            "parentIds": [],
+            "__typename": "BasicLocationObject"
+          },
+          {
+            "id": "mazowieckie/warszawa/warszawa/warszawa",
+            "locationLevel": "city_or_village",
+            "name": "Warszawa",
+            "fullName": "Warszawa, mazowieckie",
+            "fullNameItems": [
+              "Warszawa",
+              "mazowieckie"
+            ],
+            "parentIds": [
+              "mazowieckie",
+              "mazowieckie/warszawa",
+              "mazowieckie/warszawa/warszawa"
+            ],
+            "__typename": "BasicLocationObject"
+          },
+          {
+            "id": "mazowieckie/warszawa/warszawa/warszawa/praga--polnoc",
+            "locationLevel": "district",
+            "name": "Praga-P\u00f3\u0142noc",
+            "fullName": "Praga-P\u00f3\u0142noc, Warszawa, mazowieckie",
+            "fullNameItems": [
+              "Praga-P\u00f3\u0142noc",
+              "Warszawa",
+              "mazowieckie"
+            ],
+            "parentIds": [
+              "mazowieckie",
+              "mazowieckie/warszawa",
+              "mazowieckie/warszawa/warszawa",
+              "mazowieckie/warszawa/warszawa/warszawa"
+            ],
+            "__typename": "BasicLocationObject"
+          },
+          {
+            "id": "mazowieckie/warszawa/warszawa/warszawa/praga--polnoc/szmulowizna",
+            "locationLevel": "residential",
+            "name": "Szmulowizna",
+            "fullName": "Szmulowizna, Praga-P\u00f3\u0142noc, Warszawa, mazowieckie",
+            "fullNameItems": [
+              "Szmulowizna",
+              "Praga-P\u00f3\u0142noc",
+              "Warszawa",
+              "mazowieckie"
+            ],
+            "parentIds": [
+              "mazowieckie",
+              "mazowieckie/warszawa",
+              "mazowieckie/warszawa/warszawa",
+              "mazowieckie/warszawa/warszawa/warszawa",
+              "mazowieckie/warszawa/warszawa/warszawa/praga--polnoc"
+            ],
+            "__typename": "BasicLocationObject"
+          }
+        ],
+        "__typename": "ReverseGeocoding"
+      },
+      "__typename": "LocationDetails"
+    },
+    "property": null,
+    "owner": {
+      "id": 10556359,
+      "name": "Biuro Sprzeda\u017cy",
+      "type": "developer",
+      "phones": [
+        "+48573560285"
+      ],
+      "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im81OWtjYW03NjA4ei1BUEwifQ.9Lv-A97q5nFSW82bQ3IjzRXxYACJSffPJXQcIp9rPVA/image;s=97x97;q=100",
+      "contacts": [],
+      "__typename": "LegacyAdvertOwner"
+    },
+    "agency": {
+      "id": 10556359,
+      "name": "DEVELIA",
+      "licenseNumber": "",
+      "type": "developer",
+      "phones": [
+        "+48717988010"
+      ],
+      "address": "ul. gen. Romualda Traugutta 45, 50-416, Wroc\u0142aw, dolno\u015bl\u0105skie",
+      "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im53M3U3YXpwaGdydS1BUEwifQ.--1fv6eNsoatzEwTA4hrQGG11ePxQFNHDjtPx3ueOeU/image;s=800x600;q=90",
+      "url": "https://www.otodom.pl/pl/firmy/deweloperzy/develia-ID10556359",
+      "leaderYear": "",
+      "brandingVisible": true,
+      "enabledFeatures": [
+        "AD_HOMEPAGE_1_SCHEDULE",
+        "AD_STATISTICS",
+        "ADDITIONAL_CONTACT_FORMS_AD_PAGE",
+        "ADVANCED_PICTURE_GALLERY_AD_PAGE",
+        "BANNER_DISCOUNT",
+        "CRM_INTEGRATION",
+        "DEDICATED_CS",
+        "DYNAMIC_REMARKETING_OTODOM_ADSPACE",
+        "ENHANCED_BRANDING_COMPANY_NAME",
+        "ENHANCED_BRANDING_GALLERY_CONTACT_SLIDE",
+        "ENHANCED_BRANDING_LOGO_DISPLAY",
+        "ENHANCED_BRANDING_LOGO_REDIRECT",
+        "ENHANCED_BRANDING_SELLER_TYPE",
+        "EXPORT_OLX",
+        "FEATURED_DEVELOPMENT_1",
+        "IMPROVED_DEVELOPERS_PAGE",
+        "IMPROVED_INVESTMENT_PAGE",
+        "LOGO_AD_PAGE",
+        "LOGO_SEARCH_PAGE",
+        "MEGABUMP",
+        "OLX_BUNDLE_BASIC",
+        "OLX_BUNDLE_NORMAL",
+        "OLX_BUNDLE_PREMIUM",
+        "OLX_PUSHUP",
+        "OLX_TOPADS_30",
+        "OLX_TOPADS_7",
+        "OPEN_DAY_SCHEDULER",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_MEDIUM",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_ENDING_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_INTENSIVE_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_INTENSIVE_PLUS_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_MINIMUM_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_MINIMUM_HALF_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_OLD_PRICE_1",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_OLD_PRICE_2",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_OLD_PRICE_HALF_1",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_OLD_PRICE_HALF_2",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_OPTIMUM_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_OPTIMUM_HALF_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_STANDARD_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OBIDO_STANDARD_HALF_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_OTHER",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_ENDING",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_L_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_L_HALF_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_L_HALF_MEDIUM",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_L_MEDIUM",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_M_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_M_HALF_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_M_HALF_MEDIUM",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_M_HALF_OTHER",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_M_MEDIUM",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_M_OTHER",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_XL_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_INVESTMENT_PRO_XL_HALF_BIG",
+        "PAID_FOR_POST_30_DEVELOPER_UNIT",
+        "POWER_MAX_TILE_DISPLAY",
+        "POWER_PLUS_TILE_DISPLAY",
+        "POWER_TILE_DISPLAY",
+        "PREDEFINED_MESSAGES_CONTACT_FORM",
+        "PROMOTION_PLANNER",
+        "PROMOTION_RECOMMENDER",
+        "PUSHUP",
+        "SPECIAL_OFFER",
+        "STOCK_AND_PRICING_OPTIMISATION",
+        "SUGGEST_PRICE_FORM",
+        "TOPADS_1",
+        "VAS_PACKET_DEVELOPER_1",
+        "VAS_PACKET_DEVELOPER_2",
+        "VAS_PACKET_DEVELOPER_3",
+        "VAS_PACKET_DEVELOPER_4",
+        "VAS_PACKET_DEVELOPER_5",
+        "VAS_PLANNER_WITH_AUTOMATIC_SCHEDULING",
+        "WEBINARS_AND_TRAININGS_ACCESS"
+      ],
+      "__typename": "AdvertAgency"
+    },
+    "seo": {
+      "title": "Kijowska Vita, mieszkania from DEVELIA - Warszawa, Praga-P\u00f3\u0142noc - 67890030 \u2022 www.otodom.pl",
+      "description": "Zobacz t\u0119 unikaln\u0105 inwestycj\u0119 od DEVELIA z powierzchniami nieruchomo\u015bci od 35 m\u00b2 do 85 m\u00b2 w Warszawa, Praga-P\u00f3\u0142noc, z nowoczesnymi udogodnieniami i doskona\u0142\u0105 lokalizacj\u0105 zapewniaj\u0105c\u0105 wyj\u0105tkowy komfort \u017cycia.. Otodom 67890030",
+      "__typename": "AdvertSeo"
+    },
+    "breadcrumbs": [
+      {
+        "label": "Inwestycja deweloperska",
+        "locative": "",
+        "url": "https://www.otodom.pl/pl/wyniki/sprzedaz/inwestycja",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "mazowieckie",
+        "locative": "mazowieckie",
+        "url": "https://www.otodom.pl/pl/wyniki/sprzedaz/inwestycja/mazowieckie",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "Warszawa",
+        "locative": "Warszawa",
+        "url": "https://www.otodom.pl/pl/wyniki/sprzedaz/inwestycja/warszawa",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "Praga-P\u00f3\u0142noc",
+        "locative": "Praga-P\u00f3\u0142noc",
+        "url": "https://www.otodom.pl/pl/wyniki/sprzedaz/inwestycja/warszawa/praga-polnoc",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "ul. Kijowska",
+        "locative": "ul. Kijowska",
+        "url": "https://www.otodom.pl/pl/wyniki/sprzedaz/inwestycja/warszawa?locations%5B0%5D%5BstreetId%5D=130744&locations%5B0%5D%5BcityId%5D=26&locations=%5Bstreets-130744%5D",
+        "__typename": "AdvertBreadcrumb"
+      },
+      {
+        "label": "Kijowska Vita",
+        "locative": "",
+        "url": "",
+        "__typename": "AdvertBreadcrumb"
+      }
+    ],
+    "userAdverts": [
+      {
+        "adId": "66338311",
+        "url": "https://www.otodom.pl/pl/oferta/3-pokojowe-mieszkanie-63m2-balkon-ID4ulCL",
+        "image": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVrZWIzYmNldHNocS1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.nn4sxBP1Qc_gn_ILHKw4kcXO2N4z5lIf67bEXFi1aRI/image;s=314x236;q=80",
+        "roomsNum": "3",
+        "pricePerM": 11892,
+        "price": {
+          "value": "",
+          "unit": "",
+          "__typename": "UserAdvertPrice"
+        },
+        "netArea": "63.91",
+        "title": "3-pokojowe mieszkanie 63m2 + balkon",
+        "__typename": "UserAdvert"
+      },
+      {
+        "adId": "66344338",
+        "url": "https://www.otodom.pl/pl/oferta/3-pokojowe-mieszkanie-64m2-balkon-bezposrednio-ID4unbY",
+        "image": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjdoMXQ5MXUyZXdoNzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fU1JHSfeVbKJjvErvP7vTBeREtDnKGU2RJLPeN6klcs/image;s=314x236;q=80",
+        "roomsNum": "3",
+        "pricePerM": 11101,
+        "price": {
+          "value": "",
+          "unit": "",
+          "__typename": "UserAdvertPrice"
+        },
+        "netArea": "64.86",
+        "title": "3-pokojowe mieszkanie 64m2 + balkon Bezpo\u015brednio",
+        "__typename": "UserAdvert"
+      },
+      {
+        "adId": "66338422",
+        "url": "https://www.otodom.pl/pl/oferta/2-pokojowe-mieszkanie-46m2-bezposrednio-ID4ulEy",
+        "image": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZqZHMzMWtzcWp6ajEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.iAOIZkvjXfJ5MF0o9cQIaXUeVzHJFmH1UlmsPJHkqdQ/image;s=314x236;q=80",
+        "roomsNum": "2",
+        "pricePerM": 14194,
+        "price": {
+          "value": "",
+          "unit": "",
+          "__typename": "UserAdvertPrice"
+        },
+        "netArea": "46.5",
+        "title": "2-pokojowe mieszkanie 46m2 Bezpo\u015brednio",
+        "__typename": "UserAdvert"
+      },
+      {
+        "adId": "67469650",
+        "url": "https://www.otodom.pl/pl/oferta/3-pokojowe-mieszkanie-58m2-taras-bezposrednio-ID4z5Va",
+        "image": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im83M2MwdGl0aDR3NjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.TFA-9XUYKd1fqri9zaqkOg6LU7-ktIco0YRHeY91DJM/image;s=314x236;q=80",
+        "roomsNum": "3",
+        "pricePerM": 16129,
+        "price": {
+          "value": "",
+          "unit": "",
+          "__typename": "UserAdvertPrice"
+        },
+        "netArea": "58.28",
+        "title": "3-pokojowe mieszkanie 58m2 + taras Bezpo\u015brednio",
+        "__typename": "UserAdvert"
+      }
+    ],
+    "paginatedUnits": {
+      "items": [
+        {
+          "id": 67890101,
+          "title": "1-pokojowe mieszkanie 38m2 Bezpo\u015brednio",
+          "url": "https://www.otodom.pl/pl/oferta/1-pokojowe-mieszkanie-38m2-bezposrednio-ID4ARjD",
+          "target": {
+            "Area": "38.57",
+            "AreaRange": [],
+            "Build_year": "2027",
+            "Building_floors_num": "7",
+            "Building_ownership": [
+              "full_ownership"
+            ],
+            "Building_type": [
+              "block"
+            ],
+            "City": "warszawa",
+            "City_id": "26",
+            "Construction_status": [
+              "to_completion"
+            ],
+            "Country": "Polska",
+            "Extras_types": [
+              "garage",
+              "lift",
+              "usable_room"
+            ],
+            "Flat_number": "1/A/08",
+            "Flat_projection": "https://image-convert.obido.pl/flat-projections/2cc006a892bd1f2278926e717e28b62b_c.png",
+            "Floor_no": [
+              "floor_1"
+            ],
+            "Heating": [
+              "urban"
+            ],
+            "Id": "67890101",
+            "MarketType": "primary",
+            "Media_types": [
+              "internet",
+              "cable-television",
+              "phone"
+            ],
+            "ObidoAdvert": "y",
+            "OfferType": "sprzedaz",
+            "Photo": "aHR0cHM6Ly9pcmVsYW5kLmFwb2xsby5vbHhjZG4uY29tL3YxL2ZpbGVzL2V5Sm1iaUk2SW1aek4yYzVhalptTVc5bE5qTXRSVU5QVTFsVFZFVk5JaXdpZHlJNlczc2labTRpT2lKbGJuWm1jWEZsTVdGNU5Hc3hMVUZRVENJc0luTWlPaUl4TkNJc0luQWlPaUl4TUN3dE1UQWlMQ0poSWpvaU1DSjlYWDAuZlpIby1BNnZ1UF9YUjJBNVIwWU5HRkxhTmtBbjJkVDRFaU00RTAzSDhXYy9pbWFnZTtzPTY1NXg0OTE7cT04MA==",
+            "Price": 734721,
+            "PriceRange": [
+              "500001-750000"
+            ],
+            "Price_per_m": 19049,
+            "ProperType": "mieszkanie",
+            "Province": "mazowieckie",
+            "RegularUser": "n",
+            "Rooms_num": [
+              "1"
+            ],
+            "Security_types": [
+              "entryphone",
+              "monitoring"
+            ],
+            "Subregion": "powiat-warszawa",
+            "Title": "MS1wb2tvam93ZSBtaWVzemthbmllIDM4bTIgQmV6cG/Fm3JlZG5pbw==",
+            "Windows_type": [
+              "plastic"
+            ],
+            "categoryId": "101",
+            "env": "production",
+            "hidePrice": "0",
+            "seller_id": "10556359",
+            "user_type": "developer"
+          },
+          "adCategory": {
+            "name": "FLAT",
+            "__typename": "AdvertCategory"
+          },
+          "characteristics": [
+            {
+              "key": "price",
+              "value": "734721",
+              "currency": "PLN",
+              "localizedValue": "734 721 z\u0142",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "m",
+              "value": "38.57",
+              "currency": "",
+              "localizedValue": "38,57 m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "price_per_m",
+              "value": "19049",
+              "currency": "",
+              "localizedValue": "19 049 z\u0142/m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "rooms_num",
+              "value": "1",
+              "currency": "",
+              "localizedValue": "1",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "market",
+              "value": "primary",
+              "currency": "",
+              "localizedValue": "pierwotny",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_type",
+              "value": "block",
+              "currency": "",
+              "localizedValue": "blok",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "floor_no",
+              "value": "floor_1",
+              "currency": "",
+              "localizedValue": "1",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_floors_num",
+              "value": "7",
+              "currency": "",
+              "localizedValue": "7",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "windows_type",
+              "value": "plastic",
+              "currency": "",
+              "localizedValue": "plastikowe",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "heating",
+              "value": "urban",
+              "currency": "",
+              "localizedValue": "miejskie",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "build_year",
+              "value": "2027",
+              "currency": "",
+              "localizedValue": "2027",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "construction_status",
+              "value": "to_completion",
+              "currency": "",
+              "localizedValue": "do wyko\u0144czenia",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_ownership",
+              "value": "full_ownership",
+              "currency": "",
+              "localizedValue": "pe\u0142na w\u0142asno\u015b\u0107",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "free_from",
+              "value": "2027-11-30",
+              "currency": "",
+              "localizedValue": "2027-11-30",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_number",
+              "value": "1/A/08",
+              "currency": "",
+              "localizedValue": "1/A/08 ",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_projection",
+              "value": "https://image-convert.obido.pl/flat-projections/2cc006a892bd1f2278926e717e28b62b_c.png",
+              "currency": "",
+              "localizedValue": "https://image-convert.obido.pl/flat-projections/2cc006a892bd1f2278926e717e28b62b_c.png ",
+              "__typename": "Characteristic"
+            }
+          ],
+          "images": [
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InNlamJnaHkwcHd6aDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.6NoRsznf1CcuVZ7HMm_DbXjSts8xXnEdbIRHPC6s0hY/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImszOW0yb3F2dDluYS1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.HASS7OpRWCxE_CFyU3cNEUd8pvkhRSM-_6fUIf-C-1w/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImFva2FzNTlqbzBpMjEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.VKEENYUEoBbwuns4W2qQlWxp8_fWcPiHYsau5C4Vd6M/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            }
+          ],
+          "location": {
+            "coordinates": {
+              "latitude": 52.253595537516,
+              "longitude": 21.053958070842,
+              "radius": 0,
+              "zoomLevel": 12,
+              "__typename": "AdvertCoordinates"
+            },
+            "__typename": "AdvertLocation"
+          },
+          "category": {
+            "id": 101,
+            "name": [
+              {
+                "locale": "pl",
+                "value": "Mieszkania",
+                "__typename": "LocalizedString"
+              },
+              {
+                "locale": "uk",
+                "value": "\u041a\u0432\u0430\u0440\u0442\u0438\u0440\u0430",
+                "__typename": "LocalizedString"
+              }
+            ],
+            "__typename": "AdCategory"
+          },
+          "owner": {
+            "id": 10556359,
+            "name": "Biuro Sprzeda\u017cy",
+            "type": "developer",
+            "phones": [
+              "+48573560285"
+            ],
+            "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im81OWtjYW03NjA4ei1BUEwifQ.9Lv-A97q5nFSW82bQ3IjzRXxYACJSffPJXQcIp9rPVA/image;s=97x97;q=100",
+            "contacts": [],
+            "__typename": "LegacyAdvertOwner"
+          },
+          "createdAt": "2026-04-09T14:19:08Z",
+          "specialOffer": null,
+          "floorPlans": [
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImFva2FzNTlqbzBpMjEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.VKEENYUEoBbwuns4W2qQlWxp8_fWcPiHYsau5C4Vd6M/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImszOW0yb3F2dDluYS1FQ09TWVNURU0iLCJ3IjpbeyJmbiI6ImVudmZxcWUxYXk0azEtQVBMIiwicyI6IjE0IiwicCI6IjEwLC0xMCIsImEiOiIwIn1dfQ.HASS7OpRWCxE_CFyU3cNEUd8pvkhRSM-_6fUIf-C-1w/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InNlamJnaHkwcHd6aDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.6NoRsznf1CcuVZ7HMm_DbXjSts8xXnEdbIRHPC6s0hY/image"
+          ],
+          "__typename": "Advert"
+        },
+        {
+          "id": 67890108,
+          "title": "1-pokojowe mieszkanie 39m2 Bez Prowizji",
+          "url": "https://www.otodom.pl/pl/oferta/1-pokojowe-mieszkanie-39m2-bez-prowizji-ID4ARjK",
+          "target": {
+            "Area": "39.83",
+            "AreaRange": [],
+            "Build_year": "2027",
+            "Building_floors_num": "7",
+            "Building_ownership": [
+              "full_ownership"
+            ],
+            "Building_type": [
+              "block"
+            ],
+            "City": "warszawa",
+            "City_id": "26",
+            "Construction_status": [
+              "to_completion"
+            ],
+            "Country": "Polska",
+            "Extras_types": [
+              "garage",
+              "lift",
+              "usable_room"
+            ],
+            "Flat_number": "1/A/10",
+            "Flat_projection": "https://image-convert.obido.pl/flat-projections/3ed1ddf574b44c306ff3813d121047af_c.png",
+            "Floor_no": [
+              "floor_1"
+            ],
+            "Heating": [
+              "urban"
+            ],
+            "Id": "67890108",
+            "MarketType": "primary",
+            "Media_types": [
+              "internet",
+              "cable-television",
+              "phone"
+            ],
+            "ObidoAdvert": "y",
+            "OfferType": "sprzedaz",
+            "Photo": "aHR0cHM6Ly9pcmVsYW5kLmFwb2xsby5vbHhjZG4uY29tL3YxL2ZpbGVzL2V5Sm1iaUk2SW05Nk5qbHVNR3RoZG5GcmJESXRSVU5QVTFsVFZFVk5JaXdpZHlJNlczc2labTRpT2lKbGJuWm1jWEZsTVdGNU5Hc3hMVUZRVENJc0luTWlPaUl4TkNJc0luQWlPaUl4TUN3dE1UQWlMQ0poSWpvaU1DSjlYWDAuS1hzTEM4V2V3eHNlUDdQS3FJZ0c3Q3BaVlQxREFfSnpadndxX1BFRm5hVS9pbWFnZTtzPTY1NXg0OTE7cT04MA==",
+            "Price": 758723,
+            "PriceRange": [
+              "750001-1000000"
+            ],
+            "Price_per_m": 19049,
+            "ProperType": "mieszkanie",
+            "Province": "mazowieckie",
+            "RegularUser": "n",
+            "Rooms_num": [
+              "1"
+            ],
+            "Security_types": [
+              "entryphone",
+              "monitoring"
+            ],
+            "Subregion": "powiat-warszawa",
+            "Title": "MS1wb2tvam93ZSBtaWVzemthbmllIDM5bTIgQmV6IFByb3dpempp",
+            "Windows_type": [
+              "plastic"
+            ],
+            "categoryId": "101",
+            "env": "production",
+            "hidePrice": "0",
+            "seller_id": "10556359",
+            "user_type": "developer"
+          },
+          "adCategory": {
+            "name": "FLAT",
+            "__typename": "AdvertCategory"
+          },
+          "characteristics": [
+            {
+              "key": "price",
+              "value": "758723",
+              "currency": "PLN",
+              "localizedValue": "758 723 z\u0142",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "m",
+              "value": "39.83",
+              "currency": "",
+              "localizedValue": "39,83 m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "price_per_m",
+              "value": "19049",
+              "currency": "",
+              "localizedValue": "19 049 z\u0142/m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "rooms_num",
+              "value": "1",
+              "currency": "",
+              "localizedValue": "1",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "market",
+              "value": "primary",
+              "currency": "",
+              "localizedValue": "pierwotny",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_type",
+              "value": "block",
+              "currency": "",
+              "localizedValue": "blok",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "floor_no",
+              "value": "floor_1",
+              "currency": "",
+              "localizedValue": "1",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_floors_num",
+              "value": "7",
+              "currency": "",
+              "localizedValue": "7",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "windows_type",
+              "value": "plastic",
+              "currency": "",
+              "localizedValue": "plastikowe",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "heating",
+              "value": "urban",
+              "currency": "",
+              "localizedValue": "miejskie",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "build_year",
+              "value": "2027",
+              "currency": "",
+              "localizedValue": "2027",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "construction_status",
+              "value": "to_completion",
+              "currency": "",
+              "localizedValue": "do wyko\u0144czenia",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_ownership",
+              "value": "full_ownership",
+              "currency": "",
+              "localizedValue": "pe\u0142na w\u0142asno\u015b\u0107",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "free_from",
+              "value": "2027-11-30",
+              "currency": "",
+              "localizedValue": "2027-11-30",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_number",
+              "value": "1/A/10",
+              "currency": "",
+              "localizedValue": "1/A/10 ",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_projection",
+              "value": "https://image-convert.obido.pl/flat-projections/3ed1ddf574b44c306ff3813d121047af_c.png",
+              "currency": "",
+              "localizedValue": "https://image-convert.obido.pl/flat-projections/3ed1ddf574b44c306ff3813d121047af_c.png ",
+              "__typename": "Characteristic"
+            }
+          ],
+          "images": [
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Imw2MWsycnhscTMyODMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.wnEVXLKafIg1vrYuOQkaL1zQND9lKu0v5vHGxHAOXEc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjU5eDd0anJ2Nzd1NDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.WngfpUCLo28wHtizDx-LC-rO84XSGVSbuwaidO2z2PY/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijk2czJlZHhydTh1bDEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.qZ6QTG1ffHkrNSkxFhrRFV40cNtL4ZBBV_3ev8BFPEQ/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            }
+          ],
+          "location": {
+            "coordinates": {
+              "latitude": 52.253595537516,
+              "longitude": 21.053958070842,
+              "radius": 0,
+              "zoomLevel": 12,
+              "__typename": "AdvertCoordinates"
+            },
+            "__typename": "AdvertLocation"
+          },
+          "category": {
+            "id": 101,
+            "name": [
+              {
+                "locale": "uk",
+                "value": "\u041a\u0432\u0430\u0440\u0442\u0438\u0440\u0430",
+                "__typename": "LocalizedString"
+              },
+              {
+                "locale": "pl",
+                "value": "Mieszkania",
+                "__typename": "LocalizedString"
+              }
+            ],
+            "__typename": "AdCategory"
+          },
+          "owner": {
+            "id": 10556359,
+            "name": "Biuro Sprzeda\u017cy",
+            "type": "developer",
+            "phones": [
+              "+48573560285"
+            ],
+            "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im81OWtjYW03NjA4ei1BUEwifQ.9Lv-A97q5nFSW82bQ3IjzRXxYACJSffPJXQcIp9rPVA/image;s=97x97;q=100",
+            "contacts": [],
+            "__typename": "LegacyAdvertOwner"
+          },
+          "createdAt": "2026-04-09T14:19:14Z",
+          "specialOffer": null,
+          "floorPlans": [
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjU5eDd0anJ2Nzd1NDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.WngfpUCLo28wHtizDx-LC-rO84XSGVSbuwaidO2z2PY/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijk2czJlZHhydTh1bDEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.qZ6QTG1ffHkrNSkxFhrRFV40cNtL4ZBBV_3ev8BFPEQ/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Imw2MWsycnhscTMyODMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.wnEVXLKafIg1vrYuOQkaL1zQND9lKu0v5vHGxHAOXEc/image"
+          ],
+          "__typename": "Advert"
+        },
+        {
+          "id": 67908137,
+          "title": "2-pokojowe mieszkanie 35m2 + loggia Bezpo\u015brednio",
+          "url": "https://www.otodom.pl/pl/oferta/2-pokojowe-mieszkanie-35m2-loggia-bezposrednio-ID4AV0x",
+          "target": {
+            "Area": "35.72",
+            "AreaRange": [],
+            "Build_year": "2027",
+            "Building_floors_num": "7",
+            "Building_ownership": [
+              "full_ownership"
+            ],
+            "Building_type": [
+              "block"
+            ],
+            "City": "warszawa",
+            "City_id": "26",
+            "Construction_status": [
+              "to_completion"
+            ],
+            "Country": "Polska",
+            "Extras_types": [
+              "garage",
+              "lift",
+              "usable_room"
+            ],
+            "Flat_number": "7/A/06",
+            "Flat_projection": "https://image-convert.obido.pl/flat-projections/95c2a30a24e595270e32fe01addf16d2_c.png",
+            "Floor_no": [
+              "floor_7"
+            ],
+            "Heating": [
+              "urban"
+            ],
+            "Id": "67908137",
+            "MarketType": "primary",
+            "Media_types": [
+              "internet",
+              "cable-television",
+              "phone"
+            ],
+            "ObidoAdvert": "y",
+            "OfferType": "sprzedaz",
+            "Photo": "aHR0cHM6Ly9pcmVsYW5kLmFwb2xsby5vbHhjZG4uY29tL3YxL2ZpbGVzL2V5Sm1iaUk2SW1aek4yYzVhalptTVc5bE5qTXRSVU5QVTFsVFZFVk5JaXdpZHlJNlczc2labTRpT2lKbGJuWm1jWEZsTVdGNU5Hc3hMVUZRVENJc0luTWlPaUl4TkNJc0luQWlPaUl4TUN3dE1UQWlMQ0poSWpvaU1DSjlYWDAuZlpIby1BNnZ1UF9YUjJBNVIwWU5HRkxhTmtBbjJkVDRFaU00RTAzSDhXYy9pbWFnZTtzPTY1NXg0OTE7cT04MA==",
+            "Price": 825097,
+            "PriceRange": [
+              "750001-1000000"
+            ],
+            "Price_per_m": 23099,
+            "ProperType": "mieszkanie",
+            "Province": "mazowieckie",
+            "RegularUser": "n",
+            "Rooms_num": [
+              "2"
+            ],
+            "Security_types": [
+              "entryphone",
+              "monitoring"
+            ],
+            "Subregion": "powiat-warszawa",
+            "Title": "Mi1wb2tvam93ZSBtaWVzemthbmllIDM1bTIgKyBsb2dnaWEgQmV6cG/Fm3JlZG5pbw==",
+            "Windows_type": [
+              "plastic"
+            ],
+            "categoryId": "101",
+            "env": "production",
+            "hidePrice": "0",
+            "seller_id": "10556359",
+            "user_type": "developer"
+          },
+          "adCategory": {
+            "name": "FLAT",
+            "__typename": "AdvertCategory"
+          },
+          "characteristics": [
+            {
+              "key": "price",
+              "value": "825097",
+              "currency": "PLN",
+              "localizedValue": "825 097 z\u0142",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "m",
+              "value": "35.72",
+              "currency": "",
+              "localizedValue": "35,72 m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "price_per_m",
+              "value": "23099",
+              "currency": "",
+              "localizedValue": "23 099 z\u0142/m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "rooms_num",
+              "value": "2",
+              "currency": "",
+              "localizedValue": "2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "market",
+              "value": "primary",
+              "currency": "",
+              "localizedValue": "pierwotny",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_type",
+              "value": "block",
+              "currency": "",
+              "localizedValue": "blok",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "floor_no",
+              "value": "floor_7",
+              "currency": "",
+              "localizedValue": "7",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_floors_num",
+              "value": "7",
+              "currency": "",
+              "localizedValue": "7",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "windows_type",
+              "value": "plastic",
+              "currency": "",
+              "localizedValue": "plastikowe",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "heating",
+              "value": "urban",
+              "currency": "",
+              "localizedValue": "miejskie",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "build_year",
+              "value": "2027",
+              "currency": "",
+              "localizedValue": "2027",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "construction_status",
+              "value": "to_completion",
+              "currency": "",
+              "localizedValue": "do wyko\u0144czenia",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_ownership",
+              "value": "full_ownership",
+              "currency": "",
+              "localizedValue": "pe\u0142na w\u0142asno\u015b\u0107",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "free_from",
+              "value": "2027-11-30",
+              "currency": "",
+              "localizedValue": "2027-11-30",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_number",
+              "value": "7/A/06",
+              "currency": "",
+              "localizedValue": "7/A/06 ",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_projection",
+              "value": "https://image-convert.obido.pl/flat-projections/95c2a30a24e595270e32fe01addf16d2_c.png",
+              "currency": "",
+              "localizedValue": "https://image-convert.obido.pl/flat-projections/95c2a30a24e595270e32fe01addf16d2_c.png ",
+              "__typename": "Characteristic"
+            }
+          ],
+          "images": [
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InZzdWEyMmJkODd6dTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.PWrLgOsV5hrCKtvU0m48wjdQIAhg6JYAXFprmLQtpfw/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijc5czBjc25pZHZ5YTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.sHn7LUvtzhBuIN-X0VVSsA9tWR6LVUmc1qbooiWhOJM/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InZneGxqb2FvNG94ejItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Ta3qHqiiyA1JWN9oki3jfM0o3Q4mPCMZ3q3epO9t9XA/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            }
+          ],
+          "location": {
+            "coordinates": {
+              "latitude": 52.253595537516,
+              "longitude": 21.053958070842,
+              "radius": 0,
+              "zoomLevel": 12,
+              "__typename": "AdvertCoordinates"
+            },
+            "__typename": "AdvertLocation"
+          },
+          "category": {
+            "id": 101,
+            "name": [
+              {
+                "locale": "uk",
+                "value": "\u041a\u0432\u0430\u0440\u0442\u0438\u0440\u0430",
+                "__typename": "LocalizedString"
+              },
+              {
+                "locale": "pl",
+                "value": "Mieszkania",
+                "__typename": "LocalizedString"
+              }
+            ],
+            "__typename": "AdCategory"
+          },
+          "owner": {
+            "id": 10556359,
+            "name": "Biuro Sprzeda\u017cy",
+            "type": "developer",
+            "phones": [
+              "+48573560285"
+            ],
+            "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im81OWtjYW03NjA4ei1BUEwifQ.9Lv-A97q5nFSW82bQ3IjzRXxYACJSffPJXQcIp9rPVA/image;s=97x97;q=100",
+            "contacts": [],
+            "__typename": "LegacyAdvertOwner"
+          },
+          "createdAt": "2026-04-15T11:06:17Z",
+          "specialOffer": null,
+          "floorPlans": [
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Ijc5czBjc25pZHZ5YTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.sHn7LUvtzhBuIN-X0VVSsA9tWR6LVUmc1qbooiWhOJM/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InZneGxqb2FvNG94ejItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.Ta3qHqiiyA1JWN9oki3jfM0o3Q4mPCMZ3q3epO9t9XA/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InZzdWEyMmJkODd6dTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.PWrLgOsV5hrCKtvU0m48wjdQIAhg6JYAXFprmLQtpfw/image"
+          ],
+          "__typename": "Advert"
+        },
+        {
+          "id": 67890132,
+          "title": "1-pokojowe mieszkanie 38m2 + balkon Bezpo\u015brednio",
+          "url": "https://www.otodom.pl/pl/oferta/1-pokojowe-mieszkanie-38m2-balkon-bezposrednio-ID4ARk8",
+          "target": {
+            "Area": "38.57",
+            "AreaRange": [],
+            "Build_year": "2027",
+            "Building_floors_num": "7",
+            "Building_ownership": [
+              "full_ownership"
+            ],
+            "Building_type": [
+              "block"
+            ],
+            "City": "warszawa",
+            "City_id": "26",
+            "Construction_status": [
+              "to_completion"
+            ],
+            "Country": "Polska",
+            "Extras_types": [
+              "garage",
+              "balcony",
+              "lift",
+              "usable_room"
+            ],
+            "Flat_number": "3/A/08",
+            "Flat_projection": "https://image-convert.obido.pl/flat-projections/b9478ff0d7a1a705a2ecad0f4430e3ca_c.png",
+            "Floor_no": [
+              "floor_3"
+            ],
+            "Heating": [
+              "urban"
+            ],
+            "Id": "67890132",
+            "MarketType": "primary",
+            "Media_types": [
+              "internet",
+              "cable-television",
+              "phone"
+            ],
+            "ObidoAdvert": "y",
+            "OfferType": "sprzedaz",
+            "Photo": "aHR0cHM6Ly9pcmVsYW5kLmFwb2xsby5vbHhjZG4uY29tL3YxL2ZpbGVzL2V5Sm1iaUk2SW1aek4yYzVhalptTVc5bE5qTXRSVU5QVTFsVFZFVk5JaXdpZHlJNlczc2labTRpT2lKbGJuWm1jWEZsTVdGNU5Hc3hMVUZRVENJc0luTWlPaUl4TkNJc0luQWlPaUl4TUN3dE1UQWlMQ0poSWpvaU1DSjlYWDAuZlpIby1BNnZ1UF9YUjJBNVIwWU5HRkxhTmtBbjJkVDRFaU00RTAzSDhXYy9pbWFnZTtzPTY1NXg0OTE7cT04MA==",
+            "Price": 829238,
+            "PriceRange": [
+              "750001-1000000"
+            ],
+            "Price_per_m": 21500,
+            "ProperType": "mieszkanie",
+            "Province": "mazowieckie",
+            "RegularUser": "n",
+            "Rooms_num": [
+              "1"
+            ],
+            "Security_types": [
+              "entryphone",
+              "monitoring"
+            ],
+            "Subregion": "powiat-warszawa",
+            "Title": "MS1wb2tvam93ZSBtaWVzemthbmllIDM4bTIgKyBiYWxrb24gQmV6cG/Fm3JlZG5pbw==",
+            "Windows_type": [
+              "plastic"
+            ],
+            "categoryId": "101",
+            "env": "production",
+            "hidePrice": "0",
+            "seller_id": "10556359",
+            "user_type": "developer"
+          },
+          "adCategory": {
+            "name": "FLAT",
+            "__typename": "AdvertCategory"
+          },
+          "characteristics": [
+            {
+              "key": "price",
+              "value": "829238",
+              "currency": "PLN",
+              "localizedValue": "829 238 z\u0142",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "m",
+              "value": "38.57",
+              "currency": "",
+              "localizedValue": "38,57 m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "price_per_m",
+              "value": "21500",
+              "currency": "",
+              "localizedValue": "21 500 z\u0142/m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "rooms_num",
+              "value": "1",
+              "currency": "",
+              "localizedValue": "1",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "market",
+              "value": "primary",
+              "currency": "",
+              "localizedValue": "pierwotny",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_type",
+              "value": "block",
+              "currency": "",
+              "localizedValue": "blok",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "floor_no",
+              "value": "floor_3",
+              "currency": "",
+              "localizedValue": "3",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_floors_num",
+              "value": "7",
+              "currency": "",
+              "localizedValue": "7",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "windows_type",
+              "value": "plastic",
+              "currency": "",
+              "localizedValue": "plastikowe",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "heating",
+              "value": "urban",
+              "currency": "",
+              "localizedValue": "miejskie",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "build_year",
+              "value": "2027",
+              "currency": "",
+              "localizedValue": "2027",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "construction_status",
+              "value": "to_completion",
+              "currency": "",
+              "localizedValue": "do wyko\u0144czenia",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_ownership",
+              "value": "full_ownership",
+              "currency": "",
+              "localizedValue": "pe\u0142na w\u0142asno\u015b\u0107",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "free_from",
+              "value": "2027-11-30",
+              "currency": "",
+              "localizedValue": "2027-11-30",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_number",
+              "value": "3/A/08",
+              "currency": "",
+              "localizedValue": "3/A/08 ",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_projection",
+              "value": "https://image-convert.obido.pl/flat-projections/b9478ff0d7a1a705a2ecad0f4430e3ca_c.png",
+              "currency": "",
+              "localizedValue": "https://image-convert.obido.pl/flat-projections/b9478ff0d7a1a705a2ecad0f4430e3ca_c.png ",
+              "__typename": "Characteristic"
+            }
+          ],
+          "images": [
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImFydjB3bHRqNGM4bzItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.4ptqK4iOgIxw-UkGSxsNPjacADjewhhon5f_UIWnWjc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InJqc3R4NzFjOW93NTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ES--9C0tukBStiUmit42Ai9emS22wD4SKOGm_fuJGMc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InppeGRxZWJzZnBtdjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.V6VoNaybY7XKAANjxDxTNd-EZAPL1WkKq1Eu8oIiXWc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            }
+          ],
+          "location": {
+            "coordinates": {
+              "latitude": 52.253595537516,
+              "longitude": 21.053958070842,
+              "radius": 0,
+              "zoomLevel": 12,
+              "__typename": "AdvertCoordinates"
+            },
+            "__typename": "AdvertLocation"
+          },
+          "category": {
+            "id": 101,
+            "name": [
+              {
+                "locale": "pl",
+                "value": "Mieszkania",
+                "__typename": "LocalizedString"
+              },
+              {
+                "locale": "uk",
+                "value": "\u041a\u0432\u0430\u0440\u0442\u0438\u0440\u0430",
+                "__typename": "LocalizedString"
+              }
+            ],
+            "__typename": "AdCategory"
+          },
+          "owner": {
+            "id": 10556359,
+            "name": "Biuro Sprzeda\u017cy",
+            "type": "developer",
+            "phones": [
+              "+48573560285"
+            ],
+            "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im81OWtjYW03NjA4ei1BUEwifQ.9Lv-A97q5nFSW82bQ3IjzRXxYACJSffPJXQcIp9rPVA/image;s=97x97;q=100",
+            "contacts": [],
+            "__typename": "LegacyAdvertOwner"
+          },
+          "createdAt": "2026-04-09T14:19:36Z",
+          "specialOffer": null,
+          "floorPlans": [
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImFydjB3bHRqNGM4bzItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.4ptqK4iOgIxw-UkGSxsNPjacADjewhhon5f_UIWnWjc/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InJqc3R4NzFjOW93NTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ES--9C0tukBStiUmit42Ai9emS22wD4SKOGm_fuJGMc/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InppeGRxZWJzZnBtdjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.V6VoNaybY7XKAANjxDxTNd-EZAPL1WkKq1Eu8oIiXWc/image"
+          ],
+          "__typename": "Advert"
+        },
+        {
+          "id": 67890179,
+          "title": "1-pokojowe mieszkanie 37m2 + loggia Bez Prowizji",
+          "url": "https://www.otodom.pl/pl/oferta/1-pokojowe-mieszkanie-37m2-loggia-bez-prowizji-ID4ARkT",
+          "target": {
+            "Area": "37.25",
+            "AreaRange": [],
+            "Build_year": "2027",
+            "Building_floors_num": "7",
+            "Building_ownership": [
+              "full_ownership"
+            ],
+            "Building_type": [
+              "block"
+            ],
+            "City": "warszawa",
+            "City_id": "26",
+            "Construction_status": [
+              "to_completion"
+            ],
+            "Country": "Polska",
+            "Extras_types": [
+              "garage",
+              "lift",
+              "usable_room"
+            ],
+            "Flat_number": "7/A/10",
+            "Flat_projection": "https://image-convert.obido.pl/flat-projections/1073bb4df8e8915b9fdb7784b9f9cc28_c.png",
+            "Floor_no": [
+              "floor_7"
+            ],
+            "Heating": [
+              "urban"
+            ],
+            "Id": "67890179",
+            "MarketType": "primary",
+            "Media_types": [
+              "internet",
+              "cable-television",
+              "phone"
+            ],
+            "ObidoAdvert": "y",
+            "OfferType": "sprzedaz",
+            "Photo": "aHR0cHM6Ly9pcmVsYW5kLmFwb2xsby5vbHhjZG4uY29tL3YxL2ZpbGVzL2V5Sm1iaUk2SW05Nk5qbHVNR3RoZG5GcmJESXRSVU5QVTFsVFZFVk5JaXdpZHlJNlczc2labTRpT2lKbGJuWm1jWEZsTVdGNU5Hc3hMVUZRVENJc0luTWlPaUl4TkNJc0luQWlPaUl4TUN3dE1UQWlMQ0poSWpvaU1DSjlYWDAuS1hzTEM4V2V3eHNlUDdQS3FJZ0c3Q3BaVlQxREFfSnpadndxX1BFRm5hVS9pbWFnZTtzPTY1NXg0OTE7cT04MA==",
+            "Price": 830669,
+            "PriceRange": [
+              "750001-1000000"
+            ],
+            "Price_per_m": 22300,
+            "ProperType": "mieszkanie",
+            "Province": "mazowieckie",
+            "RegularUser": "n",
+            "Rooms_num": [
+              "1"
+            ],
+            "Security_types": [
+              "entryphone",
+              "monitoring"
+            ],
+            "Subregion": "powiat-warszawa",
+            "Title": "MS1wb2tvam93ZSBtaWVzemthbmllIDM3bTIgKyBsb2dnaWEgQmV6IFByb3dpempp",
+            "Windows_type": [
+              "plastic"
+            ],
+            "categoryId": "101",
+            "env": "production",
+            "hidePrice": "0",
+            "seller_id": "10556359",
+            "user_type": "developer"
+          },
+          "adCategory": {
+            "name": "FLAT",
+            "__typename": "AdvertCategory"
+          },
+          "characteristics": [
+            {
+              "key": "price",
+              "value": "830669",
+              "currency": "PLN",
+              "localizedValue": "830 669 z\u0142",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "m",
+              "value": "37.25",
+              "currency": "",
+              "localizedValue": "37,25 m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "price_per_m",
+              "value": "22300",
+              "currency": "",
+              "localizedValue": "22 300 z\u0142/m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "rooms_num",
+              "value": "1",
+              "currency": "",
+              "localizedValue": "1",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "market",
+              "value": "primary",
+              "currency": "",
+              "localizedValue": "pierwotny",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_type",
+              "value": "block",
+              "currency": "",
+              "localizedValue": "blok",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "floor_no",
+              "value": "floor_7",
+              "currency": "",
+              "localizedValue": "7",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_floors_num",
+              "value": "7",
+              "currency": "",
+              "localizedValue": "7",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "windows_type",
+              "value": "plastic",
+              "currency": "",
+              "localizedValue": "plastikowe",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "heating",
+              "value": "urban",
+              "currency": "",
+              "localizedValue": "miejskie",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "build_year",
+              "value": "2027",
+              "currency": "",
+              "localizedValue": "2027",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "construction_status",
+              "value": "to_completion",
+              "currency": "",
+              "localizedValue": "do wyko\u0144czenia",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_ownership",
+              "value": "full_ownership",
+              "currency": "",
+              "localizedValue": "pe\u0142na w\u0142asno\u015b\u0107",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "free_from",
+              "value": "2027-11-30",
+              "currency": "",
+              "localizedValue": "2027-11-30",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_number",
+              "value": "7/A/10",
+              "currency": "",
+              "localizedValue": "7/A/10 ",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_projection",
+              "value": "https://image-convert.obido.pl/flat-projections/1073bb4df8e8915b9fdb7784b9f9cc28_c.png",
+              "currency": "",
+              "localizedValue": "https://image-convert.obido.pl/flat-projections/1073bb4df8e8915b9fdb7784b9f9cc28_c.png ",
+              "__typename": "Characteristic"
+            }
+          ],
+          "images": [
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjZ1cWVkZnNsdmpxODItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fbEKmVaJi99lrVVgWlqZo8N_iCRuX3XP6OahuSagNv0/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjU1NjR4YzVwbnp6YTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.kmnoVhTYf-tdCSW4iH68Fb9Q0pxqKlLEZ2qz8OGO0_s/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImMyenp5cXJvMWd3eTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.f206DJD6k31fZKb4N_0HWnFDoqfMyBNRsDjkjyqVcHE/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            }
+          ],
+          "location": {
+            "coordinates": {
+              "latitude": 52.253595537516,
+              "longitude": 21.053958070842,
+              "radius": 0,
+              "zoomLevel": 12,
+              "__typename": "AdvertCoordinates"
+            },
+            "__typename": "AdvertLocation"
+          },
+          "category": {
+            "id": 101,
+            "name": [
+              {
+                "locale": "uk",
+                "value": "\u041a\u0432\u0430\u0440\u0442\u0438\u0440\u0430",
+                "__typename": "LocalizedString"
+              },
+              {
+                "locale": "pl",
+                "value": "Mieszkania",
+                "__typename": "LocalizedString"
+              }
+            ],
+            "__typename": "AdCategory"
+          },
+          "owner": {
+            "id": 10556359,
+            "name": "Biuro Sprzeda\u017cy",
+            "type": "developer",
+            "phones": [
+              "+48573560285"
+            ],
+            "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im81OWtjYW03NjA4ei1BUEwifQ.9Lv-A97q5nFSW82bQ3IjzRXxYACJSffPJXQcIp9rPVA/image;s=97x97;q=100",
+            "contacts": [],
+            "__typename": "LegacyAdvertOwner"
+          },
+          "createdAt": "2026-04-09T14:20:11Z",
+          "specialOffer": null,
+          "floorPlans": [
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjU1NjR4YzVwbnp6YTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.kmnoVhTYf-tdCSW4iH68Fb9Q0pxqKlLEZ2qz8OGO0_s/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjZ1cWVkZnNsdmpxODItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fbEKmVaJi99lrVVgWlqZo8N_iCRuX3XP6OahuSagNv0/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImMyenp5cXJvMWd3eTEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.f206DJD6k31fZKb4N_0HWnFDoqfMyBNRsDjkjyqVcHE/image"
+          ],
+          "__typename": "Advert"
+        },
+        {
+          "id": 67890140,
+          "title": "1-pokojowe mieszkanie 38m2 + balkon Bezpo\u015brednio",
+          "url": "https://www.otodom.pl/pl/oferta/1-pokojowe-mieszkanie-38m2-balkon-bezposrednio-ID4ARkg",
+          "target": {
+            "Area": "38.57",
+            "AreaRange": [],
+            "Build_year": "2027",
+            "Building_floors_num": "7",
+            "Building_ownership": [
+              "full_ownership"
+            ],
+            "Building_type": [
+              "block"
+            ],
+            "City": "warszawa",
+            "City_id": "26",
+            "Construction_status": [
+              "to_completion"
+            ],
+            "Country": "Polska",
+            "Extras_types": [
+              "garage",
+              "balcony",
+              "lift",
+              "usable_room"
+            ],
+            "Flat_number": "4/A/08",
+            "Flat_projection": "https://image-convert.obido.pl/flat-projections/b9478ff0d7a1a705a2ecad0f4430e3ca_c.png",
+            "Floor_no": [
+              "floor_4"
+            ],
+            "Heating": [
+              "urban"
+            ],
+            "Id": "67890140",
+            "MarketType": "primary",
+            "Media_types": [
+              "internet",
+              "cable-television",
+              "phone"
+            ],
+            "ObidoAdvert": "y",
+            "OfferType": "sprzedaz",
+            "Photo": "aHR0cHM6Ly9pcmVsYW5kLmFwb2xsby5vbHhjZG4uY29tL3YxL2ZpbGVzL2V5Sm1iaUk2SW1aek4yYzVhalptTVc5bE5qTXRSVU5QVTFsVFZFVk5JaXdpZHlJNlczc2labTRpT2lKbGJuWm1jWEZsTVdGNU5Hc3hMVUZRVENJc0luTWlPaUl4TkNJc0luQWlPaUl4TUN3dE1UQWlMQ0poSWpvaU1DSjlYWDAuZlpIby1BNnZ1UF9YUjJBNVIwWU5HRkxhTmtBbjJkVDRFaU00RTAzSDhXYy9pbWFnZTtzPTY1NXg0OTE7cT04MA==",
+            "Price": 836944,
+            "PriceRange": [
+              "750001-1000000"
+            ],
+            "Price_per_m": 21699,
+            "ProperType": "mieszkanie",
+            "Province": "mazowieckie",
+            "RegularUser": "n",
+            "Rooms_num": [
+              "1"
+            ],
+            "Security_types": [
+              "entryphone",
+              "monitoring"
+            ],
+            "Subregion": "powiat-warszawa",
+            "Title": "MS1wb2tvam93ZSBtaWVzemthbmllIDM4bTIgKyBiYWxrb24gQmV6cG/Fm3JlZG5pbw==",
+            "Windows_type": [
+              "plastic"
+            ],
+            "categoryId": "101",
+            "env": "production",
+            "hidePrice": "0",
+            "seller_id": "10556359",
+            "user_type": "developer"
+          },
+          "adCategory": {
+            "name": "FLAT",
+            "__typename": "AdvertCategory"
+          },
+          "characteristics": [
+            {
+              "key": "price",
+              "value": "836944",
+              "currency": "PLN",
+              "localizedValue": "836 944 z\u0142",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "m",
+              "value": "38.57",
+              "currency": "",
+              "localizedValue": "38,57 m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "price_per_m",
+              "value": "21699",
+              "currency": "",
+              "localizedValue": "21 699 z\u0142/m\u00b2",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "rooms_num",
+              "value": "1",
+              "currency": "",
+              "localizedValue": "1",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "market",
+              "value": "primary",
+              "currency": "",
+              "localizedValue": "pierwotny",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_type",
+              "value": "block",
+              "currency": "",
+              "localizedValue": "blok",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "floor_no",
+              "value": "floor_4",
+              "currency": "",
+              "localizedValue": "4",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_floors_num",
+              "value": "7",
+              "currency": "",
+              "localizedValue": "7",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "windows_type",
+              "value": "plastic",
+              "currency": "",
+              "localizedValue": "plastikowe",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "heating",
+              "value": "urban",
+              "currency": "",
+              "localizedValue": "miejskie",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "build_year",
+              "value": "2027",
+              "currency": "",
+              "localizedValue": "2027",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "construction_status",
+              "value": "to_completion",
+              "currency": "",
+              "localizedValue": "do wyko\u0144czenia",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "building_ownership",
+              "value": "full_ownership",
+              "currency": "",
+              "localizedValue": "pe\u0142na w\u0142asno\u015b\u0107",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "free_from",
+              "value": "2027-11-30",
+              "currency": "",
+              "localizedValue": "2027-11-30",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_number",
+              "value": "4/A/08",
+              "currency": "",
+              "localizedValue": "4/A/08 ",
+              "__typename": "Characteristic"
+            },
+            {
+              "key": "flat_projection",
+              "value": "https://image-convert.obido.pl/flat-projections/b9478ff0d7a1a705a2ecad0f4430e3ca_c.png",
+              "currency": "",
+              "localizedValue": "https://image-convert.obido.pl/flat-projections/b9478ff0d7a1a705a2ecad0f4430e3ca_c.png ",
+              "__typename": "Characteristic"
+            }
+          ],
+          "images": [
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InJ5bjhwY3JiYnkyczEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.jxPOlZmTeWEekjsTW5zfnzE1kf9ZWBKz2lSipL9VKFY/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InJqc3R4NzFjOW93NTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ES--9C0tukBStiUmit42Ai9emS22wD4SKOGm_fuJGMc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InppeGRxZWJzZnBtdjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.V6VoNaybY7XKAANjxDxTNd-EZAPL1WkKq1Eu8oIiXWc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImVneWlpZmJzb3E3ejEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.nnGQJqbVEpPjiPJ4n3SHCAmtGF8Pw3mNNekxA4Ru_A4/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im96NjluMGthdnFrbDItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.KXsLC8WewxseP7PKqIgG7CpZVT1DA_JzZvwq_PEFnaU/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjlqNnF0eG50aGoxMzEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.yNvCE8I5aWMZ4fbNIWmpjgmnBOkSPiHo51ZTJy7czZk/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            },
+            {
+              "small": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImZzN2c5ajZmMW9lNjMtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.fZHo-A6vuP_XR2A5R0YNGFLaNkAn2dT4EiM4E03H8Wc/image;s=314x236;q=80",
+              "__typename": "AdImage"
+            }
+          ],
+          "location": {
+            "coordinates": {
+              "latitude": 52.253595537516,
+              "longitude": 21.053958070842,
+              "radius": 0,
+              "zoomLevel": 12,
+              "__typename": "AdvertCoordinates"
+            },
+            "__typename": "AdvertLocation"
+          },
+          "category": {
+            "id": 101,
+            "name": [
+              {
+                "locale": "pl",
+                "value": "Mieszkania",
+                "__typename": "LocalizedString"
+              },
+              {
+                "locale": "uk",
+                "value": "\u041a\u0432\u0430\u0440\u0442\u0438\u0440\u0430",
+                "__typename": "LocalizedString"
+              }
+            ],
+            "__typename": "AdCategory"
+          },
+          "owner": {
+            "id": 10556359,
+            "name": "Biuro Sprzeda\u017cy",
+            "type": "developer",
+            "phones": [
+              "+48573560285"
+            ],
+            "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im81OWtjYW03NjA4ei1BUEwifQ.9Lv-A97q5nFSW82bQ3IjzRXxYACJSffPJXQcIp9rPVA/image;s=97x97;q=100",
+            "contacts": [],
+            "__typename": "LegacyAdvertOwner"
+          },
+          "createdAt": "2026-04-09T14:19:40Z",
+          "specialOffer": null,
+          "floorPlans": [
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InJqc3R4NzFjOW93NTItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.ES--9C0tukBStiUmit42Ai9emS22wD4SKOGm_fuJGMc/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InJ5bjhwY3JiYnkyczEtRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.jxPOlZmTeWEekjsTW5zfnzE1kf9ZWBKz2lSipL9VKFY/image",
+            "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6InppeGRxZWJzZnBtdjItRUNPU1lTVEVNIiwidyI6W3siZm4iOiJlbnZmcXFlMWF5NGsxLUFQTCIsInMiOiIxNCIsInAiOiIxMCwtMTAiLCJhIjoiMCJ9XX0.V6VoNaybY7XKAANjxDxTNd-EZAPL1WkKq1Eu8oIiXWc/image"
+          ],
+          "__typename": "Advert"
+        }
+      ],
+      "isPriceHidden": false,
+      "pagination": {
+        "totalResults": 73,
+        "totalPages": 13,
+        "page": 1,
+        "__typename": "AdvertPagination"
+      },
+      "facets": {
+        "numberOfRooms": null,
+        "floorNumber": null,
+        "price": null,
+        "area": null,
+        "numberOfRoomsWithCounter": null,
+        "__typename": "AdvertsFacets"
+      },
+      "__typename": "AdvertsPages"
+    },
+    "specialOffer": null,
+    "developerURL": "aHR0cHM6Ly9kZXZlbGlhLnBsL3BsL21pZXN6a2FuaWEvd2Fyc3phd2Eva2lqb3dza2Etdml0YS8=",
+    "unitGroups": {
+      "unitsGroupBy": "ROOMS_NUMBER",
+      "items": [
+        {
+          "groupId": "1",
+          "count": 15,
+          "__typename": "UnitGroup"
+        },
+        {
+          "groupId": "2",
+          "count": 33,
+          "__typename": "UnitGroup"
+        },
+        {
+          "groupId": "3",
+          "count": 20,
+          "__typename": "UnitGroup"
+        },
+        {
+          "groupId": "4",
+          "count": 5,
+          "__typename": "UnitGroup"
+        }
+      ],
+      "__typename": "DevelopmentUnitGroups"
+    },
+    "enrichment": null,
+    "__typename": "Advert",
+    "contactDetails": {
+      "name": "Biuro Sprzeda\u017cy",
+      "type": "developer",
+      "phones": [
+        "+48573560285"
+      ],
+      "imageUrl": "https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im81OWtjYW03NjA4ei1BUEwifQ.9Lv-A97q5nFSW82bQ3IjzRXxYACJSffPJXQcIp9rPVA/image;s=97x97;q=100"
+    }
+  },
+  "relativeUrl": "/pl/inwestycja/kijowska-vita-ID4ARiu",
+  "adTrackingData": {
+    "touch_point_page": "project_page",
+    "lat": 52.253595537516,
+    "long": 21.053958070842,
+    "ad_photo": 4,
+    "price_currency": null,
+    "special_offer_type": null,
+    "agent_id": null,
+    "parent_id": null,
+    "ad_id": "67890030",
+    "ad_price": null,
+    "business": null,
+    "city_id": "26",
+    "city_name": "warszawa",
+    "poster_type": "developer",
+    "surface": null,
+    "region_id": "mazowieckie",
+    "region_name": "mazowieckie",
+    "subregion_id": "powiat-warszawa",
+    "seller_id": "10556359",
+    "obido_advert": "y",
+    "market": "primary",
+    "nb_ads": 73,
+    "open_day": false,
+    "finish_date": "2027-4",
+    "project_status": "in_building",
+    "selected_location_id": [],
+    "listing_format": "listing"
+  },
+  "developmentData": null,
+  "isPreviewMode": false,
+  "isUnifiedAdSchemaEnabled": false,
+  "currentUser": null,
+  "viewMode": "default",
+  "cookiesCategorisation": {
+    "eupubconsent-v2": [
+      "C0001"
+    ],
+    "OptanonAlertBoxClosed": [
+      "C0001"
+    ],
+    "OptanonConsent": [
+      "C0001"
+    ],
+    "OTAdditionalConsentString": [
+      "C0001"
+    ],
+    "access_token": [
+      "C0001"
+    ],
+    "id_token": [
+      "C0001"
+    ],
+    "refresh_token": [
+      "C0001"
+    ],
+    "microservice_token": [
+      "C0001"
+    ],
+    "lastoAuthState": [
+      "C0001"
+    ],
+    "PHPSESSID": [
+      "C0001"
+    ],
+    "laquesis": [
+      "C0001"
+    ],
+    "laquesisff": [
+      "C0001"
+    ],
+    "laquesisqa": [
+      "C0001"
+    ],
+    "laquesissu": [
+      "C0001"
+    ],
+    "lqonap": [
+      "C0001"
+    ],
+    "lqstatus": [
+      "C0001"
+    ],
+    "test": [
+      "C0001"
+    ],
+    "onap": [
+      "C0001"
+    ],
+    "onap_dev": [
+      "C0001"
+    ],
+    "lang": [
+      "C0001"
+    ],
+    "dfp_user_id": [
+      "C0004"
+    ],
+    "AuthState": [
+      "C0001"
+    ],
+    "SID": [
+      "C0001"
+    ],
+    "IDPState": [
+      "C0001"
+    ],
+    "LogoutState": [
+      "C0001"
+    ],
+    "datadome": [
+      "C0001"
+    ],
+    "ldctx": [
+      "C0002"
+    ],
+    "ldff": [
+      "C0002"
+    ],
+    "aws-waf-token": [
+      "C0001"
+    ],
+    "thememode": [
+      "C0003"
+    ],
+    "idccsrf": [
+      "C0001"
+    ],
+    "nsr": [
+      "C0001"
+    ],
+    "O_N": [
+      "C0003"
+    ],
+    "O_Y": [
+      "C0002"
+    ],
+    "O_X": [
+      "C0002"
+    ],
+    "O_LOGGED": [
+      "C0003"
+    ],
+    "hotjarSurvey": [
+      "C0004"
+    ],
+    "contentmode": [
+      "C0001"
+    ]
+  },
+  "experiments": {},
+  "featureFlags": {
+    "isAdAvmModuleEnabled": true,
+    "isGenaiAd2videoEnabled": true,
+    "shouldEnableAd2VideoPreview": true,
+    "isAdFinanceBannerEnabled": true,
+    "isAdFinanceLinkEnabled": true,
+    "isAdMortgageSimulatorEnabled": true,
+    "isAdNeighborhoodPoisEnabled": false,
+    "isListingRentPriceEnabled": true,
+    "isBikPromotionEnabled": true,
+    "isSeoAdsDescriptionEnabled": true,
+    "isPropertyEvaluationPageActive": true,
+    "isRESellerLeadsActive": false,
+    "isSellerLeadsMvpEnabled": false,
+    "isXmlReportEnabled": true,
+    "isOneProductPostingFormEnabled": true,
+    "isAgentAccountMailboxEnabled": true,
+    "isDeveloperGeoPricingEnabled": true,
+    "isIntegrationPageEnabled": true,
+    "isNinFieldEnabledForInvoicing": false,
+    "isMandatoryLoginEnabled": true,
+    "isGeoBasedPricingEnabled": true,
+    "isMyAccountPDFReportsEnabled": true,
+    "isReCaptchaEnabled": true,
+    "isAgencyInvoiceReportEnabled": false,
+    "isRECsrfEnabled": true,
+    "isNexusDeveloperRegistrationFormEnabled": true,
+    "isAgencyPortfolioValuePricingEnabled": true,
+    "isAgencyPortfolioBufferEnabled": false,
+    "isBadgesFeatureEnabled": true,
+    "isInboxCrmIdFilteringEnabled": true,
+    "isDashboardWithStatisticsEnabled": false,
+    "isConciergeMigrationPageEnabled": false,
+    "isAIAssistantChatEnabled": true,
+    "arePaymentReminderBannersEnabled": true,
+    "isSapBlackoutBannerEnabled": false,
+    "isPowerVasOnboardingCampaignEnabled": false,
+    "isEnhancedAgentActivationEnabled": true,
+    "shouldShowExternalDeveloperLink": false,
+    "isPowerVasCardDisplayEnabled": true,
+    "isAgentPermissionsPageEnabled": true,
+    "isSecondStepOfBusinessAccountVerificationRemoved": false,
+    "isPowerVasGroupEnabled": true,
+    "shouldUseUnifiedAdSchema": true,
+    "isNoPhotobookingOnImovirtualPricingEnabled": true,
+    "isEInvoicingEnabled": true,
+    "isNinjaBetaVersionEnabled": true,
+    "hasBusinessRegistrationFlowBeenEnhanced": true,
+    "isSelfRefCanonicalLinkLublinOpoleEnabled": false,
+    "areCityLevelLinksKoninSkierniewiceEnabled": false,
+    "isNexusPromotePageEnabled": false,
+    "isVasAutoRenewalEnabled": true,
+    "isPostingFormAgentAccountEnabled": true,
+    "isPostingFormFreeTextStreetEnabled": false,
+    "isAdsAIEnrichmentEnabled": true,
+    "isEnhancedAgentDeletionEnabled": true,
+    "areAccountLevelStatisticsForAgentsEnabled": true,
+    "areAdLevelStatisticsEnabled": false,
+    "isOurTeamPendingTabEnhanced": false,
+    "isPlDynamicMetaTemplatesEnabled": false,
+    "isCompaniesListingPageEnabled": true,
+    "isDynamicFaqEnabled": true,
+    "isLoginDataPageEnabled": false,
+    "isNexusBillingPageEnabled": false,
+    "isTranslateErrorLoggerEnabled": false,
+    "isTranslateErrorFixEnabled": false,
+    "__typename": "FeatureFlags"
+  },
+  "laquesisResult": null,
+  "userSessionId": "0f60cb20-5a37-41f6-8655-a1c9839878ff",
+  "unconfirmedUserAuthToken": null,
+  "desktopHeader": {
+    "Is-Desktop": "true"
+  }
+}

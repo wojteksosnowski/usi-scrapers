@@ -18,9 +18,11 @@ def test_portal(portal_prefix, file_path):
     inv_mapping = get_mapping(portal_prefix, "investment")
     if inv_mapping:
         print("Investment Data:")
+        # For Otodom, mapping is now relative to the root page_props (the file itself)
+        inv_data = data
         for key, path_def in inv_mapping.items():
-            if key in ["id", "slug", "name", "developer_id", "developer_slug", "developer_name", "units_count", "price_min", "price_max", "ceiling_height_min", "ceiling_height_max"]:
-                val = resolve_path(data, path_def)
+            if key in ["id", "hash_id", "slug", "name", "developer_id", "developer_slug", "developer_name", "units_count", "price_min", "price_max", "ceiling_height_min", "ceiling_height_max"]:
+                val = resolve_path(inv_data, path_def)
                 print(f"  {key}: {val}")
     
     # Test developer mapping

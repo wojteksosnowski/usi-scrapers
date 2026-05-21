@@ -69,17 +69,22 @@ def extract_to_klient_id(html: str, raw_json: dict = None) -> str | None:
     """Extracts internal klient-id from TabelaOfert JSON or HTML fallback."""
     # 1. PURE-RAW: read from JSON directly!
     if raw_json:
-        if "klientId" in raw_json: return str(raw_json["klientId"])
+        to_mapping = get_mapping("to", "investment")
+        klient_id = resolve_path(raw_json, to_mapping.get("klient_id"))
+        if klient_id: return str(klient_id)
         
+        brand_klient_id = resolve_path(raw_json, to_mapping.get("brand_klient_id"))
+        if brand_klient_id: return str(brand_klient_id)
+        
+        pub_klient_id = resolve_path(raw_json, to_mapping.get("publisher_klient_id"))
+        if pub_klient_id: return str(pub_klient_id)
+        
+        # Fallbacks for `identifier`
         brand = raw_json.get("brand", {})
-        if isinstance(brand, dict):
-            if "klientId" in brand: return str(brand["klientId"])
-            if "identifier" in brand: return str(brand["identifier"])
-            
+        if isinstance(brand, dict) and "identifier" in brand: return str(brand["identifier"])
+        
         publisher = raw_json.get("publisher", {})
-        if isinstance(publisher, dict):
-            if "klientId" in publisher: return str(publisher["klientId"])
-            if "identifier" in publisher: return str(publisher["identifier"])
+        if isinstance(publisher, dict) and "identifier" in publisher: return str(publisher["identifier"])
 
     # 2. From Meta Tag (fallback)
     m = re.search(r'<meta[^>]+name=["\']klient-id["\'][^>]+content=["\'](\d+)["\']', html)
@@ -544,7 +549,6 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         return {"error": "Could not fetch HTML"}
 
     product = extract_to_data(html, url, fetcher=fetcher)
-    brand_name = product.get("brand", {}).get("name", "") if isinstance(product.get("brand"), dict) else ""
     
     # Native slug extraction
     from .utils.url_parser import parse_url
@@ -614,12 +618,7 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     lat = ext_loc.get("latitude")
     lng = ext_loc.get("longitude")
 
-    offers_data = product.get("offers", {})
-    try:
-        price_min = float(offers_data.get("lowPrice") or 0) or None
-        price_max = float(offers_data.get("highPrice") or 0) or None
-    except (TypeError, ValueError):
-        price_min = price_max = None
+    # Removed hardcoded lowPrice/highPrice variables
 
     gallery_urls = product.get("_raw_gallery_urls", [])
     filtered_urls = filter_investment_images(gallery_urls, product, url)
@@ -646,15 +645,15 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
         "name": resolve_path(product, to_mapping.get("name")) or product.get("name"),
-        "developer_name": resolve_path(product, to_mapping.get("developer_name")) or brand_name or None,
+        "developer_name": resolve_path(product, to_mapping.get("developer_name")),
         "address": address,
         "city": city,
         "region": region,
         "latitude": lat,
         "longitude": lng,
-        "price_min": mapped_price_min if mapped_price_min is not None else price_min,
-        "price_max": mapped_price_max if mapped_price_max is not None else price_max,
-        "properties_count": resolve_path(product, to_mapping.get("units_count")) or offers_data.get("offerCount"),
+        "price_min": mapped_price_min,
+        "price_max": mapped_price_max,
+        "properties_count": resolve_path(product, to_mapping.get("units_count")),
         "ceiling_height_min": resolve_path(product, to_mapping.get("ceiling_height_min")),
         "ceiling_height_max": resolve_path(product, to_mapping.get("ceiling_height_max")),
         "construction_date_upper": extract_additional_prop(product, "Termin oddania"),

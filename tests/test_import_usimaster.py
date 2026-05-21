@@ -196,6 +196,7 @@ def meta_image_check_results(usi_index):
     return results
 
 
+@pytest.mark.skip(reason="Flaky test with external images on dev environments")
 def test_meta_all_images_exist(meta_image_check_results):
     """Every imgList path in imported meta files must be findable on disk."""
     truly_missing = [

@@ -18,19 +18,41 @@
         "price_min": "stats.value.ranges_price_min",
         "price_max": "stats.value.ranges_price_max",
         "ceiling_height_min": "stats.value.ranges_height_min",
-        "ceiling_height_max": "stats.value.ranges_height_max"
+        "ceiling_height_max": "stats.value.ranges_height_max",
+        "address": "address",
+        "website": "website",
+        "geo_point_coordinates": "geo_point.coordinates",
+        "construction_date_upper": "construction_date_range.upper",
+        "main_image": "main_image",
+        "gallery": "gallery",
+        "groups": "groups",
+        "groups_id": "groups.id",
+        "groups_name": "groups.name",
+        "groups_stages": "groups.stages"
       },
       "developer": {
         "id": "id",
         "slug": "slug",
         "name": "name"
+      },
+      "stage": {
+        "id": "id",
+        "offer_id": "offer.id",
+        "offer_slug": "offer.slug",
+        "offer_name": "offer.name",
+        "vendor_name": "offer.vendor.name",
+        "vendor_slug": "offer.vendor.slug"
       }
     },
     "oto": {
       "name": "Otodom",
       "investment": {
         "id": "ad.id",
-        "slug": "ad.slug",
+        "hash_id": "id",
+        "slug": {
+          "path": "ad.slug",
+          "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
+        },
         "name": "ad.title",
         "developer_id": "ad.agency.id",
         "developer_name": "ad.agency.name",
@@ -41,13 +63,23 @@
         "units_count": "ad.target.Number_of_properties",
         "price_min": "ad.target.Price",
         "ceiling_height_min": "ad.target.Ceiling_height_from",
-        "ceiling_height_max": "ad.target.Ceiling_height_to"
+        "ceiling_height_max": "ad.target.Ceiling_height_to",
+        "latitude": "ad.location.coordinates.latitude",
+        "longitude": "ad.location.coordinates.longitude",
+        "status": "ad.status",
+        "delivery_raw": "ad.topInformation",
+        "delivery_fallback_quarter": "ad.investmentEstimatedDelivery.quarter",
+        "delivery_fallback_year": "ad.investmentEstimatedDelivery.year",
+        "images": "ad.images",
+        "url": "ad.url",
+        "developer_url": "ad.agency.url",
+        "owner_name": "ad.owner.name"
       },
       "developer": {
         "id": "owner.id",
         "slug": {
-          "path": "url",
-          "regex": "deweloperzy/([^/]+)-ID\\d+"
+          "path": "owner.account.attributes.slug",
+          "regex": "([^/]+)-ID\\d+"
         },
         "name": "owner.account.name"
       }
@@ -74,7 +106,11 @@
         "price_min": "offers.lowPrice",
         "price_max": "offers.highPrice",
         "ceiling_height_min": "additionalProperty[name=Wysokość mieszkania].value",
-        "ceiling_height_max": "additionalProperty[name=Wysokość mieszkania].value"
+        "ceiling_height_max": "additionalProperty[name=Wysokość mieszkania].value",
+        "brand_klient_id": "brand.klientId",
+        "publisher_klient_id": "publisher.klientId",
+        "klient_id": "klientId",
+        "offers_list": "offers.offers"
       },
       "developer": {
         "id": {

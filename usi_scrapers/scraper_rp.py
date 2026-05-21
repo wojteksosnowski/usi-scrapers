@@ -100,7 +100,8 @@ def fetch_rp_gallery(offer_id: str, fetcher: Fetcher) -> list[str]:
     data = fetcher.fetch_json(url, use_scraperapi=False) or {}
     # Extract images from gallery
     images = []
-    gallery = data.get("gallery", [])
+    rp_mapping = get_mapping("rp", "investment")
+    gallery = resolve_path(data, rp_mapping.get("gallery")) or []
     for item in gallery:
         # Prefer 1500 resolution
         img_url = item.get("image", {}).get("g_img_1500")
@@ -306,9 +307,13 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
             if img_url:
                 gallery_urls.append(img_url)
     
-    main_image = details.get("main_image", {}).get("m_img_500")
+    rp_mapping = get_mapping("rp", "investment")
+    
+    main_image = resolve_path(details, rp_mapping.get("main_image"))
     if main_image:
-        gallery_urls.insert(0, main_image)
+        main_img_500 = main_image.get("m_img_500") if isinstance(main_image, dict) else None
+        if main_img_500:
+            gallery_urls.insert(0, main_img_500)
         
     def get_val(data, key, default=None):
         if not data or key not in data:
@@ -318,8 +323,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
             return val["value"]
         return val
 
-    vendor_data = get_val(details, "vendor")
-    vendor_id = vendor_data.get("id") if vendor_data else None
+    vendor_id = resolve_path(details, rp_mapping.get("developer_id"))
     
     if not vendor_id:
         return {"error": f"Failed to resolve vendor ID from API for offer {offer_id}"}
@@ -341,7 +345,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
     if not developer_slug:
         return {"error": f"Failed to resolve developer_slug from API data for vendor ID {vendor_id}"}
 
-    investment_slug = details.get("slug")
+    investment_slug = resolve_path(details, rp_mapping.get("slug"))
     if not investment_slug:
         return {"error": f"Failed to resolve investment_slug from API for offer {offer_id}"}
 
@@ -355,22 +359,20 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         url = portal_url("rp", "investment", dev_slug=developer_slug, inv_slug=investment_slug, offer_id=offer_id)
         
     details["url"] = url
-    geo_point = get_val(details, "geo_point")
-    coords = get_val(geo_point, "coordinates") if geo_point else None
+    coords = resolve_path(details, rp_mapping.get("geo_point_coordinates"))
     
-    construction_date = get_val(details, "construction_date_range")
-    const_upper = get_val(construction_date, "upper") if construction_date else None
+    const_upper = resolve_path(details, rp_mapping.get("construction_date_upper"))
 
     stages = extract_stages(details)
-    groups_id = extract_groups_id(details)
-    groups = details.get("groups") or {}
+    groups_id = resolve_path(details, rp_mapping.get("groups_id"))
+    groups_name = resolve_path(details, rp_mapping.get("groups_name"))
 
     stage_sort = None
     stage_is_current = None
     for s in stages:
-        if str(s["offer_id"]) == str(offer_id):
-            stage_sort = s["sort"]
-            stage_is_current = s["current"]
+        if str(s.get("offer_id")) == str(offer_id):
+            stage_sort = s.get("sort")
+            stage_is_current = s.get("current")
             break
 
     sibling_stages = stages
@@ -388,22 +390,22 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         "url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
-        "name": resolve_path(details, rp_mapping.get("name")) or details.get("name"),
+        "name": resolve_path(details, rp_mapping.get("name")),
         "developer_name": resolve_path(details, rp_mapping.get("developer_name")),
-        "address": details.get("address"),
+        "address": resolve_path(details, rp_mapping.get("address")),
         "geo_point": coords,
         "latitude": coords[1] if coords and len(coords) > 1 else None,
         "longitude": coords[0] if coords and len(coords) > 0 else None,
         "construction_date_upper": const_upper,
-        "website": details.get("website"),
-        "properties_count": resolve_path(details, rp_mapping.get("units_count")) or details.get("properties"),
+        "website": resolve_path(details, rp_mapping.get("website")),
+        "properties_count": resolve_path(details, rp_mapping.get("units_count")),
         "price_min": resolve_path(details, rp_mapping.get("price_min")),
         "price_max": resolve_path(details, rp_mapping.get("price_max")),
         "ceiling_height_min": resolve_path(details, rp_mapping.get("ceiling_height_min")),
         "ceiling_height_max": resolve_path(details, rp_mapping.get("ceiling_height_max")),
         "image_urls": gallery_urls,
         "groups_id": groups_id,
-        "groups_name": groups.get("name"),
+        "groups_name": groups_name,
         "stage_sort": stage_sort,
         "stage_is_current": stage_is_current,
         "sibling_stages": sibling_stages,

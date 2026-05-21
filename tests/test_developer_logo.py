@@ -5,7 +5,6 @@ from unittest.mock import MagicMock, patch
 
 from usi_scrapers.scraper_rp import extract_rp_dev_logo
 from usi_scrapers.scraper_otodom import extract_otodom_dev_logo
-from usi_scrapers.scraper_to import extract_to_dev_logo, extract_to_dev_data
 from usi_scrapers.utils.images import download_developer_logo
 from usi_scrapers.models import ScraperConfig
 
@@ -68,57 +67,7 @@ class TestExtractOtodomDevLogo:
         assert extract_otodom_dev_logo({}) is None
 
 
-# ─── extract_to_dev_logo ──────────────────────────────────────────────────
-
-class TestExtractToDevLogo:
-    def test_og_image_property_first(self):
-        html = '<meta property="og:image" content="https://cdn.to.pl/logo.jpg"/>'
-        assert extract_to_dev_logo(html) == "https://cdn.to.pl/logo.jpg"
-
-    def test_og_image_reversed_attribute_order(self):
-        html = '<meta content="https://cdn.to.pl/logo.jpg" property="og:image"/>'
-        assert extract_to_dev_logo(html) == "https://cdn.to.pl/logo.jpg"
-
-    def test_img_with_alt_logo(self):
-        html = '<img alt="logo firmy" src="https://cdn.to.pl/logo.png"/>'
-        assert extract_to_dev_logo(html) == "https://cdn.to.pl/logo.png"
-
-    def test_img_with_class_logo(self):
-        html = '<img class="company-logo" src="https://cdn.to.pl/dev-logo.jpg"/>'
-        assert extract_to_dev_logo(html) == "https://cdn.to.pl/dev-logo.jpg"
-
-    def test_none_when_no_logo(self):
-        html = "<html><body><h1>Devco</h1></body></html>"
-        assert extract_to_dev_logo(html) is None
-
-    def test_og_image_takes_priority(self):
-        html = (
-            '<meta property="og:image" content="https://og.pl/logo.jpg"/>'
-            '<img class="logo" src="https://img.pl/other.jpg"/>'
-        )
-        assert extract_to_dev_logo(html) == "https://og.pl/logo.jpg"
-
-
-# ─── extract_to_dev_data ──────────────────────────────────────────────────
-
-class TestExtractToDevData:
-    def test_url_always_present(self):
-        data = extract_to_dev_data("<html></html>", "https://tabelaofert.pl/katalog-firm/deweloperzy/devco")
-        assert data["url"] == "https://tabelaofert.pl/katalog-firm/deweloperzy/devco"
-
-    def test_name_from_jsonld_organization(self):
-        html = '<script type="application/ld+json">{"@type":"Organization","name":"Devco Sp. z o.o."}</script>'
-        data = extract_to_dev_data(html, "https://tabelaofert.pl/katalog-firm/deweloperzy/devco")
-        assert data["name"] == "Devco Sp. z o.o."
-
-    def test_name_from_h1_fallback(self):
-        html = "<h1>Devco S.A.</h1>"
-        data = extract_to_dev_data(html, "https://x.pl/y")
-        assert data["name"] == "Devco S.A."
-
-    def test_no_name_when_empty(self):
-        data = extract_to_dev_data("<html></html>", "https://x.pl/y")
-        assert data.get("name") is None
+# Removed obsolete TestExtractToDevLogo and TestExtractToDevData tests
 
 
 # ─── download_developer_logo ──────────────────────────────────────────────

@@ -8,6 +8,7 @@ from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
 from .utils.portals import portal_url, get_portal
 from .utils.mapping import get_mapping, resolve_path
+from .utils.url_parser import parse_url
 from .utils.scrapers import generic_discover_investments, generic_download_dev_json, extract_logo_from_dict
 
 from . import get_logger
@@ -28,12 +29,18 @@ def _parse_otodom_slug(full_slug: str) -> tuple[str, str | None]:
 
 def _parse_otodom_item(item: dict, offer_id=None) -> dict | None:
     """Extracts a normalised offer dict from an Otodom search result item."""
-    full_slug = item.get("slug")
-    if not full_slug:
+    oto_mapping = get_mapping("oto", "investment")
+    
+    # Use raw slug for URL to avoid redirects
+    raw_slug = item.get("slug")
+    if not raw_slug:
         return None
+        
+    portal_id = offer_id or resolve_path({"ad": item}, oto_mapping.get("id")) or item.get("id")
+    
     return {
-        "id": offer_id or item.get("id"),
-        "url": portal_url("oto", "investment", full_slug=full_slug),
+        "id": portal_id,
+        "url": portal_url("oto", "investment", full_slug=raw_slug),
     }
 
 
@@ -50,7 +57,13 @@ def download_raw_otodom_dev_json(url: str, dev_slug: Optional[str], fetcher: Fet
     def extract_id(props):
         advertiser = props.get("advertiser") or {}
         agency = props.get("agency") or {}
-        return advertiser.get("id") or agency.get("id")
+        owner = props.get("owner") or {}
+        return advertiser.get("id") or agency.get("id") or owner.get("id")
+
+    if not dev_slug and url:
+        from .utils.url_parser import parse_url
+        parsed = parse_url(url)
+        dev_slug = parsed.get("developer_slug")
 
     return generic_download_dev_json(
         fetcher, config, url, dev_slug, "oto",
@@ -86,11 +99,12 @@ def download_raw_otodom_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fe
         logger.error(f"Failed to extract __NEXT_DATA__ for {url}")
         return None
 
-    ad_url = page_props.get("ad", {}).get("url", "")
+    oto_mapping = get_mapping("oto", "investment")
+    ad_url = resolve_path(page_props, oto_mapping.get("url")) or ""
     ad_slug = ad_url.rstrip("/").rsplit("/", 1)[-1] if ad_url else ""
     _, hash_part = _parse_otodom_slug(ad_slug)
     
-    oto_portal_id = page_props.get("ad", {}).get("id")
+    oto_portal_id = resolve_path(page_props, oto_mapping.get("id"))
     if not oto_portal_id and hash_part:
         oto_portal_id = f"ID{hash_part}"
 
@@ -174,6 +188,7 @@ def discover_otodom_listing(config: ScraperConfig, fetcher: Fetcher, identifier:
             connector = "&" if "?" in page_url else "?"
             page_url += f"{connector}{pagination_param}={current_page}"
 
+
         logger.info(f"Discovering Otodom investments from listing (page {current_page}): {page_url}")
         html = fetch_otodom_html(page_url, fetcher)
         if not html:
@@ -229,15 +244,13 @@ def fetch_otodom_agency_name(url: str, fetcher: Fetcher) -> str | None:
     data = extract_next_data(html)
     if not data:
         return None
+    oto_mapping = get_mapping("oto", "investment")
+    dev_name = resolve_path(data, oto_mapping.get("developer_name"))
+    if dev_name:
+        return dev_name
     
-    ad_data = data.get("ad", {})
-    if not ad_data:
-        ad_data = data.get("data", {}).get("searchAds", {})
-    
-    if not ad_data:
-        return None
-        
-    return ad_data.get("agency", {}).get("name") if ad_data.get("agency") else None
+    search_ads = data.get("data", {}).get("searchAds", {})
+    return search_ads.get("agency", {}).get("name") if search_ads.get("agency") else None
 
 def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     """
@@ -251,20 +264,20 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     if not page_props:
         return {"error": "Could not extract __NEXT_DATA__ JSON"}
 
-    # Native slug extraction
-    from .utils.url_parser import parse_url
     parsed = parse_url(url)
     investment_slug = parsed.get("investment_slug")
+    hash_part = parsed.get("otodom_id")
+    
     if not investment_slug:
         # Emergency fallback for URL parsing
         match = re.search(r'/(inwestycja|oferta)/([^/]+)', url)
         if match:
-            investment_slug = match.group(2)
+            full_slug = match.group(2)
+            investment_slug, hash_part = _parse_otodom_slug(full_slug)
             
     if not investment_slug:
         return {"error": f"Could not determine investment_slug from URL: {url}"}
         
-    investment_slug, hash_part = _parse_otodom_slug(investment_slug)  # guard against raw slugs with -ID suffix
     developer_slug = None
         
     ad_data = page_props.get("ad", {})
@@ -275,28 +288,45 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     if not ad_data:
         return {"error": "Could not find investment data in page properties"}
 
-    # ID-based Investment Identification
-    oto_portal_id = ad_data.get("id")
-    if not oto_portal_id and hash_part:
-        oto_portal_id = f"ID{hash_part}"
+    oto_mapping = get_mapping("oto", "investment")
+    
+    # ID resolution via mapping (Mandatory root-based project rule)
+    numeric_id = resolve_path(page_props, oto_mapping.get("id"))
+    hash_id = resolve_path(page_props, oto_mapping.get("hash_id"))
+    investment_slug = resolve_path(page_props, oto_mapping.get("slug"))
+    
+    # Fallback to URL parsing if mapping fails (e.g. unexpected structure)
+    if not investment_slug or not hash_id:
+        parsed = parse_url(url)
+        investment_slug = investment_slug or parsed.get("investment_slug")
+        hash_id = hash_id or parsed.get("otodom_id")
+
+    # Primary oto_portal_id used for lookups (prefers numeric for stability)
+    oto_portal_id = numeric_id or (f"ID{hash_id}" if hash_id else None)
 
     # Safeguard: Do not process inactive/archived listings to prevent overwriting images
-    status = str(ad_data.get("status", "active")).lower()
+    status = str(resolve_path(page_props, oto_mapping.get("status")) or "active").lower()
     if status not in ("active", "actual", "none", ""):
         logger.warning(f"Otodom listing is {status}: {url}. Skipping to protect local data.")
         return {"error": f"Listing is inactive (status: {status})"}
         
     images = []
-    images_raw = ad_data.get("images", [])
+    images_raw = resolve_path(page_props, oto_mapping.get("images")) or []
     for img in images_raw:
         img_url = img.get("large")
         if img_url:
             images.append(img_url)
             
-    agency_data = ad_data.get("agency") or ad_data.get("owner") or {}
-    agency_url = agency_data.get("url", "")
-    agency_name = agency_data.get("name", "")
-    agency_id = agency_data.get("id")
+    agency_url = resolve_path(page_props, oto_mapping.get("developer_url")) or ""
+    agency_name = resolve_path(page_props, oto_mapping.get("developer_name")) or ""
+    
+    if not agency_name:
+        agency_name = resolve_path(page_props, oto_mapping.get("owner_name")) or ""
+        
+    agency_id = resolve_path(page_props, oto_mapping.get("developer_id"))
+    if not agency_id:
+        dev_mapping = get_mapping("oto", "developer")
+        agency_id = resolve_path(page_props, dev_mapping.get("id"))
     
     # ID-based lookup (highest priority)
     if agency_id:
@@ -331,13 +361,13 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
             investment_slug = existing_inv_slug
             logger.info(f"Matched investment ID {oto_portal_id} to existing investment slug: {investment_slug}")
 
-    coords = ad_data.get("location", {}).get("coordinates") or {}
-    lat = coords.get("latitude")
-    lng = coords.get("longitude")
+    lat = resolve_path(page_props, oto_mapping.get("latitude"))
+    lng = resolve_path(page_props, oto_mapping.get("longitude"))
 
     delivery_quarter = None
     delivery_year = None
-    for item in ad_data.get("topInformation", []):
+    top_info = resolve_path(page_props, oto_mapping.get("delivery_raw")) or []
+    for item in top_info:
         if item.get("label") == "project_finish_date":
             values = item.get("values", [])
             if values:
@@ -350,29 +380,28 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
             break
             
     if delivery_quarter is None:
-        old_delivery = ad_data.get("investmentEstimatedDelivery") or {}
-        delivery_quarter = old_delivery.get("quarter")
-        delivery_year = old_delivery.get("year")
+        delivery_quarter = resolve_path(page_props, oto_mapping.get("delivery_fallback_quarter"))
+        delivery_year = resolve_path(page_props, oto_mapping.get("delivery_fallback_year"))
 
-    oto_mapping = get_mapping("oto", "investment")
-    
     result = {
         "source": "otodom.pl",
+        "id": numeric_id,
+        "hash_id": hash_id,
         "url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
-        "oto_url_id": oto_portal_id,
-        "title": resolve_path(ad_data, oto_mapping.get("name")) or ad_data.get("title"),
-        "agency_name": resolve_path(ad_data, oto_mapping.get("developer_name")) or agency_name,
+        "oto_url_id": numeric_id,
+        "title": resolve_path(page_props, oto_mapping.get("name")),
+        "agency_name": agency_name,
         "agency_id": agency_id,
         "latitude": lat,
         "longitude": lng,
         "delivery_quarter": delivery_quarter,
         "delivery_year": delivery_year,
-        "properties_count": resolve_path(ad_data, oto_mapping.get("units_count")),
-        "price_min": resolve_path(ad_data, oto_mapping.get("price_min")),
-        "ceiling_height_min": resolve_path(ad_data, oto_mapping.get("ceiling_height_min")),
-        "ceiling_height_max": resolve_path(ad_data, oto_mapping.get("ceiling_height_max")),
+        "properties_count": resolve_path(page_props, oto_mapping.get("units_count")),
+        "price_min": resolve_path(page_props, oto_mapping.get("price_min")),
+        "ceiling_height_min": resolve_path(page_props, oto_mapping.get("ceiling_height_min")),
+        "ceiling_height_max": resolve_path(page_props, oto_mapping.get("ceiling_height_max")),
         "image_urls": images,
         "raw_details": ad_data
     }

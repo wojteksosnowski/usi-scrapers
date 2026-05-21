@@ -47,12 +47,13 @@ def parse_url(url: str) -> dict:
     # 2. Otodom.pl
     if "otodom.pl" in domain:
         # Agency profile: /pl/firmy/deweloperzy/slug-ID{id}
-        match = re.search(r'/firmy/deweloperzy/.*-ID(\d+)', path)
+        match = re.search(r'/firmy/deweloperzy/([^/]+)-ID(\d+)', path)
         if match:
             return {
                 "type": "otodom",
                 "kind": "developer",
-                "agency_id": match.group(1),
+                "developer_slug": match.group(1),
+                "agency_id": match.group(2),
                 "url": url
             }
 

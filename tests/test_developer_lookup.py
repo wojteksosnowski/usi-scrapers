@@ -43,6 +43,7 @@ def test_scrape_otodom_uses_existing_slug_from_id(mock_dl, temp_public_dir):
         portal_prefix="oto",
         portal_id="99"
     )
+    mock_dl.return_value = "my-slug"
     
     # Mock HTML with a DIFFERENT slug in the URL (new-slug-ID99) but same ID (99)
     ad = {
@@ -86,9 +87,10 @@ def test_scrape_rp_uses_existing_slug_from_id(mock_details, mock_dl, temp_public
     mock_details.return_value = {
         "id": 1,
         "slug": "inv",
-        "vendor": {"id": 123, "slug": "new-rp-slug"},
+        "vendor": {"value": {"id": 123, "slug": "new-rp-slug"}},
         "main_image": {"m_img_500": "http://img.com/1.jpg"}
     }
+    mock_dl.return_value = "rp-slug"
     
     config = ScraperConfig(public_dir=temp_public_dir)
     fetcher = MagicMock()
@@ -115,6 +117,7 @@ def test_scrape_to_uses_existing_slug_from_id(mock_dl, temp_public_dir):
         portal_prefix="to",
         portal_id="12345"
     )
+    mock_dl.return_value = "to-slug"
 
     # Mock TO HTML with DIFFERENT slug but same portal-ID (in our case slug is ID)
     html = '<html><head><meta name="klient-id" content="12345"></head><body><a href="/katalog-firm/deweloperzy/other-slug">Dev</a></body></html>'    
