@@ -328,3 +328,179 @@ def test_discover_otodom_investments_global(fetcher, config):
     assert len(offers) == 2
     assert {o["id"] for o in offers} == {1, 2}
     assert fetcher.fetch.call_count == 2
+import pytest
+from unittest.mock import MagicMock, patch
+from usi_scrapers.scraper_otodom import scrape_otodom
+
+@patch("usi_scrapers.scraper_otodom.fetch_otodom_html")
+@patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
+@patch("usi_scrapers.scraper_otodom.lookup_developer_by_id")
+@patch("usi_scrapers.scraper_otodom.lookup_investment_by_id")
+def test_scrape_otodom_fallback_slug(
+    mock_inv_lookup, mock_dev_lookup, mock_download_dev, mock_fetch_html, fetcher
+):
+    # Setup mock data for investment page
+    mock_fetch_html.return_value = """
+    <script id="__NEXT_DATA__" type="application/json">
+    {
+        "props": {
+            "pageProps": {
+                "ad": {
+                    "id": 12345,
+                    "title": "Test Investment",
+                    "slug": "test-investment-ID123",
+                    "agency": {
+                        "id": 10411233,
+                        "name": "Quadro Development",
+                        "url": "/pl/wyniki/sprzedaz/inwestycja?sellerId=10411233"
+                    },
+                    "location": {"coordinates": {"latitude": 52.0, "longitude": 21.0}},
+                    "status": "active",
+                    "images": []
+                }
+            }
+        }
+    }
+    </script>
+    """
+    
+    # Simulate that we don't have an existing slug for this ID
+    mock_dev_lookup.return_value = None
+    mock_inv_lookup.return_value = None
+    
+    # Simulate that downloading the developer profile (which is a search page) fails to yield a slug
+    mock_download_dev.return_value = None
+    
+    url = "https://www.otodom.pl/pl/oferta/test-investment-ID123"
+    result = scrape_otodom(url, fetcher)
+    
+    assert result["developer_slug"] == "quadro-development"
+    assert result["agency_name"] == "Quadro Development"
+    assert result["agency_id"] == 10411233
+    assert mock_download_dev.called
+    
+def test_scrape_otodom_no_overwrite_existing_slug(
+    fetcher
+):
+    # Testing that if we already have a slug from lookup, it is not lost if download_raw_otodom_dev_json returns None
+    from usi_scrapers.scraper_otodom import scrape_otodom
+    
+    with patch("usi_scrapers.scraper_otodom.fetch_otodom_html") as mock_fetch_html, \
+         patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json") as mock_download_dev, \
+         patch("usi_scrapers.scraper_otodom.lookup_developer_by_id") as mock_dev_lookup, \
+         patch("usi_scrapers.scraper_otodom.lookup_investment_by_id") as mock_inv_lookup:
+         
+        mock_fetch_html.return_value = """
+        <script id="__NEXT_DATA__" type="application/json">
+        {
+            "props": {
+                "pageProps": {
+                    "ad": {
+                        "id": 12345,
+                        "title": "Test Investment",
+                        "slug": "test-investment-ID123",
+                        "agency": {
+                            "id": 10411233,
+                            "name": "Quadro Development",
+                            "url": "/pl/wyniki/sprzedaz/inwestycja?sellerId=10411233"
+                        },
+                        "location": {"coordinates": {"latitude": 52.0, "longitude": 21.0}},
+                        "status": "active",
+                        "images": []
+                    }
+                }
+            }
+        }
+        </script>
+        """
+        
+        # We already know this developer as 'existing-slug'
+        mock_dev_lookup.return_value = "existing-slug"
+        mock_inv_lookup.return_value = None
+        mock_download_dev.return_value = None # profile download failed/returned nothing
+        
+        url = "https://www.otodom.pl/pl/oferta/test-investment-ID123"
+        result = scrape_otodom(url, fetcher)
+        
+        # Should retain the existing slug instead of being None or falling back to 'quadro-development'
+        assert result["developer_slug"] == "existing-slug"
+import pytest
+from unittest.mock import MagicMock, patch
+from usi_scrapers.scraper_otodom import scrape_otodom
+
+def test_scrape_otodom_search_results_style_slug(
+    fetcher
+):
+    # Testing extraction from search-results style pageProps
+    with patch("usi_scrapers.scraper_otodom.fetch_otodom_html") as mock_fetch_html, \
+         patch("usi_scrapers.scraper_otodom.lookup_developer_by_id") as mock_dev_lookup, \
+         patch("usi_scrapers.scraper_otodom.lookup_investment_by_id") as mock_inv_lookup, \
+         patch("usi_scrapers.scraper_otodom.save_raw_json") as mock_save_raw, \
+         patch("usi_scrapers.scraper_otodom.save_dev_raw_json") as mock_save_dev, \
+         patch("usi_scrapers.utils.scrapers.download_developer_logo") as mock_logo:
+         
+        # Investment page HTML
+        mock_fetch_html.side_effect = [
+            # 1. Investment page
+            """
+            <script id="__NEXT_DATA__" type="application/json">
+            {
+                "props": {
+                    "pageProps": {
+                        "ad": {
+                            "id": 12345,
+                            "title": "Test Inv",
+                            "slug": "test-inv-ID1",
+                            "agency": {
+                                "id": 999,
+                                "name": "Deep Agency",
+                                "url": "/pl/wyniki/sprzedaz/inwestycja?sellerId=999"
+                            },
+                            "location": {"coordinates": {"latitude": 52.0, "longitude": 21.0}},
+                            "status": "active",
+                            "images": []
+                        }
+                    }
+                }
+            }
+            </script>
+            """,
+            # 2. Developer "search-results" style page
+            """
+            <script id="__NEXT_DATA__" type="application/json">
+            {
+                "props": {
+                    "pageProps": {
+                        "data": {
+                            "searchAds": {
+                                "items": [
+                                    {
+                                        "agency": {
+                                            "id": 999,
+                                            "name": "Deep Agency",
+                                            "slug": "deep-agency-canonical-ID999",
+                                            "imageUrl": "https://cdn.pl/logo.png"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+            </script>
+            """
+        ]
+        
+        mock_dev_lookup.return_value = None
+        mock_inv_lookup.return_value = None
+        
+        url = "https://www.otodom.pl/pl/oferta/test-inv-ID1"
+        result = scrape_otodom(url, fetcher)
+        
+        # Should find the canonical slug from the search results items, NOT use slugify fallback
+        assert result["developer_slug"] == "deep-agency-canonical-ID999"
+        assert result["agency_id"] == 999
+        assert mock_logo.called
+        # Verify first arg to logo download is the imageUrl from nested items
+        assert mock_logo.call_args[0][0] == "https://cdn.pl/logo.png"

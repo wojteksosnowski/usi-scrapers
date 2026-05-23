@@ -58,16 +58,41 @@ def download_raw_otodom_dev_json(url: str, dev_slug: Optional[str], fetcher: Fet
         advertiser = props.get("advertiser") or {}
         agency = props.get("agency") or {}
         owner = props.get("owner") or {}
-        return advertiser.get("id") or agency.get("id") or owner.get("id")
+        found_id = advertiser.get("id") or agency.get("id") or owner.get("id")
+        if found_id:
+            return found_id
+            
+        # Fallback for search-results style
+        items = props.get("data", {}).get("searchAds", {}).get("items", [])
+        if items and isinstance(items, list):
+            return items[0].get("agency", {}).get("id")
+        return None
 
     if not dev_slug and url:
         from .utils.url_parser import parse_url
         parsed = parse_url(url)
         dev_slug = parsed.get("developer_slug")
 
+    data = fetch_oto_props(url, fetcher)
+    if not data:
+        logger.error(f"Failed to fetch Otodom developer data from {url}")
+        return None
+
+    if not dev_slug:
+        dev_mapping = get_mapping("oto", "developer")
+        slug_path = dev_mapping.get("slug")
+        if slug_path:
+            dev_slug = resolve_path(data, slug_path)
+            
+        if not dev_slug:
+            # Fallback for search-results style
+            items = data.get("data", {}).get("searchAds", {}).get("items", [])
+            if items and isinstance(items, list):
+                dev_slug = items[0].get("agency", {}).get("slug")
+                
     return generic_download_dev_json(
         fetcher, config, url, dev_slug, "oto",
-        fetch_func=fetch_oto_props,
+        fetch_func=lambda u, f: data, # reuse already fetched data
         extract_id_func=extract_id,
         extract_logo_func=extract_otodom_dev_logo,
         source_url=url
@@ -82,7 +107,17 @@ def extract_otodom_dev_logo(page_props: dict) -> str | None:
         "agency.logo.url",
         "agency.logoUrl",
     ]
-    return extract_logo_from_dict(page_props, candidates)
+    logo = extract_logo_from_dict(page_props, candidates)
+    if logo:
+        return logo
+        
+    # Search in items (for search-results style developer pages)
+    items = page_props.get("data", {}).get("searchAds", {}).get("items", [])
+    if items and isinstance(items, list):
+        agency = items[0].get("agency") or {}
+        return agency.get("imageUrl") or agency.get("logoUrl")
+        
+    return None
 
 def download_raw_otodom_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
@@ -340,15 +375,20 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         
         # Resolve (if needed) and Update developer data using the internal API
         # If developer_slug is None, it will be resolved from the profile data
-        developer_slug = download_raw_otodom_dev_json(full_agency_url, developer_slug, fetcher, fetcher.config)
-        if developer_slug:
+        fetched_slug = download_raw_otodom_dev_json(full_agency_url, developer_slug, fetcher, fetcher.config)
+        if fetched_slug:
+            developer_slug = fetched_slug
             logger.info(f"Resolved/Updated developer '{developer_slug}' data from Otodom.")
+        else:
+            logger.warning(f"Failed to extract slug from developer URL: {full_agency_url}")
 
     if not developer_slug:
-        # Last resort: if we have agency_name but no slug, we might want to slugify it, 
-        # but the mandate says STRICT API-BASED. 
-        # Private sellers often don't have an agency page.
-        if not agency_id and not agency_url and agency_name:
+        # Fallback to generating slug from agency_name if we have the ID and name
+        if agency_name and agency_id:
+            from .utils.string import slugify
+            developer_slug = slugify(agency_name)
+            logger.info(f"Fallback: Generated slug '{developer_slug}' from agency name '{agency_name}' (ID: {agency_id}).")
+        elif not agency_id and not agency_url and agency_name:
              # Private seller / owner
              developer_slug = "private-seller"
         else:

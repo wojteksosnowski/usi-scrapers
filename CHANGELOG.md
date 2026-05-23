@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.8] — 2026-05-23
+
+### Fixed
+- **Otodom Developer Resolution**: Implemented support for search-results style agency pages (e.g., `?sellerId=...`). The scraper now correctly extracts canonical slugs and logos from nested search result items.
+- **Resilient Slugification**: Added a fallback to locally generate a slug from the agency name when canonical extraction fails, preventing resolution aborts while maintaining strict ID-based tracking.
+
+## [0.7.7] — 2026-05-21
+
+### Changed
+- **Error Messaging**: Improved clarity of developer resolution error messages.
+- **RP Mapping**: Fixed structural mapping for RynekPierwotny to ensure data consistency.
+
 ## [0.7.0] — 2026-05-21
 
 ### Added
