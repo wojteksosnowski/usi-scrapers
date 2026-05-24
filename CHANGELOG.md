@@ -6,6 +6,10 @@
 - **Otodom Developer Resolution**: Implemented support for search-results style agency pages (e.g., `?sellerId=...`). The scraper now correctly extracts canonical slugs and logos from nested search result items.
 - **Resilient Slugification**: Added a fallback to locally generate a slug from the agency name when canonical extraction fails, preventing resolution aborts while maintaining strict ID-based tracking.
 
+## [0.8.1] - 2026-05-24
+- **Feature**: Added `list_available_keys` to mapping engine and public API to allow dynamic inspection of available schema fields.
+- **Documentation**: Updated `API.md` with documentation for `list_available_keys`.
+
 ## [0.8.0] - 2026-05-24
 - **Unified Geo Mapping**: Introduced `geo_point` key in `portal_data_mapping.json` for all portals to standardize geographic data access, while preserving legacy fields for backward compatibility.
 - **Project Rationalization**: Moved integration tests from `scripts/` to `tests/`, removed obsolete `archive/` directory.
@@ -16,6 +20,10 @@
 ### Changed
 - **Error Messaging**: Improved clarity of developer resolution error messages.
 - **RP Mapping**: Fixed structural mapping for RynekPierwotny to ensure data consistency.
+
+## [0.8.1] - 2026-05-24
+- **Feature**: Added `list_available_keys` to mapping engine and public API to allow dynamic inspection of available schema fields.
+- **Documentation**: Updated `API.md` with documentation for `list_available_keys`.
 
 ## [0.8.0] - 2026-05-24
 - **Unified Geo Mapping**: Introduced `geo_point` key in `portal_data_mapping.json` for all portals to standardize geographic data access, while preserving legacy fields for backward compatibility.
