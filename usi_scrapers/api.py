@@ -14,6 +14,7 @@ from .models import ScraperConfig, ProgressCallback, DeveloperPage
 from .manager import TechnicalDataManager
 from .utils.io import save_raw_json, save_dev_raw_json
 from .utils.portals import resolve_prefix, get_portal
+from .mapping import get_mapping, resolve_path, load_mapping
 
 # Scraper imports
 from .scraper_rp import (
