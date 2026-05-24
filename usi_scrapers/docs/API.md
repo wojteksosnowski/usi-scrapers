@@ -201,6 +201,18 @@ oto_invest_mapping = get_mapping("oto", "investment")
 - `portal_prefix` (*str*): Prefix portalu (np. `oto`, `rp`, `to`).
 - `entity_type` (*str*): Typ encji, domyślnie `investment`.
 
+### `list_available_keys`
+Zwraca listę wszystkich dostępnych kluczy (pól), które można wyciągnąć z surowych danych dla danego portalu.
+
+```python
+from usi_scrapers.api import list_available_keys
+
+# Pobierz listę kluczy dla inwestycji na RP
+keys = list_available_keys("rp", "investment")
+print(keys) 
+# ['id', 'slug', 'name', 'developer_id', ...]
+```
+
 ### `resolve_path`
 Rdzeń silnika ekstrakcji. Rozwiązuje złożone ścieżki w strukturach JSON.
 
