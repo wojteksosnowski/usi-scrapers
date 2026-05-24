@@ -207,17 +207,26 @@ Rdzeń silnika ekstrakcji. Rozwiązuje złożone ścieżki w strukturach JSON.
 ```python
 from usi_scrapers.mapping import resolve_path
 
-data = {"nested": {"list": [{"id": 1, "val": "A"}, {"id": 2, "val": "B"}]}}
-result = resolve_path(data, "nested.list[id=2].val")
-# result == "B"
+# Przykład: Filtrowanie list
+data = {
+    "topInformation": [
+        {"label": "other", "values": ["a"]},
+        {"label": "units", "values": ["100"]}
+    ]
+}
+result = resolve_path(data, "topInformation[label=units].values[0]")
+# result == "100"
 ```
 
-**Obsługiwane funkcje:**
-- **Notacja kropkowa**: `a.b.c`
-- **Indeksy tablic**: `a[0].b`
-- **Filtrowanie tablic**: `a[key=value].b`
-- **Potoki (Fallback)**: `a.b | a.c` (zwraca pierwszą nie-pustą wartość).
+**Obsługiwana składnia:**
+- **Notacja kropkowa**: `a.b.c` (dostęp do zagnieżdżonych słowników).
+- **Indeksy tablic**: `a[0].b` (dostęp przez indeks).
+- **Filtrowanie tablic**: `a[key=value].b` (wyszukiwanie obiektu w liście).
+- **Operacje na listach głównych**: `[0].id` lub `[key=value].id`.
+- **Potoki (Fallback)**: `a.b | a.c` (zwraca pierwszą nie-pustą wartość z lewej do prawej).
 - **Regex**: Jeśli ścieżka jest słownikiem `{"path": "...", "regex": "..."}`, po wyciągnięciu wartości zostanie na niej wykonany regex.
+  - *Przykład*: `{"path": "url", "regex": ",i(\d+)"}` wyciągnie ID inwestycji z URL portalu.
+
 
 ---
 
