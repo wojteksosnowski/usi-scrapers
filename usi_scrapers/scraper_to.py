@@ -724,6 +724,12 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     mapped_price_min = resolve_path(product, to_mapping.get("price_min"))
     mapped_price_max = resolve_path(product, to_mapping.get("price_max"))
 
+    # Extract agnostic signals
+    signals = {}
+    signal_mapping = to_mapping.get("signals", {})
+    for key, path in signal_mapping.items():
+        signals[key] = resolve_path(product, path)
+
     return {
         "source": "tabelaofert.pl",
         "to_id": _extract_to_id(url),
@@ -745,6 +751,7 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         "construction_date_upper": extract_additional_prop(product, "Termin oddania"),
         "amenities": amenities,
         "image_urls": filtered_urls,
+        "signals": signals,
         "raw_details": product,
     }
 

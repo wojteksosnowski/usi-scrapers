@@ -427,6 +427,12 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         delivery_quarter = resolve_path(page_props, oto_mapping.get("delivery_fallback_quarter"))
         delivery_year = resolve_path(page_props, oto_mapping.get("delivery_fallback_year"))
 
+    # Extract agnostic signals
+    signals = {}
+    signal_mapping = oto_mapping.get("signals", {})
+    for key, path in signal_mapping.items():
+        signals[key] = resolve_path(page_props, path)
+
     result = {
         "source": "otodom.pl",
         "id": numeric_id,
@@ -447,6 +453,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         "ceiling_height_min": resolve_path(page_props, oto_mapping.get("ceiling_height_min")),
         "ceiling_height_max": resolve_path(page_props, oto_mapping.get("ceiling_height_max")),
         "image_urls": images,
+        "signals": signals,
         "raw_details": ad_data
     }
 

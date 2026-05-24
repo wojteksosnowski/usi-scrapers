@@ -389,6 +389,12 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
 
     rp_mapping = get_mapping("rp", "investment")
 
+    # Extract agnostic signals
+    signals = {}
+    signal_mapping = rp_mapping.get("signals", {})
+    for key, path in signal_mapping.items():
+        signals[key] = resolve_path(details, path)
+
     result = {
         "source": "rynekpierwotny.pl",
         "id": offer_id,
@@ -415,6 +421,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         "stage_is_current": stage_is_current,
         "sibling_stages": sibling_stages,
         "sibling_stage_folders": sibling_stage_folders,
+        "signals": signals,
         "raw_details": details,
     }
 

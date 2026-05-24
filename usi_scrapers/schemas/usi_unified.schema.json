@@ -132,6 +132,17 @@
         "created_at": { "type": "string", "format": "date-time" },
         "updated_at": { "type": "string", "format": "date-time" }
       }
+    },
+    "signals": {
+      "type": "object",
+      "description": "Platform-agnostic diagnostic indicators used for investment classification.",
+      "properties": {
+        "apartments": { "type": ["string", "number", "boolean", "null"] },
+        "houses": { "type": ["string", "number", "boolean", "null"] },
+        "commercial": { "type": ["string", "number", "boolean", "null"] },
+        "investment": { "type": ["string", "number", "boolean", "array", "null"] },
+        "rental": { "type": ["string", "number", "boolean", "null"] }
+      }
     }
   }
 }

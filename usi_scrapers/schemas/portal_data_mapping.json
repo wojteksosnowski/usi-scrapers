@@ -28,7 +28,13 @@
         "groups": "groups",
         "groups_id": "groups.id",
         "groups_name": "groups.name",
-        "groups_stages": "groups.stages"
+        "groups_stages": "groups.stages",
+        "signals": {
+          "apartments": "properties",
+          "houses": "stats.value.ranges_plot_area_max",
+          "rental": "commercial_rental",
+          "commercial": "stats.value.properties_commercials_count"
+        }
       },
       "developer": {
         "id": "id",
@@ -73,7 +79,14 @@
         "images": "ad.images",
         "url": "ad.url",
         "developer_url": "ad.agency.url",
-        "owner_name": "ad.owner.name"
+        "owner_name": "ad.owner.name",
+        "signals": {
+          "apartments": { "path": "ad.target.categoryId", "regex": "11" },
+          "houses": { "path": "ad.target.categoryId", "regex": "13" },
+          "commercial": { "path": "ad.target.categoryId", "regex": "501" },
+          "investment": "ad.target.Offered_estates_type",
+          "rental": { "path": "ad.target.MarketType", "regex": "rent" }
+        }
       },
       "developer": {
         "id": "owner.id",
@@ -110,7 +123,14 @@
         "brand_klient_id": "brand.klientId",
         "publisher_klient_id": "publisher.klientId",
         "klient_id": "klientId|klient_id",
-        "offers_list": "offers.offers"
+        "offers_list": "offers.offers",
+        "signals": {
+          "apartments": { "path": "url", "regex": "mieszkania-na-sprzedaz" },
+          "houses": { "path": "url", "regex": "domy-na-sprzedaz" },
+          "commercial": { "path": "url", "regex": "lokale-uzytkowe" },
+          "investment": { "path": "url", "regex": "apartamenty-inwestycyjne" },
+          "rental": { "path": "url", "regex": "na-wynajem" }
+        }
       },
       "developer": {
         "id": {
