@@ -16,6 +16,11 @@
     },
     "investment_slug": { "type": "string", "description": "Stabilny identyfikator inwestycji (folder)." },
     "developer_slug": { "type": "string", "description": "Stabilny identyfikator dewelopera (folder)." },
+    "segment": {
+      "type": ["string", "null"],
+      "enum": ["mieszkania deweloperskie", "lokale inwestycyjne", "segmenty i domy", "prs", "lokale usługowe", null],
+      "description": "Kategoria biznesowa inwestycji USI."
+    },
     "name": { "type": "string", "description": "Nazwa inwestycji (wyczyszczona)." },
     "developer": { "type": "string", "description": "Nazwa dewelopera (wyświetlana)." },
     "status": { 

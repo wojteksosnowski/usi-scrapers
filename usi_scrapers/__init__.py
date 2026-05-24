@@ -3,7 +3,7 @@ USI Scrapers Package
 """
 import logging
 
-__version__ = "0.7.6"
+__version__ = "0.7.8"
 
 class USILoggerAdapter(logging.LoggerAdapter):
     """Adds version information to every log message."""
@@ -17,5 +17,6 @@ def get_logger(name: str) -> logging.LoggerAdapter:
 
 # Public API for data mapping
 from .mapping import get_mapping, resolve_path, load_mapping
+from .utils.classifier import classify_segment
 
-__all__ = ["get_logger", "get_mapping", "resolve_path", "load_mapping"]
+__all__ = ["get_logger", "get_mapping", "resolve_path", "load_mapping", "classify_segment"]
