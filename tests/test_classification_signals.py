@@ -29,7 +29,7 @@ def test_rp_signals_extraction():
     
     signals = {k: resolve_path(data, v) for k, v in signals_mapping.items()}
     
-    # properties_count_for_sale is at the root in RP API
+    # apartments is mapped to properties (which is 100 in this file)
     assert signals["apartments"] == 100
     # commercial_rental
     assert signals["rental"] is False

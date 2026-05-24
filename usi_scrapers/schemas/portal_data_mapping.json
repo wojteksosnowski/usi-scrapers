@@ -30,10 +30,10 @@
         "groups_name": "groups.name",
         "groups_stages": "groups.stages",
         "signals": {
-          "apartments": "properties",
-          "houses": "stats.value.ranges_plot_area_max",
+          "apartments": "properties|properties_for_sale_count|stats.value.properties_count_for_sale|stats.properties_count_for_sale",
+          "houses": "stats.value.all_house_types|stats.all_house_types|stats.value.ranges_plot_area_max|stats.ranges_plot_area_max",
           "rental": "commercial_rental",
-          "commercial": "stats.value.properties_commercials_count"
+          "commercial": "stats.value.properties_commercials_count|stats.properties_commercials_count"
         }
       },
       "developer": {
