@@ -261,5 +261,5 @@ from usi_scrapers import get_logger
 
 logger = get_logger(__name__)
 logger.info("Rozpoczynanie procesu...")
-# Output: [usi-scrapers v0.7.9] Rozpoczynanie procesu...
+# Output: [usi-scrapers v0.8.1] Rozpoczynanie procesu...
 ```

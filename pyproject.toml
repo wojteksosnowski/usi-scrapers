@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "usi-scrapers"
-version = "0.7.9"
+version = "0.8.1"
 description = "Zewnętrzny pakiet do pobierania i unifikacji danych o inwestycjach deweloperskich (RynekPierwotny, Otodom, TabelaOfert)"
 authors = [
     {name = "USI Tracker", email = "usi@example.com"}
