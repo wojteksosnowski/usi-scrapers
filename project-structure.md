@@ -14,7 +14,7 @@ Jest to serce pakietu, zawierające całą logikę biznesową i techniczną.
 | `api.py` | Wysokopoziomowe funkcje dla użytkownika (np. `fetch_investment`, `process_batch`, `health_check`). Główne interface komunikacyjny dla aplikacji zewnętrznych. |
 | `fetcher.py` | Warstwa transportowa HTTP. Obsługuje rotację strategii (Impersonate Chrome vs ScraperAPI), retry i rate-limiting. |
 | `manager.py` | `TechnicalDataManager` — zarządza technicznymi operacjami I/O: wyznaczaniem ścieżek, zapisem surowych plików JSON oraz synchronizacją obrazów. |
-| `mapping.py` | "Głupi" silnik ekstrakcji. Rozwiązuje ścieżki zdefiniowane w `portal_data_mapping.json` (obsługuje notację kropkową, potoki `\|` oraz regex). |
+| `mapping.py` | Silnik ekstrakcji danych. Udostępnia metody `load_mapping`, `get_mapping` oraz `resolve_path` do wydobywania informacji z JSON przy użyciu ścieżek z `portal_data_mapping.json`. |
 | `models.py` | Definicje klas danych (Dataclasses), w tym konfiguracji `ScraperConfig`. |
 | `portals.json` | Deklaratywna konfiguracja portali: wzorce URL, endpointy API, limity odpytywania. |
 | `scraper_otodom.py` | Logika specyficzna dla Otodom (parsowanie HTML `__NEXT_DATA__`). |

@@ -174,6 +174,53 @@ segment = classify_segment(signals)
 
 ---
 
+## Mapowanie Danych (`usi_scrapers.mapping`)
+
+Moduł `mapping` odpowiada za ekstrakcję danych z surowych struktur JSON przy użyciu deklaratywnych ścieżek zdefiniowanych w `portal_data_mapping.json`.
+
+### `load_mapping`
+Ładuje i cache'uje zawartość pliku `portal_data_mapping.json`.
+
+```python
+from usi_scrapers.mapping import load_mapping
+
+mapping_data = load_mapping()
+```
+
+### `get_mapping`
+Pobiera definicje ścieżek dla konkretnego portalu i typu encji.
+
+```python
+from usi_scrapers.mapping import get_mapping
+
+# Pobierz mapowanie dla inwestycji na Otodom
+oto_invest_mapping = get_mapping("oto", "investment")
+```
+
+**Argumenty:**
+- `portal_prefix` (*str*): Prefix portalu (np. `oto`, `rp`, `to`).
+- `entity_type` (*str*): Typ encji, domyślnie `investment`.
+
+### `resolve_path`
+Rdzeń silnika ekstrakcji. Rozwiązuje złożone ścieżki w strukturach JSON.
+
+```python
+from usi_scrapers.mapping import resolve_path
+
+data = {"nested": {"list": [{"id": 1, "val": "A"}, {"id": 2, "val": "B"}]}}
+result = resolve_path(data, "nested.list[id=2].val")
+# result == "B"
+```
+
+**Obsługiwane funkcje:**
+- **Notacja kropkowa**: `a.b.c`
+- **Indeksy tablic**: `a[0].b`
+- **Filtrowanie tablic**: `a[key=value].b`
+- **Potoki (Fallback)**: `a.b | a.c` (zwraca pierwszą nie-pustą wartość).
+- **Regex**: Jeśli ścieżka jest słownikiem `{"path": "...", "regex": "..."}`, po wyciągnięciu wartości zostanie na niej wykonany regex.
+
+---
+
 ## Konfiguracja (`usi_scrapers.models.ScraperConfig`)
 
 Kluczowe pola:
@@ -181,3 +228,17 @@ Kluczowe pola:
 - `scraperapi_key`: `Optional[str]` – klucz do ScraperAPI (fallback).
 - `otodom_discovery_urls`: `List[str]` – lista URL-i do globalnego skanowania Otodom.
 - `rp_discovery_urls`: `List[str]` – lista URL-i do globalnego skanowania RP.
+
+---
+
+## Logowanie (`usi_scrapers.get_logger`)
+
+Pakiet używa ustandaryzowanego loggera, który automatycznie dodaje informację o wersji pakietu do każdej wiadomości.
+
+```python
+from usi_scrapers import get_logger
+
+logger = get_logger(__name__)
+logger.info("Rozpoczynanie procesu...")
+# Output: [usi-scrapers v0.7.9] Rozpoczynanie procesu...
+```

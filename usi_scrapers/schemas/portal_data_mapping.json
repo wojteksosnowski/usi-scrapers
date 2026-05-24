@@ -21,6 +21,7 @@
         "ceiling_height_max": "stats.value.ranges_height_max",
         "address": "address",
         "website": "website",
+        "geo_point": "geo_point.coordinates",
         "geo_point_coordinates": "geo_point.coordinates",
         "construction_date_upper": "construction_date_range.upper",
         "main_image": "main_image",
@@ -72,6 +73,10 @@
         "ceiling_height_max": "ad.target.Ceiling_height_to",
         "latitude": "ad.location.coordinates.latitude",
         "longitude": "ad.location.coordinates.longitude",
+        "geo_point": {
+          "lat": "ad.location.coordinates.latitude",
+          "lon": "ad.location.coordinates.longitude"
+        },
         "status": "ad.status",
         "delivery_raw": "ad.topInformation",
         "delivery_fallback_quarter": "ad.investmentEstimatedDelivery.quarter",
