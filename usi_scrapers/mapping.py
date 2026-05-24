@@ -25,6 +25,11 @@ def get_mapping(portal_prefix: str, entity_type: str = "investment") -> dict:
     mapping = load_mapping()
     return mapping.get("portals", {}).get(portal_prefix, {}).get(entity_type, {})
 
+def list_available_keys(portal_prefix: str, entity_type: str = "investment") -> list[str]:
+    """Returns a list of keys available for the specified portal and entity."""
+    mapping = get_mapping(portal_prefix, entity_type)
+    return list(mapping.keys())
+
 def resolve_path(data: dict | list, path: str | dict) -> Any:
     """
     Resolves a custom path string against a JSON-like dictionary or list.
