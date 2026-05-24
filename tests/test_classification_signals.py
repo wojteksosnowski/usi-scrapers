@@ -34,6 +34,8 @@ def test_rp_signals_extraction():
     # commercial_rental
     assert signals["rental"] is False
 
+from usi_scrapers import classify_segment
+
 def test_to_signals_extraction():
     data = load_raw_test_file("raw_to_i8975118.json")
     mapping = get_mapping("to", "investment")
@@ -44,3 +46,27 @@ def test_to_signals_extraction():
     # url contains "mieszkania-na-sprzedaz"
     assert signals["apartments"] == "mieszkania-na-sprzedaz"
     assert signals["houses"] is None
+
+def test_classify_segment_logic():
+    # PRS priority
+    assert classify_segment({"rental": True}) == "prs"
+    assert classify_segment({"rental": "rent"}) == "prs"
+    
+    # Houses
+    assert classify_segment({"houses": 1400}) == "segmenty i domy"
+    assert classify_segment({"houses": "10"}) == "segmenty i domy"
+    
+    # Commercial
+    assert classify_segment({"commercial": 5}) == "lokale usługowe"
+    
+    # Investment units
+    assert classify_segment({"investment": ["apartments"]}) == "lokale inwestycyjne"
+    assert classify_segment({"investment": "apartamenty-inwestycyjne"}) == "lokale inwestycyjne"
+    
+    # Residential
+    assert classify_segment({"apartments": 100}) == "mieszkania deweloperskie"
+    
+    # Fallback null
+    assert classify_segment({}) is None
+    assert classify_segment({"apartments": 0, "houses": 0}) is None
+    assert classify_segment(None) is None

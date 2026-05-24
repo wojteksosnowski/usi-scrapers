@@ -146,6 +146,32 @@ from usi_scrapers.api import identify_developer
 dev_name = identify_developer(fetcher, portal="otodom", url="https://www.otodom.pl/pl/oferta/...")
 ```
 
+### `classify_segment`
+Klasyfikuje inwestycję do jednej z 5 kategorii USI na podstawie agnostycznych sygnałów diagnostycznych. Zwraca `None`, jeśli klasyfikacja nie jest możliwa (null fallback).
+
+```python
+from usi_scrapers import classify_segment
+
+# Przykładowe sygnały wyciągnięte ze scrapera
+signals = {
+    "apartments": "11",
+    "houses": None,
+    "rental": False,
+    "commercial": None,
+    "investment": ["flats"]
+}
+
+segment = classify_segment(signals)
+# "mieszkania deweloperskie"
+```
+
+**Kategorie (Segmenty):**
+1. `mieszkania deweloperskie`
+2. `lokale inwestycyjne`
+3. `segmenty i domy`
+4. `prs`
+5. `lokale usługowe`
+
 ---
 
 ## Konfiguracja (`usi_scrapers.models.ScraperConfig`)

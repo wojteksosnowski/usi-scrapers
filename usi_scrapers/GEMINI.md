@@ -20,7 +20,8 @@ System opiera się na przepływie: **Fetch -> Scrape -> Adapt -> Merge**.
 1.  **Fetcher (`fetcher.py`)**: Centralny punkt obsługi zapytań HTTP z obsługą rate-limitingu i rotacji strategii (impersonate vs scraperapi).
 2.  **Scrapers (`scraper_*.py`)**: Logika specyficzna dla portalu, wyciągająca surowe dane (Raw JSON) z HTML lub ukrytych API.
 3.  **Manager (`manager.py`)**: Klasa `TechnicalDataManager` odpowiedzialna za techniczne operacje I/O: zarządzanie ścieżkami katalogów, zapis surowych plików JSON oraz pobieranie i synchronizację obrazów w strukturze `Public`. Semantyczne scalanie danych jest delegowane do nadrzędnego trackera.
-4.  **Modele i Schematy (`models.py`, `schemas/`)**: `models.py` przechowuje główne struktury konfiguracyjne (`ScraperConfig`), natomiast katalog `schemas/` dostarcza pliki JSON Schema używane do walidacji spójności pobranych danych (np. `usi_unified.schema.json`).
+4.  **Agnostyczne Sygnały (Signals)**: System ujednoliconych wskaźników (`apartments`, `houses`, `commercial`, `investment`, `rental`) wyciąganych przez mapping, służący do automatycznej klasyfikacji inwestycji.
+5.  **Modele i Schematy (`models.py`, `schemas/`)**: `models.py` przechowuje główne struktury konfiguracyjne (`ScraperConfig`), natomiast katalog `schemas/` dostarcza pliki JSON Schema używane do walidacji spójności pobranych danych (np. `usi_unified.schema.json`).
 
 ## Instrukcje Deweloperskie
 
