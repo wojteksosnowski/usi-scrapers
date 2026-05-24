@@ -176,7 +176,7 @@ segment = classify_segment(signals)
 
 ## Mapowanie Danych (`usi_scrapers.mapping`)
 
-Moduł `mapping` odpowiada za ekstrakcję danych z surowych struktur JSON przy użyciu deklaratywnych ścieżek zdefiniowanych w `portal_data_mapping.json`.
+Moduł `mapping` jest silnikiem ekstrakcji przeznaczonym **wyłącznie do przetwarzania surowych danych źródłowych** (plików `raw_*.json`), pobranych bezpośrednio z API/HTML portali. Nie należy stosować go do danych już znormalizowanych lub częściowo przetworzonych.
 
 ### `load_mapping`
 Ładuje i cache'uje zawartość pliku `portal_data_mapping.json`.

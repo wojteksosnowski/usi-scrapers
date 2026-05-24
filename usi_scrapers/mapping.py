@@ -1,3 +1,8 @@
+"""
+Mapping engine for raw portal data.
+Designed exclusively for processing `raw_*.json` files (source of truth).
+Do not use on partially transformed or normalized data.
+"""
 import json
 import re
 from pathlib import Path
