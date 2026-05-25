@@ -36,7 +36,9 @@ def _parse_otodom_item(item: dict, offer_id=None) -> dict | None:
     if not raw_slug:
         return None
         
-    portal_id = offer_id or resolve_path({"ad": item}, oto_mapping.get("id")) or item.get("id")
+    _, hash_id = _parse_otodom_slug(raw_slug)
+    # Prefer hash_id (e.g. 4fS6R) over numeric offer_id
+    portal_id = hash_id or offer_id or resolve_path({"ad": item}, oto_mapping.get("id")) or item.get("id")
     
     return {
         "id": portal_id,
@@ -325,9 +327,9 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
 
     oto_mapping = get_mapping("oto", "investment")
     
-    # ID resolution via mapping (Mandatory root-based project rule)
-    numeric_id = resolve_path(page_props, oto_mapping.get("id"))
-    hash_id = resolve_path(page_props, oto_mapping.get("hash_id"))
+    # ID resolution via mapping (Standardized on alphanumeric hash as primary ID)
+    hash_id = resolve_path(page_props, oto_mapping.get("id"))
+    numeric_id = resolve_path(page_props, oto_mapping.get("numeric_id"))
     investment_slug = resolve_path(page_props, oto_mapping.get("slug"))
     
     # Fallback to URL parsing if mapping fails (e.g. unexpected structure)
@@ -336,8 +338,8 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         investment_slug = investment_slug or parsed.get("investment_slug")
         hash_id = hash_id or parsed.get("otodom_id")
 
-    # Primary oto_portal_id used for lookups (prefers numeric for stability)
-    oto_portal_id = numeric_id or (f"ID{hash_id}" if hash_id else None)
+    # Primary oto_portal_id used for lookups (Standardized on alphanumeric hash)
+    oto_portal_id = hash_id or (f"ID{numeric_id}" if numeric_id else None)
 
     # Safeguard: Do not process inactive/archived listings to prevent overwriting images
     status = str(resolve_path(page_props, oto_mapping.get("status")) or "active").lower()
@@ -435,8 +437,8 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
 
     result = {
         "source": "otodom.pl",
-        "id": numeric_id,
-        "hash_id": hash_id,
+        "id": hash_id,
+        "numeric_id": numeric_id,
         "url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,

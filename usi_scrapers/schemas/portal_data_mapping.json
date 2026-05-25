@@ -54,8 +54,8 @@
     "oto": {
       "name": "Otodom",
       "investment": {
-        "id": "ad.id",
-        "hash_id": "id",
+        "id": "id",
+        "numeric_id": "ad.id",
         "slug": {
           "path": "ad.slug",
           "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
