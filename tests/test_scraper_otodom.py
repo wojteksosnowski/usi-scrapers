@@ -63,7 +63,7 @@ _ITEM = {
 
 def test_parse_otodom_item_basic():
     parsed = _parse_otodom_item(_ITEM)
-    assert parsed["id"] == 67916467
+    assert parsed["id"] == "4AYaT"
     assert parsed["url"] == "https://www.otodom.pl/pl/oferta/apartamenty-kameliowa-vi-etap-ID4AYaT"
 
 
@@ -74,7 +74,8 @@ def test_parse_otodom_item_no_slug_returns_none():
 
 def test_parse_otodom_item_explicit_offer_id():
     parsed = _parse_otodom_item(_ITEM, offer_id=99999)
-    assert parsed["id"] == 99999
+    # Even if offer_id is passed, it should prefer the hash from the slug if available
+    assert parsed["id"] == "4AYaT"
 
 
 # ---------------------------------------------------------------------------
@@ -216,7 +217,7 @@ def test_discover_otodom_investments_returns_offers(fetcher, config):
     fetcher.fetch.return_value = _make_agency_html([_AGENCY_ITEM])
     offers = discover_otodom_investments(config, fetcher, identifier="99")
     assert len(offers) == 1
-    assert offers[0]["id"] == 111
+    assert offers[0]["id"] == "4xF1A"
     assert "/pl/oferta/" in offers[0]["url"]
     assert "osiedle-testowe" in offers[0]["url"]
 
@@ -326,7 +327,7 @@ def test_discover_otodom_investments_global(fetcher, config):
     ]
     offers = discover_otodom_investments(config, fetcher, identifier=None)
     assert len(offers) == 2
-    assert {o["id"] for o in offers} == {1, 2}
+    assert {o["id"] for o in offers} == {"1", "2"}
     assert fetcher.fetch.call_count == 2
 import pytest
 from unittest.mock import MagicMock, patch
