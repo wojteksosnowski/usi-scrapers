@@ -28,6 +28,11 @@ class TechnicalDataManager:
 
     def save_raw_data(self, data: dict, dev_slug: str, inv_slug: str, portal_prefix: str) -> Optional[Path]:
         """Saves virgin raw JSON for an investment"""
+        from .utils.integrity import check_evolution
+        evolution = check_evolution(data, portal_prefix)
+        if evolution.get("status") == "changed":
+            logger.warning(f"Schema change detected for {portal_prefix}: %s", evolution)
+
         raw_details = data.get("raw_details")
         if not raw_details:
             logger.error(f"save_raw_data: missing 'raw_details' for {portal_prefix}/{dev_slug}/{inv_slug}. Aborting save.")

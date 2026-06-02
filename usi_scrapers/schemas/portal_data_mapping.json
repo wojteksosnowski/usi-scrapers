@@ -1,5 +1,5 @@
 {
-  "version": "1.7.5",
+  "version": "1.7.4",
   "description": "Source of truth for fundamental data keys across portals. Verified strictly against non-mock raw records and specialized test JSONs.",
   "portals": {
     "rp": {
@@ -17,6 +17,8 @@
         "units_count": "stats.value.properties_count_for_sale|stats.properties_count_for_sale",
         "price_min": "stats.value.ranges_price_min|stats.ranges_price_min",
         "price_max": "stats.value.ranges_price_max|stats.ranges_price_max",
+        "price_m2_min": "stats.value.ranges_price_m2_min|stats.ranges_price_m2_min",
+        "price_m2_max": "stats.value.ranges_price_m2_max|stats.ranges_price_m2_max",
         "ceiling_height_min": "stats.value.ranges_height_min|stats.ranges_height_min",
         "ceiling_height_max": "stats.value.ranges_height_max|stats.ranges_height_max",
         "address": "address",
@@ -35,9 +37,7 @@
           "houses": "stats.value.all_house_types|stats.all_house_types|stats.value.ranges_plot_area_max|stats.ranges_plot_area_max",
           "rental": "commercial_rental",
           "commercial": "stats.value.properties_commercials_count|stats.properties_commercials_count"
-        },
-        "price_m2_min": "stats.value.ranges_price_m2_min|stats.ranges_price_m2_min",
-        "price_m2_max": "stats.value.ranges_price_m2_max|stats.ranges_price_m2_max"
+        }
       },
       "developer": {
         "id": "id",
@@ -56,13 +56,13 @@
     "oto": {
       "name": "Otodom",
       "investment": {
-        "id": "id|ad.id|raw_details.id|oto_url_id",
+        "id": "id|ad.id|oto_url_id",
         "numeric_id": "ad.id",
         "slug": {
           "path": "ad.slug",
           "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
         },
-        "name": "ad.title|title|raw_details.title",
+        "name": "ad.title|title",
         "developer_id": "ad.agency.id|agency_id|owner.id",
         "developer_name": "ad.agency.name|agency_name|owner.name",
         "developer_slug": {
@@ -71,6 +71,7 @@
         },
         "units_count": "ad.target.Number_of_properties",
         "price_min": "ad.target.Price",
+        "price_m2_min": "ad.target.Price_per_m",
         "ceiling_height_min": "ad.target.Ceiling_height_from",
         "ceiling_height_max": "ad.target.Ceiling_height_to",
         "latitude": "ad.location.coordinates.latitude",
@@ -120,7 +121,7 @@
       "name": "TabelaOfert",
       "investment": {
         "id": {
-          "path": "to_id|to_url|url",
+          "path": "url",
           "regex": ",i(\\d+)"
         },
         "slug": {
@@ -137,6 +138,8 @@
         "units_count": "offers.offerCount",
         "price_min": "offers.lowPrice",
         "price_max": "offers.highPrice",
+        "price_m2_min": "offers.pricePerSqm",
+        "price_m2_max": "offers.pricePerSqm",
         "ceiling_height_min": "additionalProperty[name=Wysoko\u015b\u0107 mieszkania].value",
         "ceiling_height_max": "additionalProperty[name=Wysoko\u015b\u0107 mieszkania].value",
         "brand_klient_id": "brand.klientId",

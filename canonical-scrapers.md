@@ -34,7 +34,7 @@ public_dir/
 │           ├── meta_{portal}_{id}.json
 │           ├── meta_{portal}_{id}_{YYYYMMDD_HHMMSS}.json  ← archiwum
 │           ├── usi_stage_stub.json                        ← RP multi-etap
-│           └── usi_{inv_slug}.json                        ← TYLKO usi-tracker
+│           └── usi_{portal}_{id}.json                     ← TYLKO usi-tracker (dawniej usi_{inv_slug}.json)
 │
 └── USIdev/                       # dane JSON deweloperów
     └── {dev_slug}/
@@ -58,20 +58,7 @@ public_dir/
 - **RynekPierwotny**: `offer_id` (numeryczny).
 - **TabelaOfert**: `id` inwestycji (prefiksowane `i`, np. `i8982461`).
 
-**Zawartość:** surowa odpowiedź portalu bez normalizacji — pełny JSON API RP, `pageProps` Otodom lub JSON-LD + ekstrakcja TabelaOfert. Każdy plik zawiera na początku sekcję `_usi_meta`:
-
-```json
-{
-  "_usi_meta": {
-    "portal": "rp",
-    "portal_url": "https://rynekpierwotny.pl",
-    "portal_id": "12345",
-    "source_url": "https://rynekpierwotny.pl/oferty/...",
-    "saved_at": "2026-05-17T10:00:00+00:00"
-  },
-  ...surowe dane portalu...
-}
-```
+**Zawartość:** surowa odpowiedź portalu bez normalizacji — pełny JSON API RP, `pageProps` Otodom lub JSON-LD + ekstrakcja TabelaOfert. Zgodnie z zasadą PURE-RAW pliki te zawierają WYŁĄCZNIE dane zwrócone przez portal, bez wstrzykiwanych sekcji z metadanymi systemowymi.
 
 **Kto tworzy:**
 - `utils/io.py → save_raw_json()` — wywołana przez:
@@ -144,9 +131,9 @@ public_dir/
 
 ---
 
-### `usi_{inv_slug}.json`
+### `usi_{portal}_{id}.json`
 
-**Ścieżka:** `{public_dir}/USIdata/{dev_slug}/{inv_slug}/usi_{inv_slug}.json`
+**Ścieżka:** `{public_dir}/USIdata/{dev_slug}/{inv_slug}/usi_{portal}_{id}.json`
 
 **Kto tworzy:** wyłącznie `usi-tracker`. Ten pakiet tylko zwraca ścieżkę przez `TechnicalDataManager.get_usi_json_path()`. Plik nie jest tworzony ani modyfikowany przez `usi-scrapers`.
 
@@ -158,7 +145,7 @@ public_dir/
 
 **Ścieżka:** `{public_dir}/USIdev/{dev_slug}/raw_{portal}_{id}.json`
 
-**Zawartość:** surowy profil dewelopera z portalu + sekcja `_usi_meta` (jak w raw inwestycji, z dodatkiem `source_url`). Dla `import_competitors_csv` zawiera też flagę `"_mock": true` — dane z CSV, nie z portalu.
+**Zawartość:** surowy profil dewelopera z portalu. Zgodnie z zasadą PURE-RAW nie zawiera żadnych dodatkowych sekcji systemowych. Dla `import_competitors_csv` zawiera wyjątek w postaci flagi `"_mock": true` bezpośrednio w danych JSON — oznaczającą dane wczytane z CSV, nie pobrane z portalu.
 
 **Format per portal:**
 - **RP:** pola z API vendora (`id`, `slug`, `name`, `logo`, ...)
@@ -283,21 +270,13 @@ URL inwestycji Otodom używa `/pl/oferta/{slug}` (nie `/pl/inwestycja/`) — pot
 
 ---
 
-## Pole `_usi_meta` — struktura
+## Zasada PURE-RAW
 
-Każdy plik `raw_*.json` zawiera na początku sekcję `_usi_meta` dodawaną przez `save_raw_json()` / `save_dev_raw_json()`:
+Funkcje odpowiedzialne za zapis (`save_raw_json()` i `save_dev_raw_json()` z `utils/io.py`) podążają za ścisłą regułą PURE-RAW. Do plików `raw_*.json` zapisywane są dokładnie i wyłącznie dane otrzymane z portalu lub z narzędzi importu. 
 
-```json
-"_usi_meta": {
-  "portal": "rp",                          // prefix portalu
-  "portal_url": "https://rynekpierwotny.pl",
-  "portal_id": "12345",                    // ID oferty/vendora w portalu (opcjonalne)
-  "source_url": "https://...",             // URL źródłowy (tylko w raw dev)
-  "saved_at": "2026-05-17T10:00:00+00:00" // UTC ISO 8601
-}
-```
+Nie wstrzykujemy do nich żadnych dodatkowych sekcji meta-systemowych. Informacje takie jak data pobrania zawarte są z reguły w znacznikach czasowych plików w systemie (mtime) lub wynikają z nazw plików archiwalnych z timestampem.
 
-Plik mock z `import_competitors_csv` zawiera dodatkowo `"_mock": true` bezpośrednio w danych (nie w `_usi_meta`).
+Jedynym wyjątkiem w tych plikach są obiekty mockowane (deweloperzy) tworzone przez polecenie `import_competitors_csv()`, które zawierają dodatkową flagę `"_mock": true` osadzoną bezpośrednio w obiekcie JSON, by system wiedział, że nie pochodzą one w 100% z API zewętrznego.
 
 ---
 
@@ -309,15 +288,15 @@ Plik mock z `import_competitors_csv` zawiera dodatkowo `"_mock": true` bezpośre
    download_raw_dev()                → USIdev/{dev_slug}/raw_{portal}_{dev_slug}.json (real)
                                      → USIdev/{dev_slug}/logo_{portal}_{dev_slug}.{ext}
 
-2. process_batch() / download_raw()  → USIdata/{dev_slug}/{inv_slug}/raw_{portal}_{inv_slug}.json
+2. process_batch() / download_raw()  → USIdata/{dev_slug}/{inv_slug}/raw_{portal}_{id}.json
                                      → USI/{dev_slug}/{inv_slug}/{filename}
 
-3. import_usimaster_csv()            → USIdata/{dev_slug}/{inv_slug}/raw_{portal}_{inv_slug}.json
-                                     → USIdata/{dev_slug}/{inv_slug}/meta_{portal}_{inv_slug}.json
+3. import_usimaster_csv()            → USIdata/{dev_slug}/{inv_slug}/raw_{portal}_{id}.json
+                                     → USIdata/{dev_slug}/{inv_slug}/meta_{portal}_{id}.json
    (wymaga USIdev z kroku 1)
 
 4. usi-tracker (zewnętrzny)          → USIdata/{dev_slug}/{inv_slug}/app_result_*.json
-                                     → USIdata/{dev_slug}/{inv_slug}/usi_{inv_slug}.json
+                                     → USIdata/{dev_slug}/{inv_slug}/usi_{portal}_{id}.json
 
 5. run_stage_detection()             → USIdata/{dev_slug}/{inv_slug}/usi_stage_stub.json
    (wymaga app_result_* z kroku 4)
