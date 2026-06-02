@@ -34,3 +34,48 @@ def test_date_to_quarter():
     assert apply_transformer("date_to_quarter", "2025-12") == 4
     assert apply_transformer("date_to_quarter", "2025") is None
     assert apply_transformer("date_to_quarter", "abc") is None
+
+def test_rp_gallery_to_flat_list():
+    data = {
+        "main_image": {
+            "value": {
+                "g_img_2000": "http://img1_2000.jpg",
+                "g_img_1500": "http://img1_1500.jpg"
+            }
+        },
+        "gallery": {
+            "value": [
+                {
+                    "value": {
+                        "g_img_2000": "http://img1_2000.jpg" # duplicate main
+                    }
+                },
+                {
+                    "value": {
+                        "g_img_1500": "http://img2_1500.jpg"
+                    }
+                },
+                {
+                    "value": {
+                        "m_img_750": "http://img3_750.jpg"
+                    }
+                }
+            ]
+        }
+    }
+    res = apply_transformer("rp_gallery_to_flat_list", data)
+    assert res == [
+        "http://img1_2000.jpg",
+        "http://img2_1500.jpg",
+        "http://img3_750.jpg"
+    ]
+
+def test_oto_gallery_to_flat_list():
+    data = [
+        {"large": "http://large1.jpg", "small": "http://small1.jpg"},
+        {"medium": "http://medium2.jpg"},
+        {"large": "http://large1.jpg"} # duplicate
+    ]
+    res = apply_transformer("oto_gallery_to_flat_list", data)
+    assert res == ["http://large1.jpg", "http://medium2.jpg"]
+

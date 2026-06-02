@@ -29,7 +29,10 @@
         "longitude": "geo_point.coordinates[0]|geo_point.value.coordinates.value[0]",
         "construction_date_upper": "construction_date_range.value.upper|construction_date_range.upper",
         "main_image": "main_image",
-        "gallery": "gallery|_raw_gallery.gallery",
+        "gallery": {
+          "path": ".",
+          "transform": "rp_gallery_to_flat_list"
+        },
         "groups": "groups",
         "groups_id": "groups.id",
         "groups_name": "groups.name",
@@ -101,7 +104,10 @@
         "delivery_raw": "ad.topInformation",
         "delivery_fallback_quarter": "ad.investmentEstimatedDelivery.quarter",
         "delivery_fallback_year": "ad.investmentEstimatedDelivery.year",
-        "images": "ad.images",
+        "images": {
+          "path": "ad.images",
+          "transform": "oto_gallery_to_flat_list"
+        },
         "url": "ad.url|url",
         "developer_url": "ad.agency.url",
         "owner_name": "ad.owner.name|owner.account.name|owner.name",
