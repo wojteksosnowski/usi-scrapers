@@ -64,6 +64,7 @@ Obsługuje:
 - **Operatory alternatywy**: `pathA|pathB` pozwalają na bezpieczny fallback w przypadku braku lub zmiany nazwy pola.
 - **Indeksowanie i filtrowanie tablic**: `array[0].value` lub `array[name=Cecha].value`.
 - **Ekstrakcja z HTML w locie**: Dostęp do surowego kodu strony poprzez klucz `_raw_html` i wyciąganie z niego wartości za pomocą regexów (np. `{"path": "_raw_html", "regex": "(?s)class=\"dev-link\" href=\"([^\"]+)\""}`).
+- **Ujednolicone współrzędne**: Wszystkie 3 portale obsługują płaskie klucze `latitude` oraz `longitude` co ułatwia geolokalizację z pominięciem specyficznych struktur (`geo_point` lub `_raw_mapa`).
 
 ## Testy
 

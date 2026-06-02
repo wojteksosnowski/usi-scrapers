@@ -236,6 +236,16 @@ def fetch_to_api_gallery(inv_id: str, token: str, fetcher: Fetcher) -> list[str]
     images = data.get("data", {}).get("images", [])
     return [img["url"] for img in images if isinstance(img, dict) and "url" in img]
 
+def fetch_to_api_mapa(inv_id: str, token: str, fetcher: Fetcher) -> dict | None:
+    """Fetches investment map data using the hidden JSON API."""
+    url = portal_api_url("to", "mapa", token=token, inv_id=inv_id)
+    logger.info(f"Fetching TO Mapa API: {url}")
+    data = fetcher.fetch_json(url)
+    if not data:
+        logger.debug(f"fetch_to_api_mapa: no data returned for {url}")
+        return None
+    return data
+
 def extract_to_data(html: str, url: str, fetcher: Fetcher = None) -> dict:
     """
     Centralized extraction logic for TabelaOfert.
@@ -326,6 +336,13 @@ def download_raw_to_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetche
         if existing_inv_slug:
             inv_slug = existing_inv_slug
             logger.info(f"Matched investment ID {portal_id} to existing investment slug: {inv_slug}")
+
+    # Fetch hidden map API
+    token = extract_to_api_token(html)
+    if to_id and token and fetcher:
+        map_data = fetch_to_api_mapa(to_id, token, fetcher)
+        if map_data:
+            data["_raw_mapa"] = map_data
 
     cleaned_html = clean_to_html(html)
     save_raw_html(cleaned_html, config.public_dir, dev_slug, inv_slug, "to", portal_id=portal_id)

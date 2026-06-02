@@ -54,7 +54,8 @@
     "rate_limit_domain": "tabelaofert.pl",
     "default_rate_limit": 0.5,
     "api": {
-      "gallery": "/api/{token}/oferty/inwestycja/{inv_id}/galeria"
+      "gallery": "/api/{token}/oferty/inwestycja/{inv_id}/galeria",
+      "mapa": "/api/{token}/oferty/inwestycja/{inv_id}/mapa"
     },
     "url_patterns": {
       "investment": "/inwestycja/{slug},i{to_id}",
