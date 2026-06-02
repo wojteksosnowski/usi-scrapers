@@ -136,6 +136,12 @@ def download_raw_otodom_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fe
         logger.error(f"Failed to extract __NEXT_DATA__ for {url}")
         return None
 
+    # Filter out non-developer offers
+    owner_type = page_props.get("ad", {}).get("owner", {}).get("type")
+    if owner_type in ("agency", "private"):
+        logger.info(f"Skipping {url}: ad.owner.type is '{owner_type}' (only developer offers are allowed).")
+        return None
+
     oto_mapping = get_mapping("oto", "investment")
     ad_url = resolve_path(page_props, oto_mapping.get("url")) or ""
     ad_slug = ad_url.rstrip("/").rsplit("/", 1)[-1] if ad_url else ""

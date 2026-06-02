@@ -73,9 +73,24 @@
         },
         "units_count": "ad.target.Number_of_properties",
         "price_min": "ad.target.Price",
-        "price_m2_min": "ad.target.Price_per_m",
-        "ceiling_height_min": "ad.target.Ceiling_height_from",
-        "ceiling_height_max": "ad.target.Ceiling_height_to",
+        "price_m2_min": {
+          "path": "ad.characteristics[key=price_per_m].value",
+          "unit": "PLN/m2"
+        },
+        "price_m2_max": {
+          "path": "ad.characteristics[key=price_per_m].value",
+          "unit": "PLN/m2"
+        },
+        "ceiling_height_min": {
+          "path": "ad.characteristics[key=ceiling_height].value",
+          "transform": "cm_to_m",
+          "unit": "m"
+        },
+        "ceiling_height_max": {
+          "path": "ad.characteristics[key=ceiling_height].value",
+          "transform": "cm_to_m",
+          "unit": "m"
+        },
         "latitude": "ad.location.coordinates.latitude",
         "longitude": "ad.location.coordinates.longitude",
         "geo_point": {
@@ -144,10 +159,24 @@
         "units_count": "offers.offerCount",
         "price_min": "offers.lowPrice",
         "price_max": "offers.highPrice",
-        "price_m2_min": "offers.pricePerSqm",
-        "price_m2_max": "offers.pricePerSqm",
-        "ceiling_height_min": "additionalProperty[name=Wysokość mieszkania].value|additionalProperty[name=Wys. apartamentu inwestycyjnego].value",
-        "ceiling_height_max": "additionalProperty[name=Wysokość mieszkania].value|additionalProperty[name=Wys. apartamentu inwestycyjnego].value",
+        "price_m2_min": {
+          "path": "offers.pricePerSqm",
+          "unit": "PLN/m2"
+        },
+        "price_m2_max": {
+          "path": "offers.pricePerSqm",
+          "unit": "PLN/m2"
+        },
+        "ceiling_height_min": {
+          "path": "additionalProperty[name=Wysokość mieszkania].value|additionalProperty[name=Wys. apartamentu inwestycyjnego].value",
+          "transform": "cm_to_m",
+          "unit": "m"
+        },
+        "ceiling_height_max": {
+          "path": "additionalProperty[name=Wysokość mieszkania].value|additionalProperty[name=Wys. apartamentu inwestycyjnego].value",
+          "transform": "cm_to_m",
+          "unit": "m"
+        },
         "latitude": "_raw_mapa.data.center.y",
         "longitude": "_raw_mapa.data.center.x",
         "brand_klient_id": "brand.klientId",

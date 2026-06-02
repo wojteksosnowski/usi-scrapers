@@ -8,6 +8,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+from .transformers import apply_transformer
+
 _MAPPING_FILE = Path(__file__).parent / "schemas" / "portal_data_mapping.json"
 _MAPPING_DATA = None
 
@@ -43,8 +45,10 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
         return None
 
     regex_pattern = None
+    transform_name = None
     if isinstance(path, dict):
         regex_pattern = path.get("regex")
+        transform_name = path.get("transform")
         path = path.get("path")
         if not path:
             return None
@@ -55,7 +59,9 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
     if isinstance(path, str) and '|' in path:
         paths = path.split('|')
         for p in paths:
-            temp_path = {"path": p.strip(), "regex": regex_pattern} if regex_pattern else p.strip()
+            temp_path = {"path": p.strip(), "regex": regex_pattern, "transform": transform_name} 
+            if not regex_pattern and not transform_name:
+                temp_path = p.strip()
             res = resolve_path(data, temp_path)
             if res is not None:
                 return res
@@ -112,8 +118,11 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
     if regex_pattern and current is not None:
         match = re.search(regex_pattern, str(current))
         if match:
-            return match.group(1) if match.lastindex else match.group(0)
+            current = match.group(1) if match.lastindex else match.group(0)
         else:
-            return None
+            current = None
+
+    if transform_name and current is not None:
+        current = apply_transformer(transform_name, current)
 
     return current
