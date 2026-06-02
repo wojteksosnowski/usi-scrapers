@@ -14,11 +14,11 @@
           "regex": "^[a-z0-9\\-]+$"
         },
         "developer_name": "vendor.value.name|vendor.name",
-        "units_count": "stats.value.properties_count_for_sale",
-        "price_min": "stats.value.ranges_price_min",
-        "price_max": "stats.value.ranges_price_max",
-        "ceiling_height_min": "stats.value.ranges_height_min",
-        "ceiling_height_max": "stats.value.ranges_height_max",
+        "units_count": "stats.value.properties_count_for_sale|stats.properties_count_for_sale",
+        "price_min": "stats.value.ranges_price_min|stats.ranges_price_min",
+        "price_max": "stats.value.ranges_price_max|stats.ranges_price_max",
+        "ceiling_height_min": "stats.value.ranges_height_min|stats.ranges_height_min",
+        "ceiling_height_max": "stats.value.ranges_height_max|stats.ranges_height_max",
         "address": "address",
         "website": "website",
         "geo_point": "geo_point.coordinates",
@@ -86,11 +86,23 @@
         "developer_url": "ad.agency.url",
         "owner_name": "ad.owner.name",
         "signals": {
-          "apartments": { "path": "ad.target.categoryId", "regex": "11" },
-          "houses": { "path": "ad.target.categoryId", "regex": "13" },
-          "commercial": { "path": "ad.target.categoryId", "regex": "501" },
+          "apartments": {
+            "path": "ad.target.categoryId",
+            "regex": "11"
+          },
+          "houses": {
+            "path": "ad.target.categoryId",
+            "regex": "13"
+          },
+          "commercial": {
+            "path": "ad.target.categoryId",
+            "regex": "501"
+          },
           "investment": "ad.target.Offered_estates_type",
-          "rental": { "path": "ad.target.MarketType", "regex": "rent" }
+          "rental": {
+            "path": "ad.target.MarketType",
+            "regex": "rent"
+          }
         }
       },
       "developer": {
@@ -130,11 +142,26 @@
         "klient_id": "klientId|klient_id",
         "offers_list": "offers.offers",
         "signals": {
-          "apartments": { "path": "url", "regex": "mieszkania-na-sprzedaz" },
-          "houses": { "path": "url", "regex": "domy-na-sprzedaz" },
-          "commercial": { "path": "url", "regex": "lokale-uzytkowe" },
-          "investment": { "path": "url", "regex": "apartamenty-inwestycyjne" },
-          "rental": { "path": "url", "regex": "na-wynajem" }
+          "apartments": {
+            "path": "url",
+            "regex": "mieszkania-na-sprzedaz"
+          },
+          "houses": {
+            "path": "url",
+            "regex": "domy-na-sprzedaz"
+          },
+          "commercial": {
+            "path": "url",
+            "regex": "lokale-uzytkowe"
+          },
+          "investment": {
+            "path": "url",
+            "regex": "apartamenty-inwestycyjne"
+          },
+          "rental": {
+            "path": "url",
+            "regex": "na-wynajem"
+          }
         }
       },
       "developer": {
