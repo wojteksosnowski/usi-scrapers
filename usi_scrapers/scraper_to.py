@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
-from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
+from .utils.io import save_raw_json, save_dev_raw_json, save_raw_html, lookup_developer_by_id, lookup_investment_by_id
 from .utils.string import slugify
 from .utils.portals import portal_api_url, portal_url, get_portal
 from .mapping import get_mapping, resolve_path
@@ -327,7 +327,22 @@ def download_raw_to_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetche
             inv_slug = existing_inv_slug
             logger.info(f"Matched investment ID {portal_id} to existing investment slug: {inv_slug}")
 
+    cleaned_html = clean_to_html(html)
+    save_raw_html(cleaned_html, config.public_dir, dev_slug, inv_slug, "to", portal_id=portal_id)
+    
+    # Dodajemy surowy i odchudzony kod HTML do obiektu, żeby parser mógł korzystać z regexów "w locie"
+    data["_raw_html"] = cleaned_html
+
     return save_raw_json(data, config.public_dir, dev_slug, inv_slug, "to", portal_id=portal_id)
+
+def clean_to_html(html: str) -> str:
+    """Removes bloat from HTML while preserving inline JSON data and content."""
+    # Usuwamy skrypty z src (zewnętrzne biblioteki, analytics itp)
+    html = re.sub(r'<script\b[^>]*\bsrc\b[^>]*>.*?</script>', '', html, flags=re.IGNORECASE | re.DOTALL)
+    # Usuwamy wbudowane style i svg
+    html = re.sub(r'<style\b[^>]*>.*?</style>', '', html, flags=re.IGNORECASE | re.DOTALL)
+    html = re.sub(r'<svg\b[^>]*>.*?</svg>', '', html, flags=re.IGNORECASE | re.DOTALL)
+    return html
 
 def fetch_to_html(url: str, fetcher: Fetcher) -> str:
     """Fetch tabelaofert page HTML using the centralized Fetcher."""

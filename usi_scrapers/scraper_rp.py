@@ -80,6 +80,11 @@ def download_raw_rp_json(offer_id: str, dev_slug: str, inv_slug: str, fetcher: F
         inv_slug = existing_inv_slug
         logger.info(f"Matched investment ID {offer_id} to existing investment slug: {inv_slug}")
 
+    # Fetch gallery and attach to details
+    gallery_data = fetcher.fetch_json(portal_api_url("rp", "offer_gallery", offer_id=offer_id), use_scraperapi=False)
+    if gallery_data:
+        details["_raw_gallery"] = gallery_data
+
     return save_raw_json(details, config.public_dir, dev_slug, inv_slug, "rp", portal_id=offer_id)
 
 def fetch_rp_details(offer_id: str, fetcher: Fetcher) -> dict:

@@ -48,6 +48,38 @@ def save_raw_json(
     return file_path
 
 
+def save_raw_html(
+    html: str,
+    public_dir: Path,
+    dev_slug: str,
+    inv_slug: str,
+    portal_prefix: str,
+    portal_id: str | None = None,
+) -> Path:
+    """
+    Saves raw HTML for an investment.
+    Filename: raw_{portal}_{slug|id}.html
+    """
+    inv_dir = get_investment_dir(dev_slug, inv_slug, public_dir)
+    inv_dir.mkdir(parents=True, exist_ok=True)
+
+    filename = f"raw_{portal_prefix}_{portal_id or inv_slug}.html"
+    file_path = inv_dir / filename
+
+    if file_path.exists():
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        archived_filename = f"raw_{portal_prefix}_{portal_id or inv_slug}_{ts}.html"
+        archived_path = inv_dir / archived_filename
+        file_path.rename(archived_path)
+        logger.info(f"Archived existing raw HTML file: {archived_filename}")
+
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(html)
+
+    logger.info(f"Saved raw HTML: {file_path}")
+    return file_path
+
+
 def save_dev_raw_json(
     data: dict,
     public_dir: Path,

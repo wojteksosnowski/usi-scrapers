@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.5] - 2026-06-02
+- **Feature**: Added `save_raw_html` IO utility to save raw, cleaned HTML files for Time-Travel Scraping on TabelaOfert.
+- **Feature**: `portal_data_mapping.json` now supports regex extraction directly from `raw_to_*.html` through the `_raw_html` key, which is dynamically injected during scraping.
+- **Mapping Improvements**: Fixed and expanded extraction mapping paths for RynekPierwotny (`geo_point`, `gallery`), Otodom (`url`, `owner_name`, `hash_id`), and TabelaOfert (`ceiling_height_min/max` with alternative property name).
+- **Data Cleanup**: Added `clean_to_html` to strip external scripts, inline styles, and SVGs, reducing HTML archive size while preserving crucial structured data blocks.
 ## [0.8.1] - 2026-05-24
 - **Feature**: Added `list_available_keys` to mapping engine and public API to allow dynamic inspection of available schema fields.
 - **Documentation**: Updated `API.md` with documentation for `list_available_keys`.

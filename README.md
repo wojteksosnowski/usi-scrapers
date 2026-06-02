@@ -55,7 +55,15 @@ data = fetch_investment(config, fetcher, portal="rp", identifier="123", dev_slug
 
 {public_dir}/USI/{dev_slug}/{inv_slug}/
     *.webp / *.jpg
-```
+
+## Mapowanie Danych (`portal_data_mapping.json`)
+
+Plik `usi_scrapers/schemas/portal_data_mapping.json` służy jako centralne źródło prawdy dla ścieżek dostępu do ustrukturyzowanych danych pobranych z portali.
+Obsługuje:
+- **Dot notation**: `parent.child.value`
+- **Operatory alternatywy**: `pathA|pathB` pozwalają na bezpieczny fallback w przypadku braku lub zmiany nazwy pola.
+- **Indeksowanie i filtrowanie tablic**: `array[0].value` lub `array[name=Cecha].value`.
+- **Ekstrakcja z HTML w locie**: Dostęp do surowego kodu strony poprzez klucz `_raw_html` i wyciąganie z niego wartości za pomocą regexów (np. `{"path": "_raw_html", "regex": "(?s)class=\"dev-link\" href=\"([^\"]+)\""}`).
 
 ## Testy
 
