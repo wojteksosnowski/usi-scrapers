@@ -42,3 +42,35 @@ def test_resolve_path_transform():
     path_def3 = "stats.missing|stats.ranges_height_min"
     assert resolve_path(data, path_def3) == "260 cm"
 
+def test_resolve_path_evaluate_signals():
+    data = {
+        "apartments_count": 0,
+        "houses_count": 5
+    }
+    path_def = {
+        "evaluate_signals": {
+            "apartments": "apartments_count",
+            "houses": "houses_count"
+        },
+        "fallback": "unknown"
+    }
+    assert resolve_path(data, path_def) == "houses"
+
+    data2 = {
+        "apartments_count": "0",
+        "houses_count": 0
+    }
+    assert resolve_path(data2, path_def) == "unknown"
+
+    data3 = {
+        "url": "/domy-na-sprzedaz"
+    }
+    path_def2 = {
+        "evaluate_signals": {
+            "apartments": {"path": "url", "regex": "mieszkania"},
+            "houses": {"path": "url", "regex": "domy"}
+        },
+        "fallback": "unknown"
+    }
+    assert resolve_path(data3, path_def2) == "houses"
+

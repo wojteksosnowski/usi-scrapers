@@ -47,6 +47,14 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
     regex_pattern = None
     transform_name = None
     if isinstance(path, dict):
+        if "evaluate_signals" in path:
+            signals = path["evaluate_signals"]
+            for sig_name, sig_path in signals.items():
+                val = resolve_path(data, sig_path)
+                if val is not None and val != 0 and val != "0" and val != False:
+                    return sig_name
+            return path.get("fallback")
+
         regex_pattern = path.get("regex")
         transform_name = path.get("transform")
         path = path.get("path")

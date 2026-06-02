@@ -37,11 +37,19 @@
         "groups_id": "groups.id",
         "groups_name": "groups.name",
         "groups_stages": "groups.stages",
-        "signals": {
-          "apartments": "properties|properties_for_sale_count|stats.value.properties_count_for_sale|stats.properties_count_for_sale",
-          "houses": "stats.value.all_house_types|stats.all_house_types|stats.value.ranges_plot_area_max|stats.ranges_plot_area_max",
-          "rental": "commercial_rental",
-          "commercial": "stats.value.properties_commercials_count|stats.properties_commercials_count"
+        "segment": {
+          "evaluate_signals": {
+            "commercial": "stats.value.properties_commercials_count|stats.properties_commercials_count",
+            "apartments": "properties|properties_for_sale_count|stats.value.properties_count_for_sale|stats.properties_count_for_sale",
+            "houses": "stats.value.all_house_types|stats.all_house_types|stats.value.ranges_plot_area_max|stats.ranges_plot_area_max"
+          },
+          "fallback": "investment"
+        },
+        "transaction_type": {
+          "evaluate_signals": {
+            "rent": "commercial_rental"
+          },
+          "fallback": "sale"
         }
       },
       "developer": {
@@ -115,24 +123,31 @@
           "path": "ad.url|url|ad.slug",
           "regex": "-ID([A-Za-z0-9]+)"
         },
-        "signals": {
-          "apartments": {
-            "path": "ad.target.categoryId",
-            "regex": "11"
+        "segment": {
+          "evaluate_signals": {
+            "commercial": {
+              "path": "ad.target.categoryId",
+              "regex": "501"
+            },
+            "apartments": {
+              "path": "ad.target.categoryId",
+              "regex": "11"
+            },
+            "houses": {
+              "path": "ad.target.categoryId",
+              "regex": "13"
+            }
           },
-          "houses": {
-            "path": "ad.target.categoryId",
-            "regex": "13"
+          "fallback": "investment"
+        },
+        "transaction_type": {
+          "evaluate_signals": {
+            "rent": {
+              "path": "ad.target.MarketType",
+              "regex": "rent"
+            }
           },
-          "commercial": {
-            "path": "ad.target.categoryId",
-            "regex": "501"
-          },
-          "investment": "ad.target.Offered_estates_type",
-          "rental": {
-            "path": "ad.target.MarketType",
-            "regex": "rent"
-          }
+          "fallback": "sale"
         }
       },
       "developer": {
@@ -189,27 +204,31 @@
         "publisher_klient_id": "publisher.klientId",
         "klient_id": "klientId|klient_id",
         "offers_list": "offers.offers",
-        "signals": {
-          "apartments": {
-            "path": "url",
-            "regex": "mieszkania-na-sprzedaz"
+        "segment": {
+          "evaluate_signals": {
+            "commercial": {
+              "path": "url",
+              "regex": "lokale-uzytkowe"
+            },
+            "apartments": {
+              "path": "url",
+              "regex": "mieszkania-na-sprzedaz"
+            },
+            "houses": {
+              "path": "url",
+              "regex": "domy-na-sprzedaz"
+            }
           },
-          "houses": {
-            "path": "url",
-            "regex": "domy-na-sprzedaz"
+          "fallback": "investment"
+        },
+        "transaction_type": {
+          "evaluate_signals": {
+            "rent": {
+              "path": "url",
+              "regex": "na-wynajem"
+            }
           },
-          "commercial": {
-            "path": "url",
-            "regex": "lokale-uzytkowe"
-          },
-          "investment": {
-            "path": "url",
-            "regex": "apartamenty-inwestycyjne"
-          },
-          "rental": {
-            "path": "url",
-            "regex": "na-wynajem"
-          }
+          "fallback": "sale"
         }
       },
       "developer": {
