@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.2] - 2026-06-03
+- **Feature**: Implemented `transform_to_unified(portal_prefix, raw_data)` in `mapping.py` to directly return a fully resolved, unified dictionary representing the final data structure. This effectively shifts all JSON-to-Dict transformation burden completely away from the tracker/app layer, confirming `portal_data_mapping.json` as the exclusive source of truth.
+- **Documentation**: Augmented `CLAUDE.md` and `README.md` to clarify how `portal_data_mapping.json` generates unified structures, addressing visibility and pipeline clarity concerns.
+
 ## [0.9.1] - 2026-06-03
 - **Feature**: Added new dedicated transformers (`rp_extract_amenities`, `oto_extract_delivery`, `to_extract_amenities`) for fully declarative amenity and delivery date extraction.
 - **Mapping**: Updated `portal_data_mapping.json` for all 3 portals to expose `amenities` and `delivery_date` using the new transformers, removing the need for manual loops in downstream apps.
