@@ -1,5 +1,5 @@
 {
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "Source of truth for fundamental data keys across portals. Verified strictly against non-mock raw records and specialized test JSONs.",
   "portals": {
     "rp": {
@@ -7,8 +7,10 @@
       "investment": {
         "id": "id",
         "slug": "slug",
+        "investment_slug": "slug",
         "name": "name",
         "developer_id": "vendor.value.id|vendor.id|developer_id|vendor_id",
+        "vendor_id": "vendor.value.id|vendor.id|developer_id|vendor_id",
         "developer_slug": {
           "path": "vendor.value.slug|vendor.slug|developer_slug|vendor_slug",
           "regex": "^[a-z0-9\\-]+$"
@@ -97,8 +99,13 @@
           "path": "ad.slug",
           "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
         },
+        "investment_slug": {
+          "path": "ad.slug",
+          "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
+        },
         "name": "ad.title|title",
         "developer_id": "ad.agency.id|agency_id|owner.id",
+        "vendor_id": "ad.agency.id|agency_id|owner.id",
         "developer_name": "ad.agency.name|agency_name|owner.name",
         "developer_slug": {
           "path": "ad.agency.url",
@@ -206,8 +213,16 @@
           "path": "url",
           "regex": "inwestycja/([^,]+)"
         },
+        "investment_slug": {
+          "path": "url",
+          "regex": "inwestycja/([^,]+)"
+        },
         "name": "name",
         "developer_id": {
+          "path": "brand.logo",
+          "regex": "\\/(\\d+)-"
+        },
+        "vendor_id": {
           "path": "brand.logo",
           "regex": "\\/(\\d+)-"
         },

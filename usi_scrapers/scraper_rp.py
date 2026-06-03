@@ -321,7 +321,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
             return val["value"]
         return val
 
-    vendor_id = resolve_path(details, rp_mapping.get("developer_id"))
+    vendor_id = resolve_path(details, rp_mapping.get("vendor_id"))
     
     if not vendor_id:
         return {"error": f"Failed to resolve vendor ID from API for offer {offer_id}"}
@@ -348,7 +348,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         )
         return {"error": err_msg}
 
-    investment_slug = resolve_path(details, rp_mapping.get("slug"))
+    investment_slug = resolve_path(details, rp_mapping.get("investment_slug"))
     if not investment_slug:
         return {"error": f"Failed to resolve investment_slug from API for offer {offer_id}"}
 
@@ -396,6 +396,8 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
     result = {
         "source": "rynekpierwotny.pl",
         "id": offer_id,
+        "vendor_id": vendor_id,
+        "developer_id": vendor_id,
         "url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,

@@ -767,6 +767,8 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         "source": "tabelaofert.pl",
         "to_id": _extract_to_id(url),
         "to_url": url,
+        "vendor_id": resolve_path(product, to_mapping.get("vendor_id")),
+        "developer_id": resolve_path(product, to_mapping.get("vendor_id")),
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
         "name": resolve_path(product, to_mapping.get("name")) or product.get("name"),

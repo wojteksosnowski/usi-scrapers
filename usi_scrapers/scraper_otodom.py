@@ -336,7 +336,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     # ID resolution via mapping (Standardized on alphanumeric hash as primary ID)
     hash_id = resolve_path(page_props, oto_mapping.get("id"))
     numeric_id = resolve_path(page_props, oto_mapping.get("numeric_id"))
-    investment_slug = resolve_path(page_props, oto_mapping.get("slug"))
+    investment_slug = resolve_path(page_props, oto_mapping.get("investment_slug"))
     
     # Fallback to URL parsing if mapping fails (e.g. unexpected structure)
     if not investment_slug or not hash_id:
@@ -362,7 +362,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     if not agency_name:
         agency_name = resolve_path(page_props, oto_mapping.get("owner_name")) or ""
         
-    agency_id = resolve_path(page_props, oto_mapping.get("developer_id"))
+    agency_id = resolve_path(page_props, oto_mapping.get("vendor_id"))
     if not agency_id:
         dev_mapping = get_mapping("oto", "developer")
         agency_id = resolve_path(page_props, dev_mapping.get("id"))
@@ -448,6 +448,8 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         "title": resolve_path(page_props, oto_mapping.get("name")),
         "agency_name": agency_name,
         "agency_id": agency_id,
+        "vendor_id": agency_id,
+        "developer_id": agency_id,
         "latitude": lat,
         "longitude": lng,
         "delivery_quarter": delivery_quarter,

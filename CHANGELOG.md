@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.4] - 2026-06-03
+- **Feature/Compatibility**: Standardized identifier keys across all portals. Added `vendor_id` and `investment_slug` to `portal_data_mapping.json` schema and scraper outputs to eliminate the need for `if/elif` blocks in downstream clients.
+- **Deprecation**: Maintained old keys (`developer_id`, `slug`, `agency_id`) in outputs for backwards compatibility, but marked them for future deprecation.
+
 ## [0.9.3] - 2026-06-03
 - **Bugfix**: Corrected `ceiling_height_min` and `ceiling_height_max` configuration blocks in `portal_data_mapping.json` for RynekPierwotny. They are now correctly formatted as dictionaries (`{"path": "...", "transform": "cm_to_m"}`) rather than raw path strings, successfully restoring metric conversion for ceiling heights.
 
