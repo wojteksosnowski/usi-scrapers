@@ -62,6 +62,10 @@
             "rent": "commercial_rental"
           },
           "fallback": "sale"
+        },
+        "amenities": {
+          "path": "features",
+          "transform": "rp_extract_amenities"
         }
       },
       "developer": {
@@ -170,6 +174,10 @@
             }
           },
           "fallback": "sale"
+        },
+        "delivery_date": {
+          "path": "ad.topInformation",
+          "transform": "oto_extract_delivery"
         }
       },
       "developer": {
@@ -258,6 +266,10 @@
             }
           },
           "fallback": "sale"
+        },
+        "amenities": {
+          "path": "additionalProperty",
+          "transform": "to_extract_amenities"
         }
       },
       "developer": {

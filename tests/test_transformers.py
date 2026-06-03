@@ -104,3 +104,28 @@ def test_rp_extract_street():
     assert apply_transformer("rp_extract_street", "Gdańsk, Zaspa-Rozstaje, Al. Jana Pawła") == "Jana Pawła"
     assert apply_transformer("rp_extract_street", "Gdańsk") is None
 
+
+def test_rp_extract_amenities():
+    from usi_scrapers.transformers import apply_transformer
+    data = [{"id": 12, "name": "foo"}, {"name": "bar"}, {"id": 14}]
+    assert apply_transformer("rp_extract_amenities", data) == ["12", "14"]
+    assert apply_transformer("rp_extract_amenities", None) is None
+
+def test_oto_extract_delivery():
+    from usi_scrapers.transformers import apply_transformer
+    data = [
+        {"label": "other", "values": ["2023"]},
+        {"label": "project_finish_date", "values": ["2024-Q3"]}
+    ]
+    assert apply_transformer("oto_extract_delivery", data) == "2024-Q3"
+    assert apply_transformer("oto_extract_delivery", [{"label": "project_finish_date", "values": []}]) == None
+
+def test_to_extract_amenities():
+    from usi_scrapers.transformers import apply_transformer
+    data = [
+        {"name": "Garaż", "value": "parking naziemny"},
+        {"name": "Winda", "value": "tak"},
+        {"name": "Basen", "value": "nie"}
+    ]
+    res = apply_transformer("to_extract_amenities", data)
+    assert res == ["Garaż: parking naziemny", "Winda"]

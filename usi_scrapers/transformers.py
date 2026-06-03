@@ -170,3 +170,48 @@ def _rp_extract_street(value: Any) -> str | None:
     return None
 
 
+
+@register_transformer("rp_extract_amenities")
+def _rp_extract_amenities(value: Any) -> list[str]:
+    """
+    Extracts amenity IDs from RynekPierwotny features list.
+    """
+    if not isinstance(value, list):
+        return []
+    return [str(item.get("id")) for item in value if isinstance(item, dict) and item.get("id") is not None]
+
+@register_transformer("oto_extract_delivery")
+def _oto_extract_delivery(value: Any) -> str | None:
+    """
+    Extracts project finish date from Otodom topInformation.
+    """
+    if not isinstance(value, list):
+        return None
+    for item in value:
+        if isinstance(item, dict) and item.get("label") == "project_finish_date":
+            vals = item.get("values")
+            if isinstance(vals, list) and len(vals) > 0:
+                return str(vals[0])
+            elif isinstance(vals, str):
+                return vals
+    return None
+
+@register_transformer("to_extract_amenities")
+def _to_extract_amenities(value: Any) -> list[str]:
+    """
+    Extracts amenities strings from TabelaOfert additionalProperty list.
+    """
+    if not isinstance(value, list):
+        return []
+    amenities = []
+    for item in value:
+        if isinstance(item, dict):
+            name = item.get("name")
+            val = item.get("value")
+            if name and val:
+                val_str = str(val).strip().lower()
+                if val_str == "tak":
+                    amenities.append(str(name))
+                elif val_str not in ["nie", "brak", "false", "0"]:
+                    amenities.append(f"{name}: {val}")
+    return amenities
