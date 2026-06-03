@@ -279,6 +279,31 @@ result = health_check(config, fetcher)
 result = health_check()
 ```
 
+
+### 8. Unified Schema Mapping (portal_data_mapping)
+
+The `usi-scrapers` package provides a declarative mapping engine to transform raw JSON records from different portals into a unified dictionary structure. This eliminates hardcoded nested property access (like `_get_val(raw, "features")`) from the downstream application (`usi-tracker`).
+
+The mapping definitions are kept in `portal_data_mapping.json`.
+
+```python
+from usi_scrapers.mapping import transform_to_unified
+
+# Assuming `raw_data` is the loaded raw_rp_123.json payload:
+unified_data = transform_to_unified("rp", raw_data, "investment")
+
+# → returns a flat dictionary based on portal_data_mapping.json keys
+# {
+#   "price": 500000.0,
+#   "price_m2": 10000.0,
+#   "segment": "apartments",
+#   "transaction_type": "sale",
+#   "city": "Warszawa",
+#   "amenities": ["12", "14"],
+#   ...
+# }
+```
+
 ### Typical usi-tracker flow — developer catalogue scan
 
 ```python

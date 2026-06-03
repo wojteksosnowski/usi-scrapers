@@ -74,3 +74,33 @@ def test_resolve_path_evaluate_signals():
     }
     assert resolve_path(data3, path_def2) == "houses"
 
+
+def test_transform_to_unified():
+    from usi_scrapers.mapping import transform_to_unified
+    
+    raw_data = {
+        "features": [{"id": 99}],
+        "price": {"value": 15000}
+    }
+    
+    # We mock get_mapping so we don't rely on the actual huge json
+    import usi_scrapers.mapping
+    original_get_mapping = usi_scrapers.mapping.get_mapping
+    
+    def fake_get_mapping(portal, entity):
+        return {
+            "price": {"path": "price.value"},
+            "amenities": {"path": "features", "transform": "rp_extract_amenities"}
+        }
+        
+    usi_scrapers.mapping.get_mapping = fake_get_mapping
+    
+    try:
+        unified = transform_to_unified("rp", raw_data)
+        assert unified.get("price") == 15000
+        assert unified.get("amenities") == ["99"]
+        
+        # Test empty
+        assert transform_to_unified("rp", {}) == {}
+    finally:
+        usi_scrapers.mapping.get_mapping = original_get_mapping

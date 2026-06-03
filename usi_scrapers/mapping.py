@@ -137,3 +137,19 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
         current = apply_transformer(transform_name, current)
 
     return current
+
+def transform_to_unified(portal_prefix: str, raw_data: dict, entity_type: str = "investment") -> dict:
+    """
+    Transforms raw_data using portal_data_mapping into a unified schema dictionary.
+    This eliminates the need for manual parsing in downstream consumers.
+    """
+    if not raw_data:
+        return {}
+        
+    mapping = get_mapping(portal_prefix, entity_type)
+    unified = {}
+    
+    for key, path_config in mapping.items():
+        unified[key] = resolve_path(raw_data, path_config)
+        
+    return unified
