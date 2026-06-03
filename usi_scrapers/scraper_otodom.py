@@ -354,11 +354,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         return {"error": f"Listing is inactive (status: {status})"}
         
     images = []
-    images_raw = resolve_path(page_props, oto_mapping.get("images")) or []
-    for img in images_raw:
-        img_url = img.get("large")
-        if img_url:
-            images.append(img_url)
+    images = resolve_path(page_props, oto_mapping.get("images")) or []
             
     agency_url = resolve_path(page_props, oto_mapping.get("developer_url")) or ""
     agency_name = resolve_path(page_props, oto_mapping.get("developer_name")) or ""

@@ -103,15 +103,8 @@ def fetch_rp_gallery(offer_id: str, fetcher: Fetcher) -> list[str]:
     logger.info(f"Fetching RynekPierwotny gallery for ID: {offer_id} from {url}")
     
     data = fetcher.fetch_json(url, use_scraperapi=False) or {}
-    # Extract images from gallery
-    images = []
     rp_mapping = get_mapping("rp", "investment")
-    gallery = resolve_path(data, rp_mapping.get("gallery")) or []
-    for item in gallery:
-        # Prefer 1500 resolution
-        img_url = item.get("image", {}).get("g_img_1500")
-        if img_url:
-            images.append(img_url)
+    images = resolve_path(data, rp_mapping.get("gallery")) or []
                 
     return images
 

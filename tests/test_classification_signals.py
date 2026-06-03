@@ -11,41 +11,35 @@ def load_raw_test_file(filename):
 
 def test_otodom_signals_extraction_residential():
     data = load_raw_test_file("raw_oto_nowa-polnica.json")
-    # In this file, the root object contains "ad"
     mapping = get_mapping("oto", "investment")
-    signals_mapping = mapping.get("signals")
     
-    signals = {k: resolve_path(data, v) for k, v in signals_mapping.items()}
+    segment = resolve_path(data, mapping.get("segment"))
+    transaction_type = resolve_path(data, mapping.get("transaction_type"))
     
-    assert signals["apartments"] == "11"
-    assert signals["houses"] is None
-    assert signals["commercial"] is None
-    assert "flats" in signals["investment"]
+    assert segment == "apartments"
+    assert transaction_type == "sale"
 
 def test_rp_signals_extraction():
     data = load_raw_test_file("raw_rp_17812.json")
     mapping = get_mapping("rp", "investment")
-    signals_mapping = mapping.get("signals")
     
-    signals = {k: resolve_path(data, v) for k, v in signals_mapping.items()}
+    segment = resolve_path(data, mapping.get("segment"))
+    transaction_type = resolve_path(data, mapping.get("transaction_type"))
     
-    # apartments is mapped to properties (which is 100 in this file)
-    assert signals["apartments"] == 100
-    # commercial_rental
-    assert signals["rental"] is False
+    assert segment == "apartments"
+    assert transaction_type == "sale"
 
 from usi_scrapers import classify_segment
 
 def test_to_signals_extraction():
     data = load_raw_test_file("raw_to_i8975118.json")
     mapping = get_mapping("to", "investment")
-    signals_mapping = mapping.get("signals")
     
-    signals = {k: resolve_path(data, v) for k, v in signals_mapping.items()}
+    segment = resolve_path(data, mapping.get("segment"))
+    transaction_type = resolve_path(data, mapping.get("transaction_type"))
     
-    # url contains "mieszkania-na-sprzedaz"
-    assert signals["apartments"] == "mieszkania-na-sprzedaz"
-    assert signals["houses"] is None
+    assert segment == "apartments"
+    assert transaction_type == "sale"
 
 def test_classify_segment_logic():
     # PRS priority

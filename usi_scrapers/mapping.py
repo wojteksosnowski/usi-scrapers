@@ -75,53 +75,56 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
                 return res
         return None
 
-    parts = path.split('.')
-    current = data
-    
-    for part in parts:
-        if current is None:
-            return None
-            
-        bracket_match = re.search(r'^([^\[]*)\[(.*?)\]$', part)
-        if bracket_match:
-            key = bracket_match.group(1)
-            condition = bracket_match.group(2)
-            
-            if key:
-                if isinstance(current, dict):
-                    current = current.get(key)
-                else:
-                    return None
-                    
+    if path == ".":
+        current = data
+    else:
+        parts = path.split('.')
+        current = data
+        
+        for part in parts:
             if current is None:
                 return None
                 
-            if isinstance(current, list):
-                if condition.isdigit():
-                    idx = int(condition)
-                    if 0 <= idx < len(current):
-                        current = current[idx]
+            bracket_match = re.search(r'^([^\[]*)\[(.*?)\]$', part)
+            if bracket_match:
+                key = bracket_match.group(1)
+                condition = bracket_match.group(2)
+                
+                if key:
+                    if isinstance(current, dict):
+                        current = current.get(key)
                     else:
                         return None
-                elif '=' in condition:
-                    c_key, c_val = condition.split('=', 1)
-                    found = False
-                    for item in current:
-                        if isinstance(item, dict) and str(item.get(c_key)) == c_val:
-                            current = item
-                            found = True
-                            break
-                    if not found:
+                        
+                if current is None:
+                    return None
+                    
+                if isinstance(current, list):
+                    if condition.isdigit():
+                        idx = int(condition)
+                        if 0 <= idx < len(current):
+                            current = current[idx]
+                        else:
+                            return None
+                    elif '=' in condition:
+                        c_key, c_val = condition.split('=', 1)
+                        found = False
+                        for item in current:
+                            if isinstance(item, dict) and str(item.get(c_key)) == c_val:
+                                current = item
+                                found = True
+                                break
+                        if not found:
+                            return None
+                    else:
                         return None
                 else:
                     return None
             else:
-                return None
-        else:
-            if isinstance(current, dict):
-                current = current.get(part)
-            else:
-                return None
+                if isinstance(current, dict):
+                    current = current.get(part)
+                else:
+                    return None
                 
     if regex_pattern and current is not None:
         match = re.search(regex_pattern, str(current))

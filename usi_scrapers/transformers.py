@@ -70,8 +70,8 @@ def _rp_gallery_to_flat_list(value: Any) -> list[str]:
     def extract_best_url(img_obj: dict) -> str | None:
         if not isinstance(img_obj, dict):
             return None
-        # the actual data is sometimes nested under 'value'
-        data = img_obj.get("value", img_obj)
+        # the actual data is sometimes nested under 'value' or 'image'
+        data = img_obj.get("image") or img_obj.get("value") or img_obj
         if not isinstance(data, dict):
             return None
         # Prefer highest resolutions

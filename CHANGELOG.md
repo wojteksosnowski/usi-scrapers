@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.0] - 2026-06-03
+- **Architectural Overhaul**: Introduced the `transformers.py` module to parse, clean, and convert raw JSON data deterministically. Replaced hardcoded mapping paths with a declarative configuration format (`{"path": "...", "transform": "...", "unit": "..."}`).
+- **Data Normalization**: Added transformers for ceiling heights (`cm_to_m`), date-to-quarter conversion, and advanced geospatial/address extractions across all 3 portals (`city`, `street`, `region`). Added an automatic deduplicating gallery flattener.
+- **Segment Evaluation**: Implemented an `"evaluate_signals"` directive in the mapping engine, substituting the older flat `signals` structure. This enables virtual keys like `segment` (`apartments`, `houses`, `commercial`) and `transaction_type` (`rent`, `sale`) to compute dynamic aggregations out-of-the-box.
+- **TabelaOfert Scraper**: Expanded `scraper_to.py` to also record `street` directly in `_extracted_location`.
+
 ## [0.8.6] - 2026-06-02
 - **Feature**: Added discrete `latitude` and `longitude` mapping keys for all 3 portals to unify geospatial queries and eliminate array-unpacking complexity on the caller side.
 - **Feature**: Extended `scraper_to.py` to extract `latitude` and `longitude` directly from TabelaOfert's hidden `/mapa` JSON API endpoint, appending the data to the raw JSON document under `_raw_mapa`.
