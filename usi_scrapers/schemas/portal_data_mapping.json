@@ -22,6 +22,18 @@
         "ceiling_height_min": "stats.value.ranges_height_min|stats.ranges_height_min",
         "ceiling_height_max": "stats.value.ranges_height_max|stats.ranges_height_max",
         "address": "address.value|address",
+        "city": {
+          "path": "address.value|address",
+          "transform": "rp_extract_city"
+        },
+        "street": {
+          "path": "address.value|address",
+          "transform": "rp_extract_street"
+        },
+        "region": {
+          "path": "address.value|address",
+          "transform": "rp_extract_region"
+        },
         "website": "website",
         "geo_point": "geo_point.coordinates|geo_point.value.coordinates.value",
         "geo_point_coordinates": "geo_point.coordinates|geo_point.value.coordinates.value",
@@ -104,6 +116,16 @@
         },
         "latitude": "ad.location.coordinates.latitude",
         "longitude": "ad.location.coordinates.longitude",
+        "address": {
+          "path": "ad.location.address.street.name",
+          "transform": "clean_street"
+        },
+        "city": "ad.location.address.city.name",
+        "street": {
+          "path": "ad.location.address.street.name",
+          "transform": "clean_street"
+        },
+        "region": "ad.location.address.district.name",
         "geo_point": {
           "lat": "ad.location.coordinates.latitude",
           "lon": "ad.location.coordinates.longitude"
@@ -200,6 +222,13 @@
         },
         "latitude": "_raw_mapa.data.center.y",
         "longitude": "_raw_mapa.data.center.x",
+        "address": "_extracted_location.address",
+        "city": "_extracted_location.city",
+        "street": {
+          "path": "_extracted_location.street",
+          "transform": "clean_street"
+        },
+        "region": "_extracted_location.region",
         "brand_klient_id": "brand.klientId",
         "publisher_klient_id": "publisher.klientId",
         "klient_id": "klientId|klient_id",

@@ -122,3 +122,51 @@ def _oto_gallery_to_flat_list(value: Any) -> list[str]:
                 
     return images
 
+@register_transformer("clean_street")
+def _clean_street(value: Any) -> str | None:
+    """Removes 'ul. ' or 'al. ' prefixes from street names."""
+    if isinstance(value, str):
+        value = value.strip()
+        lower_val = value.lower()
+        if lower_val.startswith("ul. "):
+            return value[4:].strip()
+        if lower_val.startswith("ul."):
+            return value[3:].strip()
+        if lower_val.startswith("al. "):
+            return value[4:].strip()
+        if lower_val.startswith("al."):
+            return value[3:].strip()
+        return value
+    return None
+
+@register_transformer("rp_extract_city")
+def _rp_extract_city(value: Any) -> str | None:
+    """Extracts city from RynekPierwotny address string: 'Kraków, Czyżyny, ul. Akacjowa' -> 'Kraków'"""
+    if isinstance(value, str):
+        parts = [p.strip() for p in value.split(",")]
+        if len(parts) >= 1:
+            return parts[0]
+    return None
+
+@register_transformer("rp_extract_region")
+def _rp_extract_region(value: Any) -> str | None:
+    """Extracts region/district from RP address string: 'Kraków, Czyżyny, ul. Akacjowa' -> 'Czyżyny'"""
+    if isinstance(value, str):
+        parts = [p.strip() for p in value.split(",")]
+        if len(parts) >= 3:
+            return parts[1]
+    return None
+
+@register_transformer("rp_extract_street")
+def _rp_extract_street(value: Any) -> str | None:
+    """Extracts and cleans street from RP address string: 'Kraków, Czyżyny, ul. Akacjowa' -> 'Akacjowa'"""
+    if isinstance(value, str):
+        parts = [p.strip() for p in value.split(",")]
+        if len(parts) >= 2:
+            return _clean_street(parts[-1])
+        if len(parts) == 1:
+            # Only city name provided
+            return None
+    return None
+
+

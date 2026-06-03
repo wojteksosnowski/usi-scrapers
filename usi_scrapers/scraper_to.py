@@ -298,6 +298,7 @@ def extract_to_data(html: str, url: str, fetcher: Fetcher = None) -> dict:
         "address": address,
         "city": city,
         "region": region,
+        "street": street,
         "latitude": lat,
         "longitude": lng
     }

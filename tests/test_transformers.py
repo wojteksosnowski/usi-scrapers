@@ -79,3 +79,28 @@ def test_oto_gallery_to_flat_list():
     res = apply_transformer("oto_gallery_to_flat_list", data)
     assert res == ["http://large1.jpg", "http://medium2.jpg"]
 
+def test_clean_street():
+    assert apply_transformer("clean_street", "ul. Akacjowa") == "Akacjowa"
+    assert apply_transformer("clean_street", "ul.Akacjowa") == "Akacjowa"
+    assert apply_transformer("clean_street", "al. Jana Pawła") == "Jana Pawła"
+    assert apply_transformer("clean_street", "Al. Jana Pawła") == "Jana Pawła"
+    assert apply_transformer("clean_street", "Aleja Jana Pawła") == "Aleja Jana Pawła"
+    assert apply_transformer("clean_street", "Prosta 10") == "Prosta 10"
+    assert apply_transformer("clean_street", None) is None
+
+def test_rp_extract_city():
+    assert apply_transformer("rp_extract_city", "Kraków, Czyżyny, ul. Akacjowa") == "Kraków"
+    assert apply_transformer("rp_extract_city", "Warszawa, Mokotów, Sielce, ul. Dziekońskiego 10") == "Warszawa"
+    assert apply_transformer("rp_extract_city", "Gdańsk") == "Gdańsk"
+
+def test_rp_extract_region():
+    assert apply_transformer("rp_extract_region", "Kraków, Czyżyny, ul. Akacjowa") == "Czyżyny"
+    assert apply_transformer("rp_extract_region", "Warszawa, Mokotów, Sielce, ul. Dziekońskiego 10") == "Mokotów"
+    assert apply_transformer("rp_extract_region", "Gdańsk") is None
+
+def test_rp_extract_street():
+    assert apply_transformer("rp_extract_street", "Kraków, Czyżyny, ul. Akacjowa") == "Akacjowa"
+    assert apply_transformer("rp_extract_street", "Warszawa, Mokotów, Sielce, ul. Dziekońskiego 10") == "Dziekońskiego 10"
+    assert apply_transformer("rp_extract_street", "Gdańsk, Zaspa-Rozstaje, Al. Jana Pawła") == "Jana Pawła"
+    assert apply_transformer("rp_extract_street", "Gdańsk") is None
+
