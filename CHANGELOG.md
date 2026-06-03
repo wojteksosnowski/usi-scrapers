@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.9.3] - 2026-06-03
+- **Bugfix**: Corrected `ceiling_height_min` and `ceiling_height_max` configuration blocks in `portal_data_mapping.json` for RynekPierwotny. They are now correctly formatted as dictionaries (`{"path": "...", "transform": "cm_to_m"}`) rather than raw path strings, successfully restoring metric conversion for ceiling heights.
+
 ## [0.9.2] - 2026-06-03
 - **Feature**: Implemented `transform_to_unified(portal_prefix, raw_data)` in `mapping.py` to directly return a fully resolved, unified dictionary representing the final data structure. This effectively shifts all JSON-to-Dict transformation burden completely away from the tracker/app layer, confirming `portal_data_mapping.json` as the exclusive source of truth.
 - **Documentation**: Augmented `CLAUDE.md` and `README.md` to clarify how `portal_data_mapping.json` generates unified structures, addressing visibility and pipeline clarity concerns.
