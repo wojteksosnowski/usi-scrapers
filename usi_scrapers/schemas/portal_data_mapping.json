@@ -19,8 +19,14 @@
         "price_max": "stats.value.ranges_price_max|stats.ranges_price_max",
         "price_m2_min": "stats.value.ranges_price_m2_min|stats.ranges_price_m2_min",
         "price_m2_max": "stats.value.ranges_price_m2_max|stats.ranges_price_m2_max",
-        "ceiling_height_min": "stats.value.ranges_height_min|stats.ranges_height_min",
-        "ceiling_height_max": "stats.value.ranges_height_max|stats.ranges_height_max",
+        "ceiling_height_min": {
+          "path": "stats.value.ranges_height_min|stats.ranges_height_min",
+          "transform": "cm_to_m"
+        },
+        "ceiling_height_max": {
+          "path": "stats.value.ranges_height_max|stats.ranges_height_max",
+          "transform": "cm_to_m"
+        },
         "address": "address.value|address",
         "city": {
           "path": "address.value|address",
