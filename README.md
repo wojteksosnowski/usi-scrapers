@@ -58,13 +58,18 @@ data = fetch_investment(config, fetcher, portal="rp", identifier="123", dev_slug
 
 ## Mapowanie Danych (`portal_data_mapping.json`)
 
-Plik `usi_scrapers/schemas/portal_data_mapping.json` służy jako centralne źródło prawdy dla ścieżek dostępu do ustrukturyzowanych danych pobranych z portali.
+Plik `usi_scrapers/schemas/portal_data_mapping.json` służy jako centralne, w pełni deklaratywne źródło prawdy dla ścieżek dostępu i transformacji ustrukturyzowanych danych pobranych z portali. Api dla tego pliku ma za zadanie być **agnostyczne w stosunku do źródła danych** (kolejne warstwy aplikacji nie muszą wiedzieć, z jakiego portalu pochodzą wyciągnięte informacje).
 Obsługuje:
 - **Dot notation**: `parent.child.value`
+- **Root access**: `.` dla przekazania całego dokumentu JSON.
 - **Operatory alternatywy**: `pathA|pathB` pozwalają na bezpieczny fallback w przypadku braku lub zmiany nazwy pola.
 - **Indeksowanie i filtrowanie tablic**: `array[0].value` lub `array[name=Cecha].value`.
-- **Ekstrakcja z HTML w locie**: Dostęp do surowego kodu strony poprzez klucz `_raw_html` i wyciąganie z niego wartości za pomocą regexów (np. `{"path": "_raw_html", "regex": "(?s)class=\"dev-link\" href=\"([^\"]+)\""}`).
-- **Ujednolicone współrzędne**: Wszystkie 3 portale obsługują płaskie klucze `latitude` oraz `longitude` co ułatwia geolokalizację z pominięciem specyficznych struktur (`geo_point` lub `_raw_mapa`).
+- **Ekstrakcja z HTML w locie**: Dostęp do surowego HTML poprzez `_raw_html` z ewaluacją po wyrażeniach (np. `{"path": "_raw_html", "regex": "(?s)class=\"dev-link\""}`).
+- **Transformatory (`transform`)**: Konwersja i standaryzacja danych w locie, dzięki dynamicznemu systemowi transformatorów z pliku `transformers.py` (np. operacje: `cm_to_m`, `date_to_quarter`, ekstrakcje adresów typu `clean_street`, `rp_extract_city`, czy obróbka galerii np. `rp_gallery_to_flat_list`). Dodatkowo na poziomie transformatora istnieje ujednolicone rozliczanie się z jednostek (np. PLN_na_m2). 
+- **Ewaluacja sygnałów (`evaluate_signals`)**: Potężny mechanizm ewaluacji logicznej. Pozwala np. na ustalanie segmentu (apartament/inwestycja) czy typu transakcji, przeszukując zestaw dróg/ścieżek.
+
+### System Transformatorów (Transformers)
+Znajdujący się w `transformers.py` moduł korzystający ze wzorca dekoratora `@register_transformer`. Pozwala na całkowitą izolację problemów związanych z formatowaniem i kategoryzacją poszczególnych pól. Wszelkie modyfikacje danych (jak np. ucinanie przedrostków "ul." czy dzielenie wieloczłonowych miast dla Rynku Pierwotnego) realizowane są po stronie poszczególnych "małych, testowalnych" funkcji przypisanych bezpośrednio w pliku mapującym.
 
 ## Testy
 
