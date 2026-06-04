@@ -3,8 +3,9 @@ from pathlib import Path
 from typing import Optional
 from .models import ScraperConfig
 from .fetcher import Fetcher
-from .utils.io import save_raw_json
+from .utils.io import get_investment_dir, get_image_dir, save_raw_json
 from .utils.images import save_images
+from .storage import StorageResolver
 
 from . import get_logger
 
@@ -17,9 +18,9 @@ class TechnicalDataManager:
     """
     def __init__(self, config: ScraperConfig):
         self.config = config
+        self.resolver = StorageResolver(config)
 
-
-    def save_raw_data(self, data: dict, target_dir: Path, portal_prefix: str) -> Optional[Path]:
+    def save_raw_data(self, data: dict, portal_prefix: str) -> Optional[Path]:
         """Saves virgin raw JSON for an investment"""
         from .utils.integrity import check_evolution
         evolution = check_evolution(data, portal_prefix)
@@ -41,9 +42,23 @@ class TechnicalDataManager:
         else:
             portal_id = None
         
-        return save_raw_json(raw_details, target_dir, portal_prefix, portal_id=portal_id)
+        dev_slug = data.get("developer_slug")
+        inv_slug = data.get("investment_slug")
+        if not dev_slug or not inv_slug or str(dev_slug).lower() == "unknown":
+            logger.error(f"save_raw_data: missing dev_slug or inv_slug in data for {portal_prefix}. Aborting.")
+            return None
 
-    def sync_images(self, urls: list[str], images_dir: Path) -> list[str]:
+        from .utils.io import save_raw_json, get_investment_dir
+        target_dir = get_investment_dir(dev_slug, inv_slug, self.config.public_dir)
+        file_path = save_raw_json(raw_details, target_dir, portal_prefix, portal_id=portal_id)
+        
+        # Update the index after saving new raw data
+        if file_path and portal_id:
+            self.resolver.update_investment_index(portal_prefix, portal_id, dev_slug, inv_slug)
+            
+        return file_path
+
+    def sync_images(self, urls: list[str], target_image_dir: Path) -> list[str]:
         """Downloads and saves images, returns list of filenames"""
-        return save_images(urls, images_dir, self.config)
-
+        from .utils.images import save_images
+        return save_images(urls, target_image_dir, self.config)

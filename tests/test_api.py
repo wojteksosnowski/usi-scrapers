@@ -44,7 +44,7 @@ def test_process_batch_success_rp(mock_sleep, mock_scrape, mock_mgr_cls, config,
     mock_scrape.assert_any_call("222", fetcher)
     assert mock_mgr_cls.return_value.save_raw_data.call_count == 2
     # portal_prefix for rp
-    mock_mgr_cls.return_value.save_raw_data.assert_called_with(GOOD_INV, Path(config.public_dir) / "USIdata" / "dev-x" / "inwestycja-x", "rp")
+    mock_mgr_cls.return_value.save_raw_data.assert_any_call(GOOD_INV, "rp")
 
 
 @patch("usi_scrapers.api.TechnicalDataManager")
@@ -57,8 +57,7 @@ def test_process_batch_success_otodom(mock_sleep, mock_scrape, mock_mgr_cls, con
 
     assert len(results) == 1
     mock_scrape.assert_called_once_with("https://otodom.pl/x", fetcher)
-    # portal_prefix for otodom -> "oto"
-    mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, Path(config.public_dir) / "USIdata" / "dev-x" / "inwestycja-x", "oto")
+    mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, "oto")
 
 
 @patch("usi_scrapers.api.TechnicalDataManager")
@@ -70,8 +69,7 @@ def test_process_batch_success_tabelaofert(mock_sleep, mock_scrape, mock_mgr_cls
     results = process_batch(config, fetcher, "tabelaofert", ["https://tabelaofert.pl/x,i1"], delay_range=(0, 0))
 
     assert len(results) == 1
-    # portal_prefix for tabelaofert -> "to"
-    mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, Path(config.public_dir) / "USIdata" / "dev-x" / "inwestycja-x", "to")
+    mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, "to")
 
 
 # ---------------------------------------------------------------------------
@@ -321,4 +319,55 @@ def test_fetch_investment_unsupported_portal(config, fetcher):
     result = fetch_investment(config, fetcher, "unknown_portal", "id")
     assert "error" in result
     assert "Unknown portal alias" in result["error"]
+
+# ---------------------------------------------------------------------------
+# get_raw_data and get_raw_dev_data
+# ---------------------------------------------------------------------------
+
+@patch("usi_scrapers.storage.get_resolver")
+def test_get_raw_data_found(mock_get_resolver, config, tmp_path):
+    # Mock the resolver
+    mock_resolver = MagicMock()
+    mock_resolver.lookup_investment.return_value = ("dev-x", "inv-x")
+    mock_get_resolver.return_value = mock_resolver
+    
+    # Setup filesystem
+    config.public_dir = str(tmp_path)
+    inv_dir = tmp_path / "USIdata" / "dev-x" / "inv-x"
+    inv_dir.mkdir(parents=True)
+    raw_file = inv_dir / "raw_rp_123.json"
+    raw_file.write_text('{"id": 123, "name": "Test"}')
+
+    from usi_scrapers.api import get_raw_data
+    data = get_raw_data(config, "rp", "123")
+    assert data is not None
+    assert data["name"] == "Test"
+    mock_resolver.lookup_investment.assert_called_once_with("rp", "123")
+
+@patch("usi_scrapers.storage.get_resolver")
+def test_get_raw_data_not_found(mock_get_resolver, config):
+    mock_resolver = MagicMock()
+    mock_resolver.lookup_investment.return_value = None
+    mock_get_resolver.return_value = mock_resolver
+
+    from usi_scrapers.api import get_raw_data
+    assert get_raw_data(config, "rp", "999") is None
+
+@patch("usi_scrapers.storage.get_resolver")
+def test_get_raw_dev_data_found(mock_get_resolver, config, tmp_path):
+    mock_resolver = MagicMock()
+    mock_resolver.lookup_developer.return_value = "dev-x"
+    mock_get_resolver.return_value = mock_resolver
+    
+    config.public_dir = str(tmp_path)
+    dev_dir = tmp_path / "USIdev" / "dev-x"
+    dev_dir.mkdir(parents=True)
+    raw_file = dev_dir / "raw_rp_123.json"
+    raw_file.write_text('{"id": 123, "dev": "Test Dev"}')
+
+    from usi_scrapers.api import get_raw_dev_data
+    data = get_raw_dev_data(config, "rp", "123")
+    assert data is not None
+    assert data["dev"] == "Test Dev"
+    mock_resolver.lookup_developer.assert_called_once_with("rp", "123")
 

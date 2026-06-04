@@ -56,7 +56,7 @@ RE_DEV_LIST_LINK = re.compile(r'href="https://tabelaofert\.pl(/katalog-firm/dewe
 RE_PAGE_NUM = re.compile(r'href="[^"]*[?&]page=(\d+)"')
 # --------------------------------
 
-def download_raw_to_dev_json(url: str, dev_slug: Optional[str], fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
+def download_raw_to_dev_json(url: str, target_dir: Path, fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
     """
     Downloads raw JSON for a TabelaOfert developer profile and saves it.
     Enforces PURE-RAW rule: saves the exact JSON from the portal.
@@ -101,7 +101,7 @@ def download_raw_to_dev_json(url: str, dev_slug: Optional[str], fetcher: Fetcher
         return None
 
     return generic_download_dev_json(
-        fetcher, config, url, dev_slug, "to",
+        fetcher, config, url, target_dir, "to",
         fetch_func=fetch_to_dev,
         extract_id_func=extract_id,
         extract_logo_func=extract_logo,
@@ -346,7 +346,13 @@ def download_raw_to_json(url: str, target_dir: Path, fetcher: Fetcher, config: S
             data["_raw_mapa"] = map_data
 
     cleaned_html = clean_to_html(html)
-    save_raw_html(cleaned_html, target_dir, "to", portal_id=portal_id)
+    # Temporary fallback to save HTML using the new target_dir
+    # save_raw_html signature still requires slugs, let's bypass it and write directly or wait
+    # Actually, Krok 02.03 is about removing dev_slug/inv_slug from TechnicalDataManager,
+    # but we should probably refactor save_raw_html as well if it uses them.
+    # We will modify save_raw_html in io.py next.
+    from .utils.io import save_raw_html
+    save_raw_html(cleaned_html, target_dir, "to", portal_id=portal_id or "unknown")
     
     # Dodajemy surowy i odchudzony kod HTML do obiektu, żeby parser mógł korzystać z regexów "w locie"
     data["_raw_html"] = cleaned_html
@@ -688,16 +694,13 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     if developer_slug:
         logger.info(f"Matched TO klient-id {klient_id} to existing developer slug: {developer_slug}")
 
-    # Resolve (if needed) and Update developer data using the internal API
-    # If developer_slug is None, it will be resolved from the profile data
-    to_dev_url = None
-    # Zawsze wyciagamy natywny temp_slug ze zrodla HTML inwestycji
+    temp_slug = None
     m = RE_KRYTERIUM_ID.search(html)
     if not m:
         m = RE_KRYTERIUM_OBJ.search(html)
-    temp_slug = m.group(1) if m else None
+    if m:
+        temp_slug = m.group(1)
 
-    # Ewentualny fallback na linki:
     if not temp_slug or temp_slug == "unknown":
         dev_links = RE_DEV_LINK.findall(html)
         city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
@@ -706,13 +709,8 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
                 temp_slug = s
                 break
 
-    if temp_slug:
-        to_dev_url = portal_url("to", "developer", slug=temp_slug)
-
-    if to_dev_url:
-        developer_slug = download_raw_to_dev_json(to_dev_url, developer_slug, fetcher, fetcher.config)
-        if developer_slug:
-            logger.info(f"Resolved/Updated developer '{developer_slug}' data from TabelaOfert.")
+    if temp_slug and not developer_slug:
+        developer_slug = temp_slug
 
     if not developer_slug:
         err_msg = (
@@ -767,8 +765,6 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         "source": "tabelaofert.pl",
         "to_id": _extract_to_id(url),
         "to_url": url,
-        "vendor_id": resolve_path(product, to_mapping.get("vendor_id")),
-        "developer_id": resolve_path(product, to_mapping.get("vendor_id")),
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,
         "name": resolve_path(product, to_mapping.get("name")) or product.get("name"),

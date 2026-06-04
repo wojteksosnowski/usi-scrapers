@@ -1,5 +1,5 @@
 {
-  "version": "1.7.5",
+  "version": "1.7.4",
   "description": "Source of truth for fundamental data keys across portals. Verified strictly against non-mock raw records and specialized test JSONs.",
   "portals": {
     "rp": {
@@ -7,10 +7,8 @@
       "investment": {
         "id": "id",
         "slug": "slug",
-        "investment_slug": "slug",
         "name": "name",
         "developer_id": "vendor.value.id|vendor.id|developer_id|vendor_id",
-        "vendor_id": "vendor.value.id|vendor.id|developer_id|vendor_id",
         "developer_slug": {
           "path": "vendor.value.slug|vendor.slug|developer_slug|vendor_slug",
           "regex": "^[a-z0-9\\-]+$"
@@ -19,19 +17,19 @@
         "units_count": "stats.value.properties_count_for_sale|stats.properties_count_for_sale",
         "price_min": {
           "path": "stats.value.ranges_price_min|stats.ranges_price_min",
-          "transform": "price_to_numeric"
+          "transform": "to_float"
         },
         "price_max": {
           "path": "stats.value.ranges_price_max|stats.ranges_price_max",
-          "transform": "price_to_numeric"
+          "transform": "to_float"
         },
         "price_m2_min": {
           "path": "stats.value.ranges_price_m2_min|stats.ranges_price_m2_min",
-          "transform": "price_to_numeric"
+          "transform": "to_float"
         },
         "price_m2_max": {
           "path": "stats.value.ranges_price_m2_max|stats.ranges_price_m2_max",
-          "transform": "price_to_numeric"
+          "transform": "to_float"
         },
         "ceiling_height_min": {
           "path": "stats.value.ranges_height_min|stats.ranges_height_min",
@@ -86,10 +84,6 @@
         "amenities": {
           "path": "features",
           "transform": "rp_extract_amenities"
-        },
-        "delivery_date": {
-          "path": "construction_date_range.value.upper|construction_date_range.upper",
-          "transform": "delivery_date_to_quarter"
         }
       },
       "developer": {
@@ -115,13 +109,8 @@
           "path": "ad.slug",
           "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
         },
-        "investment_slug": {
-          "path": "ad.slug",
-          "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
-        },
         "name": "ad.title|title",
         "developer_id": "ad.agency.id|agency_id|owner.id",
-        "vendor_id": "ad.agency.id|agency_id|owner.id",
         "developer_name": "ad.agency.name|agency_name|owner.name",
         "developer_slug": {
           "path": "ad.agency.url",
@@ -130,17 +119,17 @@
         "units_count": "ad.target.Number_of_properties",
         "price_min": {
           "path": "ad.target.Price",
-          "transform": "price_to_numeric"
+          "transform": "to_float"
         },
         "price_m2_min": {
           "path": "ad.characteristics[key=price_per_m].value",
-          "unit": "PLN/m2",
-          "transform": "price_to_numeric"
+          "transform": "to_float",
+          "unit": "PLN/m2"
         },
         "price_m2_max": {
           "path": "ad.characteristics[key=price_per_m].value",
-          "unit": "PLN/m2",
-          "transform": "price_to_numeric"
+          "transform": "to_float",
+          "unit": "PLN/m2"
         },
         "ceiling_height_min": {
           "path": "ad.characteristics[key=ceiling_height].value",
@@ -168,6 +157,7 @@
           "lat": "ad.location.coordinates.latitude",
           "lon": "ad.location.coordinates.longitude"
         },
+        "status": "ad.status",
         "delivery_raw": "ad.topInformation",
         "delivery_fallback_quarter": "ad.investmentEstimatedDelivery.quarter",
         "delivery_fallback_year": "ad.investmentEstimatedDelivery.year",
@@ -210,10 +200,7 @@
         },
         "delivery_date": {
           "path": "ad.topInformation",
-          "transform": "oto_extract_delivery"
-        },
-        "listing_status": {
-          "path": "ad.status"
+          "transform": "oto_delivery_date"
         }
       },
       "developer": {
@@ -236,16 +223,8 @@
           "path": "url",
           "regex": "inwestycja/([^,]+)"
         },
-        "investment_slug": {
-          "path": "url",
-          "regex": "inwestycja/([^,]+)"
-        },
         "name": "name",
         "developer_id": {
-          "path": "brand.logo",
-          "regex": "\\/(\\d+)-"
-        },
-        "vendor_id": {
           "path": "brand.logo",
           "regex": "\\/(\\d+)-"
         },
@@ -254,21 +233,21 @@
         "units_count": "offers.offerCount",
         "price_min": {
           "path": "offers.lowPrice",
-          "transform": "price_to_numeric"
+          "transform": "to_float"
         },
         "price_max": {
           "path": "offers.highPrice",
-          "transform": "price_to_numeric"
+          "transform": "to_float"
         },
         "price_m2_min": {
           "path": "offers.pricePerSqm",
-          "unit": "PLN/m2",
-          "transform": "price_to_numeric"
+          "transform": "to_float",
+          "unit": "PLN/m2"
         },
         "price_m2_max": {
           "path": "offers.pricePerSqm",
-          "unit": "PLN/m2",
-          "transform": "price_to_numeric"
+          "transform": "to_float",
+          "unit": "PLN/m2"
         },
         "ceiling_height_min": {
           "path": "additionalProperty[name=Wysokość mieszkania].value|additionalProperty[name=Wys. apartamentu inwestycyjnego].value",

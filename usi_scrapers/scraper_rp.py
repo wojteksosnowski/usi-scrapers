@@ -16,7 +16,7 @@ from . import get_logger
 
 logger = get_logger(__name__)
 
-def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: Optional[str], fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
+def download_raw_rp_dev_json(vendor_id_or_slug: str, target_dir: Path, fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
     """
     Downloads raw JSON for an RP developer profile and saves it.
     Also downloads developer logo when found in the API response.
@@ -36,7 +36,7 @@ def download_raw_rp_dev_json(vendor_id_or_slug: str, dev_slug: Optional[str], fe
     dev_url = portal_url("rp", "developer", slug=vendor_id_or_slug) if not str(vendor_id_or_slug).isdigit() else None
     
     return generic_download_dev_json(
-        fetcher, config, vendor_id_or_slug, dev_slug, "rp",
+        fetcher, config, vendor_id_or_slug, target_dir, "rp",
         fetch_func=fetch_rp_developer_profile,
         extract_id_func=extract_id,
         extract_logo_func=extract_rp_dev_logo,
@@ -64,7 +64,7 @@ def fetch_rp_developer_profile(vendor_id_or_slug: str, fetcher: Fetcher) -> dict
     logger.info(f"Fetching RynekPierwotny developer profile for ID: {vendor_id} from {url}")
     return fetcher.fetch_json(url, use_scraperapi=False) or {}
 
-def download_raw_rp_json(offer_id: str, dev_slug: str, inv_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
+def download_raw_rp_json(offer_id: str, target_dir: Path, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
     Downloads raw JSON for an RP investment (details + gallery) and saves it to the database.
     Does not process images or adapt data.
@@ -74,18 +74,12 @@ def download_raw_rp_json(offer_id: str, dev_slug: str, inv_slug: str, fetcher: F
         logger.error(f"Failed to fetch RP details for ID {offer_id}")
         return None
 
-    # Resolve Investment Slug (ID-based lookup)
-    existing_inv_slug = lookup_investment_by_id(config.public_dir, dev_slug, "rp", offer_id)
-    if existing_inv_slug:
-        inv_slug = existing_inv_slug
-        logger.info(f"Matched investment ID {offer_id} to existing investment slug: {inv_slug}")
-
     # Fetch gallery and attach to details
     gallery_data = fetcher.fetch_json(portal_api_url("rp", "offer_gallery", offer_id=offer_id), use_scraperapi=False)
     if gallery_data:
         details["_raw_gallery"] = gallery_data
 
-    return save_raw_json(details, config.public_dir, dev_slug, inv_slug, "rp", portal_id=offer_id)
+    return save_raw_json(details, target_dir, "rp", portal_id=offer_id)
 
 def fetch_rp_details(offer_id: str, fetcher: Fetcher) -> dict:
     """
@@ -321,24 +315,30 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
             return val["value"]
         return val
 
-    vendor_id = resolve_path(details, rp_mapping.get("vendor_id"))
+    vendor_id = resolve_path(details, rp_mapping.get("developer_id"))
     
     if not vendor_id:
         return {"error": f"Failed to resolve vendor ID from API for offer {offer_id}"}
 
+    # Resolve developer using local ID lookup first
     developer_slug = None
-
-    # 1. ID-based lookup (highest priority)
     existing_slug = lookup_developer_by_id(fetcher.config.public_dir, "rp", vendor_id)
     if existing_slug:
         developer_slug = existing_slug
         logger.info(f"Matched vendor ID {vendor_id} to existing developer slug: {developer_slug}")
-
-    # Resolve (if needed) and Update developer data using the internal API
-    # If developer_slug is None, it will be resolved from the profile data
-    developer_slug = download_raw_rp_dev_json(str(vendor_id), developer_slug, fetcher, fetcher.config)
-    if developer_slug:
-        logger.info(f"Resolved/Updated developer '{developer_slug}' data from RynekPierwotny.")
+    else:
+        # If we can't find it locally, we must rely on the tracker to register it later.
+        # But we need a slug to return in the result dict.
+        # RP offers usually include a slug.
+        v_slug_path = rp_mapping.get("developer_slug")
+        if v_slug_path:
+            developer_slug = resolve_path(details, v_slug_path)
+            
+        if not developer_slug:
+            # Fallback
+            from .utils.string import slugify
+            dev_name = resolve_path(details, rp_mapping.get("developer_name")) or ""
+            developer_slug = slugify(dev_name) if dev_name else f"vendor-{vendor_id}"
 
     if not developer_slug:
         dev_url = portal_url("rp", "developer", slug=str(vendor_id))
@@ -348,7 +348,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         )
         return {"error": err_msg}
 
-    investment_slug = resolve_path(details, rp_mapping.get("investment_slug"))
+    investment_slug = resolve_path(details, rp_mapping.get("slug"))
     if not investment_slug:
         return {"error": f"Failed to resolve investment_slug from API for offer {offer_id}"}
 
@@ -396,8 +396,6 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
     result = {
         "source": "rynekpierwotny.pl",
         "id": offer_id,
-        "vendor_id": vendor_id,
-        "developer_id": vendor_id,
         "url": url,
         "developer_slug": developer_slug,
         "investment_slug": investment_slug,

@@ -56,9 +56,9 @@ def clean_filename(url: str) -> str:
 
     return filename
 
-def download_image(url: str, images_dir: Path, config: ScraperConfig) -> tuple[str, bool]:
+def download_image(url: str, target_dir: Path, force_download: bool) -> tuple[str, bool]:
     """
-    Downloads image from URL and saves it to {public_dir}/USI/{dev_slug}/{inv_slug}/{filename}.
+    Downloads image from URL and saves it to {target_dir}/{filename}.
     Returns a tuple: (filename if successful or empty string otherwise, was_skipped boolean).
     """
     filename = clean_filename(url)
@@ -67,19 +67,15 @@ def download_image(url: str, images_dir: Path, config: ScraperConfig) -> tuple[s
         logger.warning(f"Could not extract filename from URL: {url}")
         return "", False
         
-    # Standardize image directory path
-    target_dir = images_dir
-    
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
     except PermissionError:
-        # macOS drive permission issues
         logger.debug(f"Permission denied creating/accessing directory {target_dir}, proceeding anyway")
         
     target_path = target_dir / filename
     
     try:
-        if not config.force_image_download and target_path.exists():
+        if not force_download and target_path.exists():
             # Skip if already exists and is not a tiny placeholder
             if target_path.stat().st_size > 1024:
                 return filename, True
@@ -102,15 +98,15 @@ def download_image(url: str, images_dir: Path, config: ScraperConfig) -> tuple[s
         logger.error(f"Error downloading image {url}: {e}")
         return "", False
 
-def download_developer_logo(url: str, dev_slug: str, config: ScraperConfig, portal_prefix: str = "raw", portal_id: str | None = None) -> str:
+def download_developer_logo(url: str, target_dir: Path, portal_prefix: str = "raw", portal_id: str | None = None) -> str:
     """
-    Downloads developer logo and saves to {public_dir}/USIdev/{dev_slug}/logo_{portal_prefix}_{portal_id}.{ext}.
+    Downloads developer logo and saves to {target_dir}/logo_{portal_prefix}_{portal_id}.{ext}.
     portal_id is required — ID-only naming enforced (no slug fallback).
     Returns filename if successful, empty string otherwise.
     """
     if not portal_id:
         raise ValueError(
-            f"download_developer_logo: portal_id is required for {portal_prefix}/{dev_slug}. "
+            f"download_developer_logo: portal_id is required for {portal_prefix}. "
             "Slug-based fallback is not allowed (ID-only policy)."
         )
 
@@ -121,7 +117,6 @@ def download_developer_logo(url: str, dev_slug: str, config: ScraperConfig, port
     
     filename = f"logo_{portal_prefix}_{portal_id}{suffix}"
 
-    target_dir = config.public_dir / "USIdev" / dev_slug
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
     except PermissionError:
@@ -149,7 +144,7 @@ def download_developer_logo(url: str, dev_slug: str, config: ScraperConfig, port
         return ""
 
 
-def save_images(urls: list[str], images_dir: Path, config: ScraperConfig) -> list[str]:
+def save_images(urls: list[str], target_dir: Path, config: ScraperConfig) -> list[str]:
     """
     Downloads and saves a list of images.
     Returns list of successful filenames.
@@ -159,7 +154,7 @@ def save_images(urls: list[str], images_dir: Path, config: ScraperConfig) -> lis
     unique_urls = [u for u in set(urls) if u and u.strip()]
     
     for url in unique_urls:
-        fname, was_skipped = download_image(url, images_dir, config)
+        fname, was_skipped = download_image(url, target_dir, config.force_image_download)
         if fname:
             saved_filenames.append(fname)
             if was_skipped:
@@ -167,10 +162,10 @@ def save_images(urls: list[str], images_dir: Path, config: ScraperConfig) -> lis
             
     downloaded_count = len(saved_filenames) - skipped_count
     if downloaded_count > 0:
-        logger.info(f"Successfully downloaded {downloaded_count} images (skipped {skipped_count} existing) in {images_dir}")
+        logger.info(f"Successfully downloaded {downloaded_count} images (skipped {skipped_count} existing) for {target_dir.name}")
     elif skipped_count > 0:
-        logger.info(f"Skipped {skipped_count} existing images in {images_dir}")
+        logger.info(f"Skipped {skipped_count} existing images for {target_dir.name}")
     else:
-        logger.info(f"No valid images to process in {images_dir}")
+        logger.info(f"No valid images to process for {target_dir.name}")
         
     return saved_filenames

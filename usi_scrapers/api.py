@@ -105,6 +105,7 @@ def process_batch(
         portal_prefix = "raw"
 
     for i, identifier in enumerate(identifiers):
+        
         current_index = i + 1
         progress_percent = int((current_index / total) * 100)
         
@@ -118,7 +119,7 @@ def process_batch(
                 if not scrape_func:
                     raise ValueError(f"No scrape function found for portal: {portal_prefix}")
                 
-                data = scrape_func(identifier, fetcher)
+                data = scrape_func(str(identifier), fetcher)
                 
                 if data and "error" in data:
                     error_msg = str(data["error"])
@@ -153,22 +154,17 @@ def process_batch(
         inv_info = {"identifier": identifier}
         
         if status == "success" and data:
-            dev_slug = data.get("developer_slug")
-            inv_slug = data.get("investment_slug")
-            
-            if not dev_slug or not inv_slug or str(dev_slug).lower() == "unknown":
+            if not target_dir or not target_image_dir:
                 status = "failed"
-                error_msg = f"Invalid or incomplete data: missing or unknown developer_slug ({dev_slug}) or investment_slug ({inv_slug})"
+                error_msg = "Invalid or incomplete data: missing target_dir or target_image_dir in target"
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
-                inv_info["dev_slug"] = dev_slug
-                inv_info["inv_slug"] = inv_slug
-                
-                target_dir = Path(config.public_dir) / "USIdata" / dev_slug / inv_slug
-                images_dir = Path(config.public_dir) / "USI" / dev_slug / inv_slug
+                # Zapis danych surowych
                 manager.save_raw_data(data, target_dir, portal_prefix)
+                
+                # Synchronizacja zdjęć
                 image_urls = data.get("image_urls", [])
-                saved_images = manager.sync_images(image_urls, images_dir)
+                saved_images = manager.sync_images(image_urls, target_image_dir)
                 msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
         else:
             msg = f"Pobranie nieudane: {error_msg}"
@@ -371,7 +367,7 @@ def fetch_investment(
         if not scrape_func:
             raise ValueError(f"Unsupported portal for fetching: {portal}")
 
-        data = scrape_func(identifier, fetcher)
+        data = scrape_func(str(identifier), fetcher)
         if data and data.get("error"):
             error_msg = str(data["error"])
         else:
@@ -401,29 +397,101 @@ def fetch_investment(
 
     return data
 
-def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, target_dir: Path) -> Optional[Path]:
-    """Pobiera i zapisuje surowy JSON inwestycji."""
+def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str) -> Dict[str, Any]:
+    """Pobiera i zapisuje surowy JSON inwestycji. Zwraca status i metadane."""
     p = resolve_prefix(portal)
-    func = get_scraper_func(p, "download_raw")
-    if func:
-        return func(identifier, target_dir, fetcher, config)
-    return None
+    scrape_func = get_scraper_func(p, "scrape")
+    if not scrape_func:
+        return {"status": "error", "message": f"Unsupported portal for downloading: {portal}"}
+    
+    data = scrape_func(identifier, fetcher)
+    if data and "error" not in data:
+        from .manager import TechnicalDataManager
+        manager = TechnicalDataManager(config)
+        path = manager.save_raw_data(data, p)
+        if path:
+            portal_id = data.get("id") or data.get("oto_url_id") or data.get("to_id")
+            return {
+                "status": "success",
+                "portal_id": str(portal_id),
+                "dev_slug": data.get("developer_slug"),
+                "inv_slug": data.get("investment_slug")
+            }
+        else:
+            return {"status": "error", "message": "Failed to save raw data"}
+    else:
+        return {"status": "error", "message": data.get("error", "Unknown error")}
 
-def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: Optional[str] = None) -> Optional[str]:
-    """Pobiera i zapisuje surowy JSON profilu dewelopera. Zwraca ustalony slug."""
+def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: Optional[str] = None) -> Dict[str, Any]:
+    """Pobiera i zapisuje surowy JSON profilu dewelopera."""
     p = resolve_prefix(portal)
     func = get_scraper_func(p, "download_raw_dev")
-    if func:
-        return func(identifier, dev_slug, fetcher, config)
-    return None
+    if not func:
+        return {"status": "error", "message": f"No dev scraper found for {portal}"}
+        
+    target_dir = Path(config.public_dir) / "USIdev" / (dev_slug or "unknown")
+    result_slug = func(identifier, target_dir, fetcher, config)
+    if result_slug:
+        return {"status": "success", "dev_slug": result_slug}
+    return {"status": "error", "message": "Failed to download developer data"}
 
-def save_raw(config: ScraperConfig, data: Dict[str, Any], target_dir: Path, portal_prefix: str, portal_id: str) -> Path:
+def get_raw_data(config: ScraperConfig, portal: str, portal_id: str) -> Optional[Dict[str, Any]]:
+    """Pobiera surowy JSON inwestycji używając StorageResolvera do znalezienia ścieżki."""
+    from .storage import get_resolver
+    import json
+    p = resolve_prefix(portal)
+    resolver = get_resolver(config)
+    result = resolver.lookup_investment(p, portal_id)
+    if not result:
+        return None
+    
+    dev_slug, inv_slug = result
+    from .utils.io import get_investment_dir
+    target_dir = get_investment_dir(dev_slug, inv_slug, config.public_dir)
+    file_path = target_dir / f"raw_{p}_{portal_id}.json"
+    
+    if not file_path.exists():
+        return None
+        
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def get_raw_dev_data(config: ScraperConfig, portal: str, portal_id: str) -> Optional[Dict[str, Any]]:
+    """Pobiera surowy JSON dewelopera używając StorageResolvera do znalezienia ścieżki."""
+    from .storage import get_resolver
+    import json
+    p = resolve_prefix(portal)
+    resolver = get_resolver(config)
+    dev_slug = resolver.lookup_developer(p, portal_id)
+    if not dev_slug:
+        return None
+    
+    target_dir = Path(config.public_dir) / "USIdev" / dev_slug
+    file_path = target_dir / f"raw_{p}_{portal_id}.json"
+    
+    if not file_path.exists():
+        return None
+        
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def save_raw(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, inv_slug: str, portal_prefix: str, portal_id: str) -> Path:
     """Zapisuje gotowy słownik jako surowy JSON inwestycji. portal_id jest wymagane."""
-    return save_raw_json(data, target_dir, portal_prefix, portal_id=portal_id)
+    from .utils.io import save_raw_json, get_investment_dir
+    from .storage import get_resolver
+    target_dir = get_investment_dir(dev_slug, inv_slug, config.public_dir)
+    file_path = save_raw_json(data, target_dir, portal_prefix, portal_id=portal_id)
+    get_resolver(config).update_investment_index(portal_prefix, portal_id, dev_slug, inv_slug)
+    return file_path
 
 def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, portal_prefix: str, portal_id: str) -> Path:
     """Zapisuje gotowy słownik jako surowy JSON dewelopera. portal_id jest wymagane."""
-    return save_dev_raw_json(data, config.public_dir, dev_slug, portal_prefix, portal_id=portal_id)
+    from .utils.io import save_dev_raw_json
+    from .storage import get_resolver
+    target_dir = Path(config.public_dir) / "USIdev" / dev_slug
+    file_path = save_dev_raw_json(data, target_dir, portal_prefix, portal_id=portal_id)
+    get_resolver(config).update_developer_index(portal_prefix, portal_id, dev_slug)
+    return file_path
 
 def list_developers(
     config: ScraperConfig,

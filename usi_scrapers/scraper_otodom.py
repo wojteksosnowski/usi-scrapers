@@ -46,7 +46,7 @@ def _parse_otodom_item(item: dict, offer_id=None) -> dict | None:
     }
 
 
-def download_raw_otodom_dev_json(url: str, dev_slug: Optional[str], fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
+def download_raw_otodom_dev_json(url: str, target_dir: Path, fetcher: Fetcher, config: ScraperConfig) -> Optional[str]:
     """
     Downloads raw JSON for an Otodom developer profile and saves it.
     Also downloads developer logo when found in __NEXT_DATA__.
@@ -80,20 +80,8 @@ def download_raw_otodom_dev_json(url: str, dev_slug: Optional[str], fetcher: Fet
         logger.error(f"Failed to fetch Otodom developer data from {url}")
         return None
 
-    if not dev_slug:
-        dev_mapping = get_mapping("oto", "developer")
-        slug_path = dev_mapping.get("slug")
-        if slug_path:
-            dev_slug = resolve_path(data, slug_path)
-            
-        if not dev_slug:
-            # Fallback for search-results style
-            items = data.get("data", {}).get("searchAds", {}).get("items", [])
-            if items and isinstance(items, list):
-                dev_slug = items[0].get("agency", {}).get("slug")
-                
     return generic_download_dev_json(
-        fetcher, config, url, dev_slug, "oto",
+        fetcher, config, url, target_dir, "oto",
         fetch_func=lambda u, f: data, # reuse already fetched data
         extract_id_func=extract_id,
         extract_logo_func=extract_otodom_dev_logo,
@@ -151,14 +139,7 @@ def download_raw_otodom_json(url: str, target_dir: Path, fetcher: Fetcher, confi
     if not oto_portal_id and hash_part:
         oto_portal_id = f"ID{hash_part}"
 
-    # Resolve Investment Slug (ID-based lookup)
-    if oto_portal_id:
-        existing_inv_slug = lookup_investment_by_id(config.public_dir, dev_slug, "oto", oto_portal_id)
-        if existing_inv_slug:
-            inv_slug = existing_inv_slug
-            logger.info(f"Matched investment ID {oto_portal_id} to existing investment slug: {inv_slug}")
-
-    return save_raw_json(page_props, config.public_dir, dev_slug, inv_slug, "oto", portal_id=oto_portal_id)
+    return save_raw_json(page_props, target_dir, "oto", portal_id=oto_portal_id)
 
 def fetch_otodom_html(url: str, fetcher: Fetcher) -> str:
     """Fetches the Otodom URL using the centralized Fetcher."""
@@ -336,7 +317,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     # ID resolution via mapping (Standardized on alphanumeric hash as primary ID)
     hash_id = resolve_path(page_props, oto_mapping.get("id"))
     numeric_id = resolve_path(page_props, oto_mapping.get("numeric_id"))
-    investment_slug = resolve_path(page_props, oto_mapping.get("investment_slug"))
+    investment_slug = resolve_path(page_props, oto_mapping.get("slug"))
     
     # Fallback to URL parsing if mapping fails (e.g. unexpected structure)
     if not investment_slug or not hash_id:
@@ -348,7 +329,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     oto_portal_id = hash_id or (f"ID{numeric_id}" if numeric_id else None)
 
     # Safeguard: Do not process inactive/archived listings to prevent overwriting images
-    status = str(resolve_path(page_props, oto_mapping.get("listing_status")) or "active").lower()
+    status = str(resolve_path(page_props, oto_mapping.get("status")) or "active").lower()
     if status not in ("active", "actual", "none", ""):
         logger.warning(f"Otodom listing is {status}: {url}. Skipping to protect local data.")
         return {"error": f"Listing is inactive (status: {status})"}
@@ -362,7 +343,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     if not agency_name:
         agency_name = resolve_path(page_props, oto_mapping.get("owner_name")) or ""
         
-    agency_id = resolve_path(page_props, oto_mapping.get("vendor_id"))
+    agency_id = resolve_path(page_props, oto_mapping.get("developer_id"))
     if not agency_id:
         dev_mapping = get_mapping("oto", "developer")
         agency_id = resolve_path(page_props, dev_mapping.get("id"))
@@ -376,15 +357,9 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
 
     if agency_url:
         full_agency_url = agency_url if agency_url.startswith("http") else f"https://www.otodom.pl{agency_url}"
-        
-        # Resolve (if needed) and Update developer data using the internal API
-        # If developer_slug is None, it will be resolved from the profile data
-        fetched_slug = download_raw_otodom_dev_json(full_agency_url, developer_slug, fetcher, fetcher.config)
-        if fetched_slug:
-            developer_slug = fetched_slug
-            logger.info(f"Resolved/Updated developer '{developer_slug}' data from Otodom.")
-        else:
-            logger.warning(f"Failed to extract slug from developer URL: {full_agency_url}")
+        parsed_agency = parse_url(full_agency_url)
+        if parsed_agency and parsed_agency.get("developer_slug"):
+            developer_slug = developer_slug or parsed_agency.get("developer_slug")
 
     if not developer_slug:
         # Fallback to generating slug from agency_name if we have the ID and name
@@ -448,8 +423,6 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         "title": resolve_path(page_props, oto_mapping.get("name")),
         "agency_name": agency_name,
         "agency_id": agency_id,
-        "vendor_id": agency_id,
-        "developer_id": agency_id,
         "latitude": lat,
         "longitude": lng,
         "delivery_quarter": delivery_quarter,

@@ -191,9 +191,9 @@ def _oto_extract_delivery(value: Any) -> str | None:
         if isinstance(item, dict) and item.get("label") == "project_finish_date":
             vals = item.get("values")
             if isinstance(vals, list) and len(vals) > 0:
-                return apply_transformer("delivery_date_to_quarter", str(vals[0]))
+                return str(vals[0])
             elif isinstance(vals, str):
-                return apply_transformer("delivery_date_to_quarter", vals)
+                return vals
     return None
 
 @register_transformer("to_extract_amenities")
@@ -216,80 +216,40 @@ def _to_extract_amenities(value: Any) -> list[str]:
                     amenities.append(f"{name}: {val}")
     return amenities
 
-@register_transformer("delivery_date_to_quarter")
-def _delivery_date_to_quarter(value: Any) -> str | None:
-    """
-    Normalizes delivery dates (e.g. 'Q3 2026', '2026-Q3', '3 kw. 2026', 'IV kwartał 2026', '2026-03-01')
-    to 'YYYYQ#' format like '2026Q3'.
-    """
-    if not isinstance(value, str):
+@register_transformer("to_float")
+def _to_float(value: Any) -> float | None:
+    """Safely converts a value to float."""
+    if value is None:
         return None
-    val = value.strip().lower()
-    
-    year_match = re.search(r'(20\d{2})', val)
-    if not year_match:
-        return None
-    year = year_match.group(1)
-    
-    quarter = None
-    if re.search(r'q1|1\s*kw|\bi\s*kw', val):
-        quarter = "Q1"
-    elif re.search(r'q2|2\s*kw|\bii\s*kw', val):
-        quarter = "Q2"
-    elif re.search(r'q3|3\s*kw|\biii\s*kw', val):
-        quarter = "Q3"
-    elif re.search(r'q4|4\s*kw|\biv\s*kw', val):
-        quarter = "Q4"
-    else:
-        date_match = re.search(r'(20\d{2})-(\d{2})-(\d{2})', val)
-        if date_match:
-            month = int(date_match.group(2))
-            q_num = (month - 1) // 3 + 1
-            quarter = f"Q{q_num}"
-    
-    if quarter:
-        q = quarter.replace("Q", "")
-        return f"{q} kw. {year}"
-    return None
-
-@register_transformer("price_to_numeric")
-def _price_to_numeric(value: Any) -> float | None:
-    """
-    Extracts numeric value from a price string (e.g., '1 234 567,89 zł' -> 1234567.89).
-    """
-    if isinstance(value, (int, float)):
-        return float(value)
-    if not isinstance(value, str):
-        return None
-    
-    val = value.replace(',', '.')
-    val = re.sub(r'[^\d\.]', '', val)
-    if not val:
-        return None
-        
-    if val.count('.') > 1:
-        parts = val.split('.')
-        val = "".join(parts[:-1]) + "." + parts[-1]
-        
     try:
-        return float(val)
-    except ValueError:
+        if isinstance(value, str):
+            value = value.replace(",", ".")
+        return float(value)
+    except (ValueError, TypeError):
         return None
 
-@register_transformer("transaction_status_parser")
-def _transaction_status_parser(value: Any) -> str | None:
-    """
-    Interprets transaction status (e.g. from is_rental boolean or string).
-    """
-    if isinstance(value, bool):
-        return "rent" if value else "sale"
-        
-    if isinstance(value, str):
-        val = value.lower()
-        if "wynajem" in val or "rent" in val:
-            return "rent"
-        if "sprzedaż" in val or "sale" in val:
-            return "sale"
-        return val
+@register_transformer("oto_delivery_date")
+def _oto_delivery_date(value: Any) -> str | None:
+    """Extracts project finish date from Otodom topInformation and converts to YYYY-QX."""
+    if not isinstance(value, list):
+        return None
+    val_str = None
+    for item in value:
+        if isinstance(item, dict) and item.get("label") == "project_finish_date":
+            vals = item.get("values")
+            if isinstance(vals, list) and len(vals) > 0:
+                val_str = str(vals[0])
+            elif isinstance(vals, str):
+                val_str = vals
+            break
             
+    if val_str:
+        try:
+            parts = val_str.split("-")
+            if len(parts) >= 2:
+                dy = int(parts[0])
+                dq = (int(parts[1]) - 1) // 3 + 1
+                return f"{dy}-Q{dq}"
+        except (ValueError, TypeError):
+            pass
     return None

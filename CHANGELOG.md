@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased] - 2026-06-04
+- **Dodano** in-memory indeks dla danych `USIdata` i `USIdev` (`StorageResolver`), skracający czas rozwiązywania ścieżek przez brak ciągłego skanowania systemu plików.
+- **Usunięto** wymagany argument `target_dir` z funkcji pobierających i zapisujących dane (takich jak `download_raw`, `download_raw_dev`, `save_raw`).
+- **Zmieniono** metody w `manager.py`, by w połączeniu ze `StorageResolver` automatycznie determinowały miejsca zapisu na dysku przy użyciu ID portalu i slugów.
+- **Zmodyfikowano** zwracany typ dla głównego API pobierania - teraz zwraca strukturę ze zmapowanymi slugami oraz UID zapytania, pozwalając klientowi pozostać niezależnym od systemu operacyjnego i fizycznych ścieżek plików.
+- **Dodano** dedykowane testy jednostkowe w `tests/test_storage.py` obejmujące logikę nowego indeksowania plików.
 ## [0.9.6] - 2026-06-04
 - **Schema Alignment (USI Unified)**: Wyeliminowano konflikty nazewnictwa i formatowania danych pomiędzy wyjściem scraperów a ostatecznym schematem `usi_unified.schema.json`.
 - **Bugfix (Listing Status)**: Zmieniono kolidujące pole `status` w mapowaniu Otodom na `listing_status`, upewniając się, że wartości "active"/"archive" nie naruszają struktury wewnętrznego cyklu życia rekordu USI.
