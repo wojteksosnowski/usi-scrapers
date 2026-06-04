@@ -232,13 +232,13 @@ def _delivery_date_to_quarter(value: Any) -> str | None:
     year = year_match.group(1)
     
     quarter = None
-    if re.search(r'q1|1\s*kw|i\s*kw', val):
+    if re.search(r'q1|1\s*kw|\bi\s*kw', val):
         quarter = "Q1"
-    elif re.search(r'q2|2\s*kw|ii\s*kw', val):
+    elif re.search(r'q2|2\s*kw|\bii\s*kw', val):
         quarter = "Q2"
-    elif re.search(r'q3|3\s*kw|iii\s*kw', val):
+    elif re.search(r'q3|3\s*kw|\biii\s*kw', val):
         quarter = "Q3"
-    elif re.search(r'q4|4\s*kw|iv\s*kw', val):
+    elif re.search(r'q4|4\s*kw|\biv\s*kw', val):
         quarter = "Q4"
     else:
         date_match = re.search(r'(20\d{2})-(\d{2})-(\d{2})', val)
@@ -248,7 +248,8 @@ def _delivery_date_to_quarter(value: Any) -> str | None:
             quarter = f"Q{q_num}"
     
     if quarter:
-        return f"{year}{quarter}"
+        q = quarter.replace("Q", "")
+        return f"{q} kw. {year}"
     return None
 
 @register_transformer("price_to_numeric")

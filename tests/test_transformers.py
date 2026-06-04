@@ -117,7 +117,7 @@ def test_oto_extract_delivery():
         {"label": "other", "values": ["2023"]},
         {"label": "project_finish_date", "values": ["2024-Q3"]}
     ]
-    assert apply_transformer("oto_extract_delivery", data) == "2024Q3"
+    assert apply_transformer("oto_extract_delivery", data) == "3 kw. 2024"
     assert apply_transformer("oto_extract_delivery", [{"label": "project_finish_date", "values": []}]) == None
 
 def test_to_extract_amenities():
@@ -131,12 +131,12 @@ def test_to_extract_amenities():
     assert res == ["Garaż: parking naziemny", "Winda"]
 
 def test_delivery_date_to_quarter():
-    assert apply_transformer("delivery_date_to_quarter", "Q3 2026") == "2026Q3"
-    assert apply_transformer("delivery_date_to_quarter", "2026-Q3") == "2026Q3"
-    assert apply_transformer("delivery_date_to_quarter", "3 kw. 2026") == "2026Q3"
-    assert apply_transformer("delivery_date_to_quarter", "IV kwartał 2025") == "2025Q4"
-    assert apply_transformer("delivery_date_to_quarter", "2026-03-01") == "2026Q1"
-    assert apply_transformer("delivery_date_to_quarter", "2026-08-31") == "2026Q3"
+    assert apply_transformer("delivery_date_to_quarter", "Q3 2026") == "3 kw. 2026"
+    assert apply_transformer("delivery_date_to_quarter", "2026-Q3") == "3 kw. 2026"
+    assert apply_transformer("delivery_date_to_quarter", "3 kw. 2026") == "3 kw. 2026"
+    assert apply_transformer("delivery_date_to_quarter", "III kw. 2026") == "3 kw. 2026"
+    assert apply_transformer("delivery_date_to_quarter", "2026-07-15") == "3 kw. 2026"
+    assert apply_transformer("delivery_date_to_quarter", "3 kwartał 2026") == "3 kw. 2026"
     assert apply_transformer("delivery_date_to_quarter", "some invalid string 2026") is None
     assert apply_transformer("delivery_date_to_quarter", None) is None
 

@@ -348,7 +348,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     oto_portal_id = hash_id or (f"ID{numeric_id}" if numeric_id else None)
 
     # Safeguard: Do not process inactive/archived listings to prevent overwriting images
-    status = str(resolve_path(page_props, oto_mapping.get("status")) or "active").lower()
+    status = str(resolve_path(page_props, oto_mapping.get("listing_status")) or "active").lower()
     if status not in ("active", "actual", "none", ""):
         logger.warning(f"Otodom listing is {status}: {url}. Skipping to protect local data.")
         return {"error": f"Listing is inactive (status: {status})"}

@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.9.6] - 2026-06-04
+- **Schema Alignment (USI Unified)**: Wyeliminowano konflikty nazewnictwa i formatowania danych pomiędzy wyjściem scraperów a ostatecznym schematem `usi_unified.schema.json`.
+- **Bugfix (Listing Status)**: Zmieniono kolidujące pole `status` w mapowaniu Otodom na `listing_status`, upewniając się, że wartości "active"/"archive" nie naruszają struktury wewnętrznego cyklu życia rekordu USI.
+- **Bugfix (Delivery Dates)**: Poprawiono funkcję transformującą `delivery_date_to_quarter`, wymuszając format kompatybilny ze schematem końcowym (`"Q kw. YYYY"` zamiast `"YYYYQ#"`).
+- **Feature (Transaction Type)**: Rozszerzono `usi_unified.schema.json` o wcześniej pominięty, a obsługiwany przez scrapery wektor `"transaction_type"` z enumem `["sale", "rent"]`.
 ## [0.9.5] - 2026-06-04
 - **Feature (Transformers)**: Wdrożono 3 nowe dedykowane transformatory: `delivery_date_to_quarter` (normalizujący różne formaty dat oddania do postaci "YYYYQ#"), `price_to_numeric` (wyciągający liczby zmiennoprzecinkowe z ciągów walutowych) oraz `transaction_status_parser` (wyliczający poprawny status np. rent/sale).
 - **Refactoring (Thin-Adapters)**: Znacznie odciążono logikę adapterów w kliencie `usi-tracker`, przenosząc mapowania dat, cen i statusów bezpośrednio na barki silnika transformacji i nowej konfiguracji `portal_data_mapping.json`.

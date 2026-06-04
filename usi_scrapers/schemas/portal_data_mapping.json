@@ -168,10 +168,6 @@
           "lat": "ad.location.coordinates.latitude",
           "lon": "ad.location.coordinates.longitude"
         },
-        "status": {
-          "path": "ad.status",
-          "transform": "transaction_status_parser"
-        },
         "delivery_raw": "ad.topInformation",
         "delivery_fallback_quarter": "ad.investmentEstimatedDelivery.quarter",
         "delivery_fallback_year": "ad.investmentEstimatedDelivery.year",
@@ -215,6 +211,9 @@
         "delivery_date": {
           "path": "ad.topInformation",
           "transform": "oto_extract_delivery"
+        },
+        "listing_status": {
+          "path": "ad.status"
         }
       },
       "developer": {
