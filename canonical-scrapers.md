@@ -62,8 +62,7 @@ public_dir/
 
 **Kto tworzy:**
 - `utils/io.py → save_raw_json()` — wywołana przez:
-  - `api.download_raw()` → per-portalowe `download_raw_*_json()`
-  - `TechnicalDataManager.save_raw_data()` wewnątrz `process_batch()` — natychmiast po scrape'ie
+  - `TechnicalDataManager.save_raw_data()` wewnątrz `process_batch()` i `download_raw()` — natychmiast po scrape'ie, korzystając ze `StorageResolver` do lokalizacji.
   - `import_usimaster_csv()` — z kolumny `rpJSON` / `otoJSON` w CSV
 
 **Zachowanie przy nadpisaniu:** istniejący plik jest najpierw przemianowany z suffixem `_{YYYYMMDD_HHMMSS}` (archiwum w tym samym katalogu), nowy plik trafia na oryginalną nazwę.
@@ -154,7 +153,7 @@ public_dir/
 
 **Kto tworzy:**
 - `save_dev_raw_json()` w `utils/io.py` — wywołana przez:
-  - `api.download_raw_dev()` → per-portalowe `download_raw_*_dev_json()` (pobiera z portalu)
+  - `api.download_raw_dev()`
   - `import_competitors_csv()` (tworzy mock z pliku CSV)
 
 **Zachowanie przy nadpisaniu:** jak wyżej — archiwum z timestampem.
@@ -264,9 +263,11 @@ Identyfikatory przekazywane do API różnią się per portal:
 | TabelaOfert (deweloper) | developer slug | `"unidevelopment"` |
 | RP (inwestycja) | numeric offer ID | `"12345"` |
 | Otodom (inwestycja) | pełny URL `/pl/oferta/{slug}` | `"https://..."` |
-| TO (inwestycja) | pełny URL + suffix `,i{id}` | `"https://...,i8982461"` |
+| TabelaOfert (inwestycja) | pełny URL + suffix `,i{id}` | `"https://...,i8982461"` |
 
 URL inwestycji Otodom używa `/pl/oferta/{slug}` (nie `/pl/inwestycja/`) — potwierdzone na 2300+ rekordach produkcyjnych.
+
+**Uwaga:** Klient używa wyłącznie tych identyfikatorów (`portal_id`). Mapowanie na fizyczne ścieżki i określanie lokalizacji zapisu na dysku jest w pełni obsługiwane przez `StorageResolver` ukryty za funkcjami `api.get_raw_data` i `api.download_raw`.
 
 ---
 
@@ -277,6 +278,17 @@ Funkcje odpowiedzialne za zapis (`save_raw_json()` i `save_dev_raw_json()` z `ut
 Nie wstrzykujemy do nich żadnych dodatkowych sekcji meta-systemowych. Informacje takie jak data pobrania zawarte są z reguły w znacznikach czasowych plików w systemie (mtime) lub wynikają z nazw plików archiwalnych z timestampem.
 
 Jedynym wyjątkiem w tych plikach są obiekty mockowane (deweloperzy) tworzone przez polecenie `import_competitors_csv()`, które zawierają dodatkową flagę `"_mock": true` osadzoną bezpośrednio w obiekcie JSON, by system wiedział, że nie pochodzą one w 100% z API zewętrznego.
+
+---
+
+## Architektura UID (Storage Resolver)
+
+Od wersji 0.9.7 usunięto argumenty wymuszające podanie `target_dir` lub `target_image_dir` podczas pobierania. 
+Aplikacja kliencka operuje wyłącznie na bazie UID:
+1. `download_raw` / `download_raw_dev` / `process_batch` zgłaszają żądanie scrape'u używając np. URL lub vendor_id.
+2. Po pobraniu JSONa wyciągane są `dev_slug` i `inv_slug`.
+3. `StorageResolver` buforuje tę relację (in-memory) i natychmiast ją utrwala.
+4. Odczyt danych (np. przez klienta API) odbywa się przez `get_raw_data(config, portal, portal_id)`, które odpytuje resolver, elimnując tym samym jakiekolwiek dyskowe wyszukiwania.
 
 ---
 

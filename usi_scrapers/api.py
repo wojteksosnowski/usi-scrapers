@@ -154,15 +154,19 @@ def process_batch(
         inv_info = {"identifier": identifier}
         
         if status == "success" and data:
-            if not target_dir or not target_image_dir:
+            dev_slug = data.get("developer_slug")
+            inv_slug = data.get("investment_slug")
+            if not dev_slug or not inv_slug:
                 status = "failed"
-                error_msg = "Invalid or incomplete data: missing target_dir or target_image_dir in target"
+                error_msg = "Invalid or incomplete data: missing dev_slug or inv_slug in data"
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
                 # Zapis danych surowych
-                manager.save_raw_data(data, target_dir, portal_prefix)
+                manager.save_raw_data(data, portal_prefix)
                 
                 # Synchronizacja zdjęć
+                from .utils.io import get_image_dir
+                target_image_dir = get_image_dir(dev_slug, inv_slug, config.public_dir)
                 image_urls = data.get("image_urls", [])
                 saved_images = manager.sync_images(image_urls, target_image_dir)
                 msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
