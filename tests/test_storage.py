@@ -50,3 +50,21 @@ def test_get_resolver_singleton(temp_public_dir):
     resolver2 = get_resolver(config2)
     
     assert resolver1 is resolver2
+
+def test_find_image_path(temp_public_dir):
+    config = ScraperConfig(public_dir=str(temp_public_dir))
+    resolver = StorageResolver(config)
+    
+    # Create a test image file
+    img_dir = temp_public_dir / "USIdata" / "test-dev" / "test-inv"
+    img_dir.mkdir(parents=True, exist_ok=True)
+    img_path = img_dir / "test_image123.jpg"
+    img_path.touch()
+    
+    # Should find the image
+    found_path = resolver.find_image_path("test_image123.jpg")
+    assert found_path == str(img_path)
+    
+    # Should not find non-existent image
+    not_found = resolver.find_image_path("nonexistent.jpg")
+    assert not_found is None

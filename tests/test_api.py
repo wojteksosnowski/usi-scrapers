@@ -371,3 +371,15 @@ def test_get_raw_dev_data_found(mock_get_resolver, config, tmp_path):
     assert data["dev"] == "Test Dev"
     mock_resolver.lookup_developer.assert_called_once_with("rp", "123")
 
+@patch("usi_scrapers.storage.get_resolver")
+def test_resolve_image_path(mock_get_resolver, config):
+    mock_resolver = MagicMock()
+    mock_resolver.find_image_path.return_value = "/path/to/test_image123.jpg"
+    mock_get_resolver.return_value = mock_resolver
+
+    from usi_scrapers.api import resolve_image_path
+    result = resolve_image_path("test_image123.jpg", config)
+    
+    assert result == "/path/to/test_image123.jpg"
+    mock_get_resolver.assert_called_once_with(config)
+    mock_resolver.find_image_path.assert_called_once_with("test_image123.jpg")

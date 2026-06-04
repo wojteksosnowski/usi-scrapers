@@ -108,6 +108,13 @@ class StorageResolver:
             self._initialized = False
         self.build_index()
 
+    def find_image_path(self, filename: str) -> Optional[str]:
+        """Wyszukuje plik obrazu w drzewie USI po jego nazwie używając rglob."""
+        for path in self.public_dir.rglob(filename):
+            if path.is_file():
+                return str(path)
+        return None
+
 _default_resolver: Optional[StorageResolver] = None
 
 def get_resolver(config: ScraperConfig) -> StorageResolver:

@@ -1,5 +1,16 @@
 # Changelog
 
+## Wersja 0.9.8 — Kamień 06 (Naprawa ścieżek obrazów) — 2026-06-04
+
+* Dodano metodę `find_image_path` w `StorageResolver` (opartą na `rglob`), pozwalającą na dynamiczne lokalizowanie plików obrazów w drzewie katalogów.
+* Zdefiniowano nowy, publiczny endpoint `resolve_image_path` w głównym module `api.py`.
+* Zintegrowano proces wyszukiwania ze `StorageResolver`, aby zachować jedno źródło prawdy dla operacji dyskowych.
+* Dodano testy jednostkowe weryfikujące poprawność zwracanych ścieżek w symulowanym środowisku `USIdata/USIdev`.
+
+### Wnioski ze zmian
+* Wzbogacenie instancji `StorageResolver` o mechanizmy wyszukiwania zwiększa spójność API odpowiedzialnego za operacje IO na systemie plików.
+* Przeniesienie logiki rozwiązywania ścieżek na backend (do dedykowanego endpointu) odciąża klientów (np. `usi-tracker`) i wspiera lepszą separację odpowiedzialności.
+
 ## [Unreleased] - 2026-06-04
 - **Dodano** in-memory indeks dla danych `USIdata` i `USIdev` (`StorageResolver`), skracający czas rozwiązywania ścieżek przez brak ciągłego skanowania systemu plików.
 - **Usunięto** wymagany argument `target_dir` z funkcji pobierających i zapisujących dane (takich jak `download_raw`, `download_raw_dev`, `save_raw`).

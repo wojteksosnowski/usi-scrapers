@@ -549,3 +549,11 @@ def verify_consistency(
         stacklevel=2
     )
     return health_check(config, fetcher, portals)
+
+def resolve_image_path(filename: str, config: ScraperConfig) -> Optional[str]:
+    """
+    Wyszukuje pełną ścieżkę do pliku obrazu w public_dir na podstawie nazwy pliku.
+    """
+    from .storage import get_resolver
+    resolver = get_resolver(config)
+    return resolver.find_image_path(filename)

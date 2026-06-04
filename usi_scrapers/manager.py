@@ -20,6 +20,28 @@ class TechnicalDataManager:
         self.config = config
         self.resolver = StorageResolver(config)
 
+    def get_investment_path(self, portal_prefix: str, portal_id: str) -> Optional[Path]:
+        """Resolves investment directory path using portal ID (O(1) via index)."""
+        res = self.resolver.lookup_investment(portal_prefix, portal_id)
+        if res:
+            dev_slug, inv_slug = res
+            return get_investment_dir(dev_slug, inv_slug, self.config.public_dir)
+        return None
+
+    def get_image_path(self, portal_prefix: str, portal_id: str) -> Optional[Path]:
+        """Resolves image directory path using portal ID."""
+        res = self.resolver.lookup_investment(portal_prefix, portal_id)
+        if res:
+            dev_slug, inv_slug = res
+            return get_image_dir(dev_slug, inv_slug, self.config.public_dir)
+        return None
+
+    def get_raw_filename(self, portal_prefix: str, portal_id: Optional[str] = None) -> str:
+        """Returns standardized raw JSON filename."""
+        if portal_id:
+            return f"raw_{portal_prefix}_{portal_id}.json"
+        return f"raw_{portal_prefix}.json"
+
     def save_raw_data(self, data: dict, portal_prefix: str) -> Optional[Path]:
         """Saves virgin raw JSON for an investment"""
         from .utils.integrity import check_evolution
