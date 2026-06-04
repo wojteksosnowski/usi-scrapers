@@ -426,14 +426,15 @@ def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifie
     else:
         return {"status": "error", "message": data.get("error", "Unknown error")}
 
-def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: Optional[str] = None) -> Dict[str, Any]:
+def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str) -> Dict[str, Any]:
     """Pobiera i zapisuje surowy JSON profilu dewelopera."""
     p = resolve_prefix(portal)
     func = get_scraper_func(p, "download_raw_dev")
     if not func:
         return {"status": "error", "message": f"No dev scraper found for {portal}"}
         
-    target_dir = Path(config.public_dir) / "USIdev" / (dev_slug or "unknown")
+    fallback_slug = str(identifier) if not str(identifier).isdigit() else "unknown"
+    target_dir = Path(config.public_dir) / "USIdev" / fallback_slug
     result_slug = func(identifier, target_dir, fetcher, config)
     if result_slug:
         return {"status": "success", "dev_slug": result_slug}
@@ -479,8 +480,12 @@ def get_raw_dev_data(config: ScraperConfig, portal: str, portal_id: str) -> Opti
     with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def save_raw(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, inv_slug: str, portal_prefix: str, portal_id: str) -> Path:
+def save_raw(config: ScraperConfig, data: Dict[str, Any], portal_prefix: str, portal_id: str) -> Path:
     """Zapisuje gotowy słownik jako surowy JSON inwestycji. portal_id jest wymagane."""
+    dev_slug = data.get("developer_slug")
+    inv_slug = data.get("investment_slug")
+    if not dev_slug or not inv_slug:
+        raise ValueError("Dane muszą zawierać 'developer_slug' i 'investment_slug'")
     from .utils.io import save_raw_json, get_investment_dir
     from .storage import get_resolver
     target_dir = get_investment_dir(dev_slug, inv_slug, config.public_dir)
@@ -488,8 +493,11 @@ def save_raw(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, inv_slu
     get_resolver(config).update_investment_index(portal_prefix, portal_id, dev_slug, inv_slug)
     return file_path
 
-def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, portal_prefix: str, portal_id: str) -> Path:
+def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], portal_prefix: str, portal_id: str) -> Path:
     """Zapisuje gotowy słownik jako surowy JSON dewelopera. portal_id jest wymagane."""
+    dev_slug = data.get("developer_slug")
+    if not dev_slug:
+        raise ValueError("Dane muszą zawierać 'developer_slug'")
     from .utils.io import save_dev_raw_json
     from .storage import get_resolver
     target_dir = Path(config.public_dir) / "USIdev" / dev_slug
