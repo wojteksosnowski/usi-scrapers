@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.5] - 2026-06-04
+- **Feature (Transformers)**: Wdrożono 3 nowe dedykowane transformatory: `delivery_date_to_quarter` (normalizujący różne formaty dat oddania do postaci "YYYYQ#"), `price_to_numeric` (wyciągający liczby zmiennoprzecinkowe z ciągów walutowych) oraz `transaction_status_parser` (wyliczający poprawny status np. rent/sale).
+- **Refactoring (Thin-Adapters)**: Znacznie odciążono logikę adapterów w kliencie `usi-tracker`, przenosząc mapowania dat, cen i statusów bezpośrednio na barki silnika transformacji i nowej konfiguracji `portal_data_mapping.json`.
+- **Mapping (JSON)**: Przypisano nowe transformatory do odpowiednich pól (`delivery_date`, `price_min`, `price_max`, `price_m2_min`, `price_m2_max`, `status`) w konfiguracjach dla portali RynekPierwotny, Otodom oraz TabelaOfert.
+- **Architecture (ID-only Policy)**: Przebudowano rdzeń zarządzania danymi I/O (moduł `TechnicalDataManager`, `utils/io.py`, `utils/images.py` oraz `api.py`). Całkowicie wyeliminowano poleganie na nieprzewidywalnych `dev_slug` i `inv_slug` podczas zapisywania i czytania plików.
+- **API Refactoring**: Zmieniono sygnatury kluczowych funkcji API (`process_batch`, `download_raw`) oraz zapisujących (np. `save_raw_data`), wymuszając wstrzykiwanie deterministycznych instancji `Path` (`target_dir`, `images_dir`) bezpośrednio przez kod klienta (usunięto zjawisko *Path-Drift*).
+- **Scraper Alignment**: Dostosowano funkcje skrapujące (RP, Otodom, TO) do działania z nowymi, jawnymi ścieżkami katalogów.
 ## [0.9.4] - 2026-06-03
 - **Feature/Compatibility**: Standardized identifier keys across all portals. Added `vendor_id` and `investment_slug` to `portal_data_mapping.json` schema and scraper outputs to eliminate the need for `if/elif` blocks in downstream clients.
 - **Deprecation**: Maintained old keys (`developer_id`, `slug`, `agency_id`) in outputs for backwards compatibility, but marked them for future deprecation.

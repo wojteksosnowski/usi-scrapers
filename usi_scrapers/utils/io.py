@@ -11,9 +11,7 @@ logger = get_logger(__name__)
 
 def save_raw_json(
     data: dict,
-    public_dir: Path,
-    dev_slug: str,
-    inv_slug: str,
+    target_dir: Path,
     portal_prefix: str,
     portal_id: str,
 ) -> Path:
@@ -24,11 +22,11 @@ def save_raw_json(
     """
     if not portal_id:
         raise ValueError(
-            f"save_raw_json: portal_id is required for {portal_prefix}/{dev_slug}/{inv_slug}. "
+            f"save_raw_json: portal_id is required for {portal_prefix}."
             "Slug-based fallback is not allowed (ID-only policy)."
         )
 
-    inv_dir = get_investment_dir(dev_slug, inv_slug, public_dir)
+    inv_dir = target_dir
     inv_dir.mkdir(parents=True, exist_ok=True)
 
     filename = f"raw_{portal_prefix}_{portal_id}.json"
@@ -50,9 +48,7 @@ def save_raw_json(
 
 def save_raw_html(
     html: str,
-    public_dir: Path,
-    dev_slug: str,
-    inv_slug: str,
+    target_dir: Path,
     portal_prefix: str,
     portal_id: str | None = None,
 ) -> Path:
@@ -60,15 +56,15 @@ def save_raw_html(
     Saves raw HTML for an investment.
     Filename: raw_{portal}_{slug|id}.html
     """
-    inv_dir = get_investment_dir(dev_slug, inv_slug, public_dir)
+    inv_dir = target_dir
     inv_dir.mkdir(parents=True, exist_ok=True)
 
-    filename = f"raw_{portal_prefix}_{portal_id or inv_slug}.html"
+    filename = f"raw_{portal_prefix}_{portal_id}.html"
     file_path = inv_dir / filename
 
     if file_path.exists():
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        archived_filename = f"raw_{portal_prefix}_{portal_id or inv_slug}_{ts}.html"
+        archived_filename = f"raw_{portal_prefix}_{portal_id}_{ts}.html"
         archived_path = inv_dir / archived_filename
         file_path.rename(archived_path)
         logger.info(f"Archived existing raw HTML file: {archived_filename}")
@@ -168,17 +164,17 @@ def lookup_investment_by_id(public_dir: Path, dev_slug: str, portal_prefix: str,
     return None
 
 
-def save_meta_json(data: dict, public_dir: Path, dev_slug: str, inv_slug: str, portal_prefix: str, portal_id: str) -> Path:
+def save_meta_json(data: dict, target_dir: Path, portal_prefix: str, portal_id: str) -> Path:
     """
     Saves meta JSON (Coda ratings) for an investment.
     portal_id is required — ID-only naming enforced (no slug fallback).
     """
     if not portal_id:
         raise ValueError(
-            f"save_meta_json: portal_id is required for {portal_prefix}/{dev_slug}/{inv_slug}. "
+            f"save_meta_json: portal_id is required for {portal_prefix}."
             "Slug-based fallback is not allowed (ID-only policy)."
         )
-    inv_dir = get_investment_dir(dev_slug, inv_slug, public_dir)
+    inv_dir = target_dir
     inv_dir.mkdir(parents=True, exist_ok=True)
     filename = f"meta_{portal_prefix}_{portal_id}.json"
     file_path = inv_dir / filename
@@ -190,16 +186,3 @@ def save_meta_json(data: dict, public_dir: Path, dev_slug: str, inv_slug: str, p
     logger.info(f"Saved meta JSON: {file_path}")
     return file_path
 
-def get_investment_dir(dev_slug: str, inv_slug: str, public_dir: Path) -> Path:
-    """
-    Returns the absolute path to the investment directory:
-    {public_dir}/USIdata/{dev_slug}/{inv_slug}/
-    """
-    return Path(public_dir) / "USIdata" / dev_slug / inv_slug
-
-def get_image_dir(dev_slug: str, inv_slug: str, public_dir: Path) -> Path:
-    """
-    Returns the absolute path to the image directory:
-    {public_dir}/USI/{dev_slug}/{inv_slug}/
-    """
-    return Path(public_dir) / "USI" / dev_slug / inv_slug

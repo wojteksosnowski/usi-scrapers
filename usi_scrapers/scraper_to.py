@@ -318,7 +318,7 @@ def extract_to_data(html: str, url: str, fetcher: Fetcher = None) -> dict:
     
     return data
 
-def download_raw_to_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
+def download_raw_to_json(url: str, target_dir: Path, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
     Downloads raw data for a TabelaOfert investment and saves it.
     """
@@ -346,12 +346,12 @@ def download_raw_to_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetche
             data["_raw_mapa"] = map_data
 
     cleaned_html = clean_to_html(html)
-    save_raw_html(cleaned_html, config.public_dir, dev_slug, inv_slug, "to", portal_id=portal_id)
+    save_raw_html(cleaned_html, target_dir, "to", portal_id=portal_id)
     
     # Dodajemy surowy i odchudzony kod HTML do obiektu, żeby parser mógł korzystać z regexów "w locie"
     data["_raw_html"] = cleaned_html
 
-    return save_raw_json(data, config.public_dir, dev_slug, inv_slug, "to", portal_id=portal_id)
+    return save_raw_json(data, target_dir, "to", portal_id=portal_id)
 
 def clean_to_html(html: str) -> str:
     """Removes bloat from HTML while preserving inline JSON data and content."""

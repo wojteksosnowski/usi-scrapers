@@ -44,7 +44,7 @@ def test_process_batch_success_rp(mock_sleep, mock_scrape, mock_mgr_cls, config,
     mock_scrape.assert_any_call("222", fetcher)
     assert mock_mgr_cls.return_value.save_raw_data.call_count == 2
     # portal_prefix for rp
-    mock_mgr_cls.return_value.save_raw_data.assert_called_with(GOOD_INV, "dev-x", "inwestycja-x", "rp")
+    mock_mgr_cls.return_value.save_raw_data.assert_called_with(GOOD_INV, Path(config.public_dir) / "USIdata" / "dev-x" / "inwestycja-x", "rp")
 
 
 @patch("usi_scrapers.api.TechnicalDataManager")
@@ -58,7 +58,7 @@ def test_process_batch_success_otodom(mock_sleep, mock_scrape, mock_mgr_cls, con
     assert len(results) == 1
     mock_scrape.assert_called_once_with("https://otodom.pl/x", fetcher)
     # portal_prefix for otodom -> "oto"
-    mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, "dev-x", "inwestycja-x", "oto")
+    mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, Path(config.public_dir) / "USIdata" / "dev-x" / "inwestycja-x", "oto")
 
 
 @patch("usi_scrapers.api.TechnicalDataManager")
@@ -71,7 +71,7 @@ def test_process_batch_success_tabelaofert(mock_sleep, mock_scrape, mock_mgr_cls
 
     assert len(results) == 1
     # portal_prefix for tabelaofert -> "to"
-    mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, "dev-x", "inwestycja-x", "to")
+    mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, Path(config.public_dir) / "USIdata" / "dev-x" / "inwestycja-x", "to")
 
 
 # ---------------------------------------------------------------------------

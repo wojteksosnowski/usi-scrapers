@@ -150,7 +150,7 @@ def process_batch(
 
         # I/O Isolation & Reporting
         msg = ""
-        inv_info = {"identifier": identifier, "dev_slug": None, "inv_slug": None}
+        inv_info = {"identifier": identifier}
         
         if status == "success" and data:
             dev_slug = data.get("developer_slug")
@@ -164,12 +164,11 @@ def process_batch(
                 inv_info["dev_slug"] = dev_slug
                 inv_info["inv_slug"] = inv_slug
                 
-                # Zapis danych surowych
-                manager.save_raw_data(data, dev_slug, inv_slug, portal_prefix)
-                
-                # Synchronizacja zdjęć
+                target_dir = Path(config.public_dir) / "USIdata" / dev_slug / inv_slug
+                images_dir = Path(config.public_dir) / "USI" / dev_slug / inv_slug
+                manager.save_raw_data(data, target_dir, portal_prefix)
                 image_urls = data.get("image_urls", [])
-                saved_images = manager.sync_images(image_urls, dev_slug, inv_slug)
+                saved_images = manager.sync_images(image_urls, images_dir)
                 msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
         else:
             msg = f"Pobranie nieudane: {error_msg}"
@@ -402,12 +401,12 @@ def fetch_investment(
 
     return data
 
-def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: str, inv_slug: str) -> Optional[Path]:
+def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, target_dir: Path) -> Optional[Path]:
     """Pobiera i zapisuje surowy JSON inwestycji."""
     p = resolve_prefix(portal)
     func = get_scraper_func(p, "download_raw")
     if func:
-        return func(identifier, dev_slug, inv_slug, fetcher, config)
+        return func(identifier, target_dir, fetcher, config)
     return None
 
 def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str, dev_slug: Optional[str] = None) -> Optional[str]:
@@ -418,9 +417,9 @@ def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, ident
         return func(identifier, dev_slug, fetcher, config)
     return None
 
-def save_raw(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, inv_slug: str, portal_prefix: str, portal_id: str) -> Path:
+def save_raw(config: ScraperConfig, data: Dict[str, Any], target_dir: Path, portal_prefix: str, portal_id: str) -> Path:
     """Zapisuje gotowy słownik jako surowy JSON inwestycji. portal_id jest wymagane."""
-    return save_raw_json(data, config.public_dir, dev_slug, inv_slug, portal_prefix, portal_id=portal_id)
+    return save_raw_json(data, target_dir, portal_prefix, portal_id=portal_id)
 
 def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], dev_slug: str, portal_prefix: str, portal_id: str) -> Path:
     """Zapisuje gotowy słownik jako surowy JSON dewelopera. portal_id jest wymagane."""

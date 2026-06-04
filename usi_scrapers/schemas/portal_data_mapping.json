@@ -17,10 +17,22 @@
         },
         "developer_name": "vendor.value.name|vendor.name|developer_name|vendor_name",
         "units_count": "stats.value.properties_count_for_sale|stats.properties_count_for_sale",
-        "price_min": "stats.value.ranges_price_min|stats.ranges_price_min",
-        "price_max": "stats.value.ranges_price_max|stats.ranges_price_max",
-        "price_m2_min": "stats.value.ranges_price_m2_min|stats.ranges_price_m2_min",
-        "price_m2_max": "stats.value.ranges_price_m2_max|stats.ranges_price_m2_max",
+        "price_min": {
+          "path": "stats.value.ranges_price_min|stats.ranges_price_min",
+          "transform": "price_to_numeric"
+        },
+        "price_max": {
+          "path": "stats.value.ranges_price_max|stats.ranges_price_max",
+          "transform": "price_to_numeric"
+        },
+        "price_m2_min": {
+          "path": "stats.value.ranges_price_m2_min|stats.ranges_price_m2_min",
+          "transform": "price_to_numeric"
+        },
+        "price_m2_max": {
+          "path": "stats.value.ranges_price_m2_max|stats.ranges_price_m2_max",
+          "transform": "price_to_numeric"
+        },
         "ceiling_height_min": {
           "path": "stats.value.ranges_height_min|stats.ranges_height_min",
           "transform": "cm_to_m"
@@ -74,6 +86,10 @@
         "amenities": {
           "path": "features",
           "transform": "rp_extract_amenities"
+        },
+        "delivery_date": {
+          "path": "construction_date_range.value.upper|construction_date_range.upper",
+          "transform": "delivery_date_to_quarter"
         }
       },
       "developer": {
@@ -112,14 +128,19 @@
           "regex": "deweloperzy/([^/]+)-ID\\d+"
         },
         "units_count": "ad.target.Number_of_properties",
-        "price_min": "ad.target.Price",
+        "price_min": {
+          "path": "ad.target.Price",
+          "transform": "price_to_numeric"
+        },
         "price_m2_min": {
           "path": "ad.characteristics[key=price_per_m].value",
-          "unit": "PLN/m2"
+          "unit": "PLN/m2",
+          "transform": "price_to_numeric"
         },
         "price_m2_max": {
           "path": "ad.characteristics[key=price_per_m].value",
-          "unit": "PLN/m2"
+          "unit": "PLN/m2",
+          "transform": "price_to_numeric"
         },
         "ceiling_height_min": {
           "path": "ad.characteristics[key=ceiling_height].value",
@@ -147,7 +168,10 @@
           "lat": "ad.location.coordinates.latitude",
           "lon": "ad.location.coordinates.longitude"
         },
-        "status": "ad.status",
+        "status": {
+          "path": "ad.status",
+          "transform": "transaction_status_parser"
+        },
         "delivery_raw": "ad.topInformation",
         "delivery_fallback_quarter": "ad.investmentEstimatedDelivery.quarter",
         "delivery_fallback_year": "ad.investmentEstimatedDelivery.year",
@@ -229,15 +253,23 @@
         "developer_name": "brand.name",
         "developer_slug": "developer_slug",
         "units_count": "offers.offerCount",
-        "price_min": "offers.lowPrice",
-        "price_max": "offers.highPrice",
+        "price_min": {
+          "path": "offers.lowPrice",
+          "transform": "price_to_numeric"
+        },
+        "price_max": {
+          "path": "offers.highPrice",
+          "transform": "price_to_numeric"
+        },
         "price_m2_min": {
           "path": "offers.pricePerSqm",
-          "unit": "PLN/m2"
+          "unit": "PLN/m2",
+          "transform": "price_to_numeric"
         },
         "price_m2_max": {
           "path": "offers.pricePerSqm",
-          "unit": "PLN/m2"
+          "unit": "PLN/m2",
+          "transform": "price_to_numeric"
         },
         "ceiling_height_min": {
           "path": "additionalProperty[name=Wysokość mieszkania].value|additionalProperty[name=Wys. apartamentu inwestycyjnego].value",

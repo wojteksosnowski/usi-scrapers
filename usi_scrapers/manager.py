@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional
 from .models import ScraperConfig
 from .fetcher import Fetcher
-from .utils.io import get_investment_dir, get_image_dir, save_raw_json
+from .utils.io import save_raw_json
 from .utils.images import save_images
 
 from . import get_logger
@@ -18,15 +18,8 @@ class TechnicalDataManager:
     def __init__(self, config: ScraperConfig):
         self.config = config
 
-    def get_investment_path(self, dev_slug: str, inv_slug: str) -> Path:
-        """Centralized path for usi_*.json and raw_*.json"""
-        return get_investment_dir(dev_slug, inv_slug, self.config.public_dir)
 
-    def get_image_path(self, dev_slug: str, inv_slug: str) -> Path:
-        """Centralized path for USI images"""
-        return get_image_dir(dev_slug, inv_slug, self.config.public_dir)
-
-    def save_raw_data(self, data: dict, dev_slug: str, inv_slug: str, portal_prefix: str) -> Optional[Path]:
+    def save_raw_data(self, data: dict, target_dir: Path, portal_prefix: str) -> Optional[Path]:
         """Saves virgin raw JSON for an investment"""
         from .utils.integrity import check_evolution
         evolution = check_evolution(data, portal_prefix)
@@ -35,7 +28,7 @@ class TechnicalDataManager:
 
         raw_details = data.get("raw_details")
         if not raw_details:
-            logger.error(f"save_raw_data: missing 'raw_details' for {portal_prefix}/{dev_slug}/{inv_slug}. Aborting save.")
+            logger.error(f"save_raw_data: missing 'raw_details' for {portal_prefix}. Aborting save.")
             return None
 
         if portal_prefix == "rp":
@@ -48,13 +41,9 @@ class TechnicalDataManager:
         else:
             portal_id = None
         
-        return save_raw_json(raw_details, self.config.public_dir, dev_slug, inv_slug, portal_prefix, portal_id=portal_id)
+        return save_raw_json(raw_details, target_dir, portal_prefix, portal_id=portal_id)
 
-    def sync_images(self, urls: list[str], dev_slug: str, inv_slug: str) -> list[str]:
+    def sync_images(self, urls: list[str], images_dir: Path) -> list[str]:
         """Downloads and saves images, returns list of filenames"""
-        return save_images(urls, dev_slug, inv_slug, self.config)
+        return save_images(urls, images_dir, self.config)
 
-    def get_usi_json_path(self, dev_slug: str, inv_slug: str) -> Path:
-        """Returns the full path to the final usi_{slug}.json file"""
-        dir_path = self.get_investment_path(dev_slug, inv_slug)
-        return dir_path / f"usi_{inv_slug}.json"

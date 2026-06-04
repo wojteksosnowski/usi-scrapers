@@ -56,7 +56,7 @@ def clean_filename(url: str) -> str:
 
     return filename
 
-def download_image(url: str, developer_slug: str, investment_slug: str, config: ScraperConfig) -> tuple[str, bool]:
+def download_image(url: str, images_dir: Path, config: ScraperConfig) -> tuple[str, bool]:
     """
     Downloads image from URL and saves it to {public_dir}/USI/{dev_slug}/{inv_slug}/{filename}.
     Returns a tuple: (filename if successful or empty string otherwise, was_skipped boolean).
@@ -68,8 +68,7 @@ def download_image(url: str, developer_slug: str, investment_slug: str, config: 
         return "", False
         
     # Standardize image directory path
-    usi_root = config.public_dir / "USI"
-    target_dir = usi_root / developer_slug / investment_slug
+    target_dir = images_dir
     
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
@@ -150,7 +149,7 @@ def download_developer_logo(url: str, dev_slug: str, config: ScraperConfig, port
         return ""
 
 
-def save_images(urls: list[str], developer_slug: str, investment_slug: str, config: ScraperConfig) -> list[str]:
+def save_images(urls: list[str], images_dir: Path, config: ScraperConfig) -> list[str]:
     """
     Downloads and saves a list of images.
     Returns list of successful filenames.
@@ -160,7 +159,7 @@ def save_images(urls: list[str], developer_slug: str, investment_slug: str, conf
     unique_urls = [u for u in set(urls) if u and u.strip()]
     
     for url in unique_urls:
-        fname, was_skipped = download_image(url, developer_slug, investment_slug, config)
+        fname, was_skipped = download_image(url, images_dir, config)
         if fname:
             saved_filenames.append(fname)
             if was_skipped:
@@ -168,10 +167,10 @@ def save_images(urls: list[str], developer_slug: str, investment_slug: str, conf
             
     downloaded_count = len(saved_filenames) - skipped_count
     if downloaded_count > 0:
-        logger.info(f"Successfully downloaded {downloaded_count} images (skipped {skipped_count} existing) for {investment_slug}")
+        logger.info(f"Successfully downloaded {downloaded_count} images (skipped {skipped_count} existing) in {images_dir}")
     elif skipped_count > 0:
-        logger.info(f"Skipped {skipped_count} existing images for {investment_slug}")
+        logger.info(f"Skipped {skipped_count} existing images in {images_dir}")
     else:
-        logger.info(f"No valid images to process for {investment_slug}")
+        logger.info(f"No valid images to process in {images_dir}")
         
     return saved_filenames

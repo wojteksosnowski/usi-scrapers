@@ -19,18 +19,14 @@ def test_archiving_uses_portal_id(tmp_path):
     # Save once
     save_raw_json(
         data={"v": 1},
-        public_dir=public_dir,
-        dev_slug=dev_slug,
-        inv_slug=inv_slug,
+        target_dir=public_dir / "USIdata" / dev_slug / inv_slug,
         portal_prefix="rp",
         portal_id=portal_id
     )
     # Save again (should trigger archiving)
     save_raw_json(
         data={"v": 2},
-        public_dir=public_dir,
-        dev_slug=dev_slug,
-        inv_slug=inv_slug,
+        target_dir=public_dir / "USIdata" / dev_slug / inv_slug,
         portal_prefix="rp",
         portal_id=portal_id
     )
@@ -62,17 +58,13 @@ def test_archiving_uses_portal_id(tmp_path):
     # 3. Test save_meta_json archiving
     save_meta_json(
         data={"v": 1},
-        public_dir=public_dir,
-        dev_slug=dev_slug,
-        inv_slug=inv_slug,
+        target_dir=public_dir / "USIdata" / dev_slug / inv_slug,
         portal_prefix="rp",
         portal_id=portal_id
     )
     save_meta_json(
         data={"v": 2},
-        public_dir=public_dir,
-        dev_slug=dev_slug,
-        inv_slug=inv_slug,
+        target_dir=public_dir / "USIdata" / dev_slug / inv_slug,
         portal_prefix="rp",
         portal_id=portal_id
     )

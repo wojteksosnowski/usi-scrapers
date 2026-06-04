@@ -121,7 +121,7 @@ def extract_otodom_dev_logo(page_props: dict) -> str | None:
         
     return None
 
-def download_raw_otodom_json(url: str, dev_slug: str, inv_slug: str, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
+def download_raw_otodom_json(url: str, target_dir: Path, fetcher: Fetcher, config: ScraperConfig) -> Path | None:
     """
     Downloads raw JSON for an Otodom investment and saves it to the database.
     Does not process images or adapt data.
