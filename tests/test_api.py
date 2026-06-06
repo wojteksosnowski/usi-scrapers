@@ -53,10 +53,10 @@ def test_process_batch_ingest_success_rp(mock_sleep, mock_scrape, mock_mgr_cls, 
 def test_process_batch_ingest_success_otodom(mock_sleep, mock_scrape, mock_mgr_cls, config, fetcher):
     mock_mgr_cls.return_value = _make_manager_mock()
 
-    results = process_batch_ingest(config, fetcher, "otodom", ["https://otodom.pl/x"], delay_range=(0, 0))
+    results = process_batch_ingest(config, fetcher, "otodom", ["https://www.otodom.pl/pl/oferta/test-investment-ID123"], delay_range=(0, 0))
 
     assert len(results) == 1
-    mock_scrape.assert_called_once_with("https://otodom.pl/x", fetcher)
+    mock_scrape.assert_called_once_with("https://www.otodom.pl/pl/oferta/test-investment-ID123", fetcher)
     mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, "oto")
 
 
@@ -66,7 +66,7 @@ def test_process_batch_ingest_success_otodom(mock_sleep, mock_scrape, mock_mgr_c
 def test_process_batch_ingest_success_tabelaofert(mock_sleep, mock_scrape, mock_mgr_cls, config, fetcher):
     mock_mgr_cls.return_value = _make_manager_mock()
 
-    results = process_batch_ingest(config, fetcher, "tabelaofert", ["https://tabelaofert.pl/x,i1"], delay_range=(0, 0))
+    results = process_batch_ingest(config, fetcher, "tabelaofert", ["https://tabelaofert.pl/inwestycja/test-investment,i123"], delay_range=(0, 0))
 
     assert len(results) == 1
     mock_mgr_cls.return_value.save_raw_data.assert_called_once_with(GOOD_INV, "to")
@@ -274,13 +274,13 @@ def test_ingest_investment_by_url_rp_success(mock_scrape, config, fetcher):
 
 @patch("usi_scrapers.api.scrape_otodom", return_value=GOOD_INV)
 def test_ingest_investment_by_url_otodom(mock_scrape, config, fetcher):
-    result = ingest_investment_by_url(config, fetcher, "otodom", "https://otodom.pl/x")
+    result = ingest_investment_by_url(config, fetcher, "otodom", "https://www.otodom.pl/pl/oferta/test-investment-ID123")
     assert result == GOOD_INV
 
 
 @patch("usi_scrapers.api.scrape_tabelaofert", return_value=GOOD_INV)
 def test_ingest_investment_by_url_tabelaofert(mock_scrape, config, fetcher):
-    result = ingest_investment_by_url(config, fetcher, "tabelaofert", "https://tabelaofert.pl/x,i1")
+    result = ingest_investment_by_url(config, fetcher, "tabelaofert", "https://tabelaofert.pl/inwestycja/test-investment,i123")
     assert result == GOOD_INV
 
 
@@ -344,7 +344,7 @@ def test_get_raw_data_found(mock_get_resolver, config, tmp_path):
     assert data["name"] == "Test"
     mock_resolver.lookup_investment.assert_called_once_with("rp", "123")
 
-@patch("usi_scrapers.storage.get_resolver")
+@patch("usi_scrapers.api.get_resolver")
 def test_get_raw_data_not_found(mock_get_resolver, config):
     mock_resolver = MagicMock()
     mock_resolver.lookup_investment.return_value = None
@@ -353,7 +353,7 @@ def test_get_raw_data_not_found(mock_get_resolver, config):
     from usi_scrapers.api import get_raw_data
     assert get_raw_data(config, "rp", "999") is None
 
-@patch("usi_scrapers.storage.get_resolver")
+@patch("usi_scrapers.api.get_resolver")
 def test_get_raw_dev_data_found(mock_get_resolver, config, tmp_path):
     mock_resolver = MagicMock()
     mock_resolver.lookup_developer.return_value = "dev-x"
@@ -371,7 +371,7 @@ def test_get_raw_dev_data_found(mock_get_resolver, config, tmp_path):
     assert data["dev"] == "Test Dev"
     mock_resolver.lookup_developer.assert_called_once_with("rp", "123")
 
-@patch("usi_scrapers.storage.get_resolver")
+@patch("usi_scrapers.api.get_resolver")
 def test_resolve_image_path(mock_get_resolver, config):
     mock_resolver = MagicMock()
     mock_resolver.find_image_path.return_value = "/path/to/test_image123.jpg"

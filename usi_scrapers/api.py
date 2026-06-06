@@ -13,7 +13,8 @@ from pathlib import Path
 from .fetcher import Fetcher
 from .models import ScraperConfig, ProgressCallback, DeveloperPage
 from .manager import TechnicalDataManager
-from .utils.io import save_raw_json, save_dev_raw_json
+from .utils.io import save_raw_json, save_dev_raw_json, get_investment_dir, get_image_dir
+from .storage import get_resolver
 from .utils.portals import resolve_prefix, get_portal
 from .mapping import get_mapping, resolve_path, load_mapping, list_available_keys, transform_to_unified
 
@@ -149,8 +150,6 @@ def process_batch_ingest(
                 error_msg = "Invalid or incomplete data: missing dev_slug or inv_slug in data"
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
-                # Synchronizacja zdjęć
-                from .utils.io import get_image_dir
                 target_image_dir = get_image_dir(dev_slug, inv_slug, config.public_dir)
                 image_urls = data.get("image_urls", [])
                 manager = TechnicalDataManager(config)
@@ -242,8 +241,6 @@ def process_batch_refresh(
                 error_msg = "Invalid or incomplete data: missing dev_slug or inv_slug in data"
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
-                # Synchronizacja zdjęć
-                from .utils.io import get_image_dir
                 target_image_dir = get_image_dir(dev_slug, inv_slug, config.public_dir)
                 image_urls = data.get("image_urls", [])
                 manager = TechnicalDataManager(config)
@@ -392,12 +389,25 @@ def list_investments(
     if not discover_func:
         raise ValueError(f"Unsupported portal for discovery: {portal}")
 
-    if p == "oto":
-        if identifier and identifier.startswith("http"):
+    if identifier:
+        if str(identifier).startswith("http"):
+            from .utils.url_parser import parse_url
+            parsed = parse_url(str(identifier))
+            if parsed.get("type") == "unknown":
+                raise ValueError(f"Oczekiwano poprawnego adresu URL dla discovery, przekazano niepoprawny: {identifier}")
+            
             discover_listing = get_scraper_func(p, "discover_listing")
-            return discover_listing(config, fetcher, identifier)
-        return discover_func(config, fetcher, identifier)
-    
+            if discover_listing:
+                return discover_listing(config, fetcher, identifier)
+            else:
+                raise ValueError(f"Portal {p} nie obsługuje wyszukiwania po adresie URL listingu.")
+        else:
+            if "otodom.pl" in str(identifier) or "tabelaofert.pl" in str(identifier) or "rynekpierwotny.pl" in str(identifier):
+                raise ValueError(f"Adres URL musi zaczynać się od http/https. Przekazano: {identifier}")
+                
+            if p == "oto" and not str(identifier).isdigit():
+                raise ValueError(f"Portal Otodom wymaga numerycznego ID agencji lub pełnego adresu URL na wejściu Discovery, przekazano śmieciowy string: {identifier}")
+
     return discover_func(config, fetcher, identifier)
 
 
@@ -424,8 +434,10 @@ def ingest_investment_by_url(
     
     try:
         portal_prefix = resolve_prefix(portal)
-        if not url.startswith(("http://", "https://")):
-            raise ValueError(f"Metoda ingest_by_url wymaga pełnego adresu URL, przekazano: {url}")
+        from .utils.url_parser import parse_url
+        parsed = parse_url(url)
+        if parsed.get("type") == "unknown" or parsed.get("kind") != "investment":
+            raise ValueError(f"Metoda ingest_by_url wymaga poprawnego adresu URL inwestycji, przekazano: {url}")
             
         scrape_func = get_scraper_func(portal_prefix, "scrape")
         if not scrape_func:
@@ -433,9 +445,7 @@ def ingest_investment_by_url(
             
         scrape_arg = url
         if portal_prefix == "rp":
-            from .utils.url_parser import parse_url
-            parsed = parse_url(url)
-            if parsed and parsed.get("offer_id"):
+            if parsed.get("offer_id"):
                 scrape_arg = parsed["offer_id"]
             else:
                 raise ValueError(f"Nie można wyekstrahować ID z URL: {url}")
@@ -489,7 +499,6 @@ def refresh_investment_by_id(
         if portal_prefix == "rp" and not str(portal_id).isdigit():
             raise ValueError(f"Portal RP wymaga numerycznego ID: {portal_id}")
 
-        from .storage import get_resolver
         resolver = get_resolver(config)
         
         saved_meta = resolver.get_investment_metadata(portal_prefix, str(portal_id))
@@ -503,8 +512,13 @@ def refresh_investment_by_id(
             raise ValueError(f"Unsupported portal for fetching: {portal}")
 
         scrape_arg = url_reference if portal_prefix in ("oto", "to") else portal_id
-        if portal_prefix in ("oto", "to") and not scrape_arg:
-            raise ValueError(f"Brak zapisanego URL dla inwestycji {portal_id} w portalu {portal_prefix}")
+        if portal_prefix in ("oto", "to"):
+            from .utils.url_parser import parse_url
+            if not scrape_arg:
+                raise ValueError(f"Brak zapisanego URL dla inwestycji {portal_id} w portalu {portal_prefix}")
+            parsed = parse_url(str(scrape_arg))
+            if parsed.get("type") == "unknown" or parsed.get("kind") != "investment":
+                raise ValueError(f"Brak poprawnego pełnego adresu URL dla inwestycji {portal_id} w portalu {portal_prefix}, odczytano: {scrape_arg}")
 
         data = scrape_func(scrape_arg, fetcher)
         if data and data.get("error"):
@@ -538,6 +552,15 @@ def refresh_investment_by_id(
 def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str) -> Dict[str, Any]:
     """Pobiera i zapisuje surowy JSON inwestycji. Zwraca status i metadane."""
     p = resolve_prefix(portal)
+    
+    if p in ("oto", "to"):
+        from .utils.url_parser import parse_url
+        parsed = parse_url(str(identifier))
+        if parsed.get("type") == "unknown" or parsed.get("kind") != "investment":
+            raise ValueError(f"Portal {p} wymaga poprawnego adresu URL inwestycji, przekazano: {identifier}")
+    if p == "rp" and not str(identifier).isdigit():
+        raise ValueError(f"Portal RP wymaga numerycznego ID oferty, przekazano: {identifier}")
+        
     scrape_func = get_scraper_func(p, "scrape")
     if not scrape_func:
         return {"status": "error", "message": f"Unsupported portal for downloading: {portal}"}
@@ -559,21 +582,27 @@ def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifie
     else:
         return {"status": "error", "message": data.get("error", "Unknown error")}
 
-def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, portal_id: str) -> Dict[str, Any]:
+def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str) -> Dict[str, Any]:
     """Pobiera i zapisuje surowy JSON profilu dewelopera po jego ID."""
     p = resolve_prefix(portal)
+    
+    if not str(identifier).isdigit() and p == "rp":
+        raise ValueError("Public API accepts portal IDs only for developer download. Slugs are prohibited.")
+    elif p == "oto" and not str(identifier).isdigit():
+        raise ValueError(f"Portal ID must be numeric for {p}, got slug: {identifier}")
+
     func = get_scraper_func(p, "download_raw_dev")
     if not func:
         return {"status": "error", "message": f"No dev scraper found for {portal}"}
         
     from .storage import get_resolver
     resolver = get_resolver(config)
-    dev_slug = resolver.lookup_developer(p, str(portal_id))
+    dev_slug = resolver.lookup_developer(p, str(identifier))
     if not dev_slug:
-        dev_slug = f"unknown_{p}_{portal_id}"
+        dev_slug = f"unknown_{p}_{identifier}"
         
     target_dir = Path(config.public_dir) / "USIdev" / dev_slug
-    result_slug = func(portal_id, target_dir, fetcher, config)
+    result_slug = func(identifier, target_dir, fetcher, config)
     if result_slug:
         return {"status": "success", "dev_slug": result_slug}
     return {"status": "error", "message": "Failed to download developer data"}
@@ -589,7 +618,6 @@ def get_raw_data(config: ScraperConfig, portal: str, portal_id: str) -> Optional
         return None
     
     dev_slug, inv_slug = result
-    from .utils.io import get_investment_dir
     target_dir = get_investment_dir(dev_slug, inv_slug, config.public_dir)
     file_path = target_dir / f"raw_{p}_{portal_id}.json"
     
@@ -643,7 +671,6 @@ def save_raw(config: ScraperConfig, data: Dict[str, Any], portal_prefix: str, po
     # Jeśli data zawiera envelope (np. z fetch_investment), wyciągamy tylko raw_details
     raw_to_save = data.get("raw_details", data)
 
-    from .utils.io import save_raw_json, get_investment_dir
     target_dir = get_investment_dir(dev_slug, inv_slug, config.public_dir)
     file_path = save_raw_json(raw_to_save, target_dir, portal_prefix, portal_id=portal_id)
     
@@ -668,7 +695,6 @@ def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], portal_prefi
 
     raw_to_save = data.get("raw_details", data)
 
-    from .utils.io import save_dev_raw_json
     target_dir = Path(config.public_dir) / "USIdev" / dev_slug
     file_path = save_dev_raw_json(raw_to_save, target_dir, portal_prefix, portal_id=portal_id)
     resolver.update_developer_index(portal_prefix, portal_id, dev_slug)
@@ -695,10 +721,8 @@ def identify_developer(fetcher: Fetcher, portal: str, url: str) -> Optional[str]
     # This one is a bit specific as it's not in the main SCRAPER_REGISTRY yet
     # but we can add it or handle it separately.
     if p == "oto":
-        from .scraper_otodom import fetch_otodom_agency_name
         return fetch_otodom_agency_name(url, fetcher)
     elif p == "to":
-        from .scraper_to import fetch_to_agency_name
         return fetch_to_agency_name(url, fetcher)
     return None
 
@@ -723,7 +747,6 @@ def resolve_image_path(filename: str, config: ScraperConfig) -> Optional[str]:
     """
     Wyszukuje pełną ścieżkę do pliku obrazu w public_dir na podstawie nazwy pliku.
     """
-    from .storage import get_resolver
     resolver = get_resolver(config)
     return resolver.find_image_path(filename)
 
@@ -761,8 +784,6 @@ def has_local_raw(config: ScraperConfig, portal: str, portal_id: str) -> bool:
         p = resolve_prefix(portal)
     except ValueError:
         return False
-    from .storage import get_resolver
-    from .utils.io import get_investment_dir
     resolver = get_resolver(config)
     result = resolver.lookup_investment(p, portal_id)
     if not result:

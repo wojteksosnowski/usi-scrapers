@@ -69,6 +69,14 @@ def parse_url(url: str) -> dict:
                 "otodom_id": otodom_id,
                 "url": url,
             }
+            
+        # Listing URL: /pl/wyniki/...
+        if "/wyniki/" in path:
+            return {
+                "type": "otodom",
+                "kind": "listing",
+                "url": url
+            }
 
     # 3. Tabelaofert.pl
     if "tabelaofert.pl" in domain:
@@ -91,6 +99,14 @@ def parse_url(url: str) -> dict:
                 "investment_slug": match.group(1),
                 "to_id": match.group(2),
                 "url": url,
+            }
+            
+        # Listing URL (e.g., /nowe-mieszkania/..., /deweloperskie/...)
+        if re.search(r'/(nowe-mieszkania|deweloperskie|inwestycje)/', path):
+            return {
+                "type": "tabelaofert",
+                "kind": "listing",
+                "url": url
             }
 
     return {"type": "unknown", "kind": "unknown", "url": url}
