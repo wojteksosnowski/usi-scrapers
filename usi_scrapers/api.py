@@ -14,7 +14,7 @@ from .models import ScraperConfig, ProgressCallback, DeveloperPage
 from .manager import TechnicalDataManager
 from .utils.io import save_raw_json, save_dev_raw_json
 from .utils.portals import resolve_prefix, get_portal
-from .mapping import get_mapping, resolve_path, load_mapping, list_available_keys
+from .mapping import get_mapping, resolve_path, load_mapping, list_available_keys, transform_to_unified
 
 # Scraper imports
 from .scraper_rp import (
@@ -481,28 +481,59 @@ def get_raw_dev_data(config: ScraperConfig, portal: str, portal_id: str) -> Opti
         return json.load(f)
 
 def save_raw(config: ScraperConfig, data: Dict[str, Any], portal_prefix: str, portal_id: str) -> Path:
-    """Zapisuje gotowy słownik jako surowy JSON inwestycji. portal_id jest wymagane."""
-    dev_slug = data.get("developer_slug")
-    inv_slug = data.get("investment_slug")
-    if not dev_slug or not inv_slug:
-        raise ValueError("Dane muszą zawierać 'developer_slug' i 'investment_slug'")
-    from .utils.io import save_raw_json, get_investment_dir
+    """
+    Zapisuje gotowy słownik jako surowy JSON inwestycji.
+    ID-ONLY: Jeśli inwestycja już istnieje, ścieżka wyznaczana jest z indeksu na podstawie portal_id.
+    Dla nowych inwestycji wymagane są 'developer_slug' i 'investment_slug' w envelope (data).
+    """
     from .storage import get_resolver
+    resolver = get_resolver(config)
+    
+    # 1. Próba rezolucji z indeksu (Ruthless ID-only)
+    result = resolver.lookup_investment(portal_prefix, portal_id)
+    if result:
+        dev_slug, inv_slug = result
+    else:
+        # 2. Fallback do danych (tylko dla nowych inwestycji)
+        dev_slug = data.get("developer_slug")
+        inv_slug = data.get("investment_slug")
+        
+    if not dev_slug or not inv_slug:
+        raise ValueError(f"save_raw: Nie można wyznaczyć ścieżki dla {portal_prefix}/{portal_id}. Brak slugów w indeksie i danych.")
+
+    # 3. Wyodrębnienie czystych danych (Pure-Raw)
+    # Jeśli data zawiera envelope (np. z fetch_investment), wyciągamy tylko raw_details
+    raw_to_save = data.get("raw_details", data)
+
+    from .utils.io import save_raw_json, get_investment_dir
     target_dir = get_investment_dir(dev_slug, inv_slug, config.public_dir)
-    file_path = save_raw_json(data, target_dir, portal_prefix, portal_id=portal_id)
-    get_resolver(config).update_investment_index(portal_prefix, portal_id, dev_slug, inv_slug)
+    file_path = save_raw_json(raw_to_save, target_dir, portal_prefix, portal_id=portal_id)
+    
+    # Aktualizacja indeksu (niezbędne dla nowych lub przy zmianie slugów)
+    resolver.update_investment_index(portal_prefix, portal_id, dev_slug, inv_slug)
     return file_path
 
 def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], portal_prefix: str, portal_id: str) -> Path:
-    """Zapisuje gotowy słownik jako surowy JSON dewelopera. portal_id jest wymagane."""
-    dev_slug = data.get("developer_slug")
-    if not dev_slug:
-        raise ValueError("Dane muszą zawierać 'developer_slug'")
-    from .utils.io import save_dev_raw_json
+    """
+    Zapisuje gotowy słownik jako surowy JSON dewelopera.
+    ID-ONLY: Ścieżka wyznaczana jest z indeksu lub envelope.
+    """
     from .storage import get_resolver
+    resolver = get_resolver(config)
+    
+    dev_slug = resolver.lookup_developer(portal_prefix, portal_id)
+    if not dev_slug:
+        dev_slug = data.get("developer_slug")
+        
+    if not dev_slug:
+        raise ValueError(f"save_raw_developer: Brak 'developer_slug' dla {portal_prefix}/{portal_id}.")
+
+    raw_to_save = data.get("raw_details", data)
+
+    from .utils.io import save_dev_raw_json
     target_dir = Path(config.public_dir) / "USIdev" / dev_slug
-    file_path = save_dev_raw_json(data, target_dir, portal_prefix, portal_id=portal_id)
-    get_resolver(config).update_developer_index(portal_prefix, portal_id, dev_slug)
+    file_path = save_dev_raw_json(raw_to_save, target_dir, portal_prefix, portal_id=portal_id)
+    resolver.update_developer_index(portal_prefix, portal_id, dev_slug)
     return file_path
 
 def list_developers(
@@ -557,3 +588,47 @@ def resolve_image_path(filename: str, config: ScraperConfig) -> Optional[str]:
     from .storage import get_resolver
     resolver = get_resolver(config)
     return resolver.find_image_path(filename)
+
+def extract_developer_meta(raw_data: dict, portal: str) -> dict:
+    """
+    Zwraca zunifikowany słownik z danymi dewelopera: {"id": ..., "slug": ..., "name": ...}.
+    Używa portal_data_mapping.json (entity_type='developer') do ekstrakcji.
+    Zwraca {} jeśli portal jest nieznany lub raw_data jest puste.
+    """
+    if not raw_data:
+        return {}
+    try:
+        portal_prefix = resolve_prefix(portal)
+    except ValueError:
+        return {}
+    result = transform_to_unified(portal_prefix, raw_data, entity_type="developer")
+    return result if result else {}
+
+def load_raw(config: ScraperConfig, portal: str, portal_id: str) -> Optional[Dict[str, Any]]:
+    """
+    Wczytuje surowy JSON inwestycji z lokalnego dysku.
+    Publiczny, czytelny punkt wejścia dla klientów (np. usi-tracker) do odczytu
+    pobranych danych bez znajomości wewnętrznej struktury katalogów.
+    Zwraca None jeśli inwestycja nie istnieje lokalnie.
+    """
+    return get_raw_data(config, portal, portal_id)
+
+def has_local_raw(config: ScraperConfig, portal: str, portal_id: str) -> bool:
+    """
+    Sprawdza czy surowy JSON inwestycji istnieje lokalnie (bez wczytywania zawartości).
+    Lekkie sprawdzenie bool — idealne do walidacji przed uruchomieniem scrapera.
+    Zwraca False jeśli portal jest nieznany lub inwestycja nie jest w indeksie.
+    """
+    try:
+        p = resolve_prefix(portal)
+    except ValueError:
+        return False
+    from .storage import get_resolver
+    from .utils.io import get_investment_dir
+    resolver = get_resolver(config)
+    result = resolver.lookup_investment(p, portal_id)
+    if not result:
+        return False
+    dev_slug, inv_slug = result
+    file_path = get_investment_dir(dev_slug, inv_slug, config.public_dir) / f"raw_{p}_{portal_id}.json"
+    return file_path.exists()

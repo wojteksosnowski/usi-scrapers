@@ -1,5 +1,17 @@
 # Changelog
 
+## Wersja 0.9.9 — Kamień 07 (Publiczne API ekstrakcji danych dewelopera) — 2026-06-06
+
+* Dodano `extract_developer_meta(raw_data, portal) -> dict` — publiczny punkt ekstrakcji unified danych dewelopera (id, slug, name).
+* Funkcja deleguje do istniejącego silnika `transform_to_unified` + `portal_data_mapping.json`, eliminując ręczne parsowanie JSON po stronie klientów.
+* Bezpieczna obsługa błędów: nieznany portal lub puste dane zwracają `{}`.
+* Dodano import `transform_to_unified` do nagłówka `api.py`.
+* 4 testy jednostkowe pokrywające portale `rp`, `otodom`, `tabelaofert` oraz przypadki brzegowe.
+
+### Wnioski ze zmian
+* Publiczne API `api.py` zyskuje warstwę semantycznych metod — klienci przestają zależeć od wewnętrznych szczegółów (`resolve_path`, struktura katalogów).
+* Wiązanie nowej funkcjonalności z istniejącym mapping engine zamiast powielania kodu to wzór wart stosowania przy kolejnych metodach `extract_*`.
+
 ## Wersja 0.9.8 — Kamień 06 (Naprawa ścieżek obrazów) — 2026-06-04
 
 * Dodano metodę `find_image_path` w `StorageResolver` (opartą na `rglob`), pozwalającą na dynamiczne lokalizowanie plików obrazów w drzewie katalogów.

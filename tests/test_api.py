@@ -383,3 +383,112 @@ def test_resolve_image_path(mock_get_resolver, config):
     assert result == "/path/to/test_image123.jpg"
     mock_get_resolver.assert_called_once_with(config)
     mock_resolver.find_image_path.assert_called_once_with("test_image123.jpg")
+
+# ── Tests for extract_developer_meta ─────────────────────────────────────────
+
+def test_extract_developer_meta_rp():
+    """RP: flat structure — id, slug, name bezpośrednio na najwyższym poziomie."""
+    from usi_scrapers.api import extract_developer_meta
+    raw = {
+        "id": 42,
+        "slug": "nowy-dom-deweloper",
+        "name": "Nowy Dom Deweloper",
+    }
+    result = extract_developer_meta(raw, "rp")
+    assert result.get("id") == 42
+    assert result.get("slug") == "nowy-dom-deweloper"
+    assert result.get("name") == "Nowy Dom Deweloper"
+
+
+def test_extract_developer_meta_oto():
+    """Otodom: zagnieżdżona struktura owner.account.attributes.slug z regex -IDxxx."""
+    from usi_scrapers.api import extract_developer_meta
+    raw = {
+        "owner": {
+            "id": 999,
+            "account": {
+                "name": "Otodom Developer Sp. z o.o.",
+                "attributes": {
+                    "slug": "otodom-developer-ID999"
+                }
+            }
+        }
+    }
+    result = extract_developer_meta(raw, "otodom")
+    assert result.get("id") == 999
+    assert result.get("slug") == "otodom-developer"  # regex strips -IDxxx
+    assert result.get("name") == "Otodom Developer Sp. z o.o."
+
+
+def test_extract_developer_meta_to():
+    """TabelaOfert: id z regex na logo_url, slug z url, name z name|nazwa."""
+    from usi_scrapers.api import extract_developer_meta
+    raw = {
+        "logo_url": "https://cdn.example.com/logos,12345-/logo.png",
+        "url": "https://tabelaofert.pl/deweloperzy/to-developer",
+        "name": "TO Developer",
+    }
+    result = extract_developer_meta(raw, "tabelaofert")
+    assert result.get("id") == "12345"
+    assert result.get("slug") == "to-developer"
+    assert result.get("name") == "TO Developer"
+
+
+def test_extract_developer_meta_empty_returns_empty_dict():
+    """Puste raw_data lub nieznany portal zawsze zwraca {}."""
+    from usi_scrapers.api import extract_developer_meta
+    assert extract_developer_meta({}, "rp") == {}
+    assert extract_developer_meta(None, "rp") == {}
+    assert extract_developer_meta({"id": 1}, "nieznany-portal-xyz") == {}
+
+# ── Tests for load_raw and has_local_raw ─────────────────────────────────────
+
+@patch("usi_scrapers.storage.get_resolver")
+def test_load_raw_delegates_to_get_raw_data(mock_get_resolver, config, tmp_path):
+    """load_raw zwraca ten sam wynik co get_raw_data dla istniejącego pliku."""
+    mock_resolver = MagicMock()
+    mock_resolver.lookup_investment.return_value = ("dev-x", "inv-x")
+    mock_get_resolver.return_value = mock_resolver
+
+    config.public_dir = str(tmp_path)
+    inv_dir = tmp_path / "USIdata" / "dev-x" / "inv-x"
+    inv_dir.mkdir(parents=True)
+    (inv_dir / "raw_rp_123.json").write_text('{"name": "Test"}')
+
+    from usi_scrapers.api import load_raw, get_raw_data
+    assert load_raw(config, "rp", "123") == get_raw_data(config, "rp", "123")
+
+
+@patch("usi_scrapers.storage.get_resolver")
+def test_has_local_raw_true(mock_get_resolver, config, tmp_path):
+    """has_local_raw zwraca True gdy plik istnieje."""
+    mock_resolver = MagicMock()
+    mock_resolver.lookup_investment.return_value = ("dev-x", "inv-x")
+    mock_get_resolver.return_value = mock_resolver
+
+    config.public_dir = str(tmp_path)
+    inv_dir = tmp_path / "USIdata" / "dev-x" / "inv-x"
+    inv_dir.mkdir(parents=True)
+    (inv_dir / "raw_rp_123.json").touch()
+
+    from usi_scrapers.api import has_local_raw
+    assert has_local_raw(config, "rp", "123") is True
+
+
+@patch("usi_scrapers.storage.get_resolver")
+def test_has_local_raw_false_missing_file(mock_get_resolver, config, tmp_path):
+    """has_local_raw zwraca False gdy inwestycja nie jest w indeksie."""
+    mock_resolver = MagicMock()
+    mock_resolver.lookup_investment.return_value = None
+    mock_get_resolver.return_value = mock_resolver
+
+    config.public_dir = str(tmp_path)
+
+    from usi_scrapers.api import has_local_raw
+    assert has_local_raw(config, "rp", "999") is False
+
+
+def test_has_local_raw_false_unknown_portal(config):
+    """has_local_raw zwraca False dla nieznanego portalu."""
+    from usi_scrapers.api import has_local_raw
+    assert has_local_raw(config, "nieznany-portal", "123") is False
