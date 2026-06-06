@@ -1,3 +1,4 @@
+from .manager import TechnicalDataManager
 """
 Public API dla usi-scrapers.
 Zbiór metod służących do interakcji z pakietem.
@@ -83,29 +84,22 @@ def get_scraper_func(portal_prefix: str, func_name: str) -> Optional[Callable]:
 # ... (keep DEVELIA and other constants)
 # ... (keep _check_fields and health_check)
 
-def process_batch(
-    config: ScraperConfig,
-    fetcher: Fetcher,
+def process_batch_ingest(
+    config: "ScraperConfig",
+    fetcher: "Fetcher",
     portal: str,
-    identifiers: List[str],
-    on_progress: Optional[Callable[[Dict[str, Any]], None]] = None,
+    urls: List[str],
+    on_progress: "Optional[Callable[[Dict[str, Any]], None]]" = None,
     delay_range: tuple[float, float] = (0.5, 2.0),
     max_retries: int = 3,
 ) -> List[Dict[str, Any]]:
     """
-    Sekwencyjnie pobiera listę inwestycji z obsługą throttling, retry i raportowaniem postępu.
-    Zapisuje dane surowe i zdjęcia natychmiast po pobraniu każdej inwestycji (I/O Isolation).
+    Sekwencyjnie pobiera listę inwestycji po ich URL-ach.
     """
-    total = len(identifiers)
+    total = len(urls)
     results = []
-    manager = TechnicalDataManager(config)
-    try:
-        portal_prefix = resolve_prefix(portal.lower())
-    except ValueError:
-        portal_prefix = "raw"
-
-    for i, identifier in enumerate(identifiers):
-        
+    
+    for i, url in enumerate(urls):
         current_index = i + 1
         progress_percent = int((current_index / total) * 100)
         
@@ -115,12 +109,7 @@ def process_batch(
         
         for attempt in range(max_retries):
             try:
-                scrape_func = get_scraper_func(portal_prefix, "scrape")
-                if not scrape_func:
-                    raise ValueError(f"No scrape function found for portal: {portal_prefix}")
-                
-                data = scrape_func(str(identifier), fetcher)
-                
+                data = ingest_investment_by_url(config, fetcher, portal, url)
                 if data and "error" in data:
                     error_msg = str(data["error"])
                     if "429" in error_msg or "timeout" in error_msg.lower():
@@ -130,7 +119,7 @@ def process_batch(
                                 "current_index": current_index,
                                 "progress_percent": progress_percent,
                                 "status": "retrying",
-                                "investment": {"identifier": identifier},
+                                "investment": {"url": url},
                                 "message": f"Próba {attempt + 1}/{max_retries}: {error_msg}. Czekam 10s...",
                                 "error_details": error_msg
                             })
@@ -149,9 +138,8 @@ def process_batch(
                     continue
                 break
 
-        # I/O Isolation & Reporting
         msg = ""
-        inv_info = {"identifier": identifier}
+        inv_info = {"url": url}
         
         if status == "success" and data:
             dev_slug = data.get("developer_slug")
@@ -161,13 +149,11 @@ def process_batch(
                 error_msg = "Invalid or incomplete data: missing dev_slug or inv_slug in data"
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
-                # Zapis danych surowych
-                manager.save_raw_data(data, portal_prefix)
-                
                 # Synchronizacja zdjęć
                 from .utils.io import get_image_dir
                 target_image_dir = get_image_dir(dev_slug, inv_slug, config.public_dir)
                 image_urls = data.get("image_urls", [])
+                manager = TechnicalDataManager(config)
                 saved_images = manager.sync_images(image_urls, target_image_dir)
                 msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
         else:
@@ -186,11 +172,104 @@ def process_batch(
 
         results.append(data)
 
-        # Throttling
         if i < total - 1:
             time.sleep(random.uniform(*delay_range))
 
     return results
+
+def process_batch_refresh(
+    config: "ScraperConfig",
+    fetcher: "Fetcher",
+    portal: str,
+    portal_ids: List[str],
+    on_progress: "Optional[Callable[[Dict[str, Any]], None]]" = None,
+    delay_range: tuple[float, float] = (0.5, 2.0),
+    max_retries: int = 3,
+) -> List[Dict[str, Any]]:
+    """
+    Sekwencyjnie pobiera listę inwestycji po ich zapisanych ID.
+    """
+    total = len(portal_ids)
+    results = []
+    
+    for i, portal_id in enumerate(portal_ids):
+        current_index = i + 1
+        progress_percent = int((current_index / total) * 100)
+        
+        data = None
+        error_msg = None
+        status = "failed"
+        
+        for attempt in range(max_retries):
+            try:
+                data = refresh_investment_by_id(config, fetcher, portal, portal_id)
+                if data and "error" in data:
+                    error_msg = str(data["error"])
+                    if "429" in error_msg or "timeout" in error_msg.lower():
+                        if on_progress:
+                            on_progress({
+                                "total": total,
+                                "current_index": current_index,
+                                "progress_percent": progress_percent,
+                                "status": "retrying",
+                                "investment": {"portal_id": portal_id},
+                                "message": f"Próba {attempt + 1}/{max_retries}: {error_msg}. Czekam 10s...",
+                                "error_details": error_msg
+                            })
+                        time.sleep(10)
+                        continue
+                    else:
+                        break # Inny błąd - nie ponawiamy
+                
+                status = "success"
+                error_msg = None
+                break
+            except Exception as e:
+                error_msg = str(e)
+                if attempt < max_retries - 1:
+                    time.sleep(10)
+                    continue
+                break
+
+        msg = ""
+        inv_info = {"portal_id": portal_id}
+        
+        if status == "success" and data:
+            dev_slug = data.get("developer_slug")
+            inv_slug = data.get("investment_slug")
+            if not dev_slug or not inv_slug:
+                status = "failed"
+                error_msg = "Invalid or incomplete data: missing dev_slug or inv_slug in data"
+                msg = f"Pobranie nieudane: {error_msg}"
+            else:
+                # Synchronizacja zdjęć
+                from .utils.io import get_image_dir
+                target_image_dir = get_image_dir(dev_slug, inv_slug, config.public_dir)
+                image_urls = data.get("image_urls", [])
+                manager = TechnicalDataManager(config)
+                saved_images = manager.sync_images(image_urls, target_image_dir)
+                msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
+        else:
+            msg = f"Pobranie nieudane: {error_msg}"
+
+        if on_progress:
+            on_progress({
+                "total": total,
+                "current_index": current_index,
+                "progress_percent": progress_percent,
+                "status": status,
+                "investment": inv_info,
+                "message": msg,
+                "error_details": error_msg if status == "failed" else None
+            })
+
+        results.append(data)
+
+        if i < total - 1:
+            time.sleep(random.uniform(*delay_range))
+
+    return results
+
 
 def _check_fields(data: Dict[str, Any], portal: str) -> tuple[list[str], list[str]]:
     try:
@@ -322,84 +401,139 @@ def list_investments(
     return discover_func(config, fetcher, identifier)
 
 
-def fetch_many(
-    config: ScraperConfig,
-    fetcher: Fetcher,
-    portal: str,
-    investments: List[Dict[str, Any]],
-    on_progress: Optional[ProgressCallback] = None,
-) -> List[Dict[str, Any]]:
-    """
-    Pobiera szczegóły listy inwestycji z opcjonalnym raportowaniem postępu.
 
-    Każdy element investments musi zawierać klucz: "identifier".
-    Zwraca listę wyników w tej samej kolejności co investments.
-    """
-    total = len(investments)
-    results = []
-    for i, inv in enumerate(investments):
-        result = fetch_investment(config, fetcher, portal, inv["identifier"])
-        results.append(result)
-        if on_progress:
-            current_index = i + 1
-            on_progress({
-                "total": total,
-                "current_index": current_index,
-                "progress_percent": int((current_index / total) * 100) if total else 100,
-                "status": "failed" if result.get("error") else "success",
-                "investment": {"identifier": inv["identifier"]},
-                "message": "",
-                "error_details": str(result["error"]) if result.get("error") else None,
-            })
-    return results
+def _validate_and_register_id(data: dict, portal_prefix: str, url: str, config: "ScraperConfig"):
+    if data and not data.get("error"):
+        manager = TechnicalDataManager(config)
+        manager.save_raw_data(data, portal_prefix)
 
-def fetch_investment(
-    config: ScraperConfig, 
-    fetcher: Fetcher, 
+def ingest_investment_by_url(
+    config: "ScraperConfig", 
+    fetcher: "Fetcher", 
     portal: str, 
-    identifier: str,
-    on_progress: Optional[Callable[[Dict[str, Any]], None]] = None
-) -> Dict[str, Any]:
-    """Pobiera szczegóły konkretnej inwestycji ze wskazanego portalu (Scrape)."""
+    url: str,
+    on_progress: "Optional[Callable[[Dict[str, Any]], None]]" = None
+) -> dict:
+    """
+    PIERWSZY PUNKT WEJŚCIA: Pobiera inwestycję po surowym adresie URL.
+    Wyciąga ID, inicjalizuje strukturę i zapisuje dane na dysk.
+    """
     data = {}
     error_msg = None
     status = "failed"
-
+    
     try:
-        p = resolve_prefix(portal)
-        scrape_func = get_scraper_func(p, "scrape")
+        portal_prefix = resolve_prefix(portal)
+        if not url.startswith(("http://", "https://")):
+            raise ValueError(f"Metoda ingest_by_url wymaga pełnego adresu URL, przekazano: {url}")
+            
+        scrape_func = get_scraper_func(portal_prefix, "scrape")
         if not scrape_func:
             raise ValueError(f"Unsupported portal for fetching: {portal}")
+            
+        scrape_arg = url
+        if portal_prefix == "rp":
+            from .utils.url_parser import parse_url
+            parsed = parse_url(url)
+            if parsed and parsed.get("offer_id"):
+                scrape_arg = parsed["offer_id"]
+            else:
+                raise ValueError(f"Nie można wyekstrahować ID z URL: {url}")
 
-        data = scrape_func(str(identifier), fetcher)
+        data = scrape_func(scrape_arg, fetcher)
         if data and data.get("error"):
             error_msg = str(data["error"])
         else:
             status = "success"
+            _validate_and_register_id(data, portal_prefix, url, config)
     except Exception as e:
         error_msg = str(e)
         data = {"error": error_msg}
 
     if on_progress:
         msg = "Pobrano pomyślnie." if status == "success" else f"Pobranie nieudane: {error_msg}"
-        dev_slug = data.get("developer_slug") if status == "success" else None
-        inv_slug = data.get("investment_slug") if status == "success" else None
-
         on_progress({
             "total": 1,
             "current_index": 1,
             "progress_percent": 100,
             "status": status,
             "investment": {
-                "identifier": identifier,
-                "dev_slug": dev_slug,
-                "inv_slug": inv_slug
+                "url": url,
+                "dev_slug": data.get("developer_slug") if status == "success" else None,
+                "inv_slug": data.get("investment_slug") if status == "success" else None
             },
             "message": msg,
             "error_details": error_msg if status == "failed" else None
         })
 
     return data
+
+def refresh_investment_by_id(
+    config: "ScraperConfig", 
+    fetcher: "Fetcher", 
+    portal: str, 
+    portal_id: str,
+    on_progress: "Optional[Callable[[Dict[str, Any]], None]]" = None
+) -> dict:
+    """
+    KOLEJNE URUCHOMIENIA: Odświeża dane na podstawie wyekstrahowanego ID.
+    Jeśli scraper potrzebuje URL do odświeżenia, API pobiera go z lokalnego indeksu/pliku.
+    """
+    data = {}
+    error_msg = None
+    status = "failed"
+
+    try:
+        portal_prefix = resolve_prefix(portal)
+        
+        if portal_prefix == "rp" and not str(portal_id).isdigit():
+            raise ValueError(f"Portal RP wymaga numerycznego ID: {portal_id}")
+
+        from .storage import get_resolver
+        resolver = get_resolver(config)
+        
+        saved_meta = resolver.get_investment_metadata(portal_prefix, str(portal_id))
+        if not saved_meta:
+            raise FileNotFoundError(f"Inwestycja o ID {portal_id} nie istnieje lokalnie na dysku.")
+            
+        url_reference = saved_meta.get("source_url")
+        
+        scrape_func = get_scraper_func(portal_prefix, "scrape")
+        if not scrape_func:
+            raise ValueError(f"Unsupported portal for fetching: {portal}")
+
+        scrape_arg = url_reference if portal_prefix in ("oto", "to") else portal_id
+        if portal_prefix in ("oto", "to") and not scrape_arg:
+            raise ValueError(f"Brak zapisanego URL dla inwestycji {portal_id} w portalu {portal_prefix}")
+
+        data = scrape_func(scrape_arg, fetcher)
+        if data and data.get("error"):
+            error_msg = str(data["error"])
+        else:
+            status = "success"
+            _validate_and_register_id(data, portal_prefix, url_reference or portal_id, config)
+    except Exception as e:
+        error_msg = str(e)
+        data = {"error": error_msg}
+
+    if on_progress:
+        msg = "Pobrano pomyślnie." if status == "success" else f"Pobranie nieudane: {error_msg}"
+        on_progress({
+            "total": 1,
+            "current_index": 1,
+            "progress_percent": 100,
+            "status": status,
+            "investment": {
+                "portal_id": portal_id,
+                "dev_slug": data.get("developer_slug") if status == "success" else None,
+                "inv_slug": data.get("investment_slug") if status == "success" else None
+            },
+            "message": msg,
+            "error_details": error_msg if status == "failed" else None
+        })
+
+    return data
+
 
 def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str) -> Dict[str, Any]:
     """Pobiera i zapisuje surowy JSON inwestycji. Zwraca status i metadane."""
@@ -410,7 +544,6 @@ def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifie
     
     data = scrape_func(identifier, fetcher)
     if data and "error" not in data:
-        from .manager import TechnicalDataManager
         manager = TechnicalDataManager(config)
         path = manager.save_raw_data(data, p)
         if path:
@@ -426,16 +559,21 @@ def download_raw(config: ScraperConfig, fetcher: Fetcher, portal: str, identifie
     else:
         return {"status": "error", "message": data.get("error", "Unknown error")}
 
-def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, identifier: str) -> Dict[str, Any]:
-    """Pobiera i zapisuje surowy JSON profilu dewelopera."""
+def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, portal_id: str) -> Dict[str, Any]:
+    """Pobiera i zapisuje surowy JSON profilu dewelopera po jego ID."""
     p = resolve_prefix(portal)
     func = get_scraper_func(p, "download_raw_dev")
     if not func:
         return {"status": "error", "message": f"No dev scraper found for {portal}"}
         
-    fallback_slug = str(identifier) if not str(identifier).isdigit() else "unknown"
-    target_dir = Path(config.public_dir) / "USIdev" / fallback_slug
-    result_slug = func(identifier, target_dir, fetcher, config)
+    from .storage import get_resolver
+    resolver = get_resolver(config)
+    dev_slug = resolver.lookup_developer(p, str(portal_id))
+    if not dev_slug:
+        dev_slug = f"unknown_{p}_{portal_id}"
+        
+    target_dir = Path(config.public_dir) / "USIdev" / dev_slug
+    result_slug = func(portal_id, target_dir, fetcher, config)
     if result_slug:
         return {"status": "success", "dev_slug": result_slug}
     return {"status": "error", "message": "Failed to download developer data"}

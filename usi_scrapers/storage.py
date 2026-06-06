@@ -115,6 +115,39 @@ class StorageResolver:
                 return str(path)
         return None
 
+    def get_investment_metadata(self, portal_prefix: str, portal_id: str) -> Optional[Dict[str, str]]:
+        """
+        Pobiera metadane inwestycji (np. source_url) ładując surowy JSON z dysku.
+        """
+        res = self.lookup_investment(portal_prefix, portal_id)
+        if not res:
+            return None
+        dev_slug, inv_slug = res
+        from .utils.io import get_investment_dir
+        target_dir = get_investment_dir(dev_slug, inv_slug, self.public_dir)
+        file_path = target_dir / f"raw_{portal_prefix}_{portal_id}.json"
+        
+        if not file_path.exists():
+            return None
+            
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            source_url = None
+            if portal_prefix == "oto":
+                source_url = data.get("ad", {}).get("url") or data.get("url")
+            elif portal_prefix == "to":
+                source_url = data.get("url")
+            
+            return {
+                "source_url": source_url,
+                "dev_slug": dev_slug,
+                "inv_slug": inv_slug
+            }
+        except Exception as e:
+            logger.error(f"Failed to read metadata for {portal_prefix} {portal_id}: {e}")
+            return None
+
 _default_resolver: Optional[StorageResolver] = None
 
 def get_resolver(config: ScraperConfig) -> StorageResolver:

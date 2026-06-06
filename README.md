@@ -37,12 +37,20 @@ investments = list_investments(config, fetcher, portal="otodom")
 investments = list_investments(config, fetcher, portal="rp", identifier="dom-development-sa-955")
 ```
 
-### Scraping pojedynczej inwestycji
+### Scraping pojedynczej inwestycji (Ingest & Refresh)
 
 ```python
-from usi_scrapers.api import fetch_investment
+from usi_scrapers.api import ingest_investment_by_url, refresh_investment_by_id
 
-data = fetch_investment(config, fetcher, portal="rp", identifier="123", dev_slug="deweloper", inv_slug="inwestycja")
+# Dodawanie nowej inwestycji na podstawie URL
+data = ingest_investment_by_url(
+    config, fetcher, url="http://rynekpierwotny.pl/oferty/deweloper/inwestycja-123/"
+)
+
+# Odświeżanie istniejącej inwestycji na podstawie ID (wymaga podania portalu)
+data = refresh_investment_by_id(
+    config, fetcher, portal="rp", identifier="123", dev_slug="deweloper", inv_slug="inwestycja"
+)
 ```
 
 ## Struktura wyjściowa

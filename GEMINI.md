@@ -1,6 +1,4 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# GEMINI.md
 
 ## Commands
 
@@ -67,7 +65,7 @@ When `portal_id` is unavailable, falls back to `raw_{portal}_{inv_slug}.json`.
 
 **Created by:** `save_raw_json()` in `utils/io.py`, called from:
 - `api.download_raw()` → per-portal `download_raw_*_json()`
-- `TechnicalDataManager.save_raw_data()` inside `process_batch()` (immediately after each successful scrape — I/O isolation)
+- `TechnicalDataManager.save_raw_data()` inside `process_batch_ingest` / `process_batch_refresh` (immediately after each successful scrape — I/O isolation)
 
 **Overwrite behaviour:** existing file is renamed to `raw_{portal}_{inv_slug}_{YYYYMMDD_HHMMSS}.json` in the same directory before the new file is written. The `_usi_meta` block inside each file records `portal`, `portal_url`, `portal_id`, `source_url`, and `saved_at`.
 
@@ -114,7 +112,7 @@ Example: `USIdev/unidevelopment/logo_rp_955.png`
 
 **Path:** `{public_dir}/USI/{dev_slug}/{inv_slug}/{filename}`
 
-**Created by:** `save_images()` / `download_image()` in `utils/images.py`, called via `TechnicalDataManager.sync_images()` inside `process_batch()`.
+**Created by:** `save_images()` / `download_image()` in `utils/images.py`, called via `TechnicalDataManager.sync_images()` inside `process_batch_ingest` / `process_batch_refresh`.
 
 **Filename derivation — `clean_filename(url)`:**
 
@@ -186,21 +184,27 @@ path = download_raw_dev(
 # → returns Path | None
 ```
 
-### 3. Scrape one investment (full details)
+### 3. Scrape one investment (Ingest & Refresh)
 
 ```python
-from usi_scrapers.api import fetch_investment
+from usi_scrapers.api import ingest_investment_by_url, refresh_investment_by_id
 
-data = fetch_investment(
+# Ingest via full URL (auto-detects portal and identifiers)
+data = ingest_investment_by_url(
     config=config,
     fetcher=fetcher,
-    portal="tabelaofert",
-    identifier="https://tabelaofert.pl/inwestycja/...,i8982461",  # full investment URL
+    url="https://tabelaofert.pl/inwestycja/...,i8982461"
+)
+
+# Refresh via ID (requires portal)
+data = refresh_investment_by_id(
+    config=config,
+    fetcher=fetcher,
+    portal="rp",
+    identifier="12345"
 )
 # → dict: name/title, latitude, longitude, price_min/max, image_urls, amenities, ...
 ```
-
-**Note:** for `rp`, pass `inv["id"]` (numeric string) as `identifier`, not the URL.
 
 ### 4. Identify developer name from an investment URL
 
@@ -245,18 +249,29 @@ page = list_developers(
 ### 6. Batch-scrape multiple investments
 
 ```python
-from usi_scrapers.api import process_batch
+from usi_scrapers.api import process_batch_ingest, process_batch_refresh
 
-results = process_batch(
+# Batch ingest by URLs
+results_ingest = process_batch_ingest(
     config=config,
     fetcher=fetcher,
-    portal="rp",                          # "rp" | "otodom" | "tabelaofert"
-    identifiers=["12345", "67890"],       # list of investment identifiers
-    on_progress=lambda payload: ...,      # optional; receives rich dict per item
-    delay_range=(0.5, 2.0),              # throttle between requests
+    urls=["https://...", "https://..."],
+    on_progress=lambda payload: ...,
+    delay_range=(0.5, 2.0),
     max_retries=3,
 )
-# → list[dict]: one entry per identifier; includes "error" key on failure
+
+# Batch refresh by IDs (requires portal)
+results_refresh = process_batch_refresh(
+    config=config,
+    fetcher=fetcher,
+    portal="rp",
+    identifiers=["12345", "67890"],
+    on_progress=lambda payload: ...,
+    delay_range=(0.5, 2.0),
+    max_retries=3,
+)
+# → list[dict]: one entry per URL/identifier; includes "error" key on failure
 # Writes raw JSON + images to disk immediately after each item (I/O isolation).
 # Auto-retries on HTTP 429 / timeout with 10s backoff.
 ```
@@ -331,7 +346,7 @@ download_raw_dev(config, fetcher, "rp", "unidevelopment", "unidevelopment")
 
 # 3. Scrape each investment
 for inv in investments:
-    data = fetch_investment(config, fetcher, "rp", inv["id"])
+    data = refresh_investment_by_id(config, fetcher, "rp", inv["id"])
     # ... persist to database
 ```
 
@@ -362,4 +377,4 @@ Developer profile parsing (description, contact) beyond raw JSON and logo is not
 - **`utils/url_parser.py`** — `parse_url(url)` parses RynekPierwotny, Otodom, and TabelaOfert URLs and returns a dict with `type`, `kind`, and the relevant identifiers (e.g. `developer_slug`, `agency_id`, `to_id`). Use this to extract the `identifier` value needed for API calls from a raw portal URL.
 - **`utils/string.py`** — custom `slugify()` with explicit Polish character transliteration. Prefer this over the `python-slugify` dependency when generating internal slugs; `clean_filename()` in `utils/images.py` strips CDN cache-buster suffixes.
 - **`schemas/`** — JSON Schema files (`usi_unified.schema.json`, `rp_details.schema.json`, etc.) for validating scraped payloads. Used for cross-checking, not enforced at runtime.
-- **`ProgressCallback`** — `from usi_scrapers.models import ProgressCallback`; a `Callable[[Dict[str, Any]], None]`. Payload keys: `total`, `current_index`, `progress_percent`, `status` (`"success"` | `"failed"` | `"retrying"`), `investment`, `message`, `error_details`. Used by `process_batch` and `fetch_investment`.
+- **`ProgressCallback`** — `from usi_scrapers.models import ProgressCallback`; a `Callable[[Dict[str, Any]], None]`. Payload keys: `total`, `current_index`, `progress_percent`, `status` (`"success"` | `"failed"` | `"retrying"`), `investment`, `message`, `error_details`. Used by `process_batch_ingest`, `process_batch_refresh`, `ingest_investment_by_url`, and `refresh_investment_by_id`.
