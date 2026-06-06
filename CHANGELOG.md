@@ -1,5 +1,16 @@
 # Changelog
 
+## Wersja 1.0.0 — Kamień 08 (load_raw i has_local_raw w publicznym API) — 2026-06-06
+
+* Dodano `load_raw(config, portal, portal_id) -> Optional[dict]` — opisowy alias `get_raw_data` z docstringiem dla klientów.
+* Dodano `has_local_raw(config, portal, portal_id) -> bool` — lekkie sprawdzenie bool istnienia pliku bez wczytywania treści.
+* Funkcja `has_local_raw` używa `StorageResolver` + `file_path.exists()` — brak I/O poza sprawdzeniem indeksu.
+* 4 testy jednostkowe pokrywające oba nowe endpointy i przypadki brzegowe.
+
+### Wnioski ze zmian
+* Publiczne API `api.py` zyskuje spójną konwencję nazewnictwa: `has_*` do sprawdzania stanu lokalnego, `load_*` do odczytu, `extract_*` do transformacji — klienci mogą przewidywalnie nawigować po API bez zaglądania do kodu źródłowego.
+* Oddzielenie lekkiego sprawdzenia (bool) od pełnego odczytu (dict) pozwala klientom minimalizować I/O w scenariuszach walidacji przed scrapowaniem.
+
 ## Wersja 0.9.9 — Kamień 07 (Publiczne API ekstrakcji danych dewelopera) — 2026-06-06
 
 * Dodano `extract_developer_meta(raw_data, portal) -> dict` — publiczny punkt ekstrakcji unified danych dewelopera (id, slug, name).
