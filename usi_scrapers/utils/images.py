@@ -15,14 +15,28 @@ IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 def clean_filename(url: str) -> str:
     """
     Extracts and cleans filename from URL, removing parameters and ensuring correct extension.
-    Handles TabelaOfert and Otodom CDN patterns defensively.
+    Handles TabelaOfert and Otodom Base64/CDN patterns while enforcing backwards compatibility.
     """
-    # 1. Otodom CDN: .../v1/files/{unique_id}/image;s=...
-    m_oto = re.search(r'/([^/]+)/image(?:[;?])', url)
-    if m_oto:
-        return m_oto.group(1) + '.jpg'
+    # 1. Specjalna, rygorystyczna obsługa Otodom (zachowanie Base64 + wymuszenie .webp)
+    if "otodom.pl" in url or "/files/" in url:
+        # Odcinamy wszystko od pierwszego średnika lub pytajnika w URL
+        base_url = re.split(r'[;?#]', url)[0]
+        # Wyciągamy ostatni segment (często czysty Base64 lub nazwa pliku)
+        raw_filename = unquote(base_url.split("/")[-1])
+        
+        # Jeśli z jakiegoś powodu na końcu został napis '/image' lub jest pusty, 
+        # cofamy się o jeden segment w URL
+        if raw_filename == "image" or not raw_filename:
+            raw_filename = unquote(base_url.split("/")[-2])
 
-    # 2. TabelaOfert CDN: .../quality_N,scale_N,ID-filename.ext
+        # Usuwamy ewentualne kropki i stare rozszerzenia, aby wymusić czyste .webp
+        for ext in IMAGE_EXTENSIONS:
+            if raw_filename.lower().endswith(ext):
+                raw_filename = raw_filename[:-len(ext)]
+                
+        return f"{raw_filename}.webp"
+
+    # 2. TabelaOfert CDN: .../quality_N,scale_N,ID-filename.ext or .../ID-filename.ext
     m_to = re.search(r'ID-([^/?#;]+)', url)
     if m_to:
         filename = m_to.group(1)
@@ -34,12 +48,10 @@ def clean_filename(url: str) -> str:
                 filename += ".jpg"
         return filename
 
-    # 3. Standard extraction z twardym czyszczeniem query params, hashes i średników (Otodom CDN fix)
-    # Rozdzielamy po '?', '#', ale także po ';' aby odciąć transformacje obrazów
+    # 3. Standard extraction dla pozostałych portali
     base_url = re.split(r'[;?#]', url)[0]
     filename = unquote(base_url.split("/")[-1])
     
-    # Czyszczenie przyrostków cache-buster
     filename = re.sub(r'_[a-f0-9]{8}\.', '.', filename)
 
     match = re.search(r'([^\/]+\.(?:jpg|jpeg|png|webp))', filename, re.IGNORECASE)

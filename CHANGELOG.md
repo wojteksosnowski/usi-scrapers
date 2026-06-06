@@ -2,7 +2,7 @@
 
 ## Wersja 1.1.2 — Kamień 10 (Dynamiczne pobieranie obrazów w Otodom) — 2026-06-06
 
-* Usprawniono funkcję `clean_filename` w `utils/images.py` w celu obcinania wszelkich parametrów modyfikujących (takich jak skale, powiększenia i średniki) z Otodom CDN i TabelaOfert, co zapobiega zniekształceniom rozszerzeń na dysku.
+* Usprawniono funkcję `clean_filename` w `utils/images.py` w celu obcinania wszelkich parametrów modyfikujących (takich jak skale, powiększenia i średniki) z Otodom CDN i TabelaOfert, co zapobiega zniekształceniom rozszerzeń na dysku. Wprowadzono także eleganckie, niezależne wsparcie dla wyodrębniania plików Base64 z linków Otodom (z twardym wymuszaniem zapisu jako `.webp`), zachowując przy tym wsteczną kompatybilność sygnatur API w potoku pobierania.
 * Wdrożono dynamiczne pobieranie obrazków (I/O) w fazie scrapowania potoku `scraper_otodom.py`. Funkcja zwraca listę ustandaryzowanych, pobranych nazw lokalnych z powrotem do docelowego schematu w polu `image_urls`.
 
 ## Wersja 1.1.1 — Kamień 09 (Hardening API & Walidacja URL) — 2026-06-06
