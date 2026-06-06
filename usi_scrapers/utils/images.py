@@ -14,55 +14,21 @@ IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 
 def clean_filename(url: str) -> str:
     """
-    Extracts and cleans filename from URL, removing parameters and ensuring correct extension.
-    Handles TabelaOfert and Otodom Base64/CDN patterns while enforcing backwards compatibility.
+    Ekstrakcja nazwy pliku dokładnie taka, jakiej oczekuje baza danych,
+    usuwając jedynie techniczne parametry CDN (query, fragmenty, średniki).
     """
-    # 1. Specjalna, rygorystyczna obsługa Otodom (zachowanie Base64 + wymuszenie .webp)
-    if "otodom.pl" in url or "/files/" in url:
-        # Odcinamy wszystko od pierwszego średnika lub pytajnika w URL
-        base_url = re.split(r'[;?#]', url)[0]
-        # Wyciągamy ostatni segment (często czysty Base64 lub nazwa pliku)
-        raw_filename = unquote(base_url.split("/")[-1])
-        
-        # Jeśli z jakiegoś powodu na końcu został napis '/image' lub jest pusty, 
-        # cofamy się o jeden segment w URL
-        if raw_filename == "image" or not raw_filename:
-            raw_filename = unquote(base_url.split("/")[-2])
-
-        # Usuwamy ewentualne kropki i stare rozszerzenia, aby wymusić czyste .webp
-        for ext in IMAGE_EXTENSIONS:
-            if raw_filename.lower().endswith(ext):
-                raw_filename = raw_filename[:-len(ext)]
-                
-        return f"{raw_filename}.webp"
-
-    # 2. TabelaOfert CDN: .../quality_N,scale_N,ID-filename.ext or .../ID-filename.ext
-    m_to = re.search(r'ID-([^/?#;]+)', url)
-    if m_to:
-        filename = m_to.group(1)
-        if not any(filename.lower().endswith(ext) for ext in IMAGE_EXTENSIONS):
-            ext_match = re.search(r'\.([a-z0-9]+)(?:[;?#]|$)', url, re.I)
-            if ext_match:
-                filename += "." + ext_match.group(1)
-            else:
-                filename += ".jpg"
-        return filename
-
-    # 3. Standard extraction dla pozostałych portali
+    # 1. Odcinamy parametry korygujące (średniki, pytajniki, hashe)
     base_url = re.split(r'[;?#]', url)[0]
+    
+    # 2. Wyciągamy ostatni segment ścieżki
     filename = unquote(base_url.split("/")[-1])
     
-    filename = re.sub(r'_[a-f0-9]{8}\.', '.', filename)
-
-    match = re.search(r'([^\/]+\.(?:jpg|jpeg|png|webp))', filename, re.IGNORECASE)
-    if match:
-        return match.group(1)
-
-    for ext in IMAGE_EXTENSIONS:
-        if ext in filename.lower():
-            idx = filename.lower().find(ext)
-            return filename[:idx + len(ext)]
-
+    # 3. Jeśli to plik Otodom (często Base64 bez rozszerzenia), wymuszamy .webp
+    if "otodom.pl" in url or "/files/" in url:
+        # Usuwamy ewentualne stare rozszerzenie, aby nie było podwójnych kropek
+        name_only = re.sub(r'\.(jpg|jpeg|png|webp)$', '', filename, flags=re.IGNORECASE)
+        return f"{name_only}.webp"
+        
     return filename
 
 def download_image(url: str, target_dir: Path, force_download: bool) -> tuple[str, bool]:

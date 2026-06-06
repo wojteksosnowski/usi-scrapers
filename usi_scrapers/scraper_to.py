@@ -7,6 +7,7 @@ from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, save_raw_html, lookup_developer_by_id, lookup_investment_by_id
 from .utils.string import slugify
+from .utils.images import save_images
 from .utils.portals import portal_api_url, portal_url, get_portal
 from .mapping import get_mapping, resolve_path
 from .utils.scrapers import generic_discover_investments, generic_download_dev_json
@@ -761,6 +762,12 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     for key, path in signal_mapping.items():
         signals[key] = resolve_path(product, path)
 
+    # Pobieranie i zapis obrazów do właściwego katalogu
+    images_dir = Path(fetcher.config.public_dir) / "USIdata" / developer_slug / investment_slug
+    local_image_filenames = []
+    if filtered_urls:
+        local_image_filenames = save_images(filtered_urls, images_dir, fetcher.config)
+
     return {
         "source": "tabelaofert.pl",
         "to_id": _extract_to_id(url),
@@ -781,7 +788,7 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         "ceiling_height_max": resolve_path(product, to_mapping.get("ceiling_height_max")),
         "construction_date_upper": extract_additional_prop(product, "Termin oddania"),
         "amenities": amenities,
-        "image_urls": filtered_urls,
+        "image_urls": local_image_filenames,
         "signals": signals,
         "raw_details": product,
     }

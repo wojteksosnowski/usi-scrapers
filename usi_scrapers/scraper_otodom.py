@@ -329,11 +329,18 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     # Primary oto_portal_id used for lookups (Standardized on alphanumeric hash)
     oto_portal_id = hash_id or (f"ID{numeric_id}" if numeric_id else None)
 
-    # Safeguard: Do not process inactive/archived listings to prevent overwriting images
+    # Pobieramy status i standaryzujemy do małych liter
     status = str(resolve_path(page_props, oto_mapping.get("status")) or "active").lower()
+    
+    # Twarda blokada dla ofert usuniętych, nieaktywnych lub archiwalnych
+    if status in ("removed_by_user", "archived", "inactive", "removed"):
+        logger.warning(f"Otodom listing has bypass status '{status}': {url}. Skipping to protect local data.")
+        return {"error": f"Listing is inactive or removed (status: {status})"}
+        
+    # Alternatywne zabezpieczenie pozytywne (tylko aktywne ogłoszenia)
     if status not in ("active", "actual", "none", ""):
-        logger.warning(f"Otodom listing is {status}: {url}. Skipping to protect local data.")
-        return {"error": f"Listing is inactive (status: {status})"}
+        logger.warning(f"Otodom listing is non-active ({status}): {url}. Skipping to protect local data.")
+        return {"error": f"Listing is not active (status: {status})"}
         
     images = []
     images = resolve_path(page_props, oto_mapping.get("images")) or []

@@ -80,7 +80,4 @@ class TechnicalDataManager:
             
         return file_path
 
-    def sync_images(self, urls: list[str], target_image_dir: Path) -> list[str]:
-        """Downloads and saves images, returns list of filenames"""
-        from .utils.images import save_images
-        return save_images(urls, target_image_dir, self.config)
+

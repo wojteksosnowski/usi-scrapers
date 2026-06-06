@@ -7,6 +7,7 @@ from typing import Optional
 from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, lookup_developer_by_id, lookup_investment_by_id
+from .utils.images import save_images
 from .utils.stage_detector import extract_groups_id, extract_stages
 from .utils.portals import portal_api_url, portal_url, get_portal
 from .mapping import get_mapping, resolve_path
@@ -393,6 +394,12 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
     for key, path in signal_mapping.items():
         signals[key] = resolve_path(details, path)
 
+    # Pobieranie i zapis obrazów do właściwego katalogu
+    images_dir = Path(fetcher.config.public_dir) / "USIdata" / developer_slug / investment_slug
+    local_image_filenames = []
+    if gallery_urls:
+        local_image_filenames = save_images(gallery_urls, images_dir, fetcher.config)
+
     result = {
         "source": "rynekpierwotny.pl",
         "id": offer_id,
@@ -412,7 +419,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         "price_max": resolve_path(details, rp_mapping.get("price_max")),
         "ceiling_height_min": resolve_path(details, rp_mapping.get("ceiling_height_min")),
         "ceiling_height_max": resolve_path(details, rp_mapping.get("ceiling_height_max")),
-        "image_urls": gallery_urls,
+        "image_urls": local_image_filenames,
         "groups_id": groups_id,
         "groups_name": groups_name,
         "stage_sort": stage_sort,

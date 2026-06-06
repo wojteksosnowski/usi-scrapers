@@ -150,11 +150,7 @@ def process_batch_ingest(
                 error_msg = "Invalid or incomplete data: missing dev_slug or inv_slug in data"
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
-                target_image_dir = get_image_dir(dev_slug, inv_slug, config.public_dir)
-                image_urls = data.get("image_urls", [])
-                manager = TechnicalDataManager(config)
-                saved_images = manager.sync_images(image_urls, target_image_dir)
-                msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
+                msg = f"Pobrano pomyślnie."
         else:
             msg = f"Pobranie nieudane: {error_msg}"
 
@@ -241,13 +237,9 @@ def process_batch_refresh(
                 error_msg = "Invalid or incomplete data: missing dev_slug or inv_slug in data"
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
-                target_image_dir = get_image_dir(dev_slug, inv_slug, config.public_dir)
-                image_urls = data.get("image_urls", [])
-                manager = TechnicalDataManager(config)
-                saved_images = manager.sync_images(image_urls, target_image_dir)
-                msg = f"Pobrano pomyślnie i zapisano {len(saved_images)} zdjęć."
+                msg = f"Odświeżono pomyślnie."
         else:
-            msg = f"Pobranie nieudane: {error_msg}"
+            msg = f"Odświeżenie nieudane: {error_msg}"
 
         if on_progress:
             on_progress({
