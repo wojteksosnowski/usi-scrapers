@@ -1,5 +1,14 @@
 # Changelog
 
+## Wersja 1.1.1 — Kamień 09 (Hardening API & Walidacja URL) — 2026-06-06
+
+* Usunięto lokalne importy (I/O pollution) z metod publicznych w `api.py` na rzecz importów globalnych.
+* Wprowadzono twardą walidację na warstwie Discovery w API: 
+  - Rozszerzono `url_parser.py` o obsługę adresów URL wyników wyszukiwania (tzw. listing URLs, np. `/pl/wyniki/` w Otodom).
+  - Wymuszono, aby ciągi rozpoczynające się od `http` były zawsze sprawdzane za pomocą `parse_url`. Jeżeli parser zwróci nieznany format (`{"type": "unknown"}`), API natychmiastowo podnosi błąd `ValueError`.
+  - Załatano lukę umożliwiającą przekazywanie tekstowych slugów do portali wymagających numerycznego ID (jak Otodom w procesie Discovery).
+* Zmigrowano główną dokumentację systemową z `CLAUDE.md` na `GEMINI.md`.
+
 ## Wersja 1.0.0 — Kamień 08 (load_raw i has_local_raw w publicznym API) — 2026-06-06
 
 * Dodano `load_raw(config, portal, portal_id) -> Optional[dict]` — opisowy alias `get_raw_data` z docstringiem dla klientów.

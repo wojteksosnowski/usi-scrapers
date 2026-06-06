@@ -32,6 +32,8 @@ META_FIELDS = [
 _NUMERIC_KEYS = {"Gwiazdki", "Balkony", "Fasady", "Wnętrza", "Teren", "Mieszkania", "Udogodnienia", "ocenaLog"}
 _OTO_ID_SUFFIX = re.compile(r"-ID[a-zA-Z0-9]+$")
 
+# This module is designed to import competitor data from a CSV file and save it in a structured JSON format for further processing. It is core data from legacy prototype. 
+
 
 def _build_usi_index(public_dir: Path) -> dict[str, Path]:
     index: dict[str, Path] = {}

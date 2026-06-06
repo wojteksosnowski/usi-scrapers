@@ -6,6 +6,7 @@ from .utils.io import save_dev_raw_json
 
 REPO_ROOT = Path(__file__).parent.parent
 
+# This module is designed to import competitor data from a CSV file and save it in a structured JSON format for further processing. It is core data from legacy prototype. 
 
 def import_competitors_csv(
     csv_path: Path = REPO_ROOT / "reference" / "konkurenci.csv",
