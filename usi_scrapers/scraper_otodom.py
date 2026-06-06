@@ -10,6 +10,7 @@ from .utils.portals import portal_url, get_portal
 from .mapping import get_mapping, resolve_path
 from .utils.url_parser import parse_url
 from .utils.scrapers import generic_discover_investments, generic_download_dev_json, extract_logo_from_dict
+from .utils.images import save_images
 
 from . import get_logger
 
@@ -412,6 +413,15 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     for key, path in signal_mapping.items():
         signals[key] = resolve_path(page_props, path)
 
+    # --- POPRAWKA: Dynamiczne wyznaczenie ścieżki docelowej i pobranie zdjęć ---
+    # Budujemy ścieżkę zgodnie ze strukturą systemu: {public_dir}/USIdata/{developer_slug}/{investment_slug}
+    images_dir = Path(fetcher.config.public_dir) / "USIdata" / developer_slug / investment_slug
+    
+    local_image_filenames = []
+    if images:
+        # save_images pobierze pliki i zwróci wyczyszczone, lokalne nazwy (np. ['4fQKi.jpg'])
+        local_image_filenames = save_images(images, images_dir, fetcher.config)
+
     result = {
         "source": "otodom.pl",
         "id": hash_id,
@@ -431,7 +441,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         "price_min": resolve_path(page_props, oto_mapping.get("price_min")),
         "ceiling_height_min": resolve_path(page_props, oto_mapping.get("ceiling_height_min")),
         "ceiling_height_max": resolve_path(page_props, oto_mapping.get("ceiling_height_max")),
-        "image_urls": images,
+        "image_urls": local_image_filenames,
         "signals": signals,
         "raw_details": ad_data
     }

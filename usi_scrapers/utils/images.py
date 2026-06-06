@@ -15,34 +15,31 @@ IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 def clean_filename(url: str) -> str:
     """
     Extracts and cleans filename from URL, removing parameters and ensuring correct extension.
-    Handles TabelaOfert and Otodom CDN patterns.
+    Handles TabelaOfert and Otodom CDN patterns defensively.
     """
     # 1. Otodom CDN: .../v1/files/{unique_id}/image;s=...
-    m_oto = re.search(r'/([^/]+)/image[;?]', url)
+    m_oto = re.search(r'/([^/]+)/image(?:[;?])', url)
     if m_oto:
         return m_oto.group(1) + '.jpg'
 
-    # 2. TabelaOfert CDN: .../quality_N,scale_N,ID-filename.ext or .../ID-filename.ext
-    m_to = re.search(r'ID-([^/?#]+)', url)
+    # 2. TabelaOfert CDN: .../quality_N,scale_N,ID-filename.ext
+    m_to = re.search(r'ID-([^/?#;]+)', url)
     if m_to:
         filename = m_to.group(1)
-        # Ensure it has an extension if it was stripped
         if not any(filename.lower().endswith(ext) for ext in IMAGE_EXTENSIONS):
-            # Check if there's an extension in the original URL after ID-
-            ext_match = re.search(r'\.([a-z0-9]+)(?:[?#]|$)', url, re.I)
+            ext_match = re.search(r'\.([a-z0-9]+)(?:[;?#]|$)', url, re.I)
             if ext_match:
                 filename += "." + ext_match.group(1)
             else:
-                filename += ".jpg" # Fallback
+                filename += ".jpg"
         return filename
 
-    # 3. Standard extraction
-    # Remove URL parameters and fragments
-    base_url = url.split("?")[0].split("#")[0]
+    # 3. Standard extraction z twardym czyszczeniem query params, hashes i średników (Otodom CDN fix)
+    # Rozdzielamy po '?', '#', ale także po ';' aby odciąć transformacje obrazów
+    base_url = re.split(r'[;?#]', url)[0]
     filename = unquote(base_url.split("/")[-1])
     
-    # Extract something like file.jpg, file.png, etc.
-    # Strip cache-buster/hash suffix like photo_e94b5737.webp → photo.webp
+    # Czyszczenie przyrostków cache-buster
     filename = re.sub(r'_[a-f0-9]{8}\.', '.', filename)
 
     match = re.search(r'([^\/]+\.(?:jpg|jpeg|png|webp))', filename, re.IGNORECASE)
