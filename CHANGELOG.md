@@ -61,6 +61,9 @@
 * Wzbogacenie instancji `StorageResolver` o mechanizmy wyszukiwania zwiększa spójność API odpowiedzialnego za operacje IO na systemie plików.
 * Przeniesienie logiki rozwiązywania ścieżek na backend (do dedykowanego endpointu) odciąża klientów (np. `usi-tracker`) i wspiera lepszą separację odpowiedzialności.
 
+## [Unreleased] - 2026-06-06
+- **Feature/Fix**: Zaimplementowano w `TechnicalDataManager.save_raw_data` automatyczną lokalizację obrazów (`images` w danych inwestycji). Scrapery teraz automatycznie pobierają zdalne obrazy do katalogów lokalnych i nadpisują zewnętrzne URL-e w danych relatywnymi ścieżkami przed ostatecznym zapisem na dysk, zapobiegając "wyciekom" zewnętrznych adresów do bazy danych.
+
 ## [Unreleased] - 2026-06-04
 - **Dodano** in-memory indeks dla danych `USIdata` i `USIdev` (`StorageResolver`), skracający czas rozwiązywania ścieżek przez brak ciągłego skanowania systemu plików.
 - **Usunięto** wymagany argument `target_dir` z funkcji pobierających i zapisujących dane (takich jak `download_raw`, `download_raw_dev`, `save_raw`).
