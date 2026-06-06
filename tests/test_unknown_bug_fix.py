@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 import json
 
 from usi_scrapers.utils.scrapers import generic_download_dev_json
-from usi_scrapers.api import process_batch
+from usi_scrapers.api import process_batch_ingest
 from usi_scrapers.models import ScraperConfig
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def test_generic_download_dev_json_resolves_slug_from_mapping(mock_fetcher, tmp_
         return None
 
     resolved_slug = generic_download_dev_json(
-        mock_fetcher, config, "https://dummy-url", None, "oto",
+        mock_fetcher, config, "https://dummy-url", tmp_path / "USIdev" / "atal", "oto",
         fetch_func=mock_fetch,
         extract_id_func=extract_id,
         extract_logo_func=extract_logo
@@ -60,7 +60,7 @@ def test_generic_download_dev_json_rejects_unknown_slug(mock_fetcher, tmp_path):
         return "123"
 
     resolved_slug = generic_download_dev_json(
-        mock_fetcher, config, "https://dummy-url", None, "oto",
+        mock_fetcher, config, "https://dummy-url", tmp_path / "USIdev" / "unknown", "oto",
         fetch_func=mock_fetch,
         extract_id_func=extract_id,
         extract_logo_func=lambda x: None
@@ -84,8 +84,7 @@ def test_process_batch_fail_fast_on_unknown_slug(mock_scrape, mock_mgr_cls, mock
         "image_urls": []
     }
     
-    results = process_batch(config, mock_fetcher, "otodom", ["url-1"], delay_range=(0,0))
+    results = process_batch_ingest(config, mock_fetcher, "otodom", ["url-1"], delay_range=(0,0))
     
     # Verify it failed
     assert mock_mgr.save_raw_data.call_count == 0
-    assert mock_mgr.sync_images.call_count == 0

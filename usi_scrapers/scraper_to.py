@@ -6,7 +6,7 @@ from typing import Optional
 from .fetcher import Fetcher
 from .models import ScraperConfig, DeveloperPage
 from .utils.io import save_raw_json, save_dev_raw_json, save_raw_html, lookup_developer_by_id, lookup_investment_by_id
-from .utils.string import slugify
+
 from .utils.images import save_images
 from .utils.portals import portal_api_url, portal_url, get_portal
 from .mapping import get_mapping, resolve_path

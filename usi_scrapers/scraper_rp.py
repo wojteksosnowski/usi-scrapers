@@ -336,10 +336,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
             developer_slug = resolve_path(details, v_slug_path)
             
         if not developer_slug:
-            # Fallback
-            from .utils.string import slugify
-            dev_name = resolve_path(details, rp_mapping.get("developer_name")) or ""
-            developer_slug = slugify(dev_name) if dev_name else f"vendor-{vendor_id}"
+            developer_slug = f"vendor-{vendor_id}"
 
     if not developer_slug:
         dev_url = portal_url("rp", "developer", slug=str(vendor_id))

@@ -124,9 +124,11 @@ def _make_html(ad_override=None):
     return f'<script id="__NEXT_DATA__" type="application/json">{json.dumps(payload)}</script>'
 
 
+@patch("usi_scrapers.scraper_otodom.save_images")
 @patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
-def test_scrape_otodom_success(mock_dl, fetcher):
+def test_scrape_otodom_success(mock_dl, mock_save_images, fetcher):
     fetcher.fetch.return_value = _make_html()
+    mock_save_images.return_value = ["1.webp", "2.webp"]
     result = scrape_otodom("https://www.otodom.pl/pl/oferta/test-ID123", fetcher)
 
     assert "error" not in result
@@ -138,8 +140,9 @@ def test_scrape_otodom_success(mock_dl, fetcher):
     assert len(result["image_urls"]) == 2
 
 
+@patch("usi_scrapers.scraper_otodom.save_images")
 @patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
-def test_scrape_otodom_delivery_fallback_to_estimated(mock_dl, fetcher):
+def test_scrape_otodom_delivery_fallback_to_estimated(mock_dl, mock_save_images, fetcher):
     fetcher.fetch.return_value = _make_html({
         "topInformation": [],
         "investmentEstimatedDelivery": {"quarter": 2, "year": 2026},

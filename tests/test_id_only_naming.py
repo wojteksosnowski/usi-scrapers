@@ -47,11 +47,19 @@ def test_archiving_uses_portal_id(tmp_path):
     save_dev_raw_json(
         data={"v": 2},
         public_dir=public_dir,
-        dev_slug=dev_slug,
+        target_dir=public_dir / "USIdev" / dev_slug,
         portal_prefix="rp",
         portal_id=portal_id
     )
+    save_dev_raw_json(
+        data={"v": 2},
+        target_dir=public_dir / "USIdev" / dev_slug,
+        portal_prefix="rp",
+        portal_id=portal_id
+    )
+
     dev_dir = public_dir / "USIdev" / dev_slug
+    # Check that archive exists with portal_id in its name
     dev_archives = list(dev_dir.glob("raw_rp_12345_*.json"))
     assert len(dev_archives) == 1
 
@@ -91,7 +99,7 @@ def test_download_raw_rp_dev_json_resolves_portal_id(mock_logo, mock_fetch, tmp_
     
     download_raw_rp_dev_json(
         vendor_id_or_slug="some-dev-slug",
-        dev_slug="dev-slug-folder",
+        target_dir=public_dir / "USIdev" / "dev-slug-folder",
         fetcher=fetcher,
         config=config
     )

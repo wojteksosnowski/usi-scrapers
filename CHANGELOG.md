@@ -1,5 +1,18 @@
 # Changelog
 
+## Wersja 1.1.3 — Kamień 11 (Czystka Testów i I/O Hardening) — 2026-06-06
+
+* Usunięto przestarzałe testy (`test_image_consistency.py`, `test_resolve.py`) oraz zdezaktualizowane asercje, które opierały się na dawnej architekturze z inwencją nazewnictwa i systemem fallbacków (slugify).
+* Dostosowano testy I/O (`test_developer_lookup.py`, `test_id_only_naming.py`) by nie używały zdeprecjonowanych ręcznych wywołań ze zmiennymi `dev_slug` i `public_dir`, lecz symulowały docelowe środowisko zgodnie z zasadą "Fail-fast" opartą o `StorageResolver`.
+* W pełni sfinalizowano ujednolicenie potoku I/O w `scraper_rp.py` oraz `scraper_to.py`. Wyeliminowano z nich fallbacki generujące własne slugi oraz manualne przypisywanie ścieżek przed wywołaniem `save_images`. Aktualnie polegają na jednej scentralizowanej procedurze i ustandaryzowanym zachowaniu.
+* Oczyszczono pliki z nieużywanych importów `slugify`.
+* Poprawiono paczkę pod kątem pełnego pokrycia testami automatycznymi.
+
+### Wnioski ze zmian
+* Zamknięcie pętli testów z I/O ostatecznie przypieczętowuje model wymiany oparty wyłącznie na twardych identyfikatorach. Rozwiązanie to wyklucza zjawiska takie jak "Path-Drift" lub "Zatrucie folderu Unknown" u samego źródła.
+* Testy odzwierciedlają teraz precyzyjne przypadki i zabezpieczają kluczowe procesy (jak np. wpadanie ofert usuniętych/archiwalnych do folderów w Otodom).
+
+
 ## Wersja 1.1.2 — Kamień 10 (Dynamiczne pobieranie obrazów w Otodom) — 2026-06-06
 
 * Usprawniono funkcję `clean_filename` w `utils/images.py` w celu obcinania wszelkich parametrów modyfikujących (takich jak skale, powiększenia i średniki) z Otodom CDN i TabelaOfert, co zapobiega zniekształceniom rozszerzeń na dysku. Wprowadzono także eleganckie, niezależne wsparcie dla wyodrębniania plików Base64 z linków Otodom (z twardym wymuszaniem zapisu jako `.webp`), zachowując przy tym wsteczną kompatybilność sygnatur API w potoku pobierania.

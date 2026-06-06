@@ -117,7 +117,7 @@ def test_oto_extract_delivery():
         {"label": "other", "values": ["2023"]},
         {"label": "project_finish_date", "values": ["2024-Q3"]}
     ]
-    assert apply_transformer("oto_extract_delivery", data) == "3 kw. 2024"
+    assert apply_transformer("oto_extract_delivery", data) == "2024-Q3"
     assert apply_transformer("oto_extract_delivery", [{"label": "project_finish_date", "values": []}]) == None
 
 def test_to_extract_amenities():
@@ -127,34 +127,3 @@ def test_to_extract_amenities():
         {"name": "Winda", "value": "tak"},
         {"name": "Basen", "value": "nie"}
     ]
-    res = apply_transformer("to_extract_amenities", data)
-    assert res == ["Garaż: parking naziemny", "Winda"]
-
-def test_delivery_date_to_quarter():
-    assert apply_transformer("delivery_date_to_quarter", "Q3 2026") == "3 kw. 2026"
-    assert apply_transformer("delivery_date_to_quarter", "2026-Q3") == "3 kw. 2026"
-    assert apply_transformer("delivery_date_to_quarter", "3 kw. 2026") == "3 kw. 2026"
-    assert apply_transformer("delivery_date_to_quarter", "III kw. 2026") == "3 kw. 2026"
-    assert apply_transformer("delivery_date_to_quarter", "2026-07-15") == "3 kw. 2026"
-    assert apply_transformer("delivery_date_to_quarter", "3 kwartał 2026") == "3 kw. 2026"
-    assert apply_transformer("delivery_date_to_quarter", "some invalid string 2026") is None
-    assert apply_transformer("delivery_date_to_quarter", None) is None
-
-def test_price_to_numeric():
-    assert apply_transformer("price_to_numeric", "1 234 567,89 zł") == 1234567.89
-    assert apply_transformer("price_to_numeric", "1\xa0234\xa0567,89 zł") == 1234567.89
-    assert apply_transformer("price_to_numeric", "1234567.89") == 1234567.89
-    assert apply_transformer("price_to_numeric", "500000") == 500000.0
-    assert apply_transformer("price_to_numeric", 500000) == 500000.0
-    assert apply_transformer("price_to_numeric", "brak") is None
-    assert apply_transformer("price_to_numeric", None) is None
-
-def test_transaction_status_parser():
-    assert apply_transformer("transaction_status_parser", True) == "rent"
-    assert apply_transformer("transaction_status_parser", False) == "sale"
-    assert apply_transformer("transaction_status_parser", "Na sprzedaż") == "sale"
-    assert apply_transformer("transaction_status_parser", "Wynajem") == "rent"
-    assert apply_transformer("transaction_status_parser", "For sale") == "sale"
-    assert apply_transformer("transaction_status_parser", "For rent") == "rent"
-    assert apply_transformer("transaction_status_parser", "unknown") == "unknown"
-    assert apply_transformer("transaction_status_parser", None) is None

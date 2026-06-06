@@ -18,10 +18,10 @@ def test_lookup_developer_by_id(temp_public_dir):
     portal_id = "99"
     
     # Use save_dev_raw_json to create the structure correctly
+    target_dir = temp_public_dir / "USIdev" / dev_slug
     save_dev_raw_json(
         data={"name": "Existing Developer"},
-        public_dir=temp_public_dir,
-        dev_slug=dev_slug,
+        target_dir=target_dir,
         portal_prefix="oto",
         portal_id=portal_id
     )
@@ -36,10 +36,10 @@ def test_lookup_developer_by_id(temp_public_dir):
 @patch("usi_scrapers.scraper_otodom.download_raw_otodom_dev_json")
 def test_scrape_otodom_uses_existing_slug_from_id(mock_dl, temp_public_dir):
     # Setup existing developer with ID 99 mapped to slug "my-slug"
+    target_dir = temp_public_dir / "USIdev" / "my-slug"
     save_dev_raw_json(
         data={"name": "My Developer"},
-        public_dir=temp_public_dir,
-        dev_slug="my-slug",
+        target_dir=target_dir,
         portal_prefix="oto",
         portal_id="99"
     )

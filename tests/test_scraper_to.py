@@ -366,9 +366,11 @@ def test_scrape_tabelaofert_success(mock_dl, fetcher):
     assert "raw_details" in result
 
 
+@patch("usi_scrapers.scraper_to.save_images")
 @patch("usi_scrapers.scraper_to.download_raw_to_dev_json")
-def test_scrape_tabelaofert_images_in_result(mock_dl, fetcher):
+def test_scrape_tabelaofert_images_in_result(mock_dl, mock_save_images, fetcher):
     mock_dl.return_value = "devco"
+    mock_save_images.return_value = ["osiedle-z-json-01.webp", "osiedle-z-json-02.webp"]
     fetcher.fetch.return_value = _SCRAPE_HTML
     fetcher.fetch_json.return_value = {
         "data": {

@@ -202,12 +202,14 @@ def test_scrape_rynek_pierwotny_coords_single_element(fetcher):
     assert result["latitude"] is None
 
 
-def test_scrape_rynek_pierwotny_images(fetcher):
+@patch("usi_scrapers.scraper_rp.save_images")
+def test_scrape_rynek_pierwotny_images(mock_save_images, fetcher):
     fetcher.fetch_json.side_effect = [_RP_DETAILS, _RP_GALLERY, _RP_DEV_PROFILE]
+    mock_save_images.return_value = ["a.jpg", "b.jpg"]
     result = scrape_rynek_pierwotny("5000", fetcher)
     assert "error" not in result
     assert len(result["image_urls"]) == 2
-    assert "https://cdn.rp.pl/a.jpg" in result["image_urls"]
+    assert "a.jpg" in result["image_urls"]
 
 
 def test_scrape_rynek_pierwotny_missing_details(fetcher):

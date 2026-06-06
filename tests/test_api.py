@@ -353,7 +353,7 @@ def test_get_raw_data_not_found(mock_get_resolver, config):
     from usi_scrapers.api import get_raw_data
     assert get_raw_data(config, "rp", "999") is None
 
-@patch("usi_scrapers.api.get_resolver")
+@patch("usi_scrapers.storage.get_resolver")
 def test_get_raw_dev_data_found(mock_get_resolver, config, tmp_path):
     mock_resolver = MagicMock()
     mock_resolver.lookup_developer.return_value = "dev-x"
