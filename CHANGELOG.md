@@ -1,10 +1,21 @@
 # Changelog
 
+## Wersja 1.3.0 — Kamień 13 (True RAW i Logowanie Wektorów Pobrania) — 2026-06-08
+
+* **True RAW (Otodom)**: Zaktualizowano `scraper_otodom.py`, aby zapisywał 100% oryginalnego JSON-a (`__NEXT_DATA__`) do plików `raw_*.json`. Integracja z adapterem `normalize_to_legacy_props` zapewnia pełną kompatybilność wsteczną silnika mapowania.
+* **Logowanie zdarzeń (CANONICAL.md)**: Wdrożono system append-only logów tekstowych dla inwestycji (`processing_log_{slug}.txt`) oraz deweloperów (`dev_log_{portal}_{id}.txt`). Każdy zapis surowych danych jest teraz dokumentowany z uwzględnieniem znacznika czasu i typu zdarzenia.
+* **Wektor pobrania**: Rozszerzono `Fetcher` o śledzenie metody pobrania (`curl_cffi` vs `scraperapi`). Informacja ta jest teraz automatycznie dołączana do logów zdarzeń przy każdym pomyślnym pobraniu danych.
+* **Naprawa rozdzielczości deweloperów**:
+    * **Otodom**: Wyeliminowano błąd tworzenia katalogów `temp_*` poprzez dodanie fallbacku na slug wyciągnięty z URL-a profilu, gdy JSON nie zawiera metadanych sluga.
+    * **TabelaOfert**: Wprowadzono robustny mechanizm ekstrakcji sluga ze strumienia danych Next.js oraz inteligentny fallback z filtracją znanych miast, co gwarantuje poprawne pobieranie plików RAW dewelopera nawet przy braku bezpośrednich linków.
+* **Ujednolicenie silnika mapowania**: Przepisano wewnętrzne funkcje ekstrakcji (`extract_slug`, `extract_id`) w scraperach, aby konsekwentnie korzystały z `resolve_path` i centralnego pliku `portal_data_mapping.json`.
+
 ## Wersja 1.2.0 — Kamień 12 (Rozbudowa ekstrakcji danych deweloperów) — 2026-06-07
 
 * Rozbudowano schematy w `portal_data_mapping.json` (dla RP, Otodom, TabelaOfert) o pełen zestaw atrybutów dla deweloperów: `description`, `website`, `phone`, `email`, adres siedziby (`city`, `street`, `postal_code`, `address`), `logo_url`, `active_investments`, `nip`, `krs` oraz zunifikowane linki do mediów społecznościowych (`facebook_url`, `instagram_url`, `youtube_url`, `linkedin_url`).
 * Wprowadzono do `transformers.py` nowe transformatory do obróbki surowych danych: `strip_html` do oczyszczania opisów deweloperów z tagów HTML, `clean_phone` do standaryzacji numerów telefonów oraz dedykowane funkcje do precyzyjnego wyciągania adresów mediów społecznościowych z list i słowników.
 * Dodano testy jednostkowe w `tests/test_transformers.py` pod kątem nowych mechanizmów mapowania. Zapewniono pełną zgodność nowych pól z założeniami silnika `transform_to_unified()`.
+* Wprowadzono adapter `normalize_to_legacy_props` w `usi_scrapers/utils/integrity.py`, który zapewnia kompatybilność wsteczną silnika mapowania `transform_to_unified()`. Adapter pozwala na poprawne przetwarzanie zarówno tradycyjnych struktur `pageProps`, jak i pełnych zrzutów `__NEXT_DATA__` z Otodom.
 
 ## Wersja 1.1.3 — Kamień 11 (Czystka Testów i I/O Hardening) — 2026-06-06
 

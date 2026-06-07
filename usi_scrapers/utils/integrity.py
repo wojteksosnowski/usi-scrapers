@@ -43,3 +43,26 @@ def check_evolution(current_data: Dict, pattern_name: str) -> Dict:
         "missing_keys": list(missing),
         "added_keys": list(added)
     }
+
+def normalize_to_legacy_props(data: dict, portal: str) -> dict:
+    """
+    Adapter zapewniający kompatybilność wsteczną.
+    Konwertuje pełny, nowy payload RAW do formatu oczekiwanego przez stare mapowania.
+    """
+    if not data:
+        return {}
+        
+    if portal == "oto":
+        # Jeśli to nowy, pełny __NEXT_DATA__, ekstrahujemy pageProps
+        if "props" in data and "pageProps" in data["props"]:
+            return data["props"]["pageProps"]
+        # Jeśli klucz 'ad' lub 'data' jest już na roocie, to znaczy, że to stary format
+        if "ad" in data or "searchAds" in data or "data" in data:
+            return data
+            
+    if portal == "rp":
+        # Dla RynekPierwotny struktura API v2. 
+        # Jeśli w przyszłości zmieni się wrapper, tu implementujemy translację.
+        return data
+
+    return data

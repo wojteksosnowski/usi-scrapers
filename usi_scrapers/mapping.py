@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from .transformers import apply_transformer
+from .utils.integrity import normalize_to_legacy_props
 
 _MAPPING_FILE = Path(__file__).parent / "schemas" / "portal_data_mapping.json"
 _MAPPING_DATA = None
@@ -145,6 +146,9 @@ def transform_to_unified(portal_prefix: str, raw_data: dict, entity_type: str = 
     """
     if not raw_data:
         return {}
+        
+    # Apply compatibility adapter
+    raw_data = normalize_to_legacy_props(raw_data, portal_prefix)
         
     mapping = get_mapping(portal_prefix, entity_type)
     unified = {}

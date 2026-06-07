@@ -101,11 +101,25 @@ def download_raw_to_dev_json(url: str, target_dir: Path, fetcher: Fetcher, confi
             return d["image"]
         return None
 
+    def extract_slug(d):
+        if not d: return None
+        if "slug" in d: return d["slug"]
+        if "kryterium" in d: return d["kryterium"]
+        # From JSON-LD URL or self URL
+        for key in ["@id", "url"]:
+            val = d.get(key)
+            if val and isinstance(val, str):
+                # Search for slug in plain URL (RE_DEV_LINK expects href="..." so it fails here)
+                m = re.search(r'/katalog-firm/deweloperzy/([^/?#]+)', val)
+                if m: return m.group(1)
+        return None
+
     return generic_download_dev_json(
         fetcher, config, url, target_dir, "to",
         fetch_func=fetch_to_dev,
         extract_id_func=extract_id,
         extract_logo_func=extract_logo,
+        extract_slug_func=extract_slug,
         source_url=url
     )
 
@@ -331,6 +345,9 @@ def download_raw_to_json(url: str, target_dir: Path, fetcher: Fetcher, config: S
     data = parse_to_product(html) or {}
     to_id = _extract_to_id(url)
     portal_id = f"i{to_id}" if to_id else None
+
+    dev_slug = target_dir.parent.name
+    inv_slug = target_dir.name
 
     # Resolve Investment Slug (ID-based lookup)
     if portal_id:
@@ -692,26 +709,56 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     
     # Resolve local developer folder slug using the ID
     developer_slug = lookup_developer_by_id(fetcher.config.public_dir, "to", klient_id)
+    to_dev_url = None
+    
     if developer_slug:
         logger.info(f"Matched TO klient-id {klient_id} to existing developer slug: {developer_slug}")
+    else:
+        temp_slug = None
+        
+        # 1. New Next.js payload structure (as seen in __next_f stream)
+        # We use a very flexible regex to catch various escaping levels
+        m_next = re.search(r'slug[\\"]+,\s*[\\"]+deweloperzy/([^\\"?# ]+)[\\"]+', html)
+        if not m_next:
+            m_next = re.search(r'katalog-firm[\\"]+,\s*[\\"]+deweloperzy[\\"]+,\s*[\\"]+([^\\"?# ]+)[\\"]+', html)
+        
+        if m_next:
+            temp_slug = m_next.group(1)
+            logger.info(f"Extracted developer slug from Next.js payload: {temp_slug}")
+        else:
+            # 2. Extract from any deweloperzy/ URL in HTML (URL fallback)
+            # We look for all candidates and pick the first one that is NOT a known city
+            all_dev_urls = re.findall(r'/katalog-firm/deweloperzy/([^/"?#\\<> ]+)', html)
+            city_slugs = {
+                "warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", 
+                "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", 
+                "radom", "sosnowiec", "torun", "kielce", "rzeszow", "gliwice", "zabrze", 
+                "olsztyn", "bielsko-biala", "bytom", "zielona-gora", "rybnik", "ruda-slaska",
+                "opolskie", "dolnoslaskie", "mazowieckie", "slaskie", "malopolskie", "wielkopolskie"
+            }
+            for s in all_dev_urls:
+                if s not in city_slugs and s != "unknown" and not s.startswith("strona"):
+                    temp_slug = s
+                    logger.info(f"Extracted developer slug from HTML URL (non-city): {temp_slug}")
+                    break
+                    
+            if not temp_slug:
+                # 3. Fallback to older kryterium logic
+                m = RE_KRYTERIUM_ID.search(html)
+                if not m:
+                    m = RE_KRYTERIUM_OBJ.search(html)
+                if m:
+                    temp_slug = m.group(1)
 
-    temp_slug = None
-    m = RE_KRYTERIUM_ID.search(html)
-    if not m:
-        m = RE_KRYTERIUM_OBJ.search(html)
-    if m:
-        temp_slug = m.group(1)
-
-    if not temp_slug or temp_slug == "unknown":
-        dev_links = RE_DEV_LINK.findall(html)
-        city_slugs = {"warszawa", "krakow", "lodz", "wroclaw", "poznan", "gdansk", "szczecin", "bydgoszcz", "lublin", "bialystok", "katowice", "gdynia", "czestochowa", "radom"}
-        for link, s in dev_links:
-            if s not in city_slugs and s != "unknown":
-                temp_slug = s
-                break
-
-    if temp_slug and not developer_slug:
-        developer_slug = temp_slug
+        if temp_slug:
+            # Construct canonical developer URL
+            to_dev_url = f"https://tabelaofert.pl/katalog-firm/deweloperzy/{temp_slug}"
+            logger.info(f"Proactively fetching TO developer profile to resolve slug: {to_dev_url}")
+            temp_dir = Path(fetcher.config.public_dir) / "USIdev" / f"temp_{klient_id}"
+            resolved_slug = download_raw_to_dev_json(to_dev_url, temp_dir, fetcher, fetcher.config)
+            if resolved_slug:
+                developer_slug = resolved_slug
+                logger.info(f"Proactively resolved TO developer slug: {developer_slug}")
 
     if not developer_slug:
         err_msg = (
@@ -762,11 +809,8 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     for key, path in signal_mapping.items():
         signals[key] = resolve_path(product, path)
 
-    # Pobieranie i zapis obrazów do właściwego katalogu
-    images_dir = Path(fetcher.config.public_dir) / "USIdata" / developer_slug / investment_slug
-    local_image_filenames = []
-    if filtered_urls:
-        local_image_filenames = save_images(filtered_urls, images_dir, fetcher.config)
+    # Obrazy zostaną pobrane i zlokalizowane przez TechnicalDataManager w KROKU 2 (api.py)
+    # Zwracamy surowe URL-e, aby manager wiedział co pobrać.
 
     return {
         "source": "tabelaofert.pl",
@@ -788,9 +832,10 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
         "ceiling_height_max": resolve_path(product, to_mapping.get("ceiling_height_max")),
         "construction_date_upper": extract_additional_prop(product, "Termin oddania"),
         "amenities": amenities,
-        "image_urls": local_image_filenames,
+        "image_urls": filtered_urls,
         "signals": signals,
         "raw_details": product,
+        "fetch_vector": fetcher.last_fetch_vector
     }
 
 

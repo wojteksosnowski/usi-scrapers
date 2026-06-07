@@ -81,15 +81,16 @@ class TechnicalDataManager:
         # --- POPRAWKA WYCIEKU ---
         # Jeżeli w przekazanych danych przetrzymywane są wyekstrahowane adresy URL galeryjnych obrazów,
         # należy je przechwycić, pobrać i nadpisać lokalnymi ścieżkami relatywnymi/nazwami plików.
-        if "images" in data and isinstance(data["images"], list):
-            logger.info(f"Localizing {len(data['images'])} images for investment {inv_slug}")
-            local_images = self.download_and_localize_images(data["images"], dev_slug, inv_slug)
+        if "image_urls" in data and isinstance(data["image_urls"], list):
+            logger.info(f"Localizing {len(data['image_urls'])} images for investment {inv_slug}")
+            local_images = self.download_and_localize_images(data["image_urls"], dev_slug, inv_slug)
             # Nadpisujemy zewnętrzne URL lokalnymi nazwami plików przed jakimkolwiek zapisem do DB
-            data["images"] = local_images 
+            data["image_urls"] = local_images 
 
         from .utils.io import save_raw_json, get_investment_dir
         target_dir = get_investment_dir(dev_slug, inv_slug, self.config.public_dir)
-        file_path = save_raw_json(raw_details, target_dir, portal_prefix, portal_id=portal_id)
+        fetch_vector = data.get("fetch_vector")
+        file_path = save_raw_json(raw_details, target_dir, portal_prefix, portal_id=portal_id, fetch_vector=fetch_vector)
         
         if file_path and portal_id:
             self.resolver.update_investment_index(portal_prefix, portal_id, dev_slug, inv_slug)

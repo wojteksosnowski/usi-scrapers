@@ -1,0 +1,201 @@
+{
+  "id": 10788,
+  "logo": {
+    "v_log_42x32": "https://thumbs.rynekpierwotny.pl/5e89160c:8J14Gtg5MMRYspX6p5v8NIrA3ts/42x32/filters:no_upscale()/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_53x40": "https://thumbs.rynekpierwotny.pl/5e89160c:Jmopek8yTPYvP2Ny897I79_pKm4/53x40/filters:no_upscale()/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:E9UVYsEhSmiYkqJ_eA2Vak_Zplc/80x60/vendors/vendor/logo/022-investments_7edd83.png",
+    "m_img_80x60": "https://thumbs.rynekpierwotny.pl/5e89160c:c_rkFI5S5hK75kmxMq2jHbocgQ0/80x60/filters:upscale():format(jpg)/vendors/vendor/logo/022-investments_7edd83.png",
+    "m_img_80x60_png": "https://thumbs.rynekpierwotny.pl/5e89160c:kv7sKhpSVUaOQPl6n4Xuu-rmvRY/80x60/filters:upscale():format(png)/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_84x64": "https://thumbs.rynekpierwotny.pl/5e89160c:4pbRWL4zOZsbOJsycwL1202dhHU/84x64/filters:no_upscale()/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_106x80": "https://thumbs.rynekpierwotny.pl/5e89160c:jyO-6JiqnoK_5EFW9IK8mzNuDEs/106x80/filters:no_upscale()/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_120x90": "https://thumbs.rynekpierwotny.pl/5e89160c:eH6GSuMSQ16qK7KF5jwAKiKj3TM/120x90/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_126x96": "https://thumbs.rynekpierwotny.pl/5e89160c:fn6wvdBTykFf9n0a3hvjzAnuTPA/126x96/filters:no_upscale()/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_159x120": "https://thumbs.rynekpierwotny.pl/5e89160c:5weMwzDXa1f1YuwEzN2hfUNkg0A/159x120/filters:no_upscale()/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_160x120": "https://thumbs.rynekpierwotny.pl/5e89160c:wWPlTRdL6mNZxdD3EezK1x741AI/160x120/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_180": "https://thumbs.rynekpierwotny.pl/5e89160c:5AoSF-QUKGvk4i2wMI3UF02UNdU/180x0/vendors/vendor/logo/022-investments_7edd83.png",
+    "v_log_100": "https://thumbs.rynekpierwotny.pl/5e89160c:idbNlTYTCcub5XvLzbQa-Pq4JtU/100x0/vendors/vendor/logo/022-investments_7edd83.png"
+  },
+  "is_indexing_allowed": true,
+  "headquarters": {
+    "id": 10329,
+    "region": {
+      "id": 8647,
+      "slug": "warszawa",
+      "name": "Warszawa",
+      "short_name": "Warszawa",
+      "name_declension_where": "w Warszawie"
+    },
+    "type": 1,
+    "address": "ul. Modlińska 164",
+    "phone": "",
+    "mobile": "",
+    "vendor": 10788
+  },
+  "configuration": {
+    "vendor": 10788,
+    "meta_robots": null,
+    "is_active": true,
+    "include_utm": true,
+    "show_on_our_offer": false,
+    "show_offers_logos": true,
+    "business_type": null,
+    "recommendation_priority": 2,
+    "show_form_placeholder": false,
+    "form_placeholder_phone": null,
+    "form_placeholder_text": null,
+    "site_color": 3,
+    "show_email_info": false,
+    "email_info": null,
+    "privacy_policy_url": null,
+    "privacy_policy_file": null,
+    "is_locked": false,
+    "rotated_clip_phones_disabled": false,
+    "force_show_price": false,
+    "price_visibility": 2
+  },
+  "stats": {
+    "vendor": 10788,
+    "offers_count_total": 1,
+    "offers_count_for_sale": 0,
+    "offers_count_sold": 1,
+    "offers_count_planned": 0,
+    "properties_area_max": 0,
+    "properties_area_min": 0,
+    "properties_flats_area_max": 0,
+    "properties_houses_area_max": 0,
+    "properties_commercials_area_max": 0,
+    "properties_flats_area_min": 0,
+    "properties_houses_area_min": 0,
+    "properties_commercials_area_min": 0,
+    "properties_count_for_sale": 0,
+    "properties_count_mdm": 0,
+    "response_grade": 1,
+    "regions": {
+      "cadiz": {
+        "offers": 0,
+        "properties": 0
+      },
+      "malaga": {
+        "offers": 0,
+        "properties": 0
+      },
+      "murcja": {
+        "offers": 0,
+        "properties": 0
+      },
+      "almeria": {
+        "offers": 0,
+        "properties": 0
+      },
+      "baleary": {
+        "offers": 0,
+        "properties": 0
+      },
+      "lodzkie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "slaskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "alicante": {
+        "offers": 0,
+        "properties": 0
+      },
+      "lubuskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "opolskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "valencia": {
+        "offers": 0,
+        "properties": 0
+      },
+      "castellon": {
+        "offers": 0,
+        "properties": 0
+      },
+      "katalonia": {
+        "offers": 0,
+        "properties": 0
+      },
+      "lubelskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "podlaskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "pomorskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "malopolskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "mazowieckie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "dolnoslaskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "podkarpackie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "wielkopolskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "swietokrzyskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "kujawsko-pomorskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "zachodniopomorskie": {
+        "offers": 0,
+        "properties": 0
+      },
+      "warminsko-mazurskie": {
+        "offers": 0,
+        "properties": 0
+      }
+    },
+    "is_indexing_allowed": true
+  },
+  "recommendation": null,
+  "application_form_note": "Administratorem danych jest Property Group sp. z o.o. i deweloper, którego dotyczy zapytanie, 022 INVESTMENTS",
+  "promotions": [],
+  "name": "022 INVESTMENTS",
+  "slug": "022-investments",
+  "type": 1,
+  "on_the_market_since": null,
+  "description": "",
+  "logo_height": 3,
+  "logo_width": 4,
+  "website": "http://022investments.pl",
+  "related_vendors_comment": "",
+  "business_type": null,
+  "nip": "5242911802",
+  "krs": null,
+  "street": null,
+  "zipcode": "03-170",
+  "city": null,
+  "stock": null,
+  "is_custom_rodo_terms_enabled": false,
+  "custom_rodo_terms": null,
+  "contract_information": null,
+  "trader_update_date": "2025-11-21T09:43:47.216710",
+  "agency": null
+}

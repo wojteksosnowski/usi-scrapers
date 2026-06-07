@@ -52,11 +52,12 @@ def generic_download_dev_json(
     fetch_func: Callable[[str, Fetcher], Any],
     extract_id_func: Callable[[Any], Optional[str]],
     extract_logo_func: Callable[[Any], Optional[str]],
+    extract_slug_func: Optional[Callable[[Any], Optional[str]]] = None,
     source_url: Optional[str] = None
 ) -> Optional[str]:
     """
     Generic flow for downloading and saving developer profile data.
-    Returns target_dir.name on success for compatibility.
+    Returns resolved canonical slug on success.
     """
     data = fetch_func(url_or_id, fetcher)
     if not data:
@@ -68,21 +69,37 @@ def generic_download_dev_json(
         logger.error(f"Could not extract {portal_prefix} ID from {url_or_id}")
         return None
 
+    # Resolve canonical slug from data if possible
+    canonical_slug = None
+    if extract_slug_func:
+        canonical_slug = extract_slug_func(data)
+    
+    # Final directory where data will be saved
+    dev_slug = canonical_slug or target_dir.name
+    
+    # Fail-Fast: Reject 'unknown' or invalid directories
+    if not dev_slug or dev_slug.lower() == "unknown" or "unknown_" in dev_slug.lower():
+        logger.error(f"Rejecting save to invalid/unknown directory: {dev_slug}")
+        return None
+
+    final_target_dir = target_dir.parent / dev_slug
+
     logo_url = extract_logo_func(data)
     if logo_url:
-        download_developer_logo(logo_url, target_dir, portal_prefix=portal_prefix, portal_id=portal_id)
+        download_developer_logo(logo_url, final_target_dir, portal_prefix=portal_prefix, portal_id=portal_id)
     else:
-        logger.debug(f"No logo URL found for {portal_prefix} developer {target_dir.name}")
+        logger.debug(f"No logo URL found for {portal_prefix} developer {dev_slug}")
 
     save_dev_raw_json(
         data if isinstance(data, dict) else {"content": data}, 
-        target_dir, 
+        final_target_dir, 
         portal_prefix, 
         portal_id=portal_id, 
-        source_url=source_url or (url_or_id if url_or_id.startswith("http") else None)
+        source_url=source_url or (url_or_id if url_or_id.startswith("http") else None),
+        fetch_vector=fetcher.last_fetch_vector
     )
     
-    return target_dir.name
+    return dev_slug
 
 def extract_logo_from_dict(data: dict, candidates: List[str]) -> Optional[str]:
     """

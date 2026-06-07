@@ -66,19 +66,17 @@ def test_scrape_otodom_uses_existing_slug_from_id(mock_dl, temp_public_dir):
     
     # Should use "my-slug" instead of "new-slug"
     assert result["developer_slug"] == "my-slug"
-    mock_dl.assert_called_once()
-    # Check that it called download with the correct slug
-    args, _ = mock_dl.call_args
-    assert args[1] == "my-slug"
+    # mock_dl (proactive fetch) should NOT be called if already found locally
+    assert not mock_dl.called
 
 @patch("usi_scrapers.scraper_rp.download_raw_rp_dev_json")
 @patch("usi_scrapers.scraper_rp.fetch_rp_details")
 def test_scrape_rp_uses_existing_slug_from_id(mock_details, mock_dl, temp_public_dir):
     # Setup existing developer with ID 123 mapped to slug "rp-slug"
+    target_dir = temp_public_dir / "USIdev" / "rp-slug"
     save_dev_raw_json(
         data={"name": "RP Dev"},
-        public_dir=temp_public_dir,
-        dev_slug="rp-slug",
+        target_dir=target_dir,
         portal_prefix="rp",
         portal_id="123"
     )
@@ -103,17 +101,15 @@ def test_scrape_rp_uses_existing_slug_from_id(mock_details, mock_dl, temp_public
     
     # Should use "rp-slug"
     assert result["developer_slug"] == "rp-slug"
-    mock_dl.assert_called_once()
-    args, _ = mock_dl.call_args
-    assert args[1] == "rp-slug"
+    assert not mock_dl.called
 
 @patch("usi_scrapers.scraper_to.download_raw_to_dev_json")
 def test_scrape_to_uses_existing_slug_from_id(mock_dl, temp_public_dir):
     # Setup existing developer with ID "12345" mapped to slug "to-slug"
+    target_dir = temp_public_dir / "USIdev" / "to-slug"
     save_dev_raw_json(
         data={"name": "TO Dev"},
-        public_dir=temp_public_dir,
-        dev_slug="to-slug",
+        target_dir=target_dir,
         portal_prefix="to",
         portal_id="12345"
     )
@@ -135,6 +131,4 @@ def test_scrape_to_uses_existing_slug_from_id(mock_dl, temp_public_dir):
         
         # Should use "to-slug"
         assert result["developer_slug"] == "to-slug"
-        mock_dl.assert_called_once()
-        args, _ = mock_dl.call_args
-        assert args[1] == "to-slug"
+        assert not mock_dl.called

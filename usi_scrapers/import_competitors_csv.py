@@ -23,14 +23,15 @@ def import_competitors_csv(
 
             if rp_slug and rp_id:
                 rp_dev_url = f"https://rynekpierwotny.pl/deweloperzy/{rp_slug}/"
+                target_dir = Path(public_dir) / "USIdev" / rp_slug
                 save_dev_raw_json(
                     {"id": rp_id, "slug": rp_slug, "name": name, "_mock": True},
-                    public_dir, rp_slug, "rp",
-                    portal_id=rp_id,
+                    target_dir, "rp", portal_id=rp_id,
                     source_url=rp_dev_url,
                 )
             if oto_slug and oto_id:
-                existing_path = Path(public_dir) / "USIdev" / oto_slug / f"raw_oto_{oto_slug}.json"
+                target_dir = Path(public_dir) / "USIdev" / oto_slug
+                existing_path = target_dir / f"raw_oto_{oto_slug}.json"
                 known_ids: list = []
                 if existing_path.exists():
                     try:
@@ -42,8 +43,7 @@ def import_competitors_csv(
                 oto_dev_url = f"https://www.otodom.pl/pl/firmy/deweloperzy/{oto_slug}-ID{oto_id}"
                 save_dev_raw_json(
                     {"agency_id": oto_id, "agency_ids": known_ids, "name": name, "_mock": True},
-                    public_dir, oto_slug, "oto",
-                    portal_id=oto_id,
+                    target_dir, "oto", portal_id=oto_id,
                     source_url=oto_dev_url,
                 )
 

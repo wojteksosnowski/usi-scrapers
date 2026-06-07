@@ -37,23 +37,16 @@ def test_archiving_uses_portal_id(tmp_path):
     assert len(archives) == 1
     
     # 2. Test save_dev_raw_json archiving
+    target_dev_dir = public_dir / "USIdev" / dev_slug
     save_dev_raw_json(
         data={"v": 1},
-        public_dir=public_dir,
-        dev_slug=dev_slug,
+        target_dir=target_dev_dir,
         portal_prefix="rp",
         portal_id=portal_id
     )
     save_dev_raw_json(
         data={"v": 2},
-        public_dir=public_dir,
-        target_dir=public_dir / "USIdev" / dev_slug,
-        portal_prefix="rp",
-        portal_id=portal_id
-    )
-    save_dev_raw_json(
-        data={"v": 2},
-        target_dir=public_dir / "USIdev" / dev_slug,
+        target_dir=target_dev_dir,
         portal_prefix="rp",
         portal_id=portal_id
     )
@@ -66,16 +59,21 @@ def test_archiving_uses_portal_id(tmp_path):
     # 3. Test save_meta_json archiving
     save_meta_json(
         data={"v": 1},
-        target_dir=public_dir / "USIdata" / dev_slug / inv_slug,
+        public_dir=public_dir,
+        dev_slug=dev_slug,
+        inv_slug=inv_slug,
         portal_prefix="rp",
         portal_id=portal_id
     )
     save_meta_json(
         data={"v": 2},
-        target_dir=public_dir / "USIdata" / dev_slug / inv_slug,
+        public_dir=public_dir,
+        dev_slug=dev_slug,
+        inv_slug=inv_slug,
         portal_prefix="rp",
         portal_id=portal_id
     )
+    # Check that archive exists with portal_id in its name
     meta_archives = list(inv_dir.glob("meta_rp_12345_*.json"))
     assert len(meta_archives) == 1
 
@@ -104,18 +102,18 @@ def test_download_raw_rp_dev_json_resolves_portal_id(mock_logo, mock_fetch, tmp_
         config=config
     )
     
-    # 1. Verify download_developer_logo was called with portal_id="9876"
+    # 1. Verify download_developer_logo was called with canonical slug "some-dev-slug"
+    # because generic_download_dev_json now resolves it from data
+    canonical_target_dir = public_dir / "USIdev" / "some-dev-slug"
     mock_logo.assert_called_once_with(
         "http://logo.com/logo.png",
-        "dev-slug-folder",
-        config,
+        canonical_target_dir,
         portal_prefix="rp",
         portal_id="9876"
     )
     
     # 2. Verify that the raw JSON file was saved using "raw_rp_9876.json"
-    dev_dir = public_dir / "USIdev" / "dev-slug-folder"
-    saved_file = dev_dir / "raw_rp_9876.json"
+    saved_file = canonical_target_dir / "raw_rp_9876.json"
     assert saved_file.exists()
 
     # Verify content is identical to the mock source (PURE-RAW)

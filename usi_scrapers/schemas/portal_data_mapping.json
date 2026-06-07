@@ -243,8 +243,8 @@
       "developer": {
         "id": "owner.id",
         "slug": {
-          "path": "owner.account.attributes.slug",
-          "regex": "([^/]+)-ID\\d+"
+          "path": "owner.account.attributes.slug|owner.account.slug|data.searchAds.items[0].agency.slug",
+          "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
         },
         "name": "owner.account.name",
         "description": {

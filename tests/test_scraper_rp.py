@@ -209,7 +209,8 @@ def test_scrape_rynek_pierwotny_images(mock_save_images, fetcher):
     result = scrape_rynek_pierwotny("5000", fetcher)
     assert "error" not in result
     assert len(result["image_urls"]) == 2
-    assert "a.jpg" in result["image_urls"]
+    # Scraper now returns original URLs, not local filenames
+    assert "https://cdn.rp.pl/a.jpg" in result["image_urls"]
 
 
 def test_scrape_rynek_pierwotny_missing_details(fetcher):

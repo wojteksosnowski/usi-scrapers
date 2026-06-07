@@ -34,6 +34,10 @@ def download_raw_rp_dev_json(vendor_id_or_slug: str, target_dir: Path, fetcher: 
                 portal_id = resolve_rp_vendor_id(vendor_id_or_slug, fetcher)
         return portal_id
 
+    def extract_slug(profile):
+        rp_dev_mapping = get_mapping("rp", "developer")
+        return resolve_path(profile, rp_dev_mapping.get("slug"))
+
     dev_url = portal_url("rp", "developer", slug=vendor_id_or_slug) if not str(vendor_id_or_slug).isdigit() else None
     
     return generic_download_dev_json(
@@ -41,6 +45,7 @@ def download_raw_rp_dev_json(vendor_id_or_slug: str, target_dir: Path, fetcher: 
         fetch_func=fetch_rp_developer_profile,
         extract_id_func=extract_id,
         extract_logo_func=extract_rp_dev_logo,
+        extract_slug_func=extract_slug,
         source_url=dev_url
     )
 
@@ -328,9 +333,17 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         developer_slug = existing_slug
         logger.info(f"Matched vendor ID {vendor_id} to existing developer slug: {developer_slug}")
     else:
-        # If we can't find it locally, we must rely on the tracker to register it later.
+        # Proactive Fetch: Resolve canonical slug from developer profile
+        logger.info(f"Proactively fetching RP developer profile to resolve slug for ID: {vendor_id}")
+        temp_dir = Path(fetcher.config.public_dir) / "USIdev" / f"temp_{vendor_id}"
+        resolved_slug = download_raw_rp_dev_json(str(vendor_id), temp_dir, fetcher, fetcher.config)
+        if resolved_slug:
+            developer_slug = resolved_slug
+            logger.info(f"Proactively resolved RP developer slug: {developer_slug}")
+
+    if not developer_slug:
+        # Fallback: if we can't find it locally or proactively, we must rely on the data slug.
         # But we need a slug to return in the result dict.
-        # RP offers usually include a slug.
         v_slug_path = rp_mapping.get("developer_slug")
         if v_slug_path:
             developer_slug = resolve_path(details, v_slug_path)
@@ -391,12 +404,9 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
     for key, path in signal_mapping.items():
         signals[key] = resolve_path(details, path)
 
-    # Pobieranie i zapis obrazów do właściwego katalogu
-    images_dir = Path(fetcher.config.public_dir) / "USIdata" / developer_slug / investment_slug
-    local_image_filenames = []
-    if gallery_urls:
-        local_image_filenames = save_images(gallery_urls, images_dir, fetcher.config)
-
+    # Obrazy zostaną pobrane i zlokalizowane przez TechnicalDataManager w KROKU 2 (api.py)
+    # Zwracamy surowe URL-e, aby manager wiedział co pobrać.
+    
     result = {
         "source": "rynekpierwotny.pl",
         "id": offer_id,
@@ -416,7 +426,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         "price_max": resolve_path(details, rp_mapping.get("price_max")),
         "ceiling_height_min": resolve_path(details, rp_mapping.get("ceiling_height_min")),
         "ceiling_height_max": resolve_path(details, rp_mapping.get("ceiling_height_max")),
-        "image_urls": local_image_filenames,
+        "image_urls": gallery_urls,
         "groups_id": groups_id,
         "groups_name": groups_name,
         "stage_sort": stage_sort,
@@ -425,6 +435,7 @@ def scrape_rynek_pierwotny(offer_id: str, fetcher: Fetcher, url: str = None) -> 
         "sibling_stage_folders": sibling_stage_folders,
         "signals": signals,
         "raw_details": details,
+        "fetch_vector": fetcher.last_fetch_vector
     }
 
     return result

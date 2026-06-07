@@ -11,6 +11,7 @@ from .mapping import get_mapping, resolve_path
 from .utils.url_parser import parse_url
 from .utils.scrapers import generic_discover_investments, generic_download_dev_json, extract_logo_from_dict
 from .utils.images import save_images
+from .utils.integrity import normalize_to_legacy_props
 
 from . import get_logger
 
@@ -57,7 +58,8 @@ def download_raw_otodom_dev_json(url: str, target_dir: Path, fetcher: Fetcher, c
         html = fetch_otodom_html(u, f)
         return extract_next_data(html)
 
-    def extract_id(props):
+    def extract_id(data):
+        props = normalize_to_legacy_props(data, "oto")
         advertiser = props.get("advertiser") or {}
         agency = props.get("agency") or {}
         owner = props.get("owner") or {}
@@ -71,7 +73,21 @@ def download_raw_otodom_dev_json(url: str, target_dir: Path, fetcher: Fetcher, c
             return items[0].get("agency", {}).get("id")
         return None
 
-    if not dev_slug and url:
+    def extract_slug(data):
+        props = normalize_to_legacy_props(data, "oto")
+        oto_dev_mapping = get_mapping("oto", "developer")
+        found_slug = resolve_path(props, oto_dev_mapping.get("slug"))
+        if found_slug:
+            # Use the existing parse function to clean it just in case
+            clean_slug, _ = _parse_otodom_slug(found_slug)
+            if clean_slug:
+                return clean_slug
+        
+        # Fallback to the slug parsed from the URL to prevent temp_ folders
+        return dev_slug
+
+    dev_slug = None
+    if url:
         from .utils.url_parser import parse_url
         parsed = parse_url(url)
         dev_slug = parsed.get("developer_slug")
@@ -86,12 +102,14 @@ def download_raw_otodom_dev_json(url: str, target_dir: Path, fetcher: Fetcher, c
         fetch_func=lambda u, f: data, # reuse already fetched data
         extract_id_func=extract_id,
         extract_logo_func=extract_otodom_dev_logo,
+        extract_slug_func=extract_slug,
         source_url=url
     )
 
 
-def extract_otodom_dev_logo(page_props: dict) -> str | None:
+def extract_otodom_dev_logo(data: dict) -> str | None:
     """Extracts logo URL from Otodom developer page __NEXT_DATA__ pageProps."""
+    page_props = normalize_to_legacy_props(data, "oto")
     candidates = [
         "advertiser.logoUrl",
         "advertiser.logo",
@@ -120,10 +138,12 @@ def download_raw_otodom_json(url: str, target_dir: Path, fetcher: Fetcher, confi
         logger.error(f"Failed to fetch Otodom HTML for {url}")
         return None
         
-    page_props = extract_next_data(html)
-    if not page_props:
+    full_data = extract_next_data(html)
+    if not full_data:
         logger.error(f"Failed to extract __NEXT_DATA__ for {url}")
         return None
+
+    page_props = normalize_to_legacy_props(full_data, "oto")
 
     # Filter out non-developer offers
     owner_type = page_props.get("ad", {}).get("owner", {}).get("type")
@@ -140,7 +160,7 @@ def download_raw_otodom_json(url: str, target_dir: Path, fetcher: Fetcher, confi
     if not oto_portal_id and hash_part:
         oto_portal_id = f"ID{hash_part}"
 
-    return save_raw_json(page_props, target_dir, "oto", portal_id=oto_portal_id)
+    return save_raw_json(full_data, target_dir, "oto", portal_id=oto_portal_id)
 
 def fetch_otodom_html(url: str, fetcher: Fetcher) -> str:
     """Fetches the Otodom URL using the centralized Fetcher."""
@@ -148,7 +168,7 @@ def fetch_otodom_html(url: str, fetcher: Fetcher) -> str:
 
 def extract_next_data(html: str) -> dict:
     """
-    Extracts __NEXT_DATA__ JSON from the HTML source.
+    Extracts FULL __NEXT_DATA__ JSON from the HTML source (True RAW).
     """
     pattern = r'<script id="__NEXT_DATA__" type="application/json"[^>]*>(.*?)</script>'
     match = re.search(pattern, html, re.DOTALL)
@@ -158,8 +178,8 @@ def extract_next_data(html: str) -> dict:
         return {}
         
     try:
-        data = json.loads(match.group(1))
-        return data.get("props", {}).get("pageProps", {})
+        # Zwracamy PEŁNY słownik, bez obcinania do props.pageProps
+        return json.loads(match.group(1))
     except Exception as e:
         logger.error(f"Error parsing __NEXT_DATA__ JSON: {e}")
         return {}
@@ -219,9 +239,11 @@ def discover_otodom_listing(config: ScraperConfig, fetcher: Fetcher, identifier:
         if not html:
             break
 
-        data = extract_next_data(html)
-        if not data:
+        full_data = extract_next_data(html)
+        if not full_data:
             break
+        
+        data = normalize_to_legacy_props(full_data, "oto")
 
         try:
             search_ads = data.get("data", {}).get("searchAds", {})
@@ -266,9 +288,11 @@ def fetch_otodom_agency_name(url: str, fetcher: Fetcher) -> str | None:
     html = fetch_otodom_html(url, fetcher)
     if not html:
         return None
-    data = extract_next_data(html)
-    if not data:
+    full_data = extract_next_data(html)
+    if not full_data:
         return None
+    
+    data = normalize_to_legacy_props(full_data, "oto")
     oto_mapping = get_mapping("oto", "investment")
     dev_name = resolve_path(data, oto_mapping.get("developer_name"))
     if dev_name:
@@ -285,9 +309,11 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     if not html:
         return {"error": "Could not fetch HTML"}
         
-    page_props = extract_next_data(html)
-    if not page_props:
+    full_data = extract_next_data(html)
+    if not full_data:
         return {"error": "Could not extract __NEXT_DATA__ JSON"}
+    
+    page_props = normalize_to_legacy_props(full_data, "oto")
 
     parsed = parse_url(url)
     investment_slug = parsed.get("investment_slug")
@@ -340,7 +366,7 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     # Alternatywne zabezpieczenie pozytywne (tylko aktywne ogłoszenia)
     if status not in ("active", "actual", "none", ""):
         logger.warning(f"Otodom listing is non-active ({status}): {url}. Skipping to protect local data.")
-        return {"error": f"Listing is not active (status: {status})"}
+        return {"error": f"Listing is inactive or non-active (status: {status})"}
         
     images = []
     images = resolve_path(page_props, oto_mapping.get("images")) or []
@@ -362,6 +388,18 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         if existing_slug:
             developer_slug = existing_slug
             logger.info(f"Matched agency ID {agency_id} to existing developer slug: {developer_slug}")
+        else:
+            # Proactive Fetch: Resolve canonical slug from developer profile
+            if agency_url:
+                full_agency_url = agency_url if agency_url.startswith("http") else f"https://www.otodom.pl{agency_url}"
+                logger.info(f"Proactively fetching developer profile to resolve slug: {full_agency_url}")
+                # We need a target_dir for download_raw_otodom_dev_json, but we don't have dev_slug yet.
+                # Use a temporary name, the function will return the correct slug.
+                temp_dir = Path(fetcher.config.public_dir) / "USIdev" / f"temp_{agency_id}"
+                resolved_slug = download_raw_otodom_dev_json(full_agency_url, temp_dir, fetcher, fetcher.config)
+                if resolved_slug:
+                    developer_slug = resolved_slug
+                    logger.info(f"Proactively resolved developer slug: {developer_slug}")
 
     if agency_url:
         full_agency_url = agency_url if agency_url.startswith("http") else f"https://www.otodom.pl{agency_url}"
@@ -420,15 +458,9 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
     for key, path in signal_mapping.items():
         signals[key] = resolve_path(page_props, path)
 
-    # --- POPRAWKA: Dynamiczne wyznaczenie ścieżki docelowej i pobranie zdjęć ---
-    # Budujemy ścieżkę zgodnie ze strukturą systemu: {public_dir}/USIdata/{developer_slug}/{investment_slug}
-    images_dir = Path(fetcher.config.public_dir) / "USIdata" / developer_slug / investment_slug
+    # Obrazy zostaną pobrane i zlokalizowane przez TechnicalDataManager w KROKU 2 (api.py)
+    # Zwracamy surowe URL-e, aby manager wiedział co pobrać.
     
-    local_image_filenames = []
-    if images:
-        # save_images pobierze pliki i zwróci wyczyszczone, lokalne nazwy (np. ['4fQKi.jpg'])
-        local_image_filenames = save_images(images, images_dir, fetcher.config)
-
     result = {
         "source": "otodom.pl",
         "id": hash_id,
@@ -448,9 +480,10 @@ def scrape_otodom(url: str, fetcher: Fetcher) -> dict:
         "price_min": resolve_path(page_props, oto_mapping.get("price_min")),
         "ceiling_height_min": resolve_path(page_props, oto_mapping.get("ceiling_height_min")),
         "ceiling_height_max": resolve_path(page_props, oto_mapping.get("ceiling_height_max")),
-        "image_urls": local_image_filenames,
+        "image_urls": images,
         "signals": signals,
-        "raw_details": ad_data
+        "raw_details": full_data,
+        "fetch_vector": fetcher.last_fetch_vector
     }
 
     return result

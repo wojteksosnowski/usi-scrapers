@@ -88,7 +88,7 @@ def test_extract_next_data_parses_correctly():
     {"props": {"pageProps": {"ad": {"title": "Test Ad", "id": 123}}}}
     </script></body></html>"""
     data = extract_next_data(html)
-    assert data["ad"]["title"] == "Test Ad"
+    assert data["props"]["pageProps"]["ad"]["title"] == "Test Ad"
 
 
 def test_extract_next_data_missing_returns_empty():

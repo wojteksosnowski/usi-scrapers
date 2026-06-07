@@ -49,9 +49,11 @@ pytest tests/test_scraper_otodom.py
 ## Konwencje i Standardy
 
 ### Struktura Plików w `Public`:
-- `USI/{dev_slug}/{inv_slug}/usi_{inv_slug}.json`: Główny plik zintegrowany.
-- `USI/{dev_slug}/{inv_slug}/raw_{portal}_{timestamp}.json`: Surowe dane źródłowe.
-- `USI/{dev_slug}/{inv_slug}/*.webp`: Pobrane i zoptymalizowane obrazy.
+- `USI/{dev_slug}/{inv_slug}/*.webp`: Pobrane i zlokalizowane obrazy inwestycji.
+- `USIdata/{dev_slug}/{inv_slug}/usi_{portal}_{portal_id}.json`: Główny plik zintegrowany (Unified Record).
+- `USIdata/{dev_slug}/{inv_slug}/raw_{portal}_{portal_id}.json`: Surowe dane źródłowe (Pure-Raw).
+- `USIdev/{dev_slug}/raw_{portal}_{portal_id}.json`: Surowe dane profilu dewelopera.
+- `USIdev/{dev_slug}/logo_{portal}_{portal_id}.{ext}`: Logo dewelopera.
 
 ### Zasady Kodowania:
 - **Identyfikacja Deweloperów**: KRYTYCZNA ZASADA: Zawsze priorytetyzuj identyfikację dewelopera po twardym ID z portalu (`agency_id`, `vendor_id`), a nie po "slugu" z URL. Używaj funkcji `lookup_developer_by_id()` przed stworzeniem nowego rekordu, aby uniknąć duplikacji folderów przy zmianach nazw marketingowych na portalach.

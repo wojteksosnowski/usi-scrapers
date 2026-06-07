@@ -132,13 +132,18 @@ class StorageResolver:
             
         try:
             with open(file_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
+                raw_data = json.load(f)
+
+            # Stosujemy adapter normalizacyjny przed odczytem metadanych
+            from .utils.integrity import normalize_to_legacy_props
+            data = normalize_to_legacy_props(raw_data, portal_prefix)
+
             source_url = None
             if portal_prefix == "oto":
                 source_url = data.get("ad", {}).get("url") or data.get("url")
             elif portal_prefix == "to":
                 source_url = data.get("url")
-            
+
             return {
                 "source_url": source_url,
                 "dev_slug": dev_slug,

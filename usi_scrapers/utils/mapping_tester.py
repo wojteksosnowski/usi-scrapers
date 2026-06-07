@@ -67,6 +67,10 @@ def main():
                     with open(json_file, 'r', encoding='utf-8') as jf:
                         raw_data = json.load(jf)
                     
+                    # Apply compatibility adapter
+                    from .integrity import normalize_to_legacy_props
+                    raw_data = normalize_to_legacy_props(raw_data, portal_prefix)
+                    
                     val = resolve_path(raw_data, path_def)
                     filename = os.path.basename(json_file)
                     

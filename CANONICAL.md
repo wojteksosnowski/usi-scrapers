@@ -32,10 +32,10 @@ LOKALIZACJA_BAZY_DANYCH/ (np. DROPBOX_PATH/Public/ lub public_dir/)
 │
 └── USIdev/                         # Dane JSON deweloperów
     └── {dev_slug}/
-        ├── usi_dev_{DEV-ID}_{dev_slug}.json       ← Level 2: Rekord portalu dewelopera (1 na portal)
+        ├── usi_dev_{portal}_{portal_id}.json       ← Level 2: Rekord portalu dewelopera (1 na portal)
         ├── dev_master_{DM-ID}.json                ← Level 3: Rekord scalenia deweloperów (opcjonalny)
-        ├── dev_log_{dev_slug}.txt                 ← Dziennik zdarzeń dewelopera (append-only JSONL)
-        ├── discovery.json                         ← Wyniki ostatniego discovery (computed)
+        ├── dev_log_{portal}_{portal_id}.txt                 ← Dziennik zdarzeń dewelopera (append-only JSONL)
+        ├── discovery_{portal}_{portal_id}.json                        ← Wyniki ostatniego discovery (computed)
         ├── raw_{portal}_{portal_id}.json          ← Surowe dane profilu dewelopera
         ├── raw_{portal}_{portal_id}_{YYYYMMDD_HHMMSS}.json   ← Archiwum profilu dewelopera
         └── logo_{portal}_{portal_id}.{ext}        ← Plik logo dewelopera z danego portalu

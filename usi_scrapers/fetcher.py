@@ -26,6 +26,7 @@ class Fetcher:
         self.config = config
         self.session = curl_requests.Session()
         self.last_fetch_times: dict = {}
+        self.last_fetch_vector: Optional[str] = None
 
     def _get_domain(self, url: str) -> str:
         try:
@@ -72,15 +73,27 @@ class Fetcher:
         Strategy 1: curl_cffi with Chrome impersonation (JA3 fingerprint bypass).
         Strategy 2: ScraperAPI fallback if impersonation fails and credits are available.
         """
+        self.last_fetch_vector = None
         domain = self._get_domain(url)
         self._apply_rate_limit(domain)
 
         if use_impersonate:
             try:
+                headers = {}
+                if domain == "rynekpierwotny.pl":
+                    headers = {
+                        "Accept": "application/json, text/plain, */*",
+                        "Referer": "https://rynekpierwotny.pl/s/nowe-mieszkania/",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "same-origin",
+                    }
+
                 logger.info(f"Fetching {url} using impersonation (chrome)")
-                response = self.session.get(url, impersonate="chrome", timeout=timeout)
+                response = self.session.get(url, impersonate="chrome", timeout=timeout, headers=headers)
                 response.raise_for_status()
                 logger.info(f"Successfully fetched {url} ({len(response.text)} bytes)")
+                self.last_fetch_vector = "curl_cffi"
                 return response.text
             except Exception as e:
                 logger.warning(f"Impersonate fetch failed for {url}: {e}")
@@ -101,6 +114,7 @@ class Fetcher:
                     timeout=timeout + 30,
                 )
                 response.raise_for_status()
+                self.last_fetch_vector = "scraperapi"
                 return response.text
             except Exception as e:
                 logger.error(f"ScraperAPI fallback failed for {url}: {e}")

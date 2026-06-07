@@ -2,6 +2,7 @@ import json
 import logging
 from pathlib import Path
 from datetime import datetime, timezone
+from typing import Optional
 
 from .. import get_logger
 from .portals import portal_base_url
@@ -14,6 +15,7 @@ def save_raw_json(
     target_dir: Path,
     portal_prefix: str,
     portal_id: str,
+    fetch_vector: Optional[str] = None,
 ) -> Path:
     """
     Saves raw JSON data using centralized path resolution.
@@ -42,6 +44,13 @@ def save_raw_json(
         json.dump(data, f, indent=2, ensure_ascii=False)
 
     logger.info(f"Saved raw JSON: {file_path}")
+    
+    # Section 3.5: [TIMESTAMP] {dev_slug}/{inv_slug} - {Zdarzenie}
+    dev_slug = target_dir.parent.name
+    inv_slug = target_dir.name
+    msg = f"Saved raw data via {fetch_vector if fetch_vector else 'unknown'}"
+    append_processing_log(target_dir.parent.parent.parent, dev_slug, inv_slug, msg)
+    
     return file_path
 
 
@@ -80,6 +89,7 @@ def save_dev_raw_json(
     portal_prefix: str,
     portal_id: str,
     source_url: str | None = None,
+    fetch_vector: Optional[str] = None,
 ) -> Path:
     """
     Saves raw developer profile JSON using centralized path resolution.
@@ -109,7 +119,48 @@ def save_dev_raw_json(
         json.dump(data, f, indent=2, ensure_ascii=False)
 
     logger.info(f"Saved raw developer JSON: {file_path}")
+    
+    # Section 4: dev_log_{portal}_{portal_id}.txt (append-only JSONL)
+    dev_slug = target_dir.name
+    msg = f"Saved raw developer data via {fetch_vector if fetch_vector else 'unknown'}"
+    append_dev_log(target_dir.parent.parent, dev_slug, portal_prefix, portal_id, msg)
+    
     return file_path
+
+
+def append_processing_log(public_dir: Path, dev_slug: str, inv_slug: str, message: str):
+    """
+    Logs an event to processing_log_{inv_slug}.txt.
+    Format: [TIMESTAMP] {dev_slug}/{inv_slug} - {message}
+    """
+    log_dir = Path(public_dir) / "USIdata" / dev_slug / inv_slug
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = log_dir / f"processing_log_{inv_slug}.txt"
+    
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    log_entry = f"[{ts}] {dev_slug}/{inv_slug} - {message}\n"
+    
+    with open(log_file, "a", encoding="utf-8") as f:
+        f.write(log_entry)
+
+
+def append_dev_log(public_dir: Path, dev_slug: str, portal_prefix: str, portal_id: str, message: str):
+    """
+    Logs an event to dev_log_{portal}_{id}.txt (append-only JSONL).
+    """
+    log_dir = Path(public_dir) / "USIdev" / dev_slug
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = log_dir / f"dev_log_{portal_prefix}_{portal_id}.txt"
+    
+    entry = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "event": message,
+        "portal": portal_prefix,
+        "portal_id": portal_id
+    }
+    
+    with open(log_file, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 def lookup_developer_by_id(public_dir: Path, portal_prefix: str, portal_id: str | int) -> str | None:
