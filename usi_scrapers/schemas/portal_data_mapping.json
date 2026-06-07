@@ -89,7 +89,44 @@
       "developer": {
         "id": "id",
         "slug": "slug",
-        "name": "name"
+        "name": "name",
+        "description": {
+          "path": "description.value|description",
+          "transform": "strip_html"
+        },
+        "website": "website|contact.website",
+        "phone": {
+          "path": "phones|contact.phone|contact.phones|phone",
+          "transform": "clean_phone"
+        },
+        "email": {
+          "path": "email|contact.email",
+          "transform": "extract_first_item"
+        },
+        "city": "address.city|address.value.city",
+        "street": "address.street|address.value.street",
+        "postal_code": "address.postal_code|address.value.postal_code",
+        "address": "address.value|address|address.full_address",
+        "logo_url": "logo.url|logo.value|logo",
+        "active_investments": "stats.active_investments|stats.value.active_investments",
+        "nip": "nip|company.nip",
+        "krs": "krs|company.krs",
+        "facebook_url": {
+          "path": "social_media|social_media.value|socials|links",
+          "transform": "extract_facebook"
+        },
+        "instagram_url": {
+          "path": "social_media|social_media.value|socials|links",
+          "transform": "extract_instagram"
+        },
+        "youtube_url": {
+          "path": "social_media|social_media.value|socials|links",
+          "transform": "extract_youtube"
+        },
+        "linkedin_url": {
+          "path": "social_media|social_media.value|socials|links",
+          "transform": "extract_linkedin"
+        }
       },
       "stage": {
         "id": "id",
@@ -209,7 +246,44 @@
           "path": "owner.account.attributes.slug",
           "regex": "([^/]+)-ID\\d+"
         },
-        "name": "owner.account.name"
+        "name": "owner.account.name",
+        "description": {
+          "path": "owner.account.attributes.description|owner.description|description",
+          "transform": "strip_html"
+        },
+        "website": "owner.account.attributes.website|owner.website|website",
+        "phone": {
+          "path": "owner.account.phones|owner.phones|phones",
+          "transform": "clean_phone"
+        },
+        "email": {
+          "path": "owner.account.email|owner.email|email",
+          "transform": "extract_first_item"
+        },
+        "city": "owner.account.address.city.name|owner.address.city|address.city",
+        "street": "owner.account.address.street.name|owner.address.street|address.street",
+        "postal_code": "owner.account.address.postalCode|owner.address.postalCode|address.postal_code",
+        "address": "owner.account.address.street.name|owner.address.street",
+        "logo_url": "owner.account.attributes.logoUrl|owner.logoUrl|logo",
+        "active_investments": "owner.account.metrics.activeAds|owner.metrics.activeAds|active_investments",
+        "nip": "owner.account.attributes.nip|owner.nip|nip",
+        "krs": "owner.account.attributes.krs|owner.krs|krs",
+        "facebook_url": {
+          "path": "owner.account.attributes.socialMedia|owner.socialMedia|socials",
+          "transform": "extract_facebook"
+        },
+        "instagram_url": {
+          "path": "owner.account.attributes.socialMedia|owner.socialMedia|socials",
+          "transform": "extract_instagram"
+        },
+        "youtube_url": {
+          "path": "owner.account.attributes.socialMedia|owner.socialMedia|socials",
+          "transform": "extract_youtube"
+        },
+        "linkedin_url": {
+          "path": "owner.account.attributes.socialMedia|owner.socialMedia|socials",
+          "transform": "extract_linkedin"
+        }
       }
     },
     "to": {
@@ -312,7 +386,44 @@
           "path": "url",
           "regex": "deweloperzy/([^/]+)$"
         },
-        "name": "name|nazwa"
+        "name": "name|nazwa",
+        "description": {
+          "path": "description|opis",
+          "transform": "strip_html"
+        },
+        "website": "url|website",
+        "phone": {
+          "path": "telephone|contactPoint.telephone",
+          "transform": "clean_phone"
+        },
+        "email": {
+          "path": "email|contactPoint.email",
+          "transform": "extract_first_item"
+        },
+        "city": "address.addressLocality",
+        "street": "address.streetAddress",
+        "postal_code": "address.postalCode",
+        "address": "address.streetAddress",
+        "logo_url": "logo.url|logo_url|logo",
+        "active_investments": "active_investments|investments_count",
+        "nip": "taxID|nip",
+        "krs": "krs",
+        "facebook_url": {
+          "path": "sameAs|social_media",
+          "transform": "extract_facebook"
+        },
+        "instagram_url": {
+          "path": "sameAs|social_media",
+          "transform": "extract_instagram"
+        },
+        "youtube_url": {
+          "path": "sameAs|social_media",
+          "transform": "extract_youtube"
+        },
+        "linkedin_url": {
+          "path": "sameAs|social_media",
+          "transform": "extract_linkedin"
+        }
       }
     }
   }

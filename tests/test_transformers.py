@@ -127,3 +127,45 @@ def test_to_extract_amenities():
         {"name": "Winda", "value": "tak"},
         {"name": "Basen", "value": "nie"}
     ]
+    assert apply_transformer("to_extract_amenities", data) == ["Garaż: parking naziemny", "Winda"]
+
+def test_strip_html():
+    from usi_scrapers.transformers import apply_transformer
+    assert apply_transformer("strip_html", "<p>Opis</p>") == "Opis"
+    assert apply_transformer("strip_html", "<b>Bold</b><br>Nowa linia") == "Bold\nNowa linia"
+    assert apply_transformer("strip_html", "Czysty tekst") == "Czysty tekst"
+    assert apply_transformer("strip_html", "<br/>Opis<br />") == "Opis"
+    assert apply_transformer("strip_html", "  Text   spaces  ") == "Text spaces"
+
+def test_clean_phone():
+    from usi_scrapers.transformers import apply_transformer
+    assert apply_transformer("clean_phone", "+48 123 456 789") == "+48123456789"
+    assert apply_transformer("clean_phone", "(22) 123-45-67") == "221234567"
+    assert apply_transformer("clean_phone", "tel. 500 600 700") == "500600700"
+    assert apply_transformer("clean_phone", ["+48 111 222 333", "other"]) == "+48111222333"
+    assert apply_transformer("clean_phone", None) is None
+
+def test_extract_first_item():
+    from usi_scrapers.transformers import apply_transformer
+    assert apply_transformer("extract_first_item", ["a", "b"]) == "a"
+    assert apply_transformer("extract_first_item", []) is None
+    assert apply_transformer("extract_first_item", "string") == "string"
+
+def test_extract_social():
+    from usi_scrapers.transformers import apply_transformer
+    
+    # Facebook
+    assert apply_transformer("extract_facebook", "http://facebook.com/dev") == "http://facebook.com/dev"
+    assert apply_transformer("extract_facebook", ["http://twitter.com", "http://facebook.com/dev"]) == "http://facebook.com/dev"
+    assert apply_transformer("extract_facebook", [{"url": "http://facebook.com/dev"}]) == "http://facebook.com/dev"
+    assert apply_transformer("extract_facebook", [{"type": "fb", "value": "http://facebook.com/dev"}]) == "http://facebook.com/dev"
+    
+    # Instagram
+    assert apply_transformer("extract_instagram", ["http://instagram.com/dev"]) == "http://instagram.com/dev"
+    assert apply_transformer("extract_instagram", [{"name": "instagram", "value": "http://ig.com/dev"}]) == "http://ig.com/dev"
+    
+    # YouTube
+    assert apply_transformer("extract_youtube", "http://youtube.com/channel/123") == "http://youtube.com/channel/123"
+    
+    # LinkedIn
+    assert apply_transformer("extract_linkedin", [{"link": "http://linkedin.com/company/abc"}]) == "http://linkedin.com/company/abc"

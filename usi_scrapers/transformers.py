@@ -253,3 +253,87 @@ def _oto_delivery_date(value: Any) -> str | None:
         except (ValueError, TypeError):
             pass
     return None
+
+@register_transformer("strip_html")
+def _strip_html(value: Any) -> str | None:
+    """Removes HTML tags and normalizes whitespace from a string."""
+    if not isinstance(value, str):
+        return None
+    # Replace <br> and <p> with newlines
+    value = re.sub(r'<br\s*/?>|</?p>', '\n', value, flags=re.IGNORECASE)
+    # Remove all other HTML tags
+    clean = re.sub(r'<[^>]+>', '', value)
+    # Normalize multiple newlines and spaces
+    clean = re.sub(r'\n{3,}', '\n\n', clean)
+    clean = re.sub(r' {2,}', ' ', clean)
+    return clean.strip() or None
+
+@register_transformer("clean_phone")
+def _clean_phone(value: Any) -> str | None:
+    """Cleans phone numbers, removing spaces and standardizing format."""
+    if not isinstance(value, str):
+        if isinstance(value, list) and len(value) > 0:
+            value = str(value[0])
+        else:
+            return None
+            
+    # Keep only digits and '+'
+    cleaned = re.sub(r'[^\d\+]', '', value)
+    
+    if not cleaned:
+        return None
+        
+    return cleaned
+
+@register_transformer("extract_first_item")
+def _extract_first_item(value: Any) -> Any:
+    """Extracts the first item from a list, or returns the value if not a list."""
+    if isinstance(value, list):
+        return value[0] if len(value) > 0 else None
+    return value
+
+@register_transformer("extract_facebook")
+def _extract_facebook(value: Any) -> str | None:
+    """Extracts Facebook URL from a list or string."""
+    return _extract_social(value, "facebook")
+
+@register_transformer("extract_instagram")
+def _extract_instagram(value: Any) -> str | None:
+    """Extracts Instagram URL from a list or string."""
+    return _extract_social(value, "instagram")
+
+@register_transformer("extract_youtube")
+def _extract_youtube(value: Any) -> str | None:
+    """Extracts YouTube URL from a list or string."""
+    return _extract_social(value, "youtube")
+
+@register_transformer("extract_linkedin")
+def _extract_linkedin(value: Any) -> str | None:
+    """Extracts LinkedIn URL from a list or string."""
+    return _extract_social(value, "linkedin")
+
+def _extract_social(value: Any, platform: str) -> str | None:
+    if isinstance(value, list):
+        for item in value:
+            if isinstance(item, dict):
+                # Check if any value or key matches the platform
+                is_platform = False
+                for k, v in item.items():
+                    if platform in str(k).lower() or platform in str(v).lower():
+                        is_platform = True
+                if is_platform:
+                    # Find the URL
+                    for v in item.values():
+                        if isinstance(v, str) and (v.startswith("http") or "www." in v):
+                            return v
+                # Specific check if dict has url/link field and it matches platform
+                url = item.get("url") or item.get("link") or item.get("value")
+                if isinstance(url, str) and platform in url.lower():
+                    return url
+            elif isinstance(item, str):
+                if platform in item.lower():
+                    return item
+    elif isinstance(value, str):
+        if platform in value.lower():
+            return value
+    return None

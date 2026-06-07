@@ -1,5 +1,11 @@
 # Changelog
 
+## Wersja 1.2.0 — Kamień 12 (Rozbudowa ekstrakcji danych deweloperów) — 2026-06-07
+
+* Rozbudowano schematy w `portal_data_mapping.json` (dla RP, Otodom, TabelaOfert) o pełen zestaw atrybutów dla deweloperów: `description`, `website`, `phone`, `email`, adres siedziby (`city`, `street`, `postal_code`, `address`), `logo_url`, `active_investments`, `nip`, `krs` oraz zunifikowane linki do mediów społecznościowych (`facebook_url`, `instagram_url`, `youtube_url`, `linkedin_url`).
+* Wprowadzono do `transformers.py` nowe transformatory do obróbki surowych danych: `strip_html` do oczyszczania opisów deweloperów z tagów HTML, `clean_phone` do standaryzacji numerów telefonów oraz dedykowane funkcje do precyzyjnego wyciągania adresów mediów społecznościowych z list i słowników.
+* Dodano testy jednostkowe w `tests/test_transformers.py` pod kątem nowych mechanizmów mapowania. Zapewniono pełną zgodność nowych pól z założeniami silnika `transform_to_unified()`.
+
 ## Wersja 1.1.3 — Kamień 11 (Czystka Testów i I/O Hardening) — 2026-06-06
 
 * Usunięto przestarzałe testy (`test_image_consistency.py`, `test_resolve.py`) oraz zdezaktualizowane asercje, które opierały się na dawnej architekturze z inwencją nazewnictwa i systemem fallbacków (slugify).
