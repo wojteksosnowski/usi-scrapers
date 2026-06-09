@@ -15,6 +15,7 @@ venv/bin/pytest
 
 # Run a single test file or test
 venv/bin/pytest tests/test_scraper_otodom.py
+venv/bin/pytest tests/test_mapping_oto_live.py -s  # Live and random sampling mapping tests
 venv/bin/pytest tests/test_scraper_rp.py::test_parse_rp_results_stage_flattening
 ```
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## Wersja 1.3.1 — Kamień 14 (Robust ID Mapping & Cross-Portal Random Sampling) — 2026-06-09
+
+* **Udoskonalone mapowanie ID (Otodom)**: Rozszerzono `portal_data_mapping.json` o obsługę głęboko zagnieżdżonych identyfikatorów w Otodom. Dodano wsparcie dla ścieżek `raw_details.id` (dane historyczne) oraz `searchAds.items[0].id` (wyniki wyszukiwania), co zwiększyło skuteczność ekstrakcji ID z 57% do 100% na posiadanych próbkach RAW.
+* **Nowy system testów (Live + Random Sampling)**:
+    * Wdrożono `tests/test_mapping_oto_live.py` zawierający testy na żywych danych Otodom.
+    * Dodano mechanizm losowego próbkowania (`test_mapping_with_random_local_db_files`), który automatycznie weryfikuje do 100 rekordów dla każdego portalu (`rp`, `oto`, `to`) z lokalnej bazy danych (`Public/USIdata`).
+    * Zaimplementowano inteligentne filtrowanie plików "mock" i "test", zapewniając, że weryfikacja odbywa się wyłącznie na rzeczywistych danych portalowych.
+
 ## Wersja 1.3.0 — Kamień 13 (True RAW i Logowanie Wektorów Pobrania) — 2026-06-08
 
 * **True RAW (Otodom)**: Zaktualizowano `scraper_otodom.py`, aby zapisywał 100% oryginalnego JSON-a (`__NEXT_DATA__`) do plików `raw_*.json`. Integracja z adapterem `normalize_to_legacy_props` zapewnia pełną kompatybilność wsteczną silnika mapowania.
