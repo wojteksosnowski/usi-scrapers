@@ -140,22 +140,22 @@
     "oto": {
       "name": "Otodom",
       "investment": {
-        "id": "id|ad.id|raw_details.id|searchAds.items[0].id|oto_url_id",
-        "numeric_id": "ad.id|raw_details.id|searchAds.items[0].id",
+        "id": "props.pageProps.ad.id|id|ad.id|raw_details.id|searchAds.items[0].id|oto_url_id",
+        "numeric_id": "props.pageProps.ad.id|ad.id|raw_details.id|searchAds.items[0].id",
         "slug": {
-          "path": "ad.slug|raw_details.slug|searchAds.items[0].slug",
+          "path": "props.pageProps.ad.slug|ad.slug|raw_details.slug|searchAds.items[0].slug",
           "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
         },
-        "name": "ad.title|raw_details.title|searchAds.items[0].title|title",
-        "developer_id": "ad.agency.id|agency_id|owner.id|raw_details.agency_id|searchAds.items[0].agency.id",
-        "developer_name": "ad.agency.name|agency_name|owner.name|raw_details.agency_name|searchAds.items[0].agency.name",
+        "name": "props.pageProps.ad.title|ad.title|raw_details.title|searchAds.items[0].title|title",
+        "developer_id": "props.pageProps.ad.agency.id|ad.agency.id|agency_id|props.pageProps.ad.owner.id|owner.id|raw_details.agency_id|searchAds.items[0].agency.id",
+        "developer_name": "props.pageProps.ad.agency.name|ad.agency.name|agency_name|props.pageProps.ad.owner.name|owner.name|raw_details.agency_name|searchAds.items[0].agency.name",
         "developer_slug": {
-          "path": "ad.agency.url|raw_details.developer_slug|searchAds.items[0].agency.url",
+          "path": "props.pageProps.ad.agency.url|ad.agency.url|raw_details.developer_slug|searchAds.items[0].agency.url",
           "regex": "deweloperzy/([^/]+)-ID\\d+"
         },
-        "units_count": "ad.target.Number_of_properties|raw_details.properties_count|ad.target.Number_of_properties",
+        "units_count": "props.pageProps.ad.target.Number_of_properties|ad.target.Number_of_properties|raw_details.properties_count|ad.target.Number_of_properties",
         "price_min": {
-          "path": "ad.target.Price|raw_details.price_min|searchAds.items[0].price.value",
+          "path": "props.pageProps.ad.target.Price|ad.target.Price|raw_details.price_min|searchAds.items[0].price.value",
           "transform": "to_float"
         },
         "price_m2_min": {
@@ -202,11 +202,11 @@
           "path": "ad.images|raw_details.image_urls|searchAds.items[0].images",
           "transform": "oto_gallery_to_flat_list"
         },
-        "url": "ad.url|url|searchAds.items[0].url",
-        "developer_url": "ad.agency.url|raw_details.developer_url|searchAds.items[0].agency.url",
-        "owner_name": "ad.owner.name|owner.account.name|owner.name|raw_details.owner_name|searchAds.items[0].owner.name",
+        "url": "props.pageProps.ad.url|ad.url|url|searchAds.items[0].url",
+        "developer_url": "props.pageProps.ad.agency.url|ad.agency.url|raw_details.developer_url|searchAds.items[0].agency.url",
+        "owner_name": "props.pageProps.ad.owner.name|ad.owner.name|owner.account.name|owner.name|raw_details.owner_name|searchAds.items[0].owner.name",
         "hash_id": {
-          "path": "ad.url|url|ad.slug|raw_details.slug|searchAds.items[0].slug",
+          "path": "props.pageProps.ad.url|ad.url|url|props.pageProps.ad.slug|ad.slug|raw_details.slug|searchAds.items[0].slug",
           "regex": "-ID([A-Za-z0-9]+)"
         },
         "segment": {
