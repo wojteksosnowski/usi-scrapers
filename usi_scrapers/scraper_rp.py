@@ -245,6 +245,19 @@ def _parse_rp_results(results: list) -> list[dict]:
         groups = get_val(item, "groups") or {}
         stages = get_val(groups, "stages") or []
         
+        # Zawsze dodajemy inwestycję nadrzędną (parent)
+        v_data = get_val(item, "vendor") or {}
+        v_slug = v_data.get("slug") or v_slug_parent
+        o_id = str(item.get("id"))
+        o_slug = item.get("slug")
+        
+        offers.append({
+            "id": o_id,
+            "name": parent_name,
+            "developer_name": v_name_parent,
+            "url": portal_url("rp", "investment", dev_slug=v_slug, inv_slug=o_slug, offer_id=o_id),
+        })
+
         if stages:
             for stage in stages:
                 s_id_internal = stage.get("id")
@@ -270,18 +283,10 @@ def _parse_rp_results(results: list) -> list[dict]:
                     
                     offers.append({
                         "id": s_id,
+                        "name": s_name or f"{parent_name} - {s_slug}",
+                        "developer_name": s_vendor_name,
                         "url": portal_url("rp", "stage", dev_slug=s_vendor_slug, inv_slug=s_slug, offer_id=s_id, stage_id=str(s_id_internal)),
                     })
-        else:
-            v_data = get_val(item, "vendor") or {}
-            v_slug = v_data.get("slug") or v_slug_parent
-            o_id = str(item.get("id"))
-            o_slug = item.get("slug")
-            
-            offers.append({
-                "id": o_id,
-                "url": portal_url("rp", "investment", dev_slug=v_slug, inv_slug=o_slug, offer_id=o_id),
-            })
             
     return offers
 

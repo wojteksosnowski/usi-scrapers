@@ -145,10 +145,10 @@ def test_parse_rp_results_simple():
 
 def test_parse_rp_results_stage_flattening():
     offers = _parse_rp_results([_RP_MULTISTAGE_ITEM])
-    assert len(offers) == 2
+    assert len(offers) == 3
     ids = {o["id"] for o in offers}
-    assert ids == {"2001", "2002"}
-    for o in offers:
+    assert ids == {"2000", "2001", "2002"}
+    for o in offers[1:]:
         assert "show_sold_stage=true" in o["url"]
 
 
