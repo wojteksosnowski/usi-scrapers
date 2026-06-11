@@ -77,11 +77,11 @@ def download_raw_otodom_dev_json(url: str, target_dir: Path, fetcher: Fetcher, c
         props = normalize_to_legacy_props(data, "oto")
         oto_dev_mapping = get_mapping("oto", "developer")
         found_slug = resolve_path(props, oto_dev_mapping.get("slug"))
+        
+        # If mapping found a slug (which usually includes -IDxxx), use it as-is
+        # but normalize it via _parse_otodom_slug to ensure it's clean.
         if found_slug:
-            # Use the existing parse function to clean it just in case
-            clean_slug, _ = _parse_otodom_slug(found_slug)
-            if clean_slug:
-                return clean_slug
+             return found_slug
         
         # Fallback to the slug parsed from the URL to prevent temp_ folders
         return dev_slug

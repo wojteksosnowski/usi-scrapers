@@ -242,10 +242,7 @@
       },
       "developer": {
         "id": "owner.id",
-        "slug": {
-          "path": "owner.account.attributes.slug|owner.account.slug|data.searchAds.items[0].agency.slug",
-          "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
-        },
+        "slug": "owner.account.attributes.slug|owner.account.slug|data.searchAds.items[0].agency.slug",
         "name": "owner.account.name",
         "description": {
           "path": "owner.account.attributes.description|owner.description|description",
@@ -290,11 +287,12 @@
       "name": "TabelaOfert",
       "investment": {
         "id": {
-          "path": "url",
+          "path": "url|to_url",
           "regex": ",i(\\d+)"
         },
+        "numeric_id": "to_id",
         "slug": {
-          "path": "url",
+          "path": "url|to_url|investment_slug",
           "regex": "inwestycja/([^,]+)"
         },
         "name": "name",
@@ -302,15 +300,15 @@
           "path": "brand.logo",
           "regex": "\\/(\\d+)-"
         },
-        "developer_name": "brand.name",
+        "developer_name": "brand.name|developer_name",
         "developer_slug": "developer_slug",
-        "units_count": "offers.offerCount",
+        "units_count": "offers.offerCount|properties_count",
         "price_min": {
-          "path": "offers.lowPrice",
+          "path": "offers.lowPrice|price_min",
           "transform": "to_float"
         },
         "price_max": {
-          "path": "offers.highPrice",
+          "path": "offers.highPrice|price_max",
           "transform": "to_float"
         },
         "price_m2_min": {
@@ -333,15 +331,15 @@
           "transform": "cm_to_m",
           "unit": "m"
         },
-        "latitude": "_raw_mapa.data.center.y",
-        "longitude": "_raw_mapa.data.center.x",
-        "address": "_extracted_location.address",
-        "city": "_extracted_location.city",
+        "latitude": "_raw_mapa.data.center.y|latitude",
+        "longitude": "_raw_mapa.data.center.x|longitude",
+        "address": "_extracted_location.address|address",
+        "city": "_extracted_location.city|city",
         "street": {
-          "path": "_extracted_location.street",
+          "path": "_extracted_location.street|address",
           "transform": "clean_street"
         },
-        "region": "_extracted_location.region",
+        "region": "_extracted_location.region|region",
         "brand_klient_id": "brand.klientId",
         "publisher_klient_id": "publisher.klientId",
         "klient_id": "klientId|klient_id",
