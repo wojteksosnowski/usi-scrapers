@@ -199,11 +199,13 @@ def discover_rp_listing(config: ScraperConfig, fetcher: Fetcher, identifier: str
             if item["id"] not in seen_ids:
                 all_results.append(item)
                 seen_ids.add(item["id"])
-                if limit and len(all_results) >= limit:
-                    return all_results
                     
         if len(results) < PAGE_SIZE:
             break
+            
+        if limit and (page * PAGE_SIZE) >= limit:
+            break
+            
         page += 1
         
     return all_results
