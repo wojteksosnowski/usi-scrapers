@@ -28,18 +28,12 @@ def generic_discover_investments(
     seen_ids = set()
     
     for url in discovery_urls:
-        remaining_limit = (limit - len(all_results)) if limit else None
-        if limit and remaining_limit <= 0:
-            break
-            
-        batch = discover_func(config, fetcher, url, remaining_limit)
+        batch = discover_func(config, fetcher, url, limit)
         for item in batch:
             item_id = item.get("id")
             if item_id and item_id not in seen_ids:
                 all_results.append(item)
                 seen_ids.add(item_id)
-                if limit and len(all_results) >= limit:
-                    return all_results
                     
     return all_results
 
