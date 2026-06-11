@@ -344,7 +344,7 @@ def download_raw_to_json(url: str, target_dir: Path, fetcher: Fetcher, config: S
 
     data = parse_to_product(html) or {}
     to_id = _extract_to_id(url)
-    portal_id = f"i{to_id}" if to_id else None
+    portal_id = to_id if to_id else None
 
     dev_slug = target_dir.parent.name
     inv_slug = target_dir.name
@@ -769,7 +769,7 @@ def scrape_tabelaofert(url: str, fetcher: Fetcher) -> dict:
     
     # ID-based Investment Identification
     to_id = _extract_to_id(url)
-    portal_id = f"i{to_id}" if to_id else None
+    portal_id = to_id if to_id else None
     if portal_id:
         existing_inv_slug = lookup_investment_by_id(fetcher.config.public_dir, developer_slug, "to", portal_id)
         if existing_inv_slug:
