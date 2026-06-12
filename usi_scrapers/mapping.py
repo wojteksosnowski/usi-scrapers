@@ -127,10 +127,16 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
                 else:
                     return None
                 
-    if regex_pattern and current is not None:
-        match = re.search(regex_pattern, str(current))
+    if regex_pattern and isinstance(current, str):
+        match = re.search(regex_pattern, current)
         if match:
-            current = match.group(1) if match.lastindex else match.group(0)
+            if match.groups():
+                for g in match.groups():
+                    if g is not None:
+                        current = g
+                        break
+            else:
+                current = match.group(0)
         else:
             current = None
 

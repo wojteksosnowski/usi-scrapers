@@ -72,23 +72,9 @@ def download_raw_to_dev_json(url: str, target_dir: Path, fetcher: Fetcher, confi
         return d
 
     def extract_id(d):
-        if not d: return None
-        if "klientId" in d: return str(d["klientId"])
-        if "klient_id" in d: return str(d["klient_id"])
-        if "identifier" in d: return str(d["identifier"])
-        
-        # From Next.js pageProps if it's __NEXT_DATA__
-        props = d.get("props", {}).get("pageProps", {})
-        if props.get("klientId"): return str(props["klientId"])
-        if props.get("developer", {}).get("id"): return str(props["developer"]["id"])
-        
-        # From JSON-LD URL
-        for key in ["@id", "url"]:
-            val = d.get(key)
-            if val and isinstance(val, str):
-                m = RE_URL_ID_JSON.search(val)
-                if m: return m.group(1)
-        return None
+        to_dev_mapping = get_mapping("to", "developer")
+        res = resolve_path(d, to_dev_mapping.get("id"))
+        return str(res) if res else None
 
     def extract_logo(d):
         if not d: return None
@@ -102,17 +88,8 @@ def download_raw_to_dev_json(url: str, target_dir: Path, fetcher: Fetcher, confi
         return None
 
     def extract_slug(d):
-        if not d: return None
-        if "slug" in d: return d["slug"]
-        if "kryterium" in d: return d["kryterium"]
-        # From JSON-LD URL or self URL
-        for key in ["@id", "url"]:
-            val = d.get(key)
-            if val and isinstance(val, str):
-                # Search for slug in plain URL (RE_DEV_LINK expects href="..." so it fails here)
-                m = re.search(r'/katalog-firm/deweloperzy/([^/?#]+)', val)
-                if m: return m.group(1)
-        return None
+        to_dev_mapping = get_mapping("to", "developer")
+        return resolve_path(d, to_dev_mapping.get("slug"))
 
     return generic_download_dev_json(
         fetcher, config, url, target_dir, "to",

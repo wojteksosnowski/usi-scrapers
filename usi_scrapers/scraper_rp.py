@@ -25,14 +25,8 @@ def download_raw_rp_dev_json(vendor_id_or_slug: str, target_dir: Path, fetcher: 
     """
     def extract_id(profile):
         rp_dev_mapping = get_mapping("rp", "developer")
-        raw_id = resolve_path(profile, rp_dev_mapping.get("id"))
-        portal_id = str(raw_id) if raw_id else None
-        if not portal_id:
-            if str(vendor_id_or_slug).isdigit():
-                portal_id = vendor_id_or_slug
-            else:
-                portal_id = resolve_rp_vendor_id(vendor_id_or_slug, fetcher)
-        return portal_id
+        res = resolve_path(profile, rp_dev_mapping.get("id"))
+        return str(res) if res else None
 
     def extract_slug(profile):
         rp_dev_mapping = get_mapping("rp", "developer")

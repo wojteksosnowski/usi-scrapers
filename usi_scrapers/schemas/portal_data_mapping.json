@@ -380,12 +380,12 @@
       },
       "developer": {
         "id": {
-          "path": "logo_url|logo",
-          "regex": ",(\\d+)-/"
+          "path": "klientId|klient_id|identifier|props.pageProps.klientId|props.pageProps.developer.id|@id|url|logo_url|logo",
+          "regex": "(?:,i(\\d+)|,(\\d+)-/|^(\\d+)$)"
         },
         "slug": {
-          "path": "url",
-          "regex": "deweloperzy/([^/]+)$"
+          "path": "slug|kryterium|@id|url",
+          "regex": "deweloperzy/([^/?#]+)|^([^/?#]+)$"
         },
         "name": "name|nazwa",
         "description": {

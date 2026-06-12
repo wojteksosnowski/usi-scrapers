@@ -25,6 +25,13 @@ def clean_filename(url: str) -> str:
     
     # 3. Jeśli to plik Otodom (często Base64 bez rozszerzenia), wymuszamy .webp
     if "otodom.pl" in url or "/files/" in url:
+        # Otodom CDN urls are like .../files/{hash}/image;s=...
+        # So base_url is .../files/{hash}/image
+        # Jeśli filename to "image", unikalnym identyfikatorem jest hash w poprzednim segmencie
+        if filename == "image" and "/files/" in base_url:
+            hash_part = base_url.split("/")[-2]
+            return f"{hash_part}.webp"
+            
         # Usuwamy ewentualne stare rozszerzenie, aby nie było podwójnych kropek
         name_only = re.sub(r'\.(jpg|jpeg|png|webp)$', '', filename, flags=re.IGNORECASE)
         return f"{name_only}.webp"
