@@ -1,5 +1,9 @@
 # Changelog
 
+## Wersja 1.3.2 — Kamień 15 (Poprawa błędu w slugu Otodom) — 2026-06-12
+
+* **Otodom**: Naprawiono błąd w scraperze Otodom (w `extract_slug`), przez który `-ID...` niepotrzebnie wyciekało i było zapisywane jako część `developer_slug` podczas proaktywnego pobierania profilu agencji. Wprowadzono prawidłowe czyszczenie przy pomocy `_parse_otodom_slug`.
+
 ## Wersja 1.3.1 — Kamień 14 (Robust ID Mapping & Cross-Portal Random Sampling) — 2026-06-09
 
 * **Udoskonalone mapowanie ID (Otodom)**: Rozszerzono `portal_data_mapping.json` o obsługę głęboko zagnieżdżonych identyfikatorów w Otodom. Dodano wsparcie dla ścieżek `raw_details.id` (dane historyczne) oraz `searchAds.items[0].id` (wyniki wyszukiwania), co zwiększyło skuteczność ekstrakcji ID z 57% do 100% na posiadanych próbkach RAW.
