@@ -1,5 +1,10 @@
 # Changelog
 
+## Wersja 1.3.3 — Kamień 16 (Pełna agnostyczność ekstrakcji ID i Sluga) — 2026-06-12
+
+* **Zunifikowane mapowanie**: Całkowicie usunięto regexy i "ręczne" fallbacki w kodzie scrapera Otodom (`extract_id`, `extract_slug`). Logika wycinająca identyfikatory `-IDxxx` ze sluga została przeniesiona bezpośrednio do silnika mapowania (`portal_data_mapping.json` przez wyrażenia regularne w formacie JSON). Skrypt polega teraz w 100% na spójnym mapowaniu agnostycznym.
+* Poprawiono usterki asercji w testach wynikające ze sztywnych założeń względem starych slugów.
+
 ## Wersja 1.3.2 — Kamień 15 (Poprawa błędu w slugu Otodom) — 2026-06-12
 
 * **Otodom**: Naprawiono błąd w scraperze Otodom (w `extract_slug`), przez który `-ID...` niepotrzebnie wyciekało i było zapisywane jako część `developer_slug` podczas proaktywnego pobierania profilu agencji. Wprowadzono prawidłowe czyszczenie przy pomocy `_parse_otodom_slug`.

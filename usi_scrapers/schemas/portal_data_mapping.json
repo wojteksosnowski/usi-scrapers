@@ -241,8 +241,11 @@
         }
       },
       "developer": {
-        "id": "owner.id",
-        "slug": "owner.account.attributes.slug|owner.account.slug|data.searchAds.items[0].agency.slug",
+        "id": "advertiser.id|agency.id|owner.id|data.searchAds.items[0].agency.id",
+        "slug": {
+          "path": "owner.account.attributes.slug|owner.account.slug|data.searchAds.items[0].agency.slug|advertiser.slug|agency.slug",
+          "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
+        },
         "name": "owner.account.name",
         "description": {
           "path": "owner.account.attributes.description|owner.description|description",

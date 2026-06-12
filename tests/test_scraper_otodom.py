@@ -503,7 +503,7 @@ def test_scrape_otodom_search_results_style_slug(
         result = scrape_otodom(url, fetcher)
         
         # Should find the canonical slug from the search results items, NOT use slugify fallback
-        assert result["developer_slug"] == "deep-agency-canonical-ID999"
+        assert result["developer_slug"] == "deep-agency-canonical"
         assert result["agency_id"] == 999
         assert mock_logo.called
         # Verify first arg to logo download is the imageUrl from nested items

@@ -60,29 +60,16 @@ def download_raw_otodom_dev_json(url: str, target_dir: Path, fetcher: Fetcher, c
 
     def extract_id(data):
         props = normalize_to_legacy_props(data, "oto")
-        advertiser = props.get("advertiser") or {}
-        agency = props.get("agency") or {}
-        owner = props.get("owner") or {}
-        found_id = advertiser.get("id") or agency.get("id") or owner.get("id")
-        if found_id:
-            return found_id
-            
-        # Fallback for search-results style
-        items = props.get("data", {}).get("searchAds", {}).get("items", [])
-        if items and isinstance(items, list):
-            return items[0].get("agency", {}).get("id")
-        return None
+        oto_dev_mapping = get_mapping("oto", "developer")
+        return resolve_path(props, oto_dev_mapping.get("id"))
 
     def extract_slug(data):
         props = normalize_to_legacy_props(data, "oto")
         oto_dev_mapping = get_mapping("oto", "developer")
         found_slug = resolve_path(props, oto_dev_mapping.get("slug"))
         
-        # If mapping found a slug (which usually includes -IDxxx), use it as-is
-        # but normalize it via _parse_otodom_slug to ensure it's clean.
         if found_slug:
-             clean_slug, _ = _parse_otodom_slug(found_slug)
-             return clean_slug
+             return found_slug
         
         # Fallback to the slug parsed from the URL to prevent temp_ folders
         return dev_slug

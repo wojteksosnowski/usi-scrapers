@@ -416,7 +416,7 @@ def test_extract_developer_meta_oto():
     }
     result = extract_developer_meta(raw, "otodom")
     assert result.get("id") == 999
-    assert result.get("slug") == "otodom-developer-ID999"  # now preserves full slug
+    assert result.get("slug") == "otodom-developer"  # now correctly stripped
 
     assert result.get("name") == "Otodom Developer Sp. z o.o."
 
