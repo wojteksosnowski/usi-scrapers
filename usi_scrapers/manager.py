@@ -68,7 +68,7 @@ class TechnicalDataManager:
             portal_id = data.get("oto_url_id")
         elif portal_prefix == "to":
             to_id = data.get("to_id", "")
-            portal_id = f"i{to_id}" if to_id else None
+            portal_id = to_id if to_id else None
         else:
             portal_id = None
         
