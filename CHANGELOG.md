@@ -1,5 +1,12 @@
 # Changelog
 
+## Wersja 1.3.4 — Kamień 17 (Ujednolicenie mapowania deweloperów dla RP i TO oraz poprawka obrazków Otodom) — 2026-06-12
+
+* **Zunifikowane mapowanie RP/TO**: Usunięto regexy i ręczne ekstrakcje `extract_id` oraz `extract_slug` ze skryptów `scraper_rp.py` i `scraper_to.py`. Pobieranie profili deweloperów z RynekPierwotny i TabelaOfert korzysta teraz w 100% z silnika agnostycznego i pliku `portal_data_mapping.json`.
+* **Uodpornienie mapping.py**: Rozszerzono parser regexów w `resolve_path` (`mapping.py`) tak, by obsługiwał wyrażenia wielogrupowe i zwracał pierwszą nienullową grupę dopasowania.
+* **Zdjęcia Otodom**: Naprawiono błąd w `utils/images.py`, który nadpisywał wszystkie zdjęcia z Otodomu pod tą samą nazwą `image.webp`. Zmodyfikowano `clean_filename` by poprawnie wyciągał unikalny hash bezpośrednio z adresu URL.
+* **Weryfikacja Live**: Pomyślnie zweryfikowano pełny przepływ integracji na produkcji dla wszystkich 3 portali przy pomocy uaktualnionego `tests/verify_live.py`.
+
 ## Wersja 1.3.3 — Kamień 16 (Pełna agnostyczność ekstrakcji ID i Sluga) — 2026-06-12
 
 * **Zunifikowane mapowanie**: Całkowicie usunięto regexy i "ręczne" fallbacki w kodzie scrapera Otodom (`extract_id`, `extract_slug`). Logika wycinająca identyfikatory `-IDxxx` ze sluga została przeniesiona bezpośrednio do silnika mapowania (`portal_data_mapping.json` przez wyrażenia regularne w formacie JSON). Skrypt polega teraz w 100% na spójnym mapowaniu agnostycznym.
