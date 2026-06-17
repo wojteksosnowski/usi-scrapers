@@ -1,5 +1,9 @@
 # Changelog
 
+## Wersja 1.3.5 — Kamień 18 (Wsparcie dla bezwzględnych ścieżek image_paths) — 2026-06-17
+
+* **Zwracanie `image_paths` z bezwzględnymi ścieżkami**: Skrypt `TechnicalDataManager` nie nadpisuje już surowych zewnętrznych linków w kluczu `image_urls`. Od teraz zewnętrzne adresy są tam zachowywane, a w kluczu `image_paths` (zgodnie ze schematem ujednoliconym `usi_unified.schema.json`) zwracane są pełne, bezwzględne ścieżki na dysku lokalnym, wskazujące na odpowiedni folder w głównym katalogu `USI/` (a nie `USIdata/` jak w przypadku plików `.json`).
+
 ## Wersja 1.3.4 — Kamień 17 (Ujednolicenie mapowania deweloperów dla RP i TO oraz poprawka obrazków Otodom) — 2026-06-12
 
 * **Zunifikowane mapowanie RP/TO**: Usunięto regexy i ręczne ekstrakcje `extract_id` oraz `extract_slug` ze skryptów `scraper_rp.py` i `scraper_to.py`. Pobieranie profili deweloperów z RynekPierwotny i TabelaOfert korzysta teraz w 100% z silnika agnostycznego i pliku `portal_data_mapping.json`.
