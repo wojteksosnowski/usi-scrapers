@@ -84,8 +84,12 @@ class TechnicalDataManager:
         if "image_urls" in data and isinstance(data["image_urls"], list):
             logger.info(f"Localizing {len(data['image_urls'])} images for investment {inv_slug}")
             local_images = self.download_and_localize_images(data["image_urls"], dev_slug, inv_slug)
-            # Nadpisujemy zewnętrzne URL lokalnymi nazwami plików przed jakimkolwiek zapisem do DB
-            data["image_urls"] = local_images 
+            
+            # Zapisujemy bezwzględne ścieżki do pobranych plików w kluczu `image_paths`
+            target_dir = get_image_dir(dev_slug, inv_slug, self.config.public_dir)
+            data["image_paths"] = [str((target_dir / fname).absolute()) for fname in local_images]
+            
+            # Klucz `image_urls` pozostawiamy nienaruszony (jako listę oryginalnych adresów URL)
 
         from .utils.io import save_raw_json, get_investment_dir
         target_dir = get_investment_dir(dev_slug, inv_slug, self.config.public_dir)
