@@ -148,18 +148,63 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
 def transform_to_unified(portal_prefix: str, raw_data: dict, entity_type: str = "investment") -> dict:
     """
     Transforms raw_data using portal_data_mapping into a unified schema dictionary.
-    This eliminates the need for manual parsing in downstream consumers.
+    Eliminuje konieczno\u015b\u0107 transformacji po stronie klienta poprzez rekonstrukcj\u0119 obiekt\u00f3w.
+
+    Klucze z notacj\u0105 kropkow\u0105 (np. "location.city") s\u0105 automatycznie rozwijane
+    do zagnie\u017cd\u017conych s\u0142ownik\u00f3w. Wynik zawiera gotowe sekcje location, specifications
+    i financials (wraz z obliczonym price_avg i rozłożonymi kwartałami).
     """
     if not raw_data:
         return {}
-        
-    # Apply compatibility adapter
+
     raw_data = normalize_to_legacy_props(raw_data, portal_prefix)
-        
     mapping = get_mapping(portal_prefix, entity_type)
-    unified = {}
-    
+    flat_unified = {}
+
     for key, path_config in mapping.items():
-        unified[key] = resolve_path(raw_data, path_config)
-        
+        flat_unified[key] = resolve_path(raw_data, path_config)
+
+    # Rekonstrukcja struktury kropkowej (unflatten) do formatu zagnie\u017cd\u017conego
+    unified: dict = {}
+    for key, value in flat_unified.items():
+        if '.' in key:
+            parts = key.split('.')
+            current = unified
+            for part in parts[:-1]:
+                if part not in current or not isinstance(current[part], dict):
+                    current[part] = {}
+                current = current[part]
+            current[parts[-1]] = value
+        else:
+            unified[key] = value
+
+    # Do\u0142ożenie brakuj\u0105cych wylicze\u0144, je\u015bli nie zosta\u0142y zmapowane wprost z JSON
+    if entity_type == "investment":
+        specs = unified.get("specifications", {})
+        fin = unified.get("financials", {})
+
+        # Automatyczne uzupe\u0142nianie roku i kwarta\u0142u na podstawie delivery_date, je\u015bli brak jawnych danych
+        delivery_date = specs.get("delivery_date")
+        if delivery_date:
+            if not specs.get("delivery_quarter"):
+                specs["delivery_quarter"] = apply_transformer(
+                    "extract_quarter_from_qformat", delivery_date
+                )
+            if not specs.get("delivery_year"):
+                specs["delivery_year"] = apply_transformer(
+                    "extract_year_from_qformat", delivery_date
+                )
+
+        # Wyliczenie ceny \u015bredniej
+        price_min = fin.get("price_min")
+        if price_min and not fin.get("price_avg"):
+            price_max = fin.get("price_max") or price_min
+            fin["price_avg"] = round((price_min + price_max) / 2, 2)
+
+        # Upewnij si\u0119, \u017ce sekcje s\u0105 wpisane z powrotem do unified (mog\u0142y by\u0107 referencjami lub puste)
+        if specs:
+            unified["specifications"] = specs
+        if fin:
+            unified["financials"] = fin
+
     return unified

@@ -9,10 +9,10 @@ from usi_scrapers.fetcher import Fetcher
 def main():
     print("Starting LIVE URL verification...")
     # Load API key
-    api_key = os.getenv("SCRAPERAPI_API_KEY")
+    api_key = os.getenv("SCRAPERAPI_API_KEY", "")
     if not api_key:
-        print("ERROR: SCRAPERAPI_API_KEY not found.")
-        return
+        print("WARNING: SCRAPERAPI_API_KEY not found, falling back to local fetcher only.")
+
 
     # Initialize Config
     public_dir = Path("./tmp_live_public")

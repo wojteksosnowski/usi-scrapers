@@ -1,6 +1,19 @@
 # Changelog
 
-## Wersja 1.3.5 — Kamień 18 (Wsparcie dla bezwzględnych ścieżek image_paths) — 2026-06-17
+## Wersja 1.3.6 — Kamień 19 (Strukturyzacja Wyjścia Silnika Mapowania) — 2026-06-17
+
+* **Nowe transformery (`transformers.py`)**: Dodano `extract_quarter_from_qformat` i `extract_year_from_qformat` – parsują formaty `YYYY-QX` oraz `YYYY-MM-DD` do jawnych wartości int kwartału/roku. Dodano `oto_extract_coords_as_array` wyciągający `[lat, lon]` z zagnieżdżonej struktury Otodom.
+* **Hierarchiczne klucze mapowania (`portal_data_mapping.json` v1.8.0)**: Sekcja `oto.investment` rozszerzona o klucze z notacją kropkową (`location.address`, `location.city`, `location.district`, `location.coords`, `specifications.*`, `financials.*`, `image_urls`). Istniejące płaskie klucze zachowane dla wstecznej kompatybilności.
+* **Unflatten w `transform_to_unified` (`mapping.py`)**: Klucze z kropką są automatycznie rozwijane do zagnieżdżonych obiektów (`location.city` → `{location: {city: ...}}`). Eliminuje konieczność transformacji po stronie klienta.
+* **Auto-wyliczenia w `transform_to_unified`**: Gdy `specifications.delivery_date` jest obecne, a `delivery_quarter`/`delivery_year` brak – silnik uzupełnia je automatycznie. Pole `financials.price_avg` obliczane jako `(price_min + price_max) / 2` gdy nie jest dostępne wprost z portalu.
+* **Testy**: Dodano `test_extract_quarter_from_qformat`, `test_extract_year_from_qformat` i `test_transform_to_unified_unflatten` (łącznie 26 nowych asercji). Wszystkie istniejące testy (108 passed) przeszły bez regresji.
+
+### Wnioski ze zmian
+
+* Zlecanie logiki parsowania dat i koordynat bezpośrednio do `transformers.py` (zamiast do adapterów trackera) skraca czas onboardingu nowego portalu do ~10 linii JSON.
+* Unflatten w `transform_to_unified` to wzorzec jednorazowy – przyszłe klucze hierarchiczne (np. `contact.phone`) są obsługiwane bez zmiany silnika.
+
+
 
 * **Zwracanie `image_paths` z bezwzględnymi ścieżkami**: Skrypt `TechnicalDataManager` nie nadpisuje już surowych zewnętrznych linków w kluczu `image_urls`. Od teraz zewnętrzne adresy są tam zachowywane, a w kluczu `image_paths` (zgodnie ze schematem ujednoliconym `usi_unified.schema.json`) zwracane są pełne, bezwzględne ścieżki na dysku lokalnym, wskazujące na odpowiedni folder w głównym katalogu `USI/` (a nie `USIdata/` jak w przypadku plików `.json`).
 

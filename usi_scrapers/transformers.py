@@ -56,6 +56,32 @@ def _date_to_quarter(value: Any) -> int | None:
     except (ValueError, TypeError):
         return None
 
+@register_transformer("extract_quarter_from_qformat")
+def _extract_quarter_from_qformat(value: Any) -> int | None:
+    """Wyciąga numer kwartału z formatu YYYY-QX lub daty ISO."""
+    if not isinstance(value, str):
+        return None
+    # Obsługa formatu YYYY-QX
+    match_q = re.search(r'-Q([1-4])', value, re.IGNORECASE)
+    if match_q:
+        return int(match_q.group(1))
+    # Obsługa formatu ISO YYYY-MM-DD
+    match_date = re.search(r'^\d{4}-([0-1]\d)', value)
+    if match_date:
+        month = int(match_date.group(1))
+        return (month - 1) // 3 + 1
+    return None
+
+@register_transformer("extract_year_from_qformat")
+def _extract_year_from_qformat(value: Any) -> int | None:
+    """Wyciąga rok z formatu YYYY-QX lub daty ISO."""
+    if not isinstance(value, str):
+        return None
+    match = re.search(r'^(\d{4})', value)
+    if match:
+        return int(match.group(1))
+    return None
+
 @register_transformer("rp_gallery_to_flat_list")
 def _rp_gallery_to_flat_list(value: Any) -> list[str]:
     """
@@ -121,6 +147,42 @@ def _oto_gallery_to_flat_list(value: Any) -> list[str]:
                 images.append(url)
                 
     return images
+
+@register_transformer("oto_extract_coords_as_array")
+def _oto_extract_coords_as_array(value: Any) -> list[float] | None:
+    """
+    Extracts [latitude, longitude] from the root Otodom data object.
+    Looks for nested coordinates under ad.location.coordinates.
+    Returns [lat, lon] or None when not found.
+    """
+    if not isinstance(value, dict):
+        return None
+
+    # Try direct nested path: ad.location.coordinates
+    ad = value.get("ad") or value.get("props", {}).get("pageProps", {}).get("ad", {})
+    if isinstance(ad, dict):
+        coords = ad.get("location", {}).get("coordinates", {})
+        if isinstance(coords, dict):
+            lat = coords.get("latitude")
+            lon = coords.get("longitude")
+            if lat is not None and lon is not None:
+                try:
+                    return [float(lat), float(lon)]
+                except (ValueError, TypeError):
+                    pass
+
+    # Fallback: raw_details
+    raw = value.get("raw_details", {})
+    if isinstance(raw, dict):
+        lat = raw.get("latitude")
+        lon = raw.get("longitude")
+        if lat is not None and lon is not None:
+            try:
+                return [float(lat), float(lon)]
+            except (ValueError, TypeError):
+                pass
+
+    return None
 
 @register_transformer("clean_street")
 def _clean_street(value: Any) -> str | None:

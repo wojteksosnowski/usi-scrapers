@@ -1,5 +1,5 @@
 {
-  "version": "1.7.4",
+  "version": "1.8.0",
   "description": "Source of truth for fundamental data keys across portals. Verified strictly against non-mock raw records and specialized test JSONs.",
   "portals": {
     "rp": {
@@ -238,6 +238,63 @@
         "delivery_date": {
           "path": "ad.topInformation",
           "transform": "oto_delivery_date"
+        },
+
+        "investment_slug": "props.pageProps.ad.slug|ad.slug|raw_details.slug|searchAds.items[0].slug",
+        "developer": "props.pageProps.ad.agency.name|ad.agency.name|agency_name",
+        "website": "props.pageProps.ad.url|ad.url|url|searchAds.items[0].url",
+
+        "location.address": {
+          "path": "ad.location.address.street.name|raw_details.address|searchAds.items[0].location.address.street.name",
+          "transform": "clean_street"
+        },
+        "location.city": "ad.location.address.city.name|raw_details.city|searchAds.items[0].location.address.city.name",
+        "location.district": "ad.location.address.district.name|raw_details.region|searchAds.items[0].location.address.district.name",
+        "location.coords": {
+          "path": ".",
+          "transform": "oto_extract_coords_as_array"
+        },
+
+        "specifications.units_count": "props.pageProps.ad.target.Number_of_properties|ad.target.Number_of_properties|raw_details.properties_count",
+        "specifications.ceiling_height_min": {
+          "path": "ad.characteristics[key=ceiling_height].value|raw_details.ceiling_height_min",
+          "transform": "cm_to_m"
+        },
+        "specifications.ceiling_height_max": {
+          "path": "ad.characteristics[key=ceiling_height].value|raw_details.ceiling_height_max",
+          "transform": "cm_to_m"
+        },
+        "specifications.delivery_date": {
+          "path": "ad.topInformation",
+          "transform": "oto_delivery_date"
+        },
+        "specifications.delivery_quarter": "ad.investmentEstimatedDelivery.quarter|raw_details.delivery_quarter",
+        "specifications.delivery_year": "ad.investmentEstimatedDelivery.year|raw_details.delivery_year",
+        "specifications.segment": {
+          "evaluate_signals": {
+            "commercial": {"path": "ad.target.categoryId", "regex": "501"},
+            "apartments": {"path": "ad.target.categoryId", "regex": "11"},
+            "houses": {"path": "ad.target.categoryId", "regex": "13"}
+          },
+          "fallback": "investment"
+        },
+
+        "financials.price_min": {
+          "path": "props.pageProps.ad.target.Price|ad.target.Price|raw_details.price_min|searchAds.items[0].price.value",
+          "transform": "to_float"
+        },
+        "financials.price_m2_min": {
+          "path": "ad.characteristics[key=price_per_m].value|raw_details.price_m2_min",
+          "transform": "to_float"
+        },
+        "financials.price_m2_max": {
+          "path": "ad.characteristics[key=price_per_m].value|raw_details.price_m2_max",
+          "transform": "to_float"
+        },
+
+        "image_urls": {
+          "path": "ad.images|raw_details.image_urls|searchAds.items[0].images",
+          "transform": "oto_gallery_to_flat_list"
         }
       },
       "developer": {

@@ -169,3 +169,114 @@ def test_extract_social():
     
     # LinkedIn
     assert apply_transformer("extract_linkedin", [{"link": "http://linkedin.com/company/abc"}]) == "http://linkedin.com/company/abc"
+
+
+def test_extract_quarter_from_qformat():
+    from usi_scrapers.transformers import apply_transformer
+    # Format YYYY-QX
+    assert apply_transformer("extract_quarter_from_qformat", "2026-Q1") == 1
+    assert apply_transformer("extract_quarter_from_qformat", "2025-Q2") == 2
+    assert apply_transformer("extract_quarter_from_qformat", "2024-Q3") == 3
+    assert apply_transformer("extract_quarter_from_qformat", "2023-Q4") == 4
+    assert apply_transformer("extract_quarter_from_qformat", "2026-q2") == 2  # lowercase
+    # Format ISO YYYY-MM-DD
+    assert apply_transformer("extract_quarter_from_qformat", "2026-01-01") == 1
+    assert apply_transformer("extract_quarter_from_qformat", "2026-04") == 2
+    assert apply_transformer("extract_quarter_from_qformat", "2026-07") == 3
+    assert apply_transformer("extract_quarter_from_qformat", "2026-10") == 4
+    # Edge cases
+    assert apply_transformer("extract_quarter_from_qformat", "2026") is None
+    assert apply_transformer("extract_quarter_from_qformat", "invalid") is None
+    assert apply_transformer("extract_quarter_from_qformat", None) is None
+    assert apply_transformer("extract_quarter_from_qformat", 2026) is None
+
+
+def test_extract_year_from_qformat():
+    from usi_scrapers.transformers import apply_transformer
+    assert apply_transformer("extract_year_from_qformat", "2026-Q2") == 2026
+    assert apply_transformer("extract_year_from_qformat", "2025-03-15") == 2025
+    assert apply_transformer("extract_year_from_qformat", "2024") == 2024
+    assert apply_transformer("extract_year_from_qformat", "invalid") is None
+    assert apply_transformer("extract_year_from_qformat", None) is None
+    assert apply_transformer("extract_year_from_qformat", 2026) is None
+
+
+def test_transform_to_unified_unflatten():
+    """Testy rozwijania kluczy z notacją kropkową (unflatten) oraz automatycznych wyliczeń."""
+    from usi_scrapers.mapping import transform_to_unified
+    import usi_scrapers.mapping as mapping_module
+
+    original_get_mapping = mapping_module.get_mapping
+    original_normalize = mapping_module.normalize_to_legacy_props
+
+    def fake_normalize(data, portal):
+        return data
+
+    def fake_get_mapping(portal, entity):
+        return {
+            "name": "title",
+            "location.city": "city",
+            "location.district": "district",
+            "specifications.delivery_date": "delivery_date",
+            "specifications.delivery_quarter": "delivery_quarter",
+            "specifications.delivery_year": "delivery_year",
+            "financials.price_min": {"path": "price_min", "transform": "to_float"},
+            "financials.price_max": {"path": "price_max", "transform": "to_float"},
+        }
+
+    mapping_module.get_mapping = fake_get_mapping
+    mapping_module.normalize_to_legacy_props = fake_normalize
+
+    try:
+        # Test: unflatten i auto-wyliczenia z delivery_date w formacie YYYY-QX
+        raw = {
+            "title": "Nowa Inwestycja",
+            "city": "Warszawa",
+            "district": "Mokotów",
+            "delivery_date": "2026-Q3",
+            "delivery_quarter": None,
+            "delivery_year": None,
+            "price_min": 500000,
+            "price_max": 800000,
+        }
+        result = transform_to_unified("oto", raw)
+
+        # Struktura zagnieżdżona
+        assert result["name"] == "Nowa Inwestycja"
+        assert result["location"]["city"] == "Warszawa"
+        assert result["location"]["district"] == "Mokotów"
+
+        # Auto-wyliczenia kwartał/rok z delivery_date
+        assert result["specifications"]["delivery_date"] == "2026-Q3"
+        assert result["specifications"]["delivery_quarter"] == 3
+        assert result["specifications"]["delivery_year"] == 2026
+
+        # price_avg
+        assert result["financials"]["price_min"] == 500000.0
+        assert result["financials"]["price_max"] == 800000.0
+        assert result["financials"]["price_avg"] == 650000.0
+
+        # Test: brak nadpisania jawnych wartości quarter/year
+        raw2 = {
+            "title": "Inna Inwestycja",
+            "city": "Kraków",
+            "district": None,
+            "delivery_date": "2027-Q1",
+            "delivery_quarter": 2,   # jawna wartość — nie może być nadpisana
+            "delivery_year": 2028,   # jawna wartość — nie może być nadpisana
+            "price_min": 300000,
+            "price_max": None,
+        }
+        result2 = transform_to_unified("oto", raw2)
+        assert result2["specifications"]["delivery_quarter"] == 2  # nie zmieniony
+        assert result2["specifications"]["delivery_year"] == 2028  # nie zmieniony
+        # price_avg z samego price_min gdy price_max jest None
+        assert result2["financials"]["price_avg"] == 300000.0
+
+        # Test: puste dane
+        assert transform_to_unified("oto", {}) == {}
+
+    finally:
+        mapping_module.get_mapping = original_get_mapping
+        mapping_module.normalize_to_legacy_props = original_normalize
+
