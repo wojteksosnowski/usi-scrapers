@@ -14,7 +14,7 @@
           "regex": "^[a-z0-9\\-]+$"
         },
         "developer_name": "vendor.value.name|vendor.name|developer_name|vendor_name",
-        "units_count": "stats.value.properties_count_for_sale|stats.properties_count_for_sale",
+        "units_count": "properties|stats.value.properties_count|stats.properties_count|stats.value.properties_count_for_sale|stats.properties_count_for_sale",
         "price_min": {
           "path": "stats.value.ranges_price_min|stats.ranges_price_min",
           "transform": "to_float"
