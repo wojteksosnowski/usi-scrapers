@@ -1,5 +1,9 @@
 # Changelog
 
+## Wersja 1.3.7 — Kamień 20 (Naprawa agregacji liczby mieszkań dla RynekPierwotny) — 2026-06-18
+
+* **Poprawa mapowania `units_count` dla portalu RP (`portal_data_mapping.json`)**: Dodano właściwość `properties` na początek łańcucha fallbacku dla `units_count`. Zapobiega to nadpisywaniu całkowitej liczby lokali wartością 0 dla archiwalnych i wyprzedanych inwestycji (gdzie `stats.properties_count_for_sale` wynosi 0).
+
 ## Wersja 1.3.6 — Kamień 19 (Strukturyzacja Wyjścia Silnika Mapowania) — 2026-06-17
 
 * **Nowe transformery (`transformers.py`)**: Dodano `extract_quarter_from_qformat` i `extract_year_from_qformat` – parsują formaty `YYYY-QX` oraz `YYYY-MM-DD` do jawnych wartości int kwartału/roku. Dodano `oto_extract_coords_as_array` wyciągający `[lat, lon]` z zagnieżdżonej struktury Otodom.
