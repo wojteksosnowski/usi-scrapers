@@ -356,6 +356,7 @@
           "regex": "inwestycja/([^,]+)"
         },
         "name": "name",
+        "url": "url|to_url",
         "developer_id": {
           "path": "brand.logo",
           "regex": "\\/(\\d+)-"

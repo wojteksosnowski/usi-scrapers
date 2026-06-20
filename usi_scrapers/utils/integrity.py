@@ -64,5 +64,10 @@ def normalize_to_legacy_props(data: dict, portal: str) -> dict:
         # Dla RynekPierwotny struktura API v2. 
         # Jeśli w przyszłości zmieni się wrapper, tu implementujemy translację.
         return data
+        
+    if portal == "to":
+        if "to_url" in data and "url" not in data:
+            data["url"] = data["to_url"]
+        return data
 
     return data
