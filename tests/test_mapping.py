@@ -98,7 +98,7 @@ def test_transform_to_unified():
     try:
         unified = transform_to_unified("rp", raw_data)
         assert unified.get("price") == 15000
-        assert unified.get("amenities") == ["99"]
+        assert unified.get("amenities") == ["Rolne"]
         
         # Test empty
         assert transform_to_unified("rp", {}) == {}

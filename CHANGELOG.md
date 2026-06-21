@@ -1,5 +1,12 @@
 # Changelog
 
+## Wersja 1.3.8 — Kamień 21 (Dynamiczne słowniki udogodnień) — 2026-06-21
+
+* **Udogodnienia (amenities) RP (`transformers.py`)**: Słownik udogodnień dla RynekPierwotny jest teraz dynamicznie ładowany z pliku `schemas/offer_facilities.json` w miejsce hardkodowanej struktury. Ponadto transformacja udogodnień preferuje użycie lokalnego słownika `offer_facilities` z surowego dokumentu `context`, jeśli jest dostępny.
+* **Transformacje zależne od kontekstu (`mapping.py`, `transformers.py`)**: Funkcja `apply_transformer` została zaktualizowana i potrafi automatycznie wstrzykiwać referencję do pełnego przetworzanego dokumentu (`context`) do wszystkich transformerów obsługujących parametr `context`.
+* **Udogodnienia (amenities) OTO (`transformers.py`)**: Uproszczono wyciąganie udogodnień dla portalu Otodom – funkcja ogranicza się obecnie do wyciągania wyłącznie listy z właściwości `ad.features`, co zapobiega agregowaniu nadmiarowych i zanieczyszczonych tagów ze stron inwestycji.
+* **Aktualizacja testów (`test_transformers.py`, `test_mapping.py`)**: Zaktualizowano asercje testów odzwierciedlające nowe nazewnictwo i mechanikę transformacji.
+
 ## Wersja 1.3.7 — Kamień 20 (Naprawa agregacji liczby mieszkań dla RynekPierwotny) — 2026-06-18
 
 * **Poprawa mapowania `units_count` dla portalu RP (`portal_data_mapping.json`)**: Dodano właściwość `properties` na początek łańcucha fallbacku dla `units_count`. Zapobiega to nadpisywaniu całkowitej liczby lokali wartością 0 dla archiwalnych i wyprzedanych inwestycji (gdzie `stats.properties_count_for_sale` wynosi 0).

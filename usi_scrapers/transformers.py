@@ -13,13 +13,18 @@ def register_transformer(name: str):
         return func
     return decorator
 
-def apply_transformer(name: str, value: Any) -> Any:
+def apply_transformer(name: str, value: Any, context: Any = None) -> Any:
     if value is None:
         return None
     if name not in _TRANSFORMERS:
         raise ValueError(f"Unknown transformer: {name}")
     try:
-        return _TRANSFORMERS[name](value)
+        import inspect
+        func = _TRANSFORMERS[name]
+        sig = inspect.signature(func)
+        if "context" in sig.parameters:
+            return func(value, context=context)
+        return func(value)
     except Exception:
         return value
 
@@ -231,19 +236,10 @@ def _rp_extract_street(value: Any) -> str | None:
             return None
     return None
 
-
+import json
+from pathlib import Path
 
 UNIFIED_AMENITIES = {
-    # RP
-    "rp_1": "Boiska sportowe", "rp_2": "Ochrona", "rp_3": "Windy", "rp_4": "Garaż", 
-    "rp_5": "Balkon", "rp_6": "Przyjazny dla osób niepełnosprawnych", "rp_7": "Taras", 
-    "rp_8": "Ogródek", "rp_9": "Klimatyzacja", "rp_10": "Winda", "rp_11": "Basen", 
-    "rp_12": "Sauna", "rp_13": "Solarium", "rp_14": "Jacuzzi", "rp_15": "Brodzik", 
-    "rp_16": "Piwnica", "rp_17": "Pralnia", "rp_18": "Suszarnia", "rp_19": "Wózkarnia", 
-    "rp_20": "Strefa wypoczynku", "rp_21": "Rowerownia", "rp_22": "Siłownia", 
-    "rp_23": "Monitoring", "rp_24": "Wideodomofon", "rp_25": "Domofon", "rp_26": "Plac zabaw", 
-    "rp_27": "Monitoring", "rp_28": "Czujnik dymu", "rp_29": "Klub fitness", "rp_30": "Kort tenisowy", 
-    "rp_31": "Sala zabaw", "rp_32": "Miejsce do grillowania", "rp_33": "Paczkomat", 
     "rp_34": "Ładowarka aut el.", "rp_35": "Panele fotowol.", "rp_36": "Odzysk deszczówki", 
     "rp_37": "Rekuperacja", "rp_38": "Pompa ciepła", "rp_39": "Smart Home", "rp_40": "Światłowód", 
     "rp_41": "TV kablowa", "rp_42": "Internet", "rp_43": "Telefon", "rp_44": "Gaz", 
@@ -284,24 +280,61 @@ UNIFIED_AMENITIES = {
     "to_balkon": "Balkon", "to_taras": "Taras", "to_ogródek": "Ogródek"
 }
 
+def _load_rp_facilities():
+    try:
+        p = Path(__file__).parent / "schemas" / "offer_facilities.json"
+        with p.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+            for item in data.get("offer_facilities", []):
+                val = item.get("value")
+                lbl = item.get("label", "").capitalize()
+                if val is not None:
+                    UNIFIED_AMENITIES[f"rp_{val}"] = lbl
+    except Exception:
+        pass
+
+_load_rp_facilities()
+
 def _normalize_amenity(prefix: str, name: str) -> str:
     key = f"{prefix}_{str(name).strip().lower()}"
     return UNIFIED_AMENITIES.get(key, name)
 
 @register_transformer("rp_extract_amenities")
-def _rp_extract_amenities(value: Any) -> list[str]:
+def _rp_extract_amenities(value: Any, context: dict = None) -> list[str]:
     """
     Extracts amenity IDs from RynekPierwotny features list and maps them to unified strings.
+    Handles both direct lists and RP API wrapper dicts {"type": "arr", "value": [...]}.
+    If 'offer_facilities' is present in the context, it's used to decode the IDs.
     """
+    if isinstance(value, dict) and "value" in value:
+        value = value.get("value")
+
     if not isinstance(value, list):
         return []
+
+    offer_facilities = {}
+    if context and isinstance(context, dict):
+        of = context.get("offer_facilities")
+        if isinstance(of, dict):
+            for k, v in of.items():
+                if isinstance(v, dict) and "name" in v:
+                    offer_facilities[str(k)] = v["name"]
+                else:
+                    offer_facilities[str(k)] = str(v)
+
     result = []
     for item in value:
+        fid = None
         if isinstance(item, dict) and item.get("id") is not None:
             fid = str(item.get("id"))
-            result.append(_normalize_amenity("rp", fid))
         elif isinstance(item, (int, str)):
-            result.append(_normalize_amenity("rp", str(item)))
+            fid = str(item)
+
+        if fid is not None:
+            if fid in offer_facilities:
+                result.append(offer_facilities[fid])
+            else:
+                result.append(_normalize_amenity("rp", fid))
     return list(set(result))
 
 @register_transformer("oto_extract_delivery")
@@ -323,60 +356,28 @@ def _oto_extract_delivery(value: Any) -> str | None:
 @register_transformer("oto_extract_amenities")
 def _oto_extract_amenities(value: Any) -> list[str]:
     """
-    Extracts amenities from Otodom features and featuresByCategory.
-    Value is expected to be raw_details containing features and featuresByCategory.
+    Extracts amenities from Otodom features ONLY.
+    Value is expected to be raw_details containing features.
     """
     if not isinstance(value, dict):
         return []
         
-    raw_features = []
-    # OTO live API structure has changed, check both locations
     features = value.get("features", [])
-    features_cat = value.get("featuresByCategory", [])
     
-    if not features and not features_cat:
-        # Pamiętaj, że value mogło przejść przez normalize_to_legacy_props i być już 'pageProps'
+    if not features:
         ad = value.get("ad")
         if not ad:
             ad = value.get("props", {}).get("pageProps", {}).get("ad", {})
-            
         if isinstance(ad, dict):
             features = ad.get("features", [])
-            features_cat = ad.get("featuresByCategory", [])
             
-            # Additional extraction from new OTO payload structure
-            info_list = ad.get("additionalInformation", [])
-            if isinstance(info_list, list):
-                for info in info_list:
-                    if isinstance(info, dict) and "values" in info:
-                        for v in info["values"]:
-                            if isinstance(v, str):
-                                parts = v.split("::")
-                                if len(parts) == 2:
-                                    raw_features.append(parts[1])
-                                else:
-                                    raw_features.append(v)
-            target = ad.get("target", {})
-            if isinstance(target, dict):
-                for key in ["Security", "Project_amenities", "Extra_spaces"]:
-                    items = target.get(key, [])
-                    if isinstance(items, list):
-                        raw_features.extend([str(i) for i in items])
+    raw_features = []
     if isinstance(features, list):
-        raw_features.extend(features)
+        raw_features.extend([str(f) for f in features])
         
-    if isinstance(features_cat, list):
-        for cat in features_cat:
-            if isinstance(cat, dict):
-                vals = cat.get("values", [])
-                if isinstance(vals, list):
-                    raw_features.extend(vals)
-                    
     result = []
-    for f in raw_features:
-        if isinstance(f, str):
-            result.append(_normalize_amenity("oto", f))
-            
+    for f in set(raw_features):
+        result.append(_normalize_amenity("oto", str(f)))
     return list(set(result))
 
 @register_transformer("to_extract_amenities")
