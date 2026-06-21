@@ -82,7 +82,7 @@
           "fallback": "sale"
         },
         "amenities": {
-          "path": "features",
+          "path": "features|facilities",
           "transform": "rp_extract_amenities"
         }
       },
@@ -238,6 +238,10 @@
         "delivery_date": {
           "path": "ad.topInformation",
           "transform": "oto_delivery_date"
+        },
+        "amenities": {
+          "path": ".",
+          "transform": "oto_extract_amenities"
         },
 
         "investment_slug": "props.pageProps.ad.slug|ad.slug|raw_details.slug|searchAds.items[0].slug",

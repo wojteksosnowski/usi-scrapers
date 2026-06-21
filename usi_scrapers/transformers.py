@@ -233,14 +233,76 @@ def _rp_extract_street(value: Any) -> str | None:
 
 
 
+UNIFIED_AMENITIES = {
+    # RP
+    "rp_1": "Boiska sportowe", "rp_2": "Ochrona", "rp_3": "Windy", "rp_4": "Garaż", 
+    "rp_5": "Balkon", "rp_6": "Przyjazny dla osób niepełnosprawnych", "rp_7": "Taras", 
+    "rp_8": "Ogródek", "rp_9": "Klimatyzacja", "rp_10": "Winda", "rp_11": "Basen", 
+    "rp_12": "Sauna", "rp_13": "Solarium", "rp_14": "Jacuzzi", "rp_15": "Brodzik", 
+    "rp_16": "Piwnica", "rp_17": "Pralnia", "rp_18": "Suszarnia", "rp_19": "Wózkarnia", 
+    "rp_20": "Strefa wypoczynku", "rp_21": "Rowerownia", "rp_22": "Siłownia", 
+    "rp_23": "Monitoring", "rp_24": "Wideodomofon", "rp_25": "Domofon", "rp_26": "Plac zabaw", 
+    "rp_27": "Monitoring", "rp_28": "Czujnik dymu", "rp_29": "Klub fitness", "rp_30": "Kort tenisowy", 
+    "rp_31": "Sala zabaw", "rp_32": "Miejsce do grillowania", "rp_33": "Paczkomat", 
+    "rp_34": "Ładowarka aut el.", "rp_35": "Panele fotowol.", "rp_36": "Odzysk deszczówki", 
+    "rp_37": "Rekuperacja", "rp_38": "Pompa ciepła", "rp_39": "Smart Home", "rp_40": "Światłowód", 
+    "rp_41": "TV kablowa", "rp_42": "Internet", "rp_43": "Telefon", "rp_44": "Gaz", 
+    "rp_45": "Woda", "rp_46": "Prąd", "rp_47": "Kanalizacja", "rp_48": "Oczyszczalnia ścieków", 
+    "rp_49": "Garaż podziemny", "rp_50": "Parking naziemny", "rp_51": "Wiata", 
+    "rp_52": "Komórka lokatorska", "rp_53": "Loggia", "rp_54": "Antresola", "rp_55": "Poddasze", 
+    "rp_56": "Spiżarnia", "rp_57": "Garderoba", "rp_58": "Kotłownia", "rp_59": "Kuchenka", 
+    "rp_60": "Lodówka", "rp_61": "Zmywarka", "rp_62": "Piekarnik", "rp_63": "Pralka", 
+    "rp_64": "Suszarka", "rp_65": "Telewizor", "rp_66": "Meble", "rp_67": "Wyposażenie", 
+    "rp_68": "Wykończenie", "rp_69": "Stan deweloperski", "rp_70": "Stan surowy", 
+    "rp_71": "Remont", "rp_72": "Do odświeżenia", "rp_73": "Nowe", "rp_74": "Używane", 
+    "rp_75": "Okazja", "rp_76": "Luksusowe", "rp_77": "Apartament", "rp_78": "Loft", 
+    "rp_79": "Studio", "rp_80": "Kawalerka", "rp_81": "Mieszkanie", "rp_82": "Dom", 
+    "rp_83": "Szeregówka", "rp_84": "Bliźniak", "rp_85": "Wolnostojący", "rp_86": "Działka", 
+    "rp_87": "Grunt", "rp_88": "Las", "rp_89": "Łąka", "rp_90": "Pole", "rp_91": "Siedlisko", 
+    "rp_92": "Gospodarstwo", "rp_93": "Inwestycyjne", "rp_94": "Usługowe", "rp_95": "Handlowe", 
+    "rp_96": "Biurowe", "rp_97": "Magazynowe", "rp_98": "Przemysłowe", "rp_99": "Rolne", 
+    "rp_100": "Budowlane",
+
+    # OTO
+    "oto_winda": "Windy", "oto_windy": "Windy", "oto_plac zabaw": "Plac zabaw", 
+    "oto_monitoring": "Monitoring", "oto_teren zamknięty": "Teren zamknięty", 
+    "oto_balkon": "Balkon", "oto_miejsce parkingowe naziemne": "Parking naziemny", 
+    "oto_ochrona": "Ochrona", "oto_garaż": "Garaż", "oto_taras": "Taras", "oto_ogródek": "Ogródek", 
+    "oto_klimatyzacja": "Klimatyzacja", "oto_basen": "Basen", "oto_piwnica": "Piwnica", 
+    "oto_rowerownia": "Rowerownia", "oto_siłownia": "Siłownia", "oto_domofon": "Domofon", 
+    "oto_garaż podziemny": "Garaż podziemny", "oto_komórka lokatorska": "Komórka lokatorska", 
+    "oto_loggia": "Loggia", "oto_antresola": "Antresola", "oto_poddasze": "Poddasze",
+    "oto_elevators": "Windy", "oto_closed_area": "Teren zamknięty", "oto_balcony": "Balkon", 
+    "oto_ground_parking_space": "Parking naziemny", "oto_playground": "Plac zabaw", 
+    "oto_garden": "Ogródek", "oto_terrace": "Taras", "oto_air_conditioning": "Klimatyzacja", 
+    "oto_bicycle_room": "Rowerownia", "oto_intercom": "Domofon", 
+    "oto_underground_parking_space": "Garaż podziemny", "oto_storage_room": "Komórka lokatorska",
+
+    # TO
+    "to_plac zabaw dla dzieci": "Plac zabaw", "to_winda": "Windy", "to_monitoring": "Monitoring", 
+    "to_ochrona": "Ochrona", "to_garaż": "Garaż", "to_klimatyzacja": "Klimatyzacja", 
+    "to_balkon": "Balkon", "to_taras": "Taras", "to_ogródek": "Ogródek"
+}
+
+def _normalize_amenity(prefix: str, name: str) -> str:
+    key = f"{prefix}_{str(name).strip().lower()}"
+    return UNIFIED_AMENITIES.get(key, name)
+
 @register_transformer("rp_extract_amenities")
 def _rp_extract_amenities(value: Any) -> list[str]:
     """
-    Extracts amenity IDs from RynekPierwotny features list.
+    Extracts amenity IDs from RynekPierwotny features list and maps them to unified strings.
     """
     if not isinstance(value, list):
         return []
-    return [str(item.get("id")) for item in value if isinstance(item, dict) and item.get("id") is not None]
+    result = []
+    for item in value:
+        if isinstance(item, dict) and item.get("id") is not None:
+            fid = str(item.get("id"))
+            result.append(_normalize_amenity("rp", fid))
+        elif isinstance(item, (int, str)):
+            result.append(_normalize_amenity("rp", str(item)))
+    return list(set(result))
 
 @register_transformer("oto_extract_delivery")
 def _oto_extract_delivery(value: Any) -> str | None:
@@ -258,6 +320,65 @@ def _oto_extract_delivery(value: Any) -> str | None:
                 return vals
     return None
 
+@register_transformer("oto_extract_amenities")
+def _oto_extract_amenities(value: Any) -> list[str]:
+    """
+    Extracts amenities from Otodom features and featuresByCategory.
+    Value is expected to be raw_details containing features and featuresByCategory.
+    """
+    if not isinstance(value, dict):
+        return []
+        
+    raw_features = []
+    # OTO live API structure has changed, check both locations
+    features = value.get("features", [])
+    features_cat = value.get("featuresByCategory", [])
+    
+    if not features and not features_cat:
+        # Pamiętaj, że value mogło przejść przez normalize_to_legacy_props i być już 'pageProps'
+        ad = value.get("ad")
+        if not ad:
+            ad = value.get("props", {}).get("pageProps", {}).get("ad", {})
+            
+        if isinstance(ad, dict):
+            features = ad.get("features", [])
+            features_cat = ad.get("featuresByCategory", [])
+            
+            # Additional extraction from new OTO payload structure
+            info_list = ad.get("additionalInformation", [])
+            if isinstance(info_list, list):
+                for info in info_list:
+                    if isinstance(info, dict) and "values" in info:
+                        for v in info["values"]:
+                            if isinstance(v, str):
+                                parts = v.split("::")
+                                if len(parts) == 2:
+                                    raw_features.append(parts[1])
+                                else:
+                                    raw_features.append(v)
+            target = ad.get("target", {})
+            if isinstance(target, dict):
+                for key in ["Security", "Project_amenities", "Extra_spaces"]:
+                    items = target.get(key, [])
+                    if isinstance(items, list):
+                        raw_features.extend([str(i) for i in items])
+    if isinstance(features, list):
+        raw_features.extend(features)
+        
+    if isinstance(features_cat, list):
+        for cat in features_cat:
+            if isinstance(cat, dict):
+                vals = cat.get("values", [])
+                if isinstance(vals, list):
+                    raw_features.extend(vals)
+                    
+    result = []
+    for f in raw_features:
+        if isinstance(f, str):
+            result.append(_normalize_amenity("oto", f))
+            
+    return list(set(result))
+
 @register_transformer("to_extract_amenities")
 def _to_extract_amenities(value: Any) -> list[str]:
     """
@@ -273,10 +394,10 @@ def _to_extract_amenities(value: Any) -> list[str]:
             if name and val:
                 val_str = str(val).strip().lower()
                 if val_str == "tak":
-                    amenities.append(str(name))
+                    amenities.append(_normalize_amenity("to", str(name)))
                 elif val_str not in ["nie", "brak", "false", "0"]:
                     amenities.append(f"{name}: {val}")
-    return amenities
+    return list(set(amenities))
 
 @register_transformer("to_float")
 def _to_float(value: Any) -> float | None:
