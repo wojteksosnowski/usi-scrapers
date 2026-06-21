@@ -1,5 +1,9 @@
 # Changelog
 
+## Wersja 1.3.9 — Kamień 22 (Robust OTO Amenities Extraction) — 2026-06-21
+
+* **Udogodnienia OTO (`transformers.py`)**: Wdrożono w pełni robustowy ekstraktor udogodnień dla Otodom. Obsługuje teraz historyczne i zmieniające się formaty payloadu `raw_*`. Prawidłowo agreguje wartości z `features`, `featuresWithoutCategory`, zagłębień w `featuresByCategory`, `target.Project_amenities`, a także parsuje formatowane klucze (`::`) z sekcji `additionalInformation`. Zduplikowane tagi ulegają automatycznej redukcji (set).
+
 ## Wersja 1.3.8 — Kamień 21 (Dynamiczne słowniki udogodnień) — 2026-06-21
 
 * **Udogodnienia (amenities) RP (`transformers.py`)**: Słownik udogodnień dla RynekPierwotny jest teraz dynamicznie ładowany z pliku `schemas/offer_facilities.json` w miejsce hardkodowanej struktury. Ponadto transformacja udogodnień preferuje użycie lokalnego słownika `offer_facilities` z surowego dokumentu `context`, jeśli jest dostępny.
