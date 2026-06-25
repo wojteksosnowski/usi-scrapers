@@ -239,72 +239,30 @@ def _rp_extract_street(value: Any) -> str | None:
 import json
 from pathlib import Path
 
-UNIFIED_AMENITIES = {
-    "rp_34": "Ładowarka aut el.", "rp_35": "Panele fotowol.", "rp_36": "Odzysk deszczówki", 
-    "rp_37": "Rekuperacja", "rp_38": "Pompa ciepła", "rp_39": "Smart Home", "rp_40": "Światłowód", 
-    "rp_41": "TV kablowa", "rp_42": "Internet", "rp_43": "Telefon", "rp_44": "Gaz", 
-    "rp_45": "Woda", "rp_46": "Prąd", "rp_47": "Kanalizacja", "rp_48": "Oczyszczalnia ścieków", 
-    "rp_49": "Garaż podziemny", "rp_50": "Parking naziemny", "rp_51": "Wiata", 
-    "rp_52": "Komórka lokatorska", "rp_53": "Loggia", "rp_54": "Antresola", "rp_55": "Poddasze", 
-    "rp_56": "Spiżarnia", "rp_57": "Garderoba", "rp_58": "Kotłownia", "rp_59": "Kuchenka", 
-    "rp_60": "Lodówka", "rp_61": "Zmywarka", "rp_62": "Piekarnik", "rp_63": "Pralka", 
-    "rp_64": "Suszarka", "rp_65": "Telewizor", "rp_66": "Meble", "rp_67": "Wyposażenie", 
-    "rp_68": "Wykończenie", "rp_69": "Stan deweloperski", "rp_70": "Stan surowy", 
-    "rp_71": "Remont", "rp_72": "Do odświeżenia", "rp_73": "Nowe", "rp_74": "Używane", 
-    "rp_75": "Okazja", "rp_76": "Luksusowe", "rp_77": "Apartament", "rp_78": "Loft", 
-    "rp_79": "Studio", "rp_80": "Kawalerka", "rp_81": "Mieszkanie", "rp_82": "Dom", 
-    "rp_83": "Szeregówka", "rp_84": "Bliźniak", "rp_85": "Wolnostojący", "rp_86": "Działka", 
-    "rp_87": "Grunt", "rp_88": "Las", "rp_89": "Łąka", "rp_90": "Pole", "rp_91": "Siedlisko", 
-    "rp_92": "Gospodarstwo", "rp_93": "Inwestycyjne", "rp_94": "Usługowe", "rp_95": "Handlowe", 
-    "rp_96": "Biurowe", "rp_97": "Magazynowe", "rp_98": "Przemysłowe", "rp_99": "Rolne", 
-    "rp_100": "Budowlane",
-
-    # OTO
-    "oto_winda": "Windy", "oto_windy": "Windy", "oto_plac zabaw": "Plac zabaw", 
-    "oto_monitoring": "Monitoring", "oto_teren zamknięty": "Teren zamknięty", 
-    "oto_balkon": "Balkon", "oto_miejsce parkingowe naziemne": "Parking naziemny", 
-    "oto_ochrona": "Ochrona", "oto_garaż": "Garaż", "oto_taras": "Taras", "oto_ogródek": "Ogródek", 
-    "oto_klimatyzacja": "Klimatyzacja", "oto_basen": "Basen", "oto_piwnica": "Piwnica", 
-    "oto_rowerownia": "Rowerownia", "oto_siłownia": "Siłownia", "oto_domofon": "Domofon", 
-    "oto_garaż podziemny": "Garaż podziemny", "oto_komórka lokatorska": "Komórka lokatorska", 
-    "oto_loggia": "Loggia", "oto_antresola": "Antresola", "oto_poddasze": "Poddasze",
-    "oto_elevators": "Windy", "oto_closed_area": "Teren zamknięty", "oto_balcony": "Balkon", 
-    "oto_ground_parking_space": "Parking naziemny", "oto_playground": "Plac zabaw", 
-    "oto_garden": "Ogródek", "oto_terrace": "Taras", "oto_air_conditioning": "Klimatyzacja", 
-    "oto_bicycle_room": "Rowerownia", "oto_intercom": "Domofon", 
-    "oto_underground_parking_space": "Garaż podziemny", "oto_storage_room": "Komórka lokatorska",
-
-    # TO
-    "to_plac zabaw dla dzieci": "Plac zabaw", "to_winda": "Windy", "to_monitoring": "Monitoring", 
-    "to_ochrona": "Ochrona", "to_garaż": "Garaż", "to_klimatyzacja": "Klimatyzacja", 
-    "to_balkon": "Balkon", "to_taras": "Taras", "to_ogródek": "Ogródek"
-}
-
-def _load_rp_facilities():
+def _load_rp_facilities_ids() -> set[str]:
+    """
+    Wczytuje surowe identyfikatory z definicji struktury offer_facilities.json.
+    Zwraca zbiór stringów reprezentujących dozwolone ID dla portalu RP.
+    """
     try:
         p = Path(__file__).parent / "schemas" / "offer_facilities.json"
+        if not p.exists():
+            return set()
         with p.open("r", encoding="utf-8") as f:
             data = json.load(f)
-            for item in data.get("offer_facilities", []):
-                val = item.get("value")
-                lbl = item.get("label", "").capitalize()
-                if val is not None:
-                    UNIFIED_AMENITIES[f"rp_{val}"] = lbl
+            return {
+                str(item["value"]).strip() 
+                for item in data.get("offer_facilities", []) 
+                if item.get("value") is not None
+            }
     except Exception:
-        pass
-
-_load_rp_facilities()
-
-def _normalize_amenity(prefix: str, name: str) -> str:
-    key = f"{prefix}_{str(name).strip().lower()}"
-    return UNIFIED_AMENITIES.get(key, name)
+        return set()
 
 @register_transformer("rp_extract_amenities")
-def _rp_extract_amenities(value: Any, context: dict = None) -> list[str]:
+def _rp_extract_amenities(value: Any, context: Any = None) -> list[str]:
     """
-    Extracts amenity IDs from RynekPierwotny features list and maps them to unified strings.
-    Handles both direct lists and RP API wrapper dicts {"type": "arr", "value": [...]}.
-    If 'offer_facilities' is present in the context, it's used to decode the IDs.
+    Agreguje i porządkuje surowe numeryczne identyfikatory udogodnień dla RP.
+    Filtruje dane w oparciu o zewnętrzny schemat offer_facilities.json.
     """
     if isinstance(value, dict) and "value" in value:
         value = value.get("value")
@@ -312,17 +270,9 @@ def _rp_extract_amenities(value: Any, context: dict = None) -> list[str]:
     if not isinstance(value, list):
         return []
 
-    offer_facilities = {}
-    if context and isinstance(context, dict):
-        of = context.get("offer_facilities")
-        if isinstance(of, dict):
-            for k, v in of.items():
-                if isinstance(v, dict) and "name" in v:
-                    offer_facilities[str(k)] = v["name"]
-                else:
-                    offer_facilities[str(k)] = str(v)
-
+    allowed_ids = _load_rp_facilities_ids()
     result = []
+    
     for item in value:
         fid = None
         if isinstance(item, dict) and item.get("id") is not None:
@@ -330,11 +280,12 @@ def _rp_extract_amenities(value: Any, context: dict = None) -> list[str]:
         elif isinstance(item, (int, str)):
             fid = str(item)
 
-        if fid is not None:
-            if fid in offer_facilities:
-                result.append(offer_facilities[fid])
-            else:
-                result.append(_normalize_amenity("rp", fid))
+        if fid:
+            fid = fid.strip()
+            # Jeśli plik istnieje i ma dane, filtrujemy śmieci. Jeśli nie, przepuszczamy surowe ID.
+            if not allowed_ids or fid in allowed_ids:
+                result.append(fid)
+                
     return list(set(result))
 
 @register_transformer("oto_extract_delivery")
@@ -356,37 +307,45 @@ def _oto_extract_delivery(value: Any) -> str | None:
 @register_transformer("oto_extract_amenities")
 def _oto_extract_amenities(value: Any) -> list[str]:
     """
-    Extracts amenities from Otodom features ONLY.
-    Value is expected to be raw_details containing features.
+    Agreguje surowe, tekstowe tagi z Otodom. 
+    Odpowiedzialność ogranicza się do czyszczenia białych znaków i unifikacji wielkości liter.
     """
     if not isinstance(value, dict):
         return []
         
     features = value.get("features", [])
-    
     if not features:
-        ad = value.get("ad")
-        if not ad:
-            ad = value.get("props", {}).get("pageProps", {}).get("ad", {})
+        ad = value.get("ad") or value.get("props", {}).get("pageProps", {}).get("ad", {})
         if isinstance(ad, dict):
             features = ad.get("features", [])
             
-    raw_features = []
-    if isinstance(features, list):
-        raw_features.extend([str(f) for f in features])
+    if not features:
+        raw_details = value.get("raw_details", {})
+        if isinstance(raw_details, dict):
+            features = raw_details.get("features", [])
+            if not features:
+                # Czasem są w featuresByCategory
+                fbc = raw_details.get("featuresByCategory")
+                if isinstance(fbc, list):
+                    features = []
+                    for cat in fbc:
+                        if isinstance(cat, dict) and isinstance(cat.get("values"), list):
+                            features.extend(cat["values"])
+                            
+    if not isinstance(features, list):
+        return []
         
-    result = []
-    for f in set(raw_features):
-        result.append(_normalize_amenity("oto", str(f)))
-    return list(set(result))
+    return list({str(f).strip().lower() for f in features if f})
 
 @register_transformer("to_extract_amenities")
 def _to_extract_amenities(value: Any) -> list[str]:
     """
-    Extracts amenities strings from TabelaOfert additionalProperty list.
+    Ekstrahuje surowe klucze z listy cech dodatkowych TabelaOfert.
+    Zbiera wyłącznie te pozycje, których wartość logicznie potwierdza obecność cechy.
     """
     if not isinstance(value, list):
         return []
+        
     amenities = []
     for item in value:
         if isinstance(item, dict):
@@ -394,10 +353,13 @@ def _to_extract_amenities(value: Any) -> list[str]:
             val = item.get("value")
             if name and val:
                 val_str = str(val).strip().lower()
+                # Jeśli cecha jest oznaczona jako "tak", wrzucamy jej surowy klucz/nazwę
                 if val_str == "tak":
-                    amenities.append(_normalize_amenity("to", str(name)))
+                    amenities.append(str(name).strip().lower())
+                # Jeśli to inna wartość niebędąca negacją (np. wymiary/liczba), zachowujemy relację klucz:wartość
                 elif val_str not in ["nie", "brak", "false", "0"]:
-                    amenities.append(f"{name}: {val}")
+                    amenities.append(f"{str(name).strip().lower()}:{val_str}")
+                    
     return list(set(amenities))
 
 @register_transformer("to_float")

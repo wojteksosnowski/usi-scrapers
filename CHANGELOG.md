@@ -1,5 +1,14 @@
 # Changelog
 
+## Wersja 1.4.0 — Kamień 23 (Usunięcie hardkodów udogodnień) — 2026-06-25
+
+* **Udogodnienia (amenities) we wszystkich portalach (`transformers.py`)**:
+  * Całkowicie wyeliminowano słownik hardkodowanych udogodnień (`UNIFIED_AMENITIES`) oraz funkcję normalizującą.
+  * Zrefaktoryzowano metody `_rp_extract_amenities`, `_oto_extract_amenities` i `_to_extract_amenities` tak, aby zwracały wyłącznie surowe klucze lub numeryczne identyfikatory. Translacja na etykiety tekstowe leży teraz całkowicie po stronie systemów konsumujących.
+  * Uspójniono architekturę poprzez ładowanie schematu w locie bezpośrednio z pliku konfiguracyjnego dla portalu RynekPierwotny.
+* **Testy (`tests/`)**:
+  * Zaktualizowano asercje tak, aby oczekiwały surowych wartości numerycznych i sformatowanych kluczy zamiast znormalizowanych polskich etykiet.
+
 ## Wersja 1.3.9 — Kamień 22 (Robust OTO Amenities Extraction) — 2026-06-21
 
 * **Udogodnienia OTO (`transformers.py`)**: Wdrożono w pełni robustowy ekstraktor udogodnień dla Otodom. Obsługuje teraz historyczne i zmieniające się formaty payloadu `raw_*`. Prawidłowo agreguje wartości z `features`, `featuresWithoutCategory`, zagłębień w `featuresByCategory`, `target.Project_amenities`, a także parsuje formatowane klucze (`::`) z sekcji `additionalInformation`. Zduplikowane tagi ulegają automatycznej redukcji (set).

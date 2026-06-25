@@ -79,7 +79,7 @@ def test_transform_to_unified():
     from usi_scrapers.mapping import transform_to_unified
     
     raw_data = {
-        "features": [{"id": 99}],
+        "features": [{"id": 34}],
         "price": {"value": 15000}
     }
     
@@ -98,7 +98,7 @@ def test_transform_to_unified():
     try:
         unified = transform_to_unified("rp", raw_data)
         assert unified.get("price") == 15000
-        assert unified.get("amenities") == ["Rolne"]
+        assert unified.get("amenities") == ["34"]
         
         # Test empty
         assert transform_to_unified("rp", {}) == {}

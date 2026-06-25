@@ -107,9 +107,14 @@ def test_rp_extract_street():
 
 def test_rp_extract_amenities():
     from usi_scrapers.transformers import apply_transformer
-    data = [{"id": 999, "name": "foo"}, {"name": "bar"}, {"id": 1001}]
-    assert sorted(apply_transformer("rp_extract_amenities", data)) == ["1001", "999"]
+    data = [{"id": 34, "name": "foo"}, {"name": "bar"}, {"id": 35}]
+    assert sorted(apply_transformer("rp_extract_amenities", data)) == ["34", "35"]
     assert apply_transformer("rp_extract_amenities", None) is None
+
+def test_oto_extract_amenities():
+    from usi_scrapers.transformers import apply_transformer
+    data = {"features": ["Balkon ", " windy"]}
+    assert sorted(apply_transformer("oto_extract_amenities", data)) == ["balkon", "windy"]
 
 def test_oto_extract_delivery():
     from usi_scrapers.transformers import apply_transformer
@@ -127,7 +132,7 @@ def test_to_extract_amenities():
         {"name": "Winda", "value": "tak"},
         {"name": "Basen", "value": "nie"}
     ]
-    assert sorted(apply_transformer("to_extract_amenities", data)) == ["Garaż: parking naziemny", "Windy"]
+    assert sorted(apply_transformer("to_extract_amenities", data)) == ["garaż:parking naziemny", "winda"]
 
 def test_strip_html():
     from usi_scrapers.transformers import apply_transformer
