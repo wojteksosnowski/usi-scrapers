@@ -140,8 +140,8 @@
     "oto": {
       "name": "Otodom",
       "investment": {
-        "id": "props.pageProps.ad.id|id|ad.id|raw_details.id|searchAds.items[0].id|oto_url_id",
-        "numeric_id": "props.pageProps.ad.id|ad.id|raw_details.id|searchAds.items[0].id",
+        "id": "props.pageProps.ad.id|id|ad.id|raw_details.agency_id|raw_details.id|searchAds.items[0].id|oto_url_id",
+        "numeric_id": "props.pageProps.ad.id|ad.id|raw_details.agency_id|raw_details.id|searchAds.items[0].id",
         "slug": {
           "path": "props.pageProps.ad.slug|ad.slug|raw_details.slug|searchAds.items[0].slug",
           "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"

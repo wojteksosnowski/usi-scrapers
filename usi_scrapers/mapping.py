@@ -141,7 +141,7 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
             current = None
 
     if transform_name and current is not None:
-        current = apply_transformer(transform_name, current)
+        current = apply_transformer(transform_name, current, context=data)
 
     return current
 

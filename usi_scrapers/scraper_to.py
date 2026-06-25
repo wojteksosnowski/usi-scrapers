@@ -12,7 +12,7 @@ from .utils.portals import portal_api_url, portal_url, get_portal
 from .mapping import get_mapping, resolve_path
 from .utils.scrapers import generic_discover_investments, generic_download_dev_json
 
-from . import get_logger
+from usi_scrapers.logger import get_logger
 
 logger = get_logger(__name__)
 

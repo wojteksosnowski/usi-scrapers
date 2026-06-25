@@ -8,7 +8,7 @@ from .io import save_dev_raw_json
 from .images import download_developer_logo
 from ..mapping import get_mapping, resolve_path
 
-from .. import get_logger
+from usi_scrapers.logger import get_logger
 
 logger = get_logger(__name__)
 

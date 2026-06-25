@@ -8,7 +8,7 @@ from .utils.io import get_investment_dir, get_image_dir, save_raw_json
 from .utils.images import save_images, clean_filename 
 from .storage import StorageResolver
 
-from . import get_logger
+from usi_scrapers.logger import get_logger
 
 logger = get_logger(__name__)
 

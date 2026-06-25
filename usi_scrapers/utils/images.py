@@ -6,7 +6,7 @@ from pathlib import Path
 from urllib.parse import unquote
 from ..models import ScraperConfig
 
-from .. import get_logger
+from usi_scrapers.logger import get_logger
 
 logger = get_logger(__name__)
 

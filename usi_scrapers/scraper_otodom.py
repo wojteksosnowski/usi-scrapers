@@ -13,7 +13,7 @@ from .utils.scrapers import generic_discover_investments, generic_download_dev_j
 from .utils.images import save_images
 from .utils.integrity import normalize_to_legacy_props
 
-from . import get_logger
+from usi_scrapers.logger import get_logger
 
 logger = get_logger(__name__)
 

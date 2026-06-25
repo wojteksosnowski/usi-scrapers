@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import Dict, Optional
 
-from . import get_logger
+from usi_scrapers.logger import get_logger
 from .utils.images import clean_filename
 from .utils.io import save_raw_json, save_meta_json
 from .scraper_otodom import _parse_otodom_slug

@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional
 
-from .. import get_logger
+from usi_scrapers.logger import get_logger
 from .portals import portal_base_url
 
 logger = get_logger(__name__)
