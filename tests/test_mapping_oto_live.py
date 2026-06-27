@@ -1,5 +1,6 @@
 import os
 import json
+import random  # PEP 8: Import przeniesiony na górę pliku
 import pytest
 from pathlib import Path
 from usi_scrapers.scraper_otodom import scrape_otodom
@@ -95,13 +96,9 @@ def test_mapping_with_local_raw_files():
 
 def test_mapping_with_random_local_db_files():
     """
-    Losuje do 100 plików raw_{portal}_*.json z lokalnej bazy danych (Public/USIdata) 
-    dla każdego z portali (rp, oto, to) i weryfikuje poprawność ekstrakcji ID. 
-    Odrzuca pliki z 'mock' lub 'test' w nazwie.
+    Losuje deterministycznie do 100 plików raw_{portal}_*.json z lokalnej bazy danych 
+    i weryfikuje poprawność ekstrakcji ID.
     """
-    import random
-    
-    # Katalog bazy danych (zgodnie z konwencjami repozytorium to Public/USIdata)
     db_dir = Path("Public/USIdata")
     if not db_dir.exists():
         pytest.skip("Katalog bazy danych 'Public/USIdata' nie istnieje. Test pominięty.")
@@ -110,10 +107,8 @@ def test_mapping_with_random_local_db_files():
     overall_success = True
     
     for portal in portals:
-        # Szukamy tylko inwestycji (USIdata), omijamy deweloperów (USIdev)
         raw_files = list(db_dir.rglob(f"raw_{portal}_*.json"))
         
-        # Filtrujemy mocki i pliki testowe (case-insensitive)
         valid_files = [
             f for f in raw_files 
             if "mock" not in f.name.lower() and "test" not in f.name.lower()
@@ -123,8 +118,10 @@ def test_mapping_with_random_local_db_files():
             print(f"\nBrak prawidłowych plików raw_{portal}_*.json w 'Public/USIdata'. Skipowanie portalu.")
             continue
             
+        # Zapewnienie determinizmu: stałe sortowanie i dedykowany generator z seedem
+        valid_files.sort(key=lambda x: x.name)
         sample_size = min(100, len(valid_files))
-        sampled_files = random.sample(valid_files, sample_size)
+        sampled_files = random.Random(42).sample(valid_files, sample_size)
         
         success_count = 0
         total_count = 0
@@ -140,7 +137,6 @@ def test_mapping_with_random_local_db_files():
                 print(f"Error reading {raw_file.name}: {e}")
                 continue
                 
-            # Heurystyki odfiltrowujące dane deweloperów lub niepełne struktury
             if portal == "oto":
                 props = raw_data.get("props", {}).get("pageProps", raw_data)
                 if "ad" not in props and "raw_details" not in raw_data and "searchAds" not in props:
@@ -171,7 +167,7 @@ def test_mapping_with_random_local_db_files():
             if success_count != total_count:
                 overall_success = False
                 
-    assert overall_success, "Wystąpiły błędy ekstrakcji ID w próbkach danych historycznych (szczegóły powyżej)."
+    assert overall_success, "Wystąpiły błędy ekstrakcji ID w próbkach danych historycznych."
 
 if __name__ == "__main__":
     # Pozwala na szybkie uruchomienie skryptu bezpośrednio

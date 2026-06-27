@@ -239,24 +239,24 @@ def _rp_extract_street(value: Any) -> str | None:
 import json
 from pathlib import Path
 
-def _load_rp_facilities_ids() -> set[str]:
+def _load_rp_facilities_map() -> dict[str, str]:
     """
     Wczytuje surowe identyfikatory z definicji struktury offer_facilities.json.
-    Zwraca zbiór stringów reprezentujących dozwolone ID dla portalu RP.
+    Zwraca słownik mapujący ID udogodnienia na jego nazwę.
     """
     try:
         p = Path(__file__).parent / "schemas" / "offer_facilities.json"
         if not p.exists():
-            return set()
+            return {}
         with p.open("r", encoding="utf-8") as f:
             data = json.load(f)
             return {
-                str(item["value"]).strip() 
+                str(item["value"]).strip(): str(item["label"]).strip()
                 for item in data.get("offer_facilities", []) 
-                if item.get("value") is not None
+                if item.get("value") is not None and item.get("label")
             }
     except Exception:
-        return set()
+        return {}
 
 @register_transformer("rp_extract_amenities")
 def _rp_extract_amenities(value: Any, context: Any = None) -> list[str]:
@@ -270,7 +270,7 @@ def _rp_extract_amenities(value: Any, context: Any = None) -> list[str]:
     if not isinstance(value, list):
         return []
 
-    allowed_ids = _load_rp_facilities_ids()
+    facilities_map = _load_rp_facilities_map()
     result = []
     
     for item in value:
@@ -282,8 +282,7 @@ def _rp_extract_amenities(value: Any, context: Any = None) -> list[str]:
 
         if fid:
             fid = fid.strip()
-            # Jeśli plik istnieje i ma dane, filtrujemy śmieci. Jeśli nie, przepuszczamy surowe ID.
-            if not allowed_ids or fid in allowed_ids:
+            if not facilities_map or fid in facilities_map:
                 result.append(fid)
                 
     return list(set(result))
@@ -331,6 +330,27 @@ def _oto_extract_amenities(value: Any) -> list[str]:
                     for cat in fbc:
                         if isinstance(cat, dict) and isinstance(cat.get("values"), list):
                             features.extend(cat["values"])
+
+    ad = value.get("ad") or value.get("props", {}).get("pageProps", {}).get("ad", {})
+    raw_details = value.get("raw_details", {})
+    
+    # Otodom czasem trzyma udogodnienia w additionalInformation
+    add_info = None
+    if isinstance(ad, dict) and ad.get("additionalInformation"):
+        add_info = ad.get("additionalInformation")
+    elif isinstance(raw_details, dict) and raw_details.get("additionalInformation"):
+        add_info = raw_details.get("additionalInformation")
+
+    if isinstance(add_info, list):
+        if not isinstance(features, list):
+            features = []
+        for item in add_info:
+            if isinstance(item, dict) and item.get("label") in ["project_amenities", "extra_spaces", "security", "equipment"]:
+                for val in item.get("values", []):
+                    if isinstance(val, str):
+                        if "::" in val:
+                            val = val.split("::", 1)[1]
+                        features.append(val)
                             
     if not isinstance(features, list):
         return []
@@ -482,4 +502,26 @@ def _extract_social(value: Any, platform: str) -> str | None:
     elif isinstance(value, str):
         if platform in value.lower():
             return value
+    return None
+
+@register_transformer("oto_extract_city")
+def _oto_extract_city(value: Any) -> str | None:
+    """Extracts city from Otodom location or reverseGeocoding."""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        for loc in value:
+            if isinstance(loc, dict) and loc.get("locationLevel") in ["city", "city_or_village", "town"]:
+                return loc.get("name")
+    return None
+
+@register_transformer("oto_extract_district")
+def _oto_extract_district(value: Any) -> str | None:
+    """Extracts district from Otodom location or reverseGeocoding."""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        for loc in value:
+            if isinstance(loc, dict) and loc.get("locationLevel") == "district":
+                return loc.get("name")
     return None

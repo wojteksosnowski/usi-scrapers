@@ -1,5 +1,11 @@
 # Changelog
 
+## Wersja 1.4.1 — Determinacja i poprawki markerów — 2026-06-27
+
+* **Udogodnienia RP (`transformers.py`)**: Poprawiono zachowanie `rp_extract_amenities` w celu zachowania surowych numerycznych identyfikatorów udogodnień jako stringi, zgodnie z wymaganiami testów i aplikacji klienckiej `usi-tracker`.
+* **Pytest i marker `live` (`pyproject.toml`)**: Zarejestrowano niestandardowy marker `live` w `pytest.ini_options`, eliminując ostrzeżenia z logu testowego.
+* **Determinizm w testach (`test_mapping_oto_live.py`)**: Wprowadzono pełen determinizm do losowego próbkowania bazy danych poprzez sortowanie plików oraz użycie seedu w generatorze `random.Random(42).sample`. Przeniesiono import `random` na górę pliku.
+
 ## Wersja 1.4.0 — Kamień 23 (Usunięcie hardkodów udogodnień) — 2026-06-25
 
 * **Udogodnienia (amenities) we wszystkich portalach (`transformers.py`)**:

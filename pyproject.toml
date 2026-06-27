@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "usi-scrapers"
-version = "1.4.0"
+version = "1.4.1"
 description = "USI Scrapers - fetch raw property data from Polish portals"
 authors = [
     {name = "USI Tracker", email = "usi@example.com"}
@@ -32,3 +32,8 @@ include = ["usi_scrapers*"]
 
 [tool.setuptools.package-data]
 usi_scrapers = ["*.json", "schemas/*.json"]
+
+[tool.pytest.ini_options]
+markers = [
+    "live: testy integracyjne wykonujące rzeczywiste żądania sieciowe do zewnętrznych portali"
+]
