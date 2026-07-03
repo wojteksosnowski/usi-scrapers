@@ -85,10 +85,18 @@ class TechnicalDataManager:
             logger.info(f"Localizing {len(data['image_urls'])} images for investment {inv_slug}")
             local_images = self.download_and_localize_images(data["image_urls"], dev_slug, inv_slug)
             
-            # Zapisujemy bezwzględne ścieżki do pobranych plików w kluczu `image_paths`
-            target_dir = get_image_dir(dev_slug, inv_slug, self.config.public_dir)
-            data["image_paths"] = [str((target_dir / fname).absolute()) for fname in local_images]
+            # Zapisujemy relatywne ścieżki (względem public_dir) do pobranych plików w kluczu `image_paths`
+            # Przykład: /Public/USI/developer/investment/file.webp
+            public_dir_path = Path(self.config.public_dir)
+            target_dir = get_image_dir(dev_slug, inv_slug, public_dir_path)
             
+            # Use relative paths (e.g. /Public/USI/developer/investment/file.webp)
+            if public_dir_path.name == "Public":
+                rel_dir = target_dir.relative_to(public_dir_path.parent)
+                data["image_paths"] = [f"/{rel_dir}/{fname}" for fname in local_images]
+            else:
+                rel_dir = target_dir.relative_to(public_dir_path)
+                data["image_paths"] = [f"/Public/{rel_dir}/{fname}" for fname in local_images]
             # Klucz `image_urls` pozostawiamy nienaruszony (jako listę oryginalnych adresów URL)
 
         from .utils.io import save_raw_json, get_investment_dir

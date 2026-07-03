@@ -84,6 +84,10 @@
         "amenities": {
           "path": "features|facilities",
           "transform": "rp_extract_amenities"
+        },
+        "image_urls": {
+          "path": "_raw_gallery.gallery",
+          "transform": "rp_gallery_to_flat_list"
         }
       },
       "developer": {
@@ -147,10 +151,10 @@
           "regex": "^(.*?)(?:-ID[A-Za-z0-9]+)?$"
         },
         "name": "props.pageProps.ad.title|ad.title|raw_details.title|searchAds.items[0].title|title",
-        "developer_id": "props.pageProps.ad.agency.id|ad.agency.id|agency_id|props.pageProps.ad.owner.id|owner.id|raw_details.agency_id|searchAds.items[0].agency.id",
-        "developer_name": "props.pageProps.ad.agency.name|ad.agency.name|agency_name|props.pageProps.ad.owner.name|owner.name|raw_details.agency_name|searchAds.items[0].agency.name",
+        "developer_id": "props.pageProps.ad.agency.id|ad.agency.id|agency.id|agency_id|props.pageProps.ad.owner.id|owner.id|raw_details.agency_id|searchAds.items[0].agency.id",
+        "developer_name": "props.pageProps.ad.agency.name|ad.agency.name|agency.name|agency_name|props.pageProps.ad.owner.name|owner.name|raw_details.agency_name|searchAds.items[0].agency.name",
         "developer_slug": {
-          "path": "props.pageProps.ad.agency.url|ad.agency.url|raw_details.developer_slug|searchAds.items[0].agency.url",
+          "path": "props.pageProps.ad.agency.url|ad.agency.url|agency.url|raw_details.developer_slug|searchAds.items[0].agency.url",
           "regex": "deweloperzy/([^/]+)-ID\\d+"
         },
         "units_count": "props.pageProps.ad.target.Number_of_properties|ad.target.Number_of_properties|raw_details.properties_count|ad.target.Number_of_properties",
@@ -203,7 +207,7 @@
           "transform": "oto_gallery_to_flat_list"
         },
         "url": "props.pageProps.ad.url|ad.url|url|searchAds.items[0].url",
-        "developer_url": "props.pageProps.ad.agency.url|ad.agency.url|raw_details.developer_url|searchAds.items[0].agency.url",
+        "developer_url": "props.pageProps.ad.agency.url|ad.agency.url|agency.url|raw_details.developer_url|searchAds.items[0].agency.url",
         "owner_name": "props.pageProps.ad.owner.name|ad.owner.name|owner.account.name|owner.name|raw_details.owner_name|searchAds.items[0].owner.name",
         "hash_id": {
           "path": "props.pageProps.ad.url|ad.url|url|props.pageProps.ad.slug|ad.slug|raw_details.slug|searchAds.items[0].slug",
@@ -243,22 +247,25 @@
           "path": ".",
           "transform": "oto_extract_amenities"
         },
-
         "investment_slug": "props.pageProps.ad.slug|ad.slug|raw_details.slug|searchAds.items[0].slug",
-        "developer": "props.pageProps.ad.agency.name|ad.agency.name|agency_name",
+        "developer": "props.pageProps.ad.agency.name|ad.agency.name|agency.name|agency_name",
         "website": "props.pageProps.ad.url|ad.url|url|searchAds.items[0].url",
-
         "location.address": {
           "path": "ad.location.address.street.name|raw_details.address|searchAds.items[0].location.address.street.name",
           "transform": "clean_street"
         },
-        "location.city": "ad.location.address.city.name|raw_details.city|searchAds.items[0].location.address.city.name",
-        "location.district": "ad.location.address.district.name|raw_details.region|searchAds.items[0].location.address.district.name",
+        "location.city": {
+          "path": "props.pageProps.ad.location.reverseGeocoding.locations|ad.location.reverseGeocoding.locations|ad.location.address.city.name|raw_details.city|searchAds.items[0].location.address.city.name",
+          "transform": "oto_extract_city"
+        },
+        "location.district": {
+          "path": "props.pageProps.ad.location.reverseGeocoding.locations|ad.location.reverseGeocoding.locations|ad.location.address.district.name|raw_details.region|searchAds.items[0].location.address.district.name",
+          "transform": "oto_extract_district"
+        },
         "location.coords": {
           "path": ".",
           "transform": "oto_extract_coords_as_array"
         },
-
         "specifications.units_count": "props.pageProps.ad.target.Number_of_properties|ad.target.Number_of_properties|raw_details.properties_count",
         "specifications.ceiling_height_min": {
           "path": "ad.characteristics[key=ceiling_height].value|raw_details.ceiling_height_min",
@@ -276,13 +283,21 @@
         "specifications.delivery_year": "ad.investmentEstimatedDelivery.year|raw_details.delivery_year",
         "specifications.segment": {
           "evaluate_signals": {
-            "commercial": {"path": "ad.target.categoryId", "regex": "501"},
-            "apartments": {"path": "ad.target.categoryId", "regex": "11"},
-            "houses": {"path": "ad.target.categoryId", "regex": "13"}
+            "commercial": {
+              "path": "ad.target.categoryId",
+              "regex": "501"
+            },
+            "apartments": {
+              "path": "ad.target.categoryId",
+              "regex": "11"
+            },
+            "houses": {
+              "path": "ad.target.categoryId",
+              "regex": "13"
+            }
           },
           "fallback": "investment"
         },
-
         "financials.price_min": {
           "path": "props.pageProps.ad.target.Price|ad.target.Price|raw_details.price_min|searchAds.items[0].price.value",
           "transform": "to_float"
@@ -295,7 +310,6 @@
           "path": "ad.characteristics[key=price_per_m].value|raw_details.price_m2_max",
           "transform": "to_float"
         },
-
         "image_urls": {
           "path": "ad.images|raw_details.image_urls|searchAds.items[0].images",
           "transform": "oto_gallery_to_flat_list"
@@ -438,6 +452,9 @@
         "amenities": {
           "path": "additionalProperty",
           "transform": "to_extract_amenities"
+        },
+        "image_urls": {
+          "path": "_raw_gallery_urls"
         }
       },
       "developer": {

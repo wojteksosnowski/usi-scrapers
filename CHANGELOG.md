@@ -1,5 +1,13 @@
 # Changelog
 
+## Wersja 1.4.2 — Relatywne ścieżki obrazów i rozszerzenie mappingu — 2026-07-03
+
+* **`manager.py` — relatywne ścieżki `image_paths`**: Zmieniono generowanie klucza `image_paths` z bezwzględnych ścieżek pliku na relatywne ścieżki webowe względem `public_dir` (format `/Public/USI/{dev}/{inv}/file.webp`). Logika poprawnie obsługuje oba warianty: gdy `public_dir` kończy się na `Public/` oraz gdy wskazuje na katalog nadrzędny.
+* **`portal_data_mapping.json` — RP `image_urls`**: Dodano mapowanie `image_urls` dla portalu RynekPierwotny przez ścieżkę `_raw_gallery.gallery` z transformem `rp_gallery_to_flat_list`.
+* **`portal_data_mapping.json` — TO `image_urls`**: Dodano mapowanie `image_urls` dla portalu TabelaOfert przez ścieżkę `_raw_gallery_urls`.
+* **`portal_data_mapping.json` — Otodom fallbacki agencji**: Dodano `agency.url`, `agency.name`, `agency.id` jako fallback ścieżki dla pól `developer_id`, `developer_name`, `developer_slug`, `developer_url` i `developer`.
+* **`portal_data_mapping.json` — Otodom lokalizacja**: Pola `location.city` i `location.district` obsługują teraz `reverseGeocoding.locations` przez nowe transformy `oto_extract_city` i `oto_extract_district`.
+
 ## Wersja 1.4.1 — Determinacja i poprawki markerów — 2026-06-27
 
 * **Udogodnienia RP (`transformers.py`)**: Poprawiono zachowanie `rp_extract_amenities` w celu zachowania surowych numerycznych identyfikatorów udogodnień jako stringi, zgodnie z wymaganiami testów i aplikacji klienckiej `usi-tracker`.
