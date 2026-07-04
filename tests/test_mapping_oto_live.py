@@ -169,6 +169,32 @@ def test_mapping_with_random_local_db_files():
                 
     assert overall_success, "Wystąpiły błędy ekstrakcji ID w próbkach danych historycznych."
 
+def test_oto_free_from_extraction():
+    """
+    Test weryfikujący poprawność ekstrakcji kluczy free_from jako listy dat
+    z pliku testowego raw_oto_kijowska-vita.json.
+    """
+    test_file = Path("usi_scrapers/schemas/porta_data_mapping_tests/raw_oto_kijowska-vita.json")
+    if not test_file.exists():
+        pytest.skip(f"Test file {test_file} not found")
+        
+    with open(test_file, "r", encoding="utf-8") as f:
+        raw_data = json.load(f)
+        
+    unified = transform_to_unified("oto", raw_data, "investment")
+    
+    # Sprawdzamy czy free_from i specifications.free_from zostały wyekstrahowane jako lista
+    free_from = unified.get("free_from")
+    spec_free_from = unified.get("specifications", {}).get("free_from")
+    
+    assert isinstance(free_from, list), f"Expected list for free_from, got {type(free_from)}"
+    assert isinstance(spec_free_from, list), f"Expected list for specifications.free_from, got {type(spec_free_from)}"
+    
+    # W pliku raw_oto_kijowska-vita.json mamy free_from = "2027-11-30" w kilku mieszkaniach
+    assert len(free_from) > 0, "Expected at least one free_from value"
+    assert "2027-11-30" in free_from, f"Expected '2027-11-30' in free_from, got {free_from}"
+    assert "2027-11-30" in spec_free_from, f"Expected '2027-11-30' in spec_free_from, got {spec_free_from}"
+
 if __name__ == "__main__":
     # Pozwala na szybkie uruchomienie skryptu bezpośrednio
     pytest.main([__file__, "-s"])

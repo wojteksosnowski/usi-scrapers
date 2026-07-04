@@ -202,6 +202,7 @@
         "delivery_raw": "ad.topInformation|raw_details.delivery_raw",
         "delivery_fallback_quarter": "ad.investmentEstimatedDelivery.quarter|raw_details.delivery_quarter",
         "delivery_fallback_year": "ad.investmentEstimatedDelivery.year|raw_details.delivery_year",
+        "free_from": "props.pageProps.ad.paginatedUnits.items[*].characteristics[key=free_from].value|ad.paginatedUnits.items[*].characteristics[key=free_from].value",
         "images": {
           "path": "ad.images|raw_details.image_urls|searchAds.items[0].images",
           "transform": "oto_gallery_to_flat_list"
@@ -281,6 +282,7 @@
         },
         "specifications.delivery_quarter": "ad.investmentEstimatedDelivery.quarter|raw_details.delivery_quarter",
         "specifications.delivery_year": "ad.investmentEstimatedDelivery.year|raw_details.delivery_year",
+        "specifications.free_from": "props.pageProps.ad.paginatedUnits.items[*].characteristics[key=free_from].value|ad.paginatedUnits.items[*].characteristics[key=free_from].value",
         "specifications.segment": {
           "evaluate_signals": {
             "commercial": {

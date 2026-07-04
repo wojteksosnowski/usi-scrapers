@@ -1,5 +1,11 @@
 # Changelog
 
+## Wersja 1.4.3 — Wsparcie dla wieloznacznych ścieżek i free_from w Otodom — 2026-07-04
+
+* **`mapping.py` — wieloznaczne ścieżki w `resolve_path`**: Wprowadzono wsparcie dla symbolu wieloznacznego `*` (np. `items[*]`), co pozwala na rekurencyjne pobranie listy wartości dla pasujących pól we wszystkich obiektach w tablicy.
+* **`portal_data_mapping.json` — Otodom `free_from`**: Dodano automatyczne wyciąganie listy wartości klucza `free_from` z mieszkań w ofercie inwestycji na portalu Otodom do pól `free_from` oraz `specifications.free_from`.
+* **Testy**: Dodano test jednostkowy weryfikujący poprawność ekstrakcji wartości `free_from` z surowych plików JSON dla portalu Otodom.
+
 ## Wersja 1.4.2 — Relatywne ścieżki obrazów i rozszerzenie mappingu — 2026-07-03
 
 * **`manager.py` — relatywne ścieżki `image_paths`**: Zmieniono generowanie klucza `image_paths` z bezwzględnych ścieżek pliku na relatywne ścieżki webowe względem `public_dir` (format `/Public/USI/{dev}/{inv}/file.webp`). Logika poprawnie obsługuje oba warianty: gdy `public_dir` kończy się na `Public/` oraz gdy wskazuje na katalog nadrzędny.

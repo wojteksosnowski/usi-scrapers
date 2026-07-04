@@ -234,6 +234,7 @@ result = resolve_path(data, "topInformation[label=units].values[0]")
 - **Notacja kropkowa**: `a.b.c` (dostęp do zagnieżdżonych słowników).
 - **Indeksy tablic**: `a[0].b` (dostęp przez indeks).
 - **Filtrowanie tablic**: `a[key=value].b` (wyszukiwanie obiektu w liście).
+- **Wieloznaczność tablic**: `a[*].b` (pobiera listę wartości pola `b` dla wszystkich elementów w liście `a`).
 - **Operacje na listach głównych**: `[0].id` lub `[key=value].id`.
 - **Potoki (Fallback)**: `a.b | a.c` (zwraca pierwszą nie-pustą wartość z lewej do prawej).
 - **Regex**: Jeśli ścieżka jest słownikiem `{"path": "...", "regex": "..."}`, po wyciągnięciu wartości zostanie na niej wykonany regex.

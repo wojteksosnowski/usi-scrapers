@@ -82,7 +82,7 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
         parts = path.split('.')
         current = data
         
-        for part in parts:
+        for i, part in enumerate(parts):
             if current is None:
                 return None
                 
@@ -101,7 +101,20 @@ def resolve_path(data: dict | list, path: str | dict) -> Any:
                     return None
                     
                 if isinstance(current, list):
-                    if condition.isdigit():
+                    if condition == "*":
+                        remaining_path = ".".join(parts[i+1:])
+                        if not remaining_path:
+                            return current
+                        results = []
+                        for item in current:
+                            res = resolve_path(item, remaining_path)
+                            if res is not None:
+                                if isinstance(res, list):
+                                    results.extend(res)
+                                else:
+                                    results.append(res)
+                        return results if results else None
+                    elif condition.isdigit():
                         idx = int(condition)
                         if 0 <= idx < len(current):
                             current = current[idx]
