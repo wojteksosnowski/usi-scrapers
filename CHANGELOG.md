@@ -1,5 +1,12 @@
 # Changelog
 
+## Wersja 1.4.4 — Agregacja historycznych obrazów w image_urls / image_paths — 2026-07-04
+
+* **`manager.py` — `collect_archived_image_urls`**: Nowa metoda statyczna skanuje zarchiwizowane kopie pliku `raw_{portal}_{id}_*.json` w katalogu inwestycji i zbiera adresy URL obrazów z poprzednich sesji scrapowania (OTO: `ad.images[]`, RP: `_raw_gallery.gallery`, TO: `_raw_gallery_urls`).
+* **`manager.py` — `collect_disk_image_filenames`**: Nowa metoda statyczna zwraca posortowaną listę plików graficznych (`.jpg`, `.png`, `.webp`) już istniejących na dysku w katalogu `USI/{dev}/{inv}/`, o rozmiarze > 1 KB.
+* **`manager.py` — `save_raw_data`**: Pola `image_urls` i `image_paths` zawierają teraz pełną, deduplikowaną listę łączącą obrazy bieżącego scrapowania, URL-e ze starszych archiwów raw JSON oraz nazwy plików już pobranych na dysk. Duplikaty są usuwane z zachowaniem kolejności (bieżące URL-e jako pierwsze).
+* **Testy**: Dodano `tests/test_manager_image_aggregation.py` z 10 testami jednostkowymi pokrywającymi wszystkie trzy portale oraz logikę scalania plików z dysku.
+
 ## Wersja 1.4.3 — Wsparcie dla wieloznacznych ścieżek i free_from w Otodom — 2026-07-04
 
 * **`mapping.py` — wieloznaczne ścieżki w `resolve_path`**: Wprowadzono wsparcie dla symbolu wieloznacznego `*` (np. `items[*]`), co pozwala na rekurencyjne pobranie listy wartości dla pasujących pól we wszystkich obiektach w tablicy.
