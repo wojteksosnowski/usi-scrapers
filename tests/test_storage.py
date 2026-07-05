@@ -68,3 +68,93 @@ def test_find_image_path(temp_public_dir):
     # Should not find non-existent image
     not_found = resolver.find_image_path("nonexistent.jpg")
     assert not_found is None
+
+
+# ── OTO dual-ID support tests ─────────────────────────────────────────────────
+
+import json
+
+@pytest.fixture
+def oto_dual_id_dir(tmp_path):
+    """Tworzy strukturę z plikiem raw_oto_{alphanum}.json zawierającym ad.id (numeryczny)."""
+    inv_dir = tmp_path / "USIdata" / "test-dev" / "test-inv"
+    inv_dir.mkdir(parents=True)
+    raw = {"ad": {"id": 65110911, "features": ["Balkon"]}}
+    (inv_dir / "raw_oto_4pcjZ.json").write_text(json.dumps(raw), encoding="utf-8")
+
+    dev_dir = tmp_path / "USIdev" / "test-dev"
+    dev_dir.mkdir(parents=True)
+    dev_raw = {"id": 9867181, "name": "Test Dev"}
+    (dev_dir / "raw_oto_4pcjZ.json").write_text(json.dumps(dev_raw), encoding="utf-8")
+
+    return tmp_path
+
+
+def test_oto_lookup_investment_by_alphanum(oto_dual_id_dir):
+    """Lookup po alfanumerycznym ID (kanoniczny) działa jak dotychczas."""
+    config = ScraperConfig(public_dir=str(oto_dual_id_dir))
+    resolver = StorageResolver(config)
+    result = resolver.lookup_investment("oto", "4pcjZ")
+    assert result == ("test-dev", "test-inv")
+
+
+def test_oto_lookup_investment_by_numeric(oto_dual_id_dir):
+    """Lookup po numerycznym ad.id zwraca ten sam wynik co alfanumeryczny."""
+    config = ScraperConfig(public_dir=str(oto_dual_id_dir))
+    resolver = StorageResolver(config)
+    result = resolver.lookup_investment("oto", "65110911")
+    assert result == ("test-dev", "test-inv")
+
+
+def test_oto_resolve_canonical_inv_id(oto_dual_id_dir):
+    """resolve_oto_inv_canonical_id zwraca alfanumeryczny ID dla numerycznego."""
+    config = ScraperConfig(public_dir=str(oto_dual_id_dir))
+    resolver = StorageResolver(config)
+    assert resolver.resolve_oto_inv_canonical_id("65110911") == "4pcjZ"
+    # Alfanumeryczny ID pozostaje niezmieniony
+    assert resolver.resolve_oto_inv_canonical_id("4pcjZ") == "4pcjZ"
+
+
+def test_oto_lookup_developer_by_numeric(oto_dual_id_dir):
+    """Lookup dewelopera po numerycznym id (z pliku raw OTO) działa poprawnie."""
+    config = ScraperConfig(public_dir=str(oto_dual_id_dir))
+    resolver = StorageResolver(config)
+    assert resolver.lookup_developer("oto", "9867181") == "test-dev"
+    assert resolver.lookup_developer("oto", "4pcjZ") == "test-dev"
+
+
+def test_has_local_raw_oto_numeric(oto_dual_id_dir):
+    """has_local_raw akceptuje numeryczny OTO ID i zwraca True gdy plik istnieje."""
+    from usi_scrapers.api import has_local_raw
+    from usi_scrapers import storage as _storage
+    _storage._default_resolver = None
+
+    config = ScraperConfig(public_dir=str(oto_dual_id_dir))
+
+    assert has_local_raw(config, "oto", "65110911") is True
+    assert has_local_raw(config, "oto", "4pcjZ") is True
+    assert has_local_raw(config, "oto", "9999999") is False
+
+    _storage._default_resolver = None  # cleanup
+
+
+def test_load_raw_oto_numeric(oto_dual_id_dir):
+    """load_raw wczytuje plik raw_oto_4pcjZ.json gdy zapytany z numerycznym ID."""
+    from usi_scrapers.api import load_raw
+    from usi_scrapers import storage as _storage
+    _storage._default_resolver = None
+
+    config = ScraperConfig(public_dir=str(oto_dual_id_dir))
+
+    # Zapytanie po numerycznym ID
+    data_numeric = load_raw(config, "oto", "65110911")
+    # Zapytanie po alfanumerycznym ID
+    data_alphanum = load_raw(config, "oto", "4pcjZ")
+
+    assert data_numeric is not None
+    assert data_alphanum is not None
+    # Oba powinny zwrócić ten sam JSON
+    assert data_numeric == data_alphanum
+    assert data_numeric["ad"]["id"] == 65110911
+
+    _storage._default_resolver = None  # cleanup

@@ -1,6 +1,14 @@
 # Changelog
 
-## Wersja 1.4.5 — Naprawa niespójności w polu `amenities` (OTO + TO) — 2026-07-05
+## Wersja 1.4.6 — OTO dual-ID: obsługa alfanumerycznych i numerycznych ID w `load_raw` / `has_local_raw` — 2026-07-05
+
+* **`storage.py` — `StorageResolver.build_index`**: Podczas indeksowania plików `raw_oto_*.json` (non-archiwum) odczytywany jest `ad.id` z zawartości pliku (inwestycje) lub `id` / `agency.id` (deweloperzy) i rejestrowany jako alias numeryczny w cache. Dzięki temu cache zawiera obie formy ID jednocześnie.
+* **`storage.py` — `resolve_oto_inv_canonical_id` / `resolve_oto_dev_canonical_id`**: Nowe metody zwracające kanoniczny alfanumeryczny ID (używany w nazwie pliku) na podstawie dowolnej formy ID (alfanumerycznej lub numerycznej).
+* **`storage.py` — `get_investment_metadata`**: Naprawiono ścieżkę pliku — używa kanonicznego ID zamiast przekazanego ID, dzięki czemu lookup po numerycznym ID OTO także może odczytywać metadane.
+* **`api.py` — `get_raw_data` / `load_raw`**: Używa `resolve_oto_inv_canonical_id` do budowania ścieżki pliku, co pozwala wczytać `raw_oto_4pcjZ.json` zarówno przez `portal_id="4pcjZ"` jak i przez `portal_id="65110911"` (numeryczne `ad.id`).
+* **`api.py` — `has_local_raw`**: Analogiczna poprawka dla sprawdzania istnienia pliku.
+* **Testy**: Dodano 6 nowych testów w `test_storage.py` pokrywających lookup inwestycji i dewelopera OTO po obu formach ID, resolucję kanonicznego ID oraz `load_raw` / `has_local_raw` z numerycznym ID.
+
 
 * **`transformers.py` — `oto_extract_amenities`**: Usunięto scalanie z `additionalInformation` jako źródła amenities. Jedynym źródłem jest teraz `ad.features` (polskie nazwy tekstowe), co eliminuje duplikaty EN+PL (np. `"balkon"` + `"balcony"` pojawiające się jednocześnie).
 * **`transformers.py` — `to_extract_amenities`**: Całkowita przepisanie logiki:

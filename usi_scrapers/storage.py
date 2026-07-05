@@ -12,12 +12,24 @@ class StorageResolver:
     """
     In-memory index and path resolver for USIdata and USIdev.
     Caches the mapping from portal_id to dev_slug and inv_slug.
+
+    OTO dual-ID support
+    -------------------
+    Otodom pliki są zapisywane pod alfanumerycznym ID z URL (np. "4mLbK"),
+    ale usi-tracker może pytać także po numerycznym ad.id (np. "65110911").
+    Podczas build_index dla każdego pliku raw_oto_*.json odczytywany jest
+    ad.id (inwestycja) lub agency.id (deweloper) z zawartości pliku
+    i rejestrowany jako alias wskazujący na ten sam (dev_slug, inv_slug).
+    Dzięki temu lookup_investment/lookup_developer akceptuje oba formaty.
     """
     def __init__(self, config: ScraperConfig):
         self.config = config
         self.public_dir = Path(config.public_dir)
         self._dev_cache: Dict[str, Dict[str, str]] = {}  # {portal_prefix: {portal_id: dev_slug}}
         self._inv_cache: Dict[str, Dict[str, Tuple[str, str]]] = {}  # {portal_prefix: {portal_id: (dev_slug, inv_slug)}}
+        # OTO: mapowanie numeric_id -> canonical_alphanum_id (do resolucji nazwy pliku)
+        self._oto_inv_canonical: Dict[str, str] = {}   # numeric_id -> alphanum_id
+        self._oto_dev_canonical: Dict[str, str] = {}   # numeric_id -> alphanum_id
         self._initialized = False
         self._lock = Lock()
 
@@ -29,6 +41,8 @@ class StorageResolver:
 
             self._dev_cache.clear()
             self._inv_cache.clear()
+            self._oto_inv_canonical.clear()
+            self._oto_dev_canonical.clear()
 
             dev_raw_root = self.public_dir / "USIdev"
             if dev_raw_root.exists() and dev_raw_root.is_dir():
@@ -37,22 +51,22 @@ class StorageResolver:
                         continue
                     dev_slug = dev_dir.name
                     for file_path in dev_dir.glob("raw_*_*.json"):
-                        # expected format: raw_{portal_prefix}_{portal_id}.json
-                        # Note: we might have _timestamp.json archived files, so we check parts
                         parts = file_path.stem.split("_")
                         if len(parts) >= 3 and parts[0] == "raw":
                             portal_prefix = parts[1]
-                            # Combine remaining parts in case portal_id has underscores, but ignore timestamp suffix if present
-                            # Better approach: check if it matches exactly raw_{prefix}_{id}.json without timestamp
-                            # timestamp is 15 chars e.g. 20260604_135717 -> so length of parts would be 4 and last is 6 chars.
-                            # We just avoid files with more than 3 parts if they look like timestamp.
                             if len(parts) > 3 and parts[-1].isdigit() and len(parts[-1]) == 6 and len(parts[-2]) == 8 and parts[-2].isdigit():
-                                continue # It's an archive file
-                                
+                                continue  # archiwum
                             portal_id = "_".join(parts[2:])
                             if portal_prefix not in self._dev_cache:
                                 self._dev_cache[portal_prefix] = {}
                             self._dev_cache[portal_prefix][portal_id] = dev_slug
+
+                            # OTO: dodaj alias po numerycznym agency.id
+                            if portal_prefix == "oto":
+                                numeric_id = self._read_oto_dev_numeric_id(file_path)
+                                if numeric_id and numeric_id != portal_id:
+                                    self._dev_cache["oto"][numeric_id] = dev_slug
+                                    self._oto_dev_canonical[numeric_id] = portal_id
 
             data_raw_root = self.public_dir / "USIdata"
             if data_raw_root.exists() and data_raw_root.is_dir():
@@ -69,15 +83,72 @@ class StorageResolver:
                             if len(parts) >= 3 and parts[0] == "raw":
                                 portal_prefix = parts[1]
                                 if len(parts) > 3 and parts[-1].isdigit() and len(parts[-1]) == 6 and len(parts[-2]) == 8 and parts[-2].isdigit():
-                                    continue # It's an archive file
-                                    
+                                    continue  # archiwum
                                 portal_id = "_".join(parts[2:])
                                 if portal_prefix not in self._inv_cache:
                                     self._inv_cache[portal_prefix] = {}
                                 self._inv_cache[portal_prefix][portal_id] = (dev_slug, inv_slug)
 
+                                # OTO: dodaj alias po numerycznym ad.id
+                                if portal_prefix == "oto":
+                                    numeric_id = self._read_oto_inv_numeric_id(file_path)
+                                    if numeric_id and numeric_id != portal_id:
+                                        self._inv_cache["oto"][numeric_id] = (dev_slug, inv_slug)
+                                        self._oto_inv_canonical[numeric_id] = portal_id
+
             self._initialized = True
-            logger.debug(f"StorageResolver index built. Dev records: {sum(len(v) for v in self._dev_cache.values())}, Inv records: {sum(len(v) for v in self._inv_cache.values())}")
+            logger.debug(
+                f"StorageResolver index built. "
+                f"Dev records: {sum(len(v) for v in self._dev_cache.values())}, "
+                f"Inv records: {sum(len(v) for v in self._inv_cache.values())}"
+            )
+
+    @staticmethod
+    def _read_oto_inv_numeric_id(file_path: Path) -> Optional[str]:
+        """Odczytuje numeryczne ad.id z pliku raw_oto_*.json. Zwraca string lub None."""
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            ad_id = (data.get("ad") or {}).get("id")
+            if ad_id is not None:
+                return str(ad_id)
+        except Exception:
+            pass
+        return None
+
+    @staticmethod
+    def _read_oto_dev_numeric_id(file_path: Path) -> Optional[str]:
+        """Odczytuje numeryczne agency.id z pliku raw_oto_*.json (deweloper). Zwraca string lub None."""
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            # Plik dewelopera OTO: id dewelopera jest bezpośrednio w root lub w pageProps.ad.agency
+            root_id = data.get("id") or data.get("agency_id")
+            if root_id is not None:
+                return str(root_id)
+            ad_id = ((data.get("ad") or {}).get("agency") or {}).get("id")
+            if ad_id is not None:
+                return str(ad_id)
+        except Exception:
+            pass
+        return None
+
+    def resolve_oto_inv_canonical_id(self, portal_id: str) -> str:
+        """
+        Dla OTO: zwraca kanoniczny alfanumeryczny ID (używany w nazwie pliku)
+        na podstawie dowolnego przekazanego ID (alfanumerycznego lub numerycznego).
+        Jeśli portal_id jest już kanoniczny, zwraca go bez zmian.
+        """
+        if not self._initialized:
+            self.build_index()
+        return self._oto_inv_canonical.get(portal_id, portal_id)
+
+    def resolve_oto_dev_canonical_id(self, portal_id: str) -> str:
+        """Jak resolve_oto_inv_canonical_id, ale dla deweloperów."""
+        if not self._initialized:
+            self.build_index()
+        return self._oto_dev_canonical.get(portal_id, portal_id)
+
 
     def lookup_developer(self, portal_prefix: str, portal_id: str) -> Optional[str]:
         if not self._initialized:
@@ -118,6 +189,7 @@ class StorageResolver:
     def get_investment_metadata(self, portal_prefix: str, portal_id: str) -> Optional[Dict[str, str]]:
         """
         Pobiera metadane inwestycji (np. source_url) ładując surowy JSON z dysku.
+        Dla OTO obsługuje zarówno alfanumeryczne jak i numeryczne portal_id.
         """
         res = self.lookup_investment(portal_prefix, portal_id)
         if not res:
@@ -125,7 +197,14 @@ class StorageResolver:
         dev_slug, inv_slug = res
         from .utils.io import get_investment_dir
         target_dir = get_investment_dir(dev_slug, inv_slug, self.public_dir)
-        file_path = target_dir / f"raw_{portal_prefix}_{portal_id}.json"
+
+        # Dla OTO: nazwa pliku używa kanonicznego alfanumerycznego ID, nie numerycznego
+        canonical_id = (
+            self.resolve_oto_inv_canonical_id(portal_id)
+            if portal_prefix == "oto"
+            else portal_id
+        )
+        file_path = target_dir / f"raw_{portal_prefix}_{canonical_id}.json"
         
         if not file_path.exists():
             return None

@@ -600,7 +600,11 @@ def download_raw_dev(config: ScraperConfig, fetcher: Fetcher, portal: str, ident
     return {"status": "error", "message": "Failed to download developer data"}
 
 def get_raw_data(config: ScraperConfig, portal: str, portal_id: str) -> Optional[Dict[str, Any]]:
-    """Pobiera surowy JSON inwestycji używając StorageResolvera do znalezienia ścieżki."""
+    """Pobiera surowy JSON inwestycji używając StorageResolvera do znalezienia ścieżki.
+
+    Dla OTO akceptuje zarówno alfanumeryczny ID z URL (np. '4mLbK') jak i
+    numeryczny ad.id (np. '65110911') — oba są indeksowane przez StorageResolver.
+    """
     from .storage import get_resolver
     import json
     p = resolve_prefix(portal)
@@ -608,14 +612,17 @@ def get_raw_data(config: ScraperConfig, portal: str, portal_id: str) -> Optional
     result = resolver.lookup_investment(p, portal_id)
     if not result:
         return None
-    
+
     dev_slug, inv_slug = result
     target_dir = get_investment_dir(dev_slug, inv_slug, config.public_dir)
-    file_path = target_dir / f"raw_{p}_{portal_id}.json"
-    
+
+    # Dla OTO: nazwa pliku używa kanonicznego alfanumerycznego ID
+    file_id = resolver.resolve_oto_inv_canonical_id(portal_id) if p == "oto" else portal_id
+    file_path = target_dir / f"raw_{p}_{file_id}.json"
+
     if not file_path.exists():
         return None
-        
+
     with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -770,6 +777,7 @@ def has_local_raw(config: ScraperConfig, portal: str, portal_id: str) -> bool:
     """
     Sprawdza czy surowy JSON inwestycji istnieje lokalnie (bez wczytywania zawartości).
     Lekkie sprawdzenie bool — idealne do walidacji przed uruchomieniem scrapera.
+    Dla OTO akceptuje zarówno alfanumeryczny ID z URL jak i numeryczny ad.id.
     Zwraca False jeśli portal jest nieznany lub inwestycja nie jest w indeksie.
     """
     try:
@@ -781,5 +789,7 @@ def has_local_raw(config: ScraperConfig, portal: str, portal_id: str) -> bool:
     if not result:
         return False
     dev_slug, inv_slug = result
-    file_path = get_investment_dir(dev_slug, inv_slug, config.public_dir) / f"raw_{p}_{portal_id}.json"
+    # Dla OTO: używamy kanonicznego alfanumerycznego ID w nazwie pliku
+    file_id = resolver.resolve_oto_inv_canonical_id(portal_id) if p == "oto" else portal_id
+    file_path = get_investment_dir(dev_slug, inv_slug, config.public_dir) / f"raw_{p}_{file_id}.json"
     return file_path.exists()
