@@ -1,6 +1,12 @@
 # Changelog
 
-## Wersja 1.4.6 — OTO dual-ID: obsługa alfanumerycznych i numerycznych ID w `load_raw` / `has_local_raw` — 2026-07-05
+## Wersja 1.4.7 — OTO dual-ID: pełne wsparcie we wszystkich endpointach API — 2026-07-05
+
+* **`api.py` — `refresh_investment_by_id`**: Rozwiązuje wejściowy `portal_id` do kanonicznego alfanumerycznego ID przed pobraniem metadanych z dysku.
+* **`api.py` — `get_raw_dev_data`**: Rozwiązuje wejściowy `portal_id` do kanonicznego ID przy generowaniu ścieżki do pliku JSON dewelopera.
+* **`api.py` — `save_raw`**: Używa kanonicznego ID do zapisu pliku raw inwestycji na dysku oraz upewnia się, że indeks lokalny jest aktualizowany zarówno dla przekazanego ID, jak i jego kanonicznego odpowiednika.
+* **`api.py` — `save_raw_developer`**: Analogiczne wsparcie i aktualizacja indeksu pod obydwoma ID dla plików deweloperów.
+
 
 * **`storage.py` — `StorageResolver.build_index`**: Podczas indeksowania plików `raw_oto_*.json` (non-archiwum) odczytywany jest `ad.id` z zawartości pliku (inwestycje) lub `id` / `agency.id` (deweloperzy) i rejestrowany jako alias numeryczny w cache. Dzięki temu cache zawiera obie formy ID jednocześnie.
 * **`storage.py` — `resolve_oto_inv_canonical_id` / `resolve_oto_dev_canonical_id`**: Nowe metody zwracające kanoniczny alfanumeryczny ID (używany w nazwie pliku) na podstawie dowolnej formy ID (alfanumerycznej lub numerycznej).

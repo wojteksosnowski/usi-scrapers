@@ -493,3 +493,37 @@ def test_has_local_raw_false_unknown_portal(config):
     """has_local_raw zwraca False dla nieznanego portalu."""
     from usi_scrapers.api import has_local_raw
     assert has_local_raw(config, "nieznany-portal", "123") is False
+
+
+# ── API dual-ID support tests ──────────────────────────────────────────────────
+
+@patch("usi_scrapers.storage.get_resolver")
+def test_api_endpoints_resolve_oto_canonical_ids(mock_get_resolver, config, tmp_path):
+    mock_resolver = MagicMock()
+    mock_resolver.lookup_investment.return_value = ("dev-x", "inv-x")
+    mock_resolver.lookup_developer.return_value = "dev-x"
+    # Map numeric ID to canonical
+    mock_resolver.resolve_oto_inv_canonical_id.side_effect = lambda x: "4pcjZ" if x == "65110911" else x
+    mock_resolver.resolve_oto_dev_canonical_id.side_effect = lambda x: "4pcjZ" if x == "9867181" else x
+    mock_get_resolver.return_value = mock_resolver
+
+    config.public_dir = str(tmp_path)
+    
+    # 1. Test get_raw_data uses canonical ID
+    inv_dir = tmp_path / "USIdata" / "dev-x" / "inv-x"
+    inv_dir.mkdir(parents=True, exist_ok=True)
+    raw_file = inv_dir / "raw_oto_4pcjZ.json"
+    raw_file.write_text('{"name": "Test"}', encoding="utf-8")
+
+    from usi_scrapers.api import get_raw_data, get_raw_dev_data
+    assert get_raw_data(config, "oto", "65110911") == {"name": "Test"}
+    mock_resolver.resolve_oto_inv_canonical_id.assert_called_with("65110911")
+
+    # 2. Test get_raw_dev_data uses canonical ID
+    dev_dir = tmp_path / "USIdev" / "dev-x"
+    dev_dir.mkdir(parents=True, exist_ok=True)
+    dev_file = dev_dir / "raw_oto_4pcjZ.json"
+    dev_file.write_text('{"name": "Dev"}', encoding="utf-8")
+
+    assert get_raw_dev_data(config, "oto", "9867181") == {"name": "Dev"}
+    mock_resolver.resolve_oto_dev_canonical_id.assert_called_with("9867181")

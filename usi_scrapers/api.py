@@ -492,8 +492,11 @@ def refresh_investment_by_id(
             raise ValueError(f"Portal RP wymaga numerycznego ID: {portal_id}")
 
         resolver = get_resolver(config)
+
+        # OTO dual-ID support: resolve input portal_id to canonical ID (alphanumeric)
+        canonical_id = resolver.resolve_oto_inv_canonical_id(str(portal_id)) if portal_prefix == "oto" else str(portal_id)
         
-        saved_meta = resolver.get_investment_metadata(portal_prefix, str(portal_id))
+        saved_meta = resolver.get_investment_metadata(portal_prefix, canonical_id)
         if not saved_meta:
             raise FileNotFoundError(f"Inwestycja o ID {portal_id} nie istnieje lokalnie na dysku.")
             
@@ -637,7 +640,9 @@ def get_raw_dev_data(config: ScraperConfig, portal: str, portal_id: str) -> Opti
         return None
     
     target_dir = Path(config.public_dir) / "USIdev" / dev_slug
-    file_path = target_dir / f"raw_{p}_{portal_id}.json"
+    # OTO dual-ID support: use canonical alphanumeric ID in filename
+    file_id = resolver.resolve_oto_dev_canonical_id(portal_id) if p == "oto" else portal_id
+    file_path = target_dir / f"raw_{p}_{file_id}.json"
     
     if not file_path.exists():
         return None
@@ -671,10 +676,15 @@ def save_raw(config: ScraperConfig, data: Dict[str, Any], portal_prefix: str, po
     raw_to_save = data.get("raw_details", data)
 
     target_dir = get_investment_dir(dev_slug, inv_slug, config.public_dir)
-    file_path = save_raw_json(raw_to_save, target_dir, portal_prefix, portal_id=portal_id)
+    # OTO dual-ID support: write files with canonical alphanumeric IDs only
+    file_id = resolver.resolve_oto_inv_canonical_id(portal_id) if portal_prefix == "oto" else portal_id
+    file_path = save_raw_json(raw_to_save, target_dir, portal_prefix, portal_id=file_id)
     
     # Aktualizacja indeksu (niezbędne dla nowych lub przy zmianie slugów)
     resolver.update_investment_index(portal_prefix, portal_id, dev_slug, inv_slug)
+    # Jeśli to alias, zaktualizuj indeks także dla wersji kanonicznej
+    if portal_prefix == "oto" and file_id != portal_id:
+        resolver.update_investment_index(portal_prefix, file_id, dev_slug, inv_slug)
     return file_path
 
 def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], portal_prefix: str, portal_id: str) -> Path:
@@ -695,8 +705,12 @@ def save_raw_developer(config: ScraperConfig, data: Dict[str, Any], portal_prefi
     raw_to_save = data.get("raw_details", data)
 
     target_dir = Path(config.public_dir) / "USIdev" / dev_slug
-    file_path = save_dev_raw_json(raw_to_save, target_dir, portal_prefix, portal_id=portal_id)
+    # OTO dual-ID support: use canonical alphanumeric ID in filename
+    file_id = resolver.resolve_oto_dev_canonical_id(portal_id) if portal_prefix == "oto" else portal_id
+    file_path = save_dev_raw_json(raw_to_save, target_dir, portal_prefix, portal_id=file_id)
     resolver.update_developer_index(portal_prefix, portal_id, dev_slug)
+    if portal_prefix == "oto" and file_id != portal_id:
+        resolver.update_developer_index(portal_prefix, file_id, dev_slug)
     return file_path
 
 def list_developers(
