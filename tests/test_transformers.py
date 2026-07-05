@@ -113,8 +113,29 @@ def test_rp_extract_amenities():
 
 def test_oto_extract_amenities():
     from usi_scrapers.transformers import apply_transformer
+    # Tylko ad.features — brak duplikatow EN/PL
     data = {"features": ["Balkon ", " windy"]}
     assert sorted(apply_transformer("oto_extract_amenities", data)) == ["balkon", "windy"]
+
+
+def test_oto_extract_amenities_no_addinfo_duplication():
+    from usi_scrapers.transformers import apply_transformer
+    # additionalInformation powinno byc ignorowane — bez duplikatow EN+PL
+    data = {
+        "ad": {
+            "features": ["Balkon", "Windy"],
+            "additionalInformation": [
+                {"label": "project_amenities", "values": ["project_amenities::balcony", "project_amenities::elevators"]},
+            ]
+        }
+    }
+    result = apply_transformer("oto_extract_amenities", data)
+    # Powinny byc tylko polskie nazwy, bez angielskich kluczy
+    assert "balkon" in result
+    assert "windy" in result
+    assert "balcony" not in result
+    assert "elevators" not in result
+    assert len(result) == 2
 
 def test_oto_extract_delivery():
     from usi_scrapers.transformers import apply_transformer
@@ -130,9 +151,57 @@ def test_to_extract_amenities():
     data = [
         {"name": "Garaż", "value": "parking naziemny"},
         {"name": "Winda", "value": "tak"},
-        {"name": "Basen", "value": "nie"}
+        {"name": "Basen", "value": "nie"},
     ]
-    assert sorted(apply_transformer("to_extract_amenities", data)) == ["garaż:parking naziemny", "winda"]
+    result = apply_transformer("to_extract_amenities", data)
+    # Wartość "parking naziemny" staje się tagiem wprost (split po przecinku - jeden element)
+    assert "parking naziemny" in result
+    # "tak" → nazwa pola jako tag
+    assert "winda" in result
+    # "nie" → pomijamy
+    assert "basen" not in result
+    assert len(result) == 2
+
+
+def test_to_extract_amenities_splits_comma_values():
+    from usi_scrapers.transformers import apply_transformer
+    data = [
+        {"name": "Powierzchnie zewnętrzne", "value": "balkon, loggia, taras, ogródek"},
+        {"name": "Teren", "value": "plac zabaw, monitoring"},
+    ]
+    result = apply_transformer("to_extract_amenities", data)
+    assert result == ["balkon", "loggia", "taras", "ogródek", "plac zabaw", "monitoring"]
+
+
+def test_to_extract_amenities_denylist():
+    from usi_scrapers.transformers import apply_transformer
+    data = [
+        {"name": "Termin oddania", "value": "czerwiec 2027"},
+        {"name": "Dostępna liczba ofert", "value": "96"},
+        {"name": "Wysokość mieszkania", "value": "2,60 m"},
+        {"name": "Wys. lokalu inwestycyjnego", "value": "2,75 m"},
+        {"name": "Wys. apartamentu", "value": "2,70 m"},
+        {"name": "Garaż", "value": "parking podziemny"},
+    ]
+    result = apply_transformer("to_extract_amenities", data)
+    # Tylko garaż przechodzi przez filtr
+    assert result == ["parking podziemny"]
+    # Żadne z denylist nie powinno być w wynikach
+    for banned in ["termin oddania", "dostępna liczba ofert", "wysokość mieszkania",
+                   "wys. lokalu inwestycyjnego", "wys. apartamentu"]:
+        assert banned not in result
+
+
+def test_to_extract_amenities_deduplication():
+    from usi_scrapers.transformers import apply_transformer
+    data = [
+        {"name": "Powierzchnie zewnętrzne", "value": "balkon, taras"},
+        {"name": "Budynek", "value": "taras, rowerownia"},  # 'taras' powtórzony
+    ]
+    result = apply_transformer("to_extract_amenities", data)
+    assert result.count("taras") == 1
+    assert "balkon" in result
+    assert "rowerownia" in result
 
 def test_strip_html():
     from usi_scrapers.transformers import apply_transformer

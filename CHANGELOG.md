@@ -1,6 +1,16 @@
 # Changelog
 
-## Wersja 1.4.4 — Agregacja historycznych obrazów w image_urls / image_paths — 2026-07-04
+## Wersja 1.4.5 — Naprawa niespójności w polu `amenities` (OTO + TO) — 2026-07-05
+
+* **`transformers.py` — `oto_extract_amenities`**: Usunięto scalanie z `additionalInformation` jako źródła amenities. Jedynym źródłem jest teraz `ad.features` (polskie nazwy tekstowe), co eliminuje duplikaty EN+PL (np. `"balkon"` + `"balcony"` pojawiające się jednocześnie).
+* **`transformers.py` — `to_extract_amenities`**: Całkowita przepisanie logiki:
+  * Denylist wykluczający pola niebędące amenities: `Termin oddania`, `Dostępna liczba ofert`, `Wysokość mieszkania`, `Wys. lokalu inwestycyjnego`, `Wys. apartamentu` (i warianty).
+  * Wartości wielokrotne (np. `"balkon, loggia, taras, ogródek"`) są dzielone regex-em `r",\s*"` na osobne tagi — każda wartość to oddzielny element listy.
+  * Wartość `"tak"` → nazwa pola jako tag; wartości zanegowane → pomijane.
+  * Deduplicacja z zachowaniem kolejności pierwszego wystąpienia.
+  * Normalizacja `\xa0` i `\u200b` w polskich tekstach.
+* **Testy**: Dodano 4 nowe testy w `test_transformers.py`: OTO bez duplikatów addInfo, TO split po przecinku, TO denylist, TO deduplicacja. Zaktualizowano `test_to_extract_amenities` do nowego formatu (płaskie tagi zamiast `"kategoria:wartość"`).
+
 
 * **`manager.py` — `collect_archived_image_urls`**: Nowa metoda statyczna skanuje zarchiwizowane kopie pliku `raw_{portal}_{id}_*.json` w katalogu inwestycji i zbiera adresy URL obrazów z poprzednich sesji scrapowania (OTO: `ad.images[]`, RP: `_raw_gallery.gallery`, TO: `_raw_gallery_urls`).
 * **`manager.py` — `collect_disk_image_filenames`**: Nowa metoda statyczna zwraca posortowaną listę plików graficznych (`.jpg`, `.png`, `.webp`) już istniejących na dysku w katalogu `USI/{dev}/{inv}/`, o rozmiarze > 1 KB.

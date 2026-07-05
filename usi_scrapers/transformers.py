@@ -306,24 +306,31 @@ def _oto_extract_delivery(value: Any) -> str | None:
 @register_transformer("oto_extract_amenities")
 def _oto_extract_amenities(value: Any) -> list[str]:
     """
-    Agreguje surowe, tekstowe tagi z Otodom. 
-    Odpowiedzialność ogranicza się do czyszczenia białych znaków i unifikacji wielkości liter.
+    Agreguje surowe, tekstowe tagi z Otodom.
+    ឹródło kanoniczne: ad.features (polskie nazwy tekstowe).
+    additionalInformation jest pomijane — zawiera te same cechy w EN,
+    co powodowało duplikaty typów "balkon" + "balcony".
     """
     if not isinstance(value, dict):
         return []
-        
-    features = value.get("features", [])
+
+    features: list = []
+
+    # 1. Próba top-level 'features'
+    features = value.get("features", []) or []
+
+    # 2. Fallback: ad.features
     if not features:
         ad = value.get("ad") or value.get("props", {}).get("pageProps", {}).get("ad", {})
         if isinstance(ad, dict):
-            features = ad.get("features", [])
-            
+            features = ad.get("features", []) or []
+
+    # 3. Fallback: raw_details.features lub raw_details.featuresByCategory
     if not features:
-        raw_details = value.get("raw_details", {})
+        raw_details = value.get("raw_details", {}) or {}
         if isinstance(raw_details, dict):
-            features = raw_details.get("features", [])
+            features = raw_details.get("features", []) or []
             if not features:
-                # Czasem są w featuresByCategory
                 fbc = raw_details.get("featuresByCategory")
                 if isinstance(fbc, list):
                     features = []
@@ -331,56 +338,92 @@ def _oto_extract_amenities(value: Any) -> list[str]:
                         if isinstance(cat, dict) and isinstance(cat.get("values"), list):
                             features.extend(cat["values"])
 
-    ad = value.get("ad") or value.get("props", {}).get("pageProps", {}).get("ad", {})
-    raw_details = value.get("raw_details", {})
-    
-    # Otodom czasem trzyma udogodnienia w additionalInformation
-    add_info = None
-    if isinstance(ad, dict) and ad.get("additionalInformation"):
-        add_info = ad.get("additionalInformation")
-    elif isinstance(raw_details, dict) and raw_details.get("additionalInformation"):
-        add_info = raw_details.get("additionalInformation")
-
-    if isinstance(add_info, list):
-        if not isinstance(features, list):
-            features = []
-        for item in add_info:
-            if isinstance(item, dict) and item.get("label") in ["project_amenities", "extra_spaces", "security", "equipment"]:
-                for val in item.get("values", []):
-                    if isinstance(val, str):
-                        if "::" in val:
-                            val = val.split("::", 1)[1]
-                        features.append(val)
-                            
     if not isinstance(features, list):
         return []
-        
-    return list({str(f).strip().lower() for f in features if f})
+
+    # Deduplikacja z zachowaniem kolejności (lowercase)
+    seen: set[str] = set()
+    result: list[str] = []
+    for f in features:
+        if not f:
+            continue
+        tag = str(f).strip().lower()
+        if tag and tag not in seen:
+            seen.add(tag)
+            result.append(tag)
+    return result
+
+# Pola TO które nie są amenities — mają swoje dedykowane pola w schemacie
+_TO_AMENITIES_DENYLIST: frozenset[str] = frozenset({
+    "termin oddania",
+    "dostępna liczba ofert",
+    "wysokość mieszkania",
+    "wys. lokalu inwestycyjnego",
+    "wys. apartamentu",
+    "wys. apartamentu inwestycyjnego",
+})
+
+# Separator: przecinek + opcjonalne białe znaki (ew. poprzedzony \xa0)
+_TO_VALUE_SPLIT_RE = re.compile(r",\s*")
 
 @register_transformer("to_extract_amenities")
 def _to_extract_amenities(value: Any) -> list[str]:
     """
-    Ekstrahuje surowe klucze z listy cech dodatkowych TabelaOfert.
-    Zbiera wyłącznie te pozycje, których wartość logicznie potwierdza obecność cechy.
+    Ekstrahuje płaską listę tagów amenities z listy additionalProperty TabelaOfert.
+
+    Strategia:
+    - Pola z denylisty (daty, liczby, wymiary) są pomijane.
+    - Wartość "tak" → nazwa pola staje się tagiem (np. "winda").
+    - Wartości zanegowane ("nie", "brak", ...) są pomijane.
+    - Pozostałe wartości są dzielone regex-em po przecinku —
+      każdy segment staje się osobnym tagiem
+      (np. "balkon, loggia, taras" → ["balkon", "loggia", "taras"]).
     """
     if not isinstance(value, list):
         return []
-        
-    amenities = []
+
+    seen: set[str] = set()
+    result: list[str] = []
+
+    def _add(tag: str) -> None:
+        tag = tag.strip().lower()
+        # Normalizacja znaków nieskampowalnych (np. \xa0 w "ii\xa0kwartal")
+        tag = re.sub(r"[\xa0\u200b]", " ", tag).strip()
+        if tag and tag not in seen:
+            seen.add(tag)
+            result.append(tag)
+
     for item in value:
-        if isinstance(item, dict):
-            name = item.get("name")
-            val = item.get("value")
-            if name and val:
-                val_str = str(val).strip().lower()
-                # Jeśli cecha jest oznaczona jako "tak", wrzucamy jej surowy klucz/nazwę
-                if val_str == "tak":
-                    amenities.append(str(name).strip().lower())
-                # Jeśli to inna wartość niebędąca negacją (np. wymiary/liczba), zachowujemy relację klucz:wartość
-                elif val_str not in ["nie", "brak", "false", "0"]:
-                    amenities.append(f"{str(name).strip().lower()}:{val_str}")
-                    
-    return list(set(amenities))
+        if not isinstance(item, dict):
+            continue
+        name = item.get("name")
+        val = item.get("value")
+        if not name:
+            continue
+
+        name_lower = str(name).strip().lower()
+
+        # Pominąć pola spoza zakresu amenities
+        if name_lower in _TO_AMENITIES_DENYLIST:
+            continue
+
+        # Brak wartości lub negacja → pomijamy
+        if not val:
+            continue
+        val_str = str(val).strip().lower()
+        val_str = re.sub(r"[\xa0\u200b]", " ", val_str).strip()
+        if val_str in ("nie", "brak", "false", "0", "no", ""):
+            continue
+
+        if val_str == "tak":
+            # Cecha boolean → nazwa pola jako tag
+            _add(name_lower)
+        else:
+            # Wielowartościowy string → split po przecinku
+            for part in _TO_VALUE_SPLIT_RE.split(val_str):
+                _add(part)
+
+    return result
 
 @register_transformer("to_float")
 def _to_float(value: Any) -> float | None:
