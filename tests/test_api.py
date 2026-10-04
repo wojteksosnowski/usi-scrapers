@@ -527,3 +527,58 @@ def test_api_endpoints_resolve_oto_canonical_ids(mock_get_resolver, config, tmp_
 
     assert get_raw_dev_data(config, "oto", "9867181") == {"name": "Dev"}
     mock_resolver.resolve_oto_dev_canonical_id.assert_called_with("9867181")
+
+
+def _ok_data():
+    return {"developer_slug": "d", "investment_slug": "i"}
+
+
+def test_ingest_calls_on_item_once_per_success_and_survives_callback_errors():
+    from unittest.mock import patch
+    from usi_scrapers import api
+
+    seen = []
+
+    def on_item(idx, url, data):
+        seen.append((idx, url))
+        if url == "http://a":
+            raise RuntimeError("boom")
+
+    results = [_ok_data(), {"error": "nope"}, _ok_data()]
+    with patch.object(api, "ingest_investment_by_url", side_effect=results), \
+         patch.object(api.time, "sleep"):
+        out = api.process_batch_ingest(None, None, "rp", ["http://a", "http://b", "http://c"],
+                                       on_item=on_item, delay_range=(0, 0))
+
+    assert len(out) == 3
+    assert seen == [(0, "http://a"), (2, "http://c")]  # brak wywołania dla błędu, wyjątek nie przerwał batcha
+
+
+def test_ingest_calls_on_start_before_each_item_without_changing_progress_events():
+    from unittest.mock import patch
+    from usi_scrapers import api
+
+    order, events = [], []
+    def fake_ingest(*a, **k):
+        order.append("fetch")
+        return _ok_data()
+
+    with patch.object(api, "ingest_investment_by_url", side_effect=fake_ingest), \
+         patch.object(api.time, "sleep"):
+        api.process_batch_ingest(None, None, "rp", ["http://a"], on_progress=events.append,
+                                 on_start=lambda i, u: order.append(f"start:{u}"), delay_range=(0, 0))
+
+    assert order == ["start:http://a", "fetch"]
+    assert [e["status"] for e in events] == ["success"]
+
+
+def test_refresh_calls_on_item():
+    from unittest.mock import patch
+    from usi_scrapers import api
+
+    seen = []
+    with patch.object(api, "refresh_investment_by_id", return_value=_ok_data()), \
+         patch.object(api.time, "sleep"):
+        api.process_batch_refresh(None, None, "rp", ["1", "2"], on_item=lambda i, r, d: seen.append((i, r)),
+                                  delay_range=(0, 0))
+    assert seen == [(0, "1"), (1, "2")]

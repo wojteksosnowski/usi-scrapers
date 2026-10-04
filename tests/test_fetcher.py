@@ -162,3 +162,35 @@ def test_fetcher_success_resets_throttle_streak(mock_curl_get, mock_sleep, test_
     assert fetcher.fetch("https://example.com/a", use_scraperapi=False) == "ok"
     assert "example.com" not in fetcher._throttle_streak
     assert not fetcher.breaker_open("example.com")
+
+
+@patch('usi_scrapers.fetcher.time.sleep')
+@patch('usi_scrapers.fetcher.curl_requests.Session.get')
+def test_fetcher_snapshot_reports_breaker_and_stats(mock_curl_get, mock_sleep, test_config):
+    fetcher = Fetcher(test_config)
+    assert fetcher.snapshot()["domains"] == {}
+
+    mock_curl_get.side_effect = _HttpError(429)
+    for _ in range(3):
+        fetcher.fetch("https://example.com/p", use_scraperapi=False)
+
+    snap = fetcher.snapshot()["domains"]["example.com"]
+    assert snap["breaker_open"] is True
+    assert snap["breaker_remaining_s"] > 0
+    assert snap["direct_fail"] == 3 and snap["status"] == {"429": 3}
+    assert snap["throttle_streak"] == 3
+
+
+@patch('usi_scrapers.fetcher.curl_requests.Session.get')
+def test_fetcher_on_request_hook_sees_urls_and_cannot_break_fetch(mock_get, test_config):
+    mock_get.return_value = MagicMock(text="ok")
+    fetcher = Fetcher(test_config)
+    seen = []
+    fetcher.on_request = seen.append
+    fetcher.fetch("https://example.com/a", use_scraperapi=False)
+    assert seen == ["https://example.com/a"]
+
+    def bad(url):
+        raise RuntimeError("hook bug")
+    fetcher.on_request = bad
+    assert fetcher.fetch("https://example.com/b", use_scraperapi=False) == "ok"

@@ -10,6 +10,7 @@ import warnings
 from typing import Any, Callable, Dict, List, Optional
 from pathlib import Path
 
+from usi_scrapers.logger import get_logger
 from .fetcher import Fetcher
 from .models import ScraperConfig, ProgressCallback, DeveloperPage
 from .manager import TechnicalDataManager
@@ -17,6 +18,8 @@ from .utils.io import save_raw_json, save_dev_raw_json, get_investment_dir, get_
 from .storage import get_resolver
 from .utils.portals import resolve_prefix, get_portal
 from .mapping import get_mapping, resolve_path, load_mapping, list_available_keys, transform_to_unified
+
+logger = get_logger(__name__)
 
 # Scraper imports
 from .scraper_rp import (
@@ -93,9 +96,15 @@ def process_batch_ingest(
     on_progress: "Optional[Callable[[Dict[str, Any]], None]]" = None,
     delay_range: tuple[float, float] = (0.5, 2.0),
     max_retries: int = 3,
+    on_item: "Optional[Callable[[int, str, Dict[str, Any]], None]]" = None,
+    on_start: "Optional[Callable[[int, str], None]]" = None,
 ) -> List[Dict[str, Any]]:
     """
     Sekwencyjnie pobiera listę inwestycji po ich URL-ach.
+
+    on_item(index, url, data) jest wołane od razu po pobraniu kompletnej inwestycji (przed kolejną),
+    dzięki czemu wywołujący może ją zapisać natychmiast. on_start(index, ref) jest wołane tuż przed pobraniem elementu.
+    Wyjątki z obu callbacków są logowane i nie przerywają batcha.
     """
     total = len(urls)
     results = []
@@ -107,7 +116,13 @@ def process_batch_ingest(
         data = None
         error_msg = None
         status = "failed"
-        
+
+        if on_start:
+            try:
+                on_start(i, url)
+            except Exception as start_err:
+                logger.error(f"on_start callback failed for {url}: {start_err}")
+
         for attempt in range(max_retries):
             try:
                 data = ingest_investment_by_url(config, fetcher, portal, url)
@@ -151,6 +166,11 @@ def process_batch_ingest(
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
                 msg = f"Pobrano pomyślnie."
+                if on_item:
+                    try:
+                        on_item(i, url, data)
+                    except Exception as item_err:
+                        logger.error(f"on_item callback failed for {url}: {item_err}", exc_info=True)
         else:
             msg = f"Pobranie nieudane: {error_msg}"
 
@@ -180,9 +200,13 @@ def process_batch_refresh(
     on_progress: "Optional[Callable[[Dict[str, Any]], None]]" = None,
     delay_range: tuple[float, float] = (0.5, 2.0),
     max_retries: int = 3,
+    on_item: "Optional[Callable[[int, str, Dict[str, Any]], None]]" = None,
+    on_start: "Optional[Callable[[int, str], None]]" = None,
 ) -> List[Dict[str, Any]]:
     """
     Sekwencyjnie pobiera listę inwestycji po ich zapisanych ID.
+
+    on_item(index, portal_id, data): patrz process_batch_ingest.
     """
     total = len(portal_ids)
     results = []
@@ -194,7 +218,13 @@ def process_batch_refresh(
         data = None
         error_msg = None
         status = "failed"
-        
+
+        if on_start:
+            try:
+                on_start(i, portal_id)
+            except Exception as start_err:
+                logger.error(f"on_start callback failed for {portal_id}: {start_err}")
+
         for attempt in range(max_retries):
             try:
                 data = refresh_investment_by_id(config, fetcher, portal, portal_id)
@@ -238,6 +268,11 @@ def process_batch_refresh(
                 msg = f"Pobranie nieudane: {error_msg}"
             else:
                 msg = f"Odświeżono pomyślnie."
+                if on_item:
+                    try:
+                        on_item(i, portal_id, data)
+                    except Exception as item_err:
+                        logger.error(f"on_item callback failed for {portal_id}: {item_err}", exc_info=True)
         else:
             msg = f"Odświeżenie nieudane: {error_msg}"
 

@@ -2,7 +2,7 @@ import logging
 import time
 import json
 from urllib.parse import urlparse
-from typing import Optional
+from typing import Callable, Optional
 from curl_cffi import requests as curl_requests
 import requests as std_requests
 
@@ -53,6 +53,8 @@ class Fetcher:
         self.last_fetch_times: dict = {}
         self.last_fetch_vector: Optional[str] = None
         self.last_status: Optional[int] = None
+        # Opcjonalny podgląd: wołany z adresem przed każdym żądaniem (np. do logu zadania w UI). Nie zmienia ruchu.
+        self.on_request: Optional[Callable[[str], None]] = None
         # Cooldown per domena po 403/429: {domain: (until_ts, kolejna_przerwa_s)}
         self._cooldowns: dict = {}
         self._credits_cache: Optional[tuple] = None  # (timestamp, credits_left)
@@ -69,6 +71,33 @@ class Fetcher:
 
     def breaker_open(self, domain: str) -> bool:
         return time.time() < self._breaker_until.get(domain, 0)
+
+    def snapshot(self) -> dict:
+        """Stan Fetchera do podglądu (bez żadnych żądań HTTP): statystyki, cooldowny i wyłączniki per domena."""
+        now = time.time()
+        domains = set(self.stats) | set(self._cooldowns) | set(self._breaker_until) | set(self._throttle_streak)
+        out = {}
+        for domain in sorted(domains):
+            cooldown_until = (self._cooldowns.get(domain) or (0, 0))[0]
+            stat = self.stats.get(domain) or {}
+            out[domain] = {
+                "direct_ok": stat.get("direct_ok", 0),
+                "direct_fail": stat.get("direct_fail", 0),
+                "scraperapi": stat.get("scraperapi", 0),
+                "breaker_skips": stat.get("breaker_skips", 0),
+                "status": dict(stat.get("status", {})),
+                "throttle_streak": self._throttle_streak.get(domain, 0),
+                "cooldown_remaining_s": max(0, round(cooldown_until - now)),
+                "breaker_open": self.breaker_open(domain),
+                "breaker_remaining_s": max(0, round(self._breaker_until.get(domain, 0) - now)),
+            }
+        credits = self._credits_cache[1] if self._credits_cache else None
+        return {
+            "domains": out,
+            "scraperapi_credits_cached": credits,
+            "last_status": self.last_status,
+            "last_fetch_vector": self.last_fetch_vector,
+        }
 
     def _get_domain(self, url: str) -> str:
         try:
@@ -149,6 +178,11 @@ class Fetcher:
         self.last_status = None
         domain = self._get_domain(url)
         stat = self._stat(domain)
+        if self.on_request:
+            try:
+                self.on_request(url)
+            except Exception:
+                pass
         direct = use_impersonate and not self.breaker_open(domain)
         if use_impersonate and not direct:
             stat["breaker_skips"] += 1
