@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional
@@ -8,6 +9,34 @@ from usi_scrapers.logger import get_logger
 from .portals import portal_base_url
 
 logger = get_logger(__name__)
+
+
+def _json_unchanged(file_path: Path, data: dict) -> bool:
+    """True, gdy istniejący plik JSON ma identyczną treść jak `data` (wtedy nie archiwizujemy ani nie przepisujemy)."""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return json.load(f) == json.loads(json.dumps(data, ensure_ascii=False))
+    except Exception:
+        return False
+
+
+def _text_unchanged(file_path: Path, text: str) -> bool:
+    try:
+        return file_path.read_text(encoding="utf-8") == text
+    except Exception:
+        return False
+
+
+def _skip_if_unchanged(file_path: Path, unchanged: bool, label: str) -> bool:
+    """Gdy treść się nie zmieniła: odświeża mtime (znacznik ostatniego pobrania) i zgłasza pominięcie zapisu."""
+    if not unchanged:
+        return False
+    try:
+        os.utime(file_path, None)
+    except OSError:
+        pass
+    logger.info(f"{label} unchanged, skipping save: {file_path}")
+    return True
 
 
 def save_raw_json(
@@ -32,6 +61,9 @@ def save_raw_json(
 
     filename = f"raw_{portal_prefix}_{portal_id}.json"
     file_path = target_dir / filename
+
+    if _skip_if_unchanged(file_path, _json_unchanged(file_path, data), "Raw JSON"):
+        return file_path
 
     if file_path.exists():
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -68,6 +100,9 @@ def save_raw_html(
 
     filename = f"raw_{portal_prefix}_{portal_id}.html"
     file_path = target_dir / filename
+
+    if _skip_if_unchanged(file_path, _text_unchanged(file_path, html), "Raw HTML"):
+        return file_path
 
     if file_path.exists():
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -107,6 +142,9 @@ def save_dev_raw_json(
 
     filename = f"raw_{portal_prefix}_{portal_id}.json"
     file_path = target_dir / filename
+
+    if _skip_if_unchanged(file_path, _json_unchanged(file_path, data), "Raw developer JSON"):
+        return file_path
 
     if file_path.exists():
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")

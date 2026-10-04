@@ -174,6 +174,14 @@ class StorageResolver:
                 self._inv_cache[portal_prefix] = {}
             self._inv_cache[portal_prefix][str(portal_id)] = (dev_slug, inv_slug)
 
+    def register_oto_inv_alias(self, numeric_id: str, canonical_id: str, dev_slug: str, inv_slug: str):
+        """Rejestruje numeryczne ad.id Otodom jako alias kanonicznego ID (jak build_index, ale bez skanu)."""
+        if numeric_id == canonical_id:
+            return
+        self.update_investment_index("oto", numeric_id, dev_slug, inv_slug)
+        with self._lock:
+            self._oto_inv_canonical[numeric_id] = canonical_id
+
     def force_rebuild(self):
         with self._lock:
             self._initialized = False

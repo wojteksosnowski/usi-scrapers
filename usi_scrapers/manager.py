@@ -7,7 +7,7 @@ from .fetcher import Fetcher
 from .utils.io import get_investment_dir, get_image_dir, save_raw_json
 # Upewniamy się, że clean_filename jest dostępny do transformacji adresów na nazwy lokalne
 from .utils.images import save_images, clean_filename, IMAGE_EXTENSIONS
-from .storage import StorageResolver
+from .storage import get_resolver
 
 from usi_scrapers.logger import get_logger
 
@@ -16,7 +16,8 @@ logger = get_logger(__name__)
 class TechnicalDataManager:
     def __init__(self, config: ScraperConfig):
         self.config = config
-        self.resolver = StorageResolver(config)
+        # Współdzielony resolver: zapisy z dowolnej instancji managera są widoczne wszędzie bez przebudowy indeksu
+        self.resolver = get_resolver(config)
 
     def get_investment_path(self, portal_prefix: str, portal_id: str) -> Optional[Path]:
         res = self.resolver.lookup_investment(portal_prefix, portal_id)
@@ -211,5 +212,9 @@ class TechnicalDataManager:
         
         if file_path and portal_id:
             self.resolver.update_investment_index(portal_prefix, portal_id, dev_slug, inv_slug)
-            
+            if portal_prefix == "oto":
+                numeric_id = ((raw_details or {}).get("ad") or {}).get("id")
+                if numeric_id is not None:
+                    self.resolver.register_oto_inv_alias(str(numeric_id), str(portal_id), dev_slug, inv_slug)
+
         return file_path
